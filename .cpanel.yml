@@ -1,0 +1,35 @@
+name: Next.js CI/CD on Scaleway
+
+on:
+  push:
+    branches:
+      - main # Replace with your main branch name
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14 # Replace with your desired Node.js version
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build the Next.js app
+        run: npm run build
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to Scaleway Web Hosting
+        run: |
+          ssh-keyscan -H 51.159.128.187 >> ~/.ssh/known_hosts
+          scp -r ./build/* ssh://cpe0000637@dev-edy.fr/home/cpe0000637/repositories/EYF

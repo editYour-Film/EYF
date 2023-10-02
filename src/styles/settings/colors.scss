@@ -1,0 +1,10 @@
+@mixin text-violet-gradient{
+  background: linear-gradient(270deg, #c985fe 6.21%, #999dff 103.42%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+}
+
+$primary-dark-purple: #370B4E;
+$violet: #7977ff;

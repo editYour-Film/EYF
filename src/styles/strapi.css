@@ -1,0 +1,56 @@
+.editorjs p a {
+  text-decoration: underline;
+  /* color: #7977ff; */
+  background: linear-gradient(270deg, #c985fe 6.21%, #999dff 103.42%);
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.strapi p,
+.strapi li {
+  font-size: 18px;
+  color: #ebebeb;
+  opacity: 0.8;
+  margin-top: 16px;
+}
+
+.strapi ul,
+.strapi ol {
+  margin-left: 25px;
+}
+
+.strapi ul li {
+  list-style: disc;
+}
+
+.strapi ol li {
+  list-style: decimal;
+}
+
+.strapi h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  font-family: "N27", sans-serif;
+}
+.strapi h1 {
+  font-size: 30px;
+}
+.strapi h2 {
+  font-size: 26px;
+}
+.strapi h3 {
+  font-size: 24px;
+}
+.strapi h4 {
+  font-size: 22px;
+}
+.strapi h5 {
+  font-size: 20px;
+}
+.strapi h6 {
+  font-size: 18px;
+}

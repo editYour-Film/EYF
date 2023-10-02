@@ -1,0 +1,12 @@
+.sign_in_container {
+  background-image: url("/img/signin-bg-spot.png");
+  background-repeat: no-repeat;
+  background-position: 23% -100px;
+}
+
+@media screen and (max-width: 768px) {
+  .sign_in_container {
+    background-image: url("/img/signin-bg-spot-sm.png");
+    background-position: 120% -40px;
+  }
+}

@@ -1,0 +1,29 @@
+@use "@/styles/settings/colors" as c;
+
+.footer__icons {
+    svg { 
+      *[fill] {
+        fill: #5A5477;
+      }
+      *[stroke] {
+        stroke: #5A5477;;
+      }
+
+      @media screen and (hover: hover) {
+        *[fill], *[stroke] {
+          transition: 
+          fill 0.3s,
+          stroke 0.3s;
+        }
+
+        &:hover {
+          *[fill] {
+            fill: c.$violet;
+          }
+          *[stroke] {
+            stroke: c.$violet;;
+          }
+        }
+      }
+    }
+  }

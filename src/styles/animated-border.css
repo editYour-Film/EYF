@@ -1,0 +1,39 @@
+.bottom-inOutSpread:before,
+.bottom-inOutSpread:after,
+.bottom-inOutSpread > .ui-border-element:before,
+.bottom-inOutSpread > .ui-border-element:after {
+  content: "";
+  position: absolute;
+}
+.bottom-inOutSpread:after {
+  border-bottom: 1px solid #333;
+  left: 51%;
+  right: 51%;
+  bottom: 0px;
+  -webkit-transition-property: all;
+  -moz-transition-property: all;
+  -o-transition-property: all;
+  transition-property: all;
+  -webkit-transition-timing-function: cubic-bezier(0, 0.98, 0.51, 0.93);
+  -moz-transition-timing-function: cubic-bezier(0, 0.98, 0.51, 0.93);
+  -o-transition-timing-function: cubic-bezier(0, 0.98, 0.51, 0.93);
+  transition-timing-function: cubic-bezier(0, 0.98, 0.51, 0.93);
+  -webkit-transition-duration: 500ms;
+  -moz-transition-duration: 500ms;
+  -o-transition-duration: 500ms;
+  transition-duration: 500ms;
+  -webkit-transition-delay: 0s;
+  -moz-transition-delay: 0s;
+  -o-transition-delay: 0s;
+  transition-delay: 0s;
+}
+.bottom-inOutSpread:hover:after {
+  left: 0%;
+  right: 0%;
+}
+.bottom-inOutSpread:not(:hover):after {
+  -webkit-transition-delay: 0s;
+  -moz-transition-delay: 0s;
+  -o-transition-delay: 0s;
+  transition-delay: 0s;
+}

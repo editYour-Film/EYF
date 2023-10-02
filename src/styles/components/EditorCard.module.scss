@@ -1,0 +1,44 @@
+@use '../settings/colors.scss' as *;
+
+.editorcard {
+  --icon-bg: white; 
+  --icon-color: black; 
+  --icon-rotate: 45deg;
+
+  .monFiltre {
+    opacity: 0;
+    transition: opacity 0.3s;
+    background: radial-gradient(rgba(47, 35, 80, 0.66) 70%, rgba(47, 35, 80, 0) 150%);
+  }
+}
+
+.active { 
+  --icon-rotate: 0deg;
+
+  .monFiltre {
+    opacity: 0.5;
+  }
+}
+
+.editorcard:hover {
+  --icon-bg: #{$violet}; 
+  --icon-color: white;
+
+  .img {
+    transform: scale(1.01) translateX(-50%) translateY(-50%);
+    filter: blur(7px);
+  }
+
+  .monFiltre {
+    opacity: 0.5;
+  }
+}
+
+.icon {
+  transform: rotate(var(--icon-rotate));
+  background-color: var(--icon-bg);
+}
+
+.icon *[fill] { fill: var(--icon-color); }
+.icon *[stroke] { stroke: var(--icon-color); }
+

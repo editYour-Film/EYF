@@ -1,0 +1,23 @@
+@use "@/styles/settings/colors" as colors;
+@use "@/styles/settings/variables" as *;
+.button {
+  @media screen and (hover: hover) {
+    span {
+      opacity: 0.7;
+      transition: 
+        all 0.5s $ease-out;
+    }
+    &:hover {
+      span {
+        opacity: 1;
+      }
+    }
+  }
+  &.active {
+    span {
+      opacity: 1;
+
+      @include colors.text-violet-gradient;
+    }
+  }
+}
