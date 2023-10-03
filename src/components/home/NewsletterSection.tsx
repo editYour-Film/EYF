@@ -5,15 +5,31 @@ import Image from "next/image";
 import validator from "validator";
 import { inputErrors } from "@/const";
 import { useStrapi } from "@/hooks/useStrapi";
+import { sendEmail } from '../../lib/sendEmail';
 
 type NewsletterSectionProps = {
   type?: 'newsletter' | 'sponsor'
 }
+
 export const NewsletterSection = ({type = 'newsletter'}:NewsletterSectionProps) => {  
   const { data: newsletterData, mutate: getNewsLetterData } = useStrapi("newsletter-section", false);
 
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
+
+  const sendgrid = async () => {
+    try {
+      await sendEmail(email);
+
+      setEmailError("Email sent successfully");
+    } catch (error) {
+      if (error) {
+        setEmailError("Email sending failed: " + error);
+      } else {
+        setEmailError("Email sending failed. Please try again later.");
+      }
+    }
+  };
 
   useEffect(() => { 
     getNewsLetterData();   
@@ -60,31 +76,8 @@ export const NewsletterSection = ({type = 'newsletter'}:NewsletterSectionProps) 
                       setEmailError(inputErrors.required);
                     else if (!validator.isEmail(email))
                       setEmailError(inputErrors.invalid);
-
-                    if (validator.isEmail(email)) {                      
-                      // @ts-ignore
-                      process2(
-                        "https://api.sarbacane.com/v1/forms/contacts/upsert?listID&#x3D;17d2faac-8a04-4f66-885b-94adfe94d833&amp;formID&#x3D;ZWiBJOSDSRaCGrwiJV55FQ&amp;timezone&#x3D;Europe/Paris",
-                        "https://forms.sbc30.net/form.js",
-                        "630b38236b13361baa5dd350",
-                        "false",
-                        "message",
-                        "",
-                        "https://api.sarbacane.com/v1/transactional/sendmessage/optin",
-                        "Merci",
-                        "Vos informations ont été ajoutées avec succès.",
-                        "Vous allez recevoir un email",
-                        "Vous devrez cliquer sur le lien de confirmation pour valider votre inscription",
-                        "Erreur",
-                        "Une erreur inattendue s%27est produite.",
-                        "Le formulaire est en cours d%27édition, veuillez patienter quelques minutes avant d%27essayer à nouveau.",
-                        "",
-                        "",
-                        "",
-                        "",
-                        ""
-                      )
-                    }
+                    else
+                      sendgrid();
                   }}
                 >
                   Rejoindre la newsletter
@@ -106,30 +99,8 @@ export const NewsletterSection = ({type = 'newsletter'}:NewsletterSectionProps) 
                     setEmailError(inputErrors.required);
                   else if (!validator.isEmail(email))
                     setEmailError(inputErrors.invalid);
-
-                  if (validator.isEmail(email))
-                    // @ts-ignore
-                    process2(
-                      "https://api.sarbacane.com/v1/forms/contacts/upsert?listID&#x3D;17d2faac-8a04-4f66-885b-94adfe94d833&amp;formID&#x3D;ZWiBJOSDSRaCGrwiJV55FQ&amp;timezone&#x3D;Europe/Paris",
-                      "https://forms.sbc30.net/form.js",
-                      "630b38236b13361baa5dd350",
-                      "false",
-                      "message",
-                      "",
-                      "https://api.sarbacane.com/v1/transactional/sendmessage/optin",
-                      "Merci",
-                      "Vos informations ont été ajoutées avec succès.",
-                      "Vous allez recevoir un email",
-                      "Vous devrez cliquer sur le lien de confirmation pour valider votre inscription",
-                      "Erreur",
-                      "Une erreur inattendue s%27est produite.",
-                      "Le formulaire est en cours d%27édition, veuillez patienter quelques minutes avant d%27essayer à nouveau.",
-                      "",
-                      "",
-                      "",
-                      "",
-                      ""
-                    );
+                  else
+                    sendgrid();
                 }}
               />
             </div>
