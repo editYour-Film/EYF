@@ -13,6 +13,7 @@ export const sendEmail = async (to) => {
 
   try {
     await sgMail.send(msg);
+    console.log('Newsletter email sent');
   } catch (error) {
     console.error(error);
   }
