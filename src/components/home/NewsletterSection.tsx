@@ -6,6 +6,7 @@ import validator from "validator";
 import { inputErrors } from "@/const";
 import { useStrapi } from "@/hooks/useStrapi";
 import { sendEmail } from '../../lib/sendEmail';
+import axios from "axios";
 
 type NewsletterSectionProps = {
   type?: 'newsletter' | 'sponsor'
@@ -19,7 +20,9 @@ export const NewsletterSection = ({type = 'newsletter'}:NewsletterSectionProps) 
 
   const sendgrid = async () => {
     try {
-      await sendEmail(email);
+      // await sendEmail(email);
+      await axios.post('/api/send-newsletter-email', { email });
+
 
       setEmailError("Email sent successfully");
     } catch (error) {
