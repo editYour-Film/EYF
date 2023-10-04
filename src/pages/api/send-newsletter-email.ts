@@ -1,11 +1,11 @@
-import { sendEmail } from '../../lib/sendEmail';
+import { sendNewsletterEmail } from '../../lib/sendNewsletterEmail';
 import { addEmailToNewsletter } from '../../lib/addEmailToNewsletter';
 
 export default async (req, res) => {
   const { email } = req.body;
 
   try {
-    await sendEmail(email);
+    await sendNewsletterEmail(email);
     await addEmailToNewsletter(email);
     res.status(200).json({ message: 'Email sent successfully' });
   } catch (error) {

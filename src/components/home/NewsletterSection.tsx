@@ -5,7 +5,7 @@ import Image from "next/image";
 import validator from "validator";
 import { inputErrors } from "@/const";
 import { useStrapi } from "@/hooks/useStrapi";
-import { sendEmail } from '../../lib/sendEmail';
+import { sendEmail } from '../../lib/sendNewsletterEmail';
 import axios from "axios";
 
 type NewsletterSectionProps = {
@@ -20,7 +20,6 @@ export const NewsletterSection = ({type = 'newsletter'}:NewsletterSectionProps) 
 
   const sendgrid = async () => {
     try {
-      // await sendEmail(email);
       await axios.post('/api/send-newsletter-email', { email });
 
 
