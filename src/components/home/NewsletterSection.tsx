@@ -24,13 +24,9 @@ export const NewsletterSection = ({type = 'newsletter'}:NewsletterSectionProps) 
       await axios.post('/api/send-newsletter-email', { email });
 
 
-      setEmailError("Email sent successfully");
+      setEmailError("L'email a bien été ajouté à la newsletter.");
     } catch (error) {
-      if (error) {
-        setEmailError("Email sending failed: " + error);
-      } else {
-        setEmailError("Email sending failed. Please try again later.");
-      }
+      setEmailError("L'envoi de l'email a échoué, veuillez réessayer plus tard.");
     }
   };
 
