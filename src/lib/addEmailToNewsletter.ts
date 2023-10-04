@@ -1,7 +1,7 @@
 const axios = require('axios');
 const client = require('@sendgrid/client');
 
-client.setApiKey("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");
+client.setApiKey(process.env.SENDGRID_API_KEY);
 
 const contactListId = "e4e454a1-ddce-43d0-be03-82c903737169";
 
