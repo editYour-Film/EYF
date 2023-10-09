@@ -5,7 +5,6 @@ import Image from "next/image";
 import validator from "validator";
 import { inputErrors } from "@/const";
 import { useStrapi } from "@/hooks/useStrapi";
-import { sendEmail } from '../../lib/sendNewsletterEmail';
 import axios from "axios";
 
 type NewsletterSectionProps = {
