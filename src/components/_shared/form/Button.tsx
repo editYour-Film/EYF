@@ -11,7 +11,7 @@ type buttonProps = {
   size?: "xs" | "sm" | "lg";
   onClick?: () => void;
   disabled?: boolean;
-  icon?: "menu" | "arrow-left" | "arrow-right" | "google" | "apple" | "cross";
+  icon?: "menu" | "arrow-left" | "arrow-right" | "arrow-down" | "google" | "apple" | "cross";
   iconLeft?: boolean;
   iconRight?: boolean;
   className?: string;
@@ -68,6 +68,15 @@ const Button = ({
           <Image
             src="/icons/right-arrow-white.svg"
             width="30"
+            height="20"
+            alt=""
+          />
+        );
+      case "arrow-down":
+        return (
+          <Image
+            src="/icons/arrow-down-circle.svg"
+            width="20"
             height="20"
             alt=""
           />

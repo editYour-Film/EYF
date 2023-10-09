@@ -10,6 +10,7 @@ import Image from 'next/image'
 import { VideoDuration, getDuration } from "@/utils/Video"
 import slugify from "slugify"
 import { checkAlphanumeric } from "./utils"
+import { InputVignet } from '@/components/_shared/form/InputVignet'
 
 type InfosPanProps = {
 }
@@ -69,7 +70,7 @@ export const InfosPan = ({}:InfosPanProps) => {
         context.strapiObject.attributes.thumbnail.data.attributes.url : 
         context.defaultImage
       )
-      setTags(context.strapiObject.attributes.video_tags.data ? 
+      setTags(context.strapiObject.attributes.video_tags?.data ? 
         context.strapiObject.attributes.video_tags.data.map((tag: any) => {return {name: tag.attributes.name, slug: tag.attributes.slug}}) :
         []
       )
@@ -219,6 +220,7 @@ export const InfosPan = ({}:InfosPanProps) => {
           <div className="md:basis-5/12">
             <InputVignet 
               label="Miniature" 
+              buttonLabel="Modifier la miniature"
               desc="Importez une image qui donne un aperçu du contenu de votre vidéo. Une bonne image se remarque et attire l'attention des spectateurs." 
               image={defaultImage}
               onChange={(file) => { setVignet(file) }}
@@ -334,69 +336,3 @@ const KeyWords = ({onChange}: keyWordsProps) => {
   )
 }
 
-type InputVignetProps = {
-  label: string,
-  desc: string,
-  image: string,
-  onChange: (file:File) => void
-}
-export const InputVignet = ({label, desc, image, onChange}:InputVignetProps) => {  
-  const [img, setImg] = useState(image)
-  const [error, setError] = useState('')
-  const input = useRef<HTMLInputElement>(null)
-
-  const handleClick = () => {
-    input.current?.click()
-  }
-
-  useEffect(() => {
-    setImg(image)
-  }, [image])
-
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && ['image/jpg', 'image/jpeg', 'image/png'].includes(e.target.files[0].type)) {
-      setImg(URL.createObjectURL(e.target.files[0]));
-      onChange(e.target.files[0])
-    } else {
-      setError("Le format du fichier n'est pas compatible")
-    } 
-  }
-
-  return (
-    <div className="input-vignet flex flex-col gap-3">
-      <div className="flex justify-between">
-        <label htmlFor="vignet" className="font-bold">{label}</label>
-        <Help text="Text" label={label} />
-      </div>
-      
-      <div className="text-base-text text-sm">{desc}</div>
-
-      {error && <div className="text-error text-sm">{error}</div>}
-
-      <div className="rounded-lg relative overflow-hidden border h-0 pb-[45%]">
-        <Image 
-          src={img}
-          alt= 'Image de la vignette'
-          width={200}
-          height={200}
-          className="w-full h-full absolute top-0 left-0 object-cover"
-        />
-      </div>
-
-      <Button 
-        text="Importer une miniature"
-        size="xs"
-        onClick={() => { handleClick() }}
-      />
-
-      <input 
-        ref={input}
-        type="file" 
-        name="vignet"
-        id="vignet"
-        onChange={(e) => { handleChange(e) }}
-        className="hidden"
-      />
-    </div>
-  )
-}
