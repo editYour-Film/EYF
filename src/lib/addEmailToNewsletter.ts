@@ -30,5 +30,6 @@ export const addEmailToNewsletter = async (emailAdress) => {
     })
     .catch(error => {
       console.error(error);
+      res.status(500).json({ message: 'Error sending mail' });
     });
 }

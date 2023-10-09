@@ -5,8 +5,9 @@ export default async (req, res) => {
   const { email } = req.body;
 
   try {
-    await sendNewsletterEmail(email);
+    await sendNewsletterEmail(email)
     await addEmailToNewsletter(email);
+    
     res.status(200).json({ message: 'Email sent successfully' });
   } catch (error) {
     console.error(error);

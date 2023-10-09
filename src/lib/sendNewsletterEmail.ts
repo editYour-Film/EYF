@@ -17,5 +17,6 @@ export const sendNewsletterEmail = async (to) => {
     console.log('Newsletter email sent');
   } catch (error) {
     console.error(error);
+    res.status(500).json({ message: 'Error sending mail' });
   }
 };

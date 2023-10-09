@@ -20,8 +20,7 @@ export const NewsletterSection = ({type = 'newsletter'}:NewsletterSectionProps) 
 
   const sendgrid = async () => {
     try {
-      await axios.post('/api/send-newsletter-email', { email });
-
+      await axios.post('/api/send-newsletter-email', { email })
 
       setEmailError("L'email a bien été ajouté à la newsletter.");
     } catch (error) {
