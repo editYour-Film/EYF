@@ -78,7 +78,7 @@ const BlogCategory = () => {
           )}
 
           <div className="categoryTitle mt-14 flex flex-row divide-x gap-10">
-            <Title titleType="h1">Catégorie.s</Title>
+            <Title titleType="h1">{currentCategory}</Title>
           </div>
 
           <div className="mt-14 flex flex-col gap-5">

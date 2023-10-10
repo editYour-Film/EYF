@@ -30,10 +30,10 @@ export const CategoriesList = ({
     >
       <div className="categoriesList flex flex-row md:flex-wrap gap-2">
         <div
-          className={`categoryTag px-4 py-2 bg-darkgrey w-max h-max rounded-2xl shrink-0 border transition-colors duration-200 hover:bg-background-card`}
+          className={`categoryTag px-4 py-2 bg-darkgrey w-max h-max rounded-2xl shrink-0 border transition-colors duration-200 hover:bg-background-card uppercase`}
           onClick={() => { router.push(routes.BLOG)}}
         >
-          À la une
+          <span className="uppercase">À la une</span>
         </div>
         {categories &&
           categories.map((category: any, i:number) => {
