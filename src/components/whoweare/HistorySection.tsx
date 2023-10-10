@@ -56,11 +56,9 @@ export const HistorySection = ({ data }: any) => {
           },
         })
 
-        tl.to(scrollContent.current, {
-          y: 0,
-        }, 0)
         tl.to([p2.current, p3.current], {
-          opacity: 0.1
+          opacity: 0.5,
+          y: 300
         }, 0)
 
         setP2Readed(false)
@@ -86,16 +84,14 @@ export const HistorySection = ({ data }: any) => {
           },
         })
 
-        tl.to(scrollContent.current, {
-          y: isFullHd ? 0 : -p2.current!.offsetTop,
-        }, 0)
-
         tl.to([p2.current], {
-          opacity: 1
+          opacity: 1,
+          y: 0
         }, 0)
 
         tl.to([p3.current], {
-          opacity: 0.1
+          opacity: 0.5,
+          y: 300
         }, 0)
 
         setP2Readed(true)
@@ -121,12 +117,9 @@ export const HistorySection = ({ data }: any) => {
           },
         })
 
-        tl.to(scrollContent.current, {
-          y: isFullHd ? 0 : -p3.current!.offsetTop,
-        }, 0)
-
         tl.to([p3.current], {
-          opacity: 1
+          opacity: 1,
+          y: 0
         }, 0)
 
         setP3Readed(true)
@@ -140,7 +133,7 @@ export const HistorySection = ({ data }: any) => {
         }, 0)
       });
 
-      const offset1 = window.innerHeight * 0.35
+      const offset1 = window.innerHeight * 0.15
       const offset2 = window.innerHeight * 0.15
 
       let trigger1: ScrollTrigger
@@ -160,11 +153,6 @@ export const HistorySection = ({ data }: any) => {
           onLeave: () => {
             ctx.current?.secondDate()
           },
-          onUpdate: (self) => {
-            !isTweening.current && gsap.set(scrollContent.current, {
-              y: `+=${-0.3 * self.direction}`,
-            })
-          }
         });
 
         trigger2 = ScrollTrigger.create({
@@ -178,11 +166,6 @@ export const HistorySection = ({ data }: any) => {
           onLeave: () => {
             ctx.current?.thirdDate()
           },
-          onUpdate: (self) => {          
-            !isTweening.current && gsap.set(scrollContent.current, {
-              y: `+=${-0.3 * self.direction}`,
-            })
-          }
         });
       }
 
@@ -230,12 +213,12 @@ export const HistorySection = ({ data }: any) => {
 
   return (
     <div>
-      <div className="my-10 md:my-20 max-w-lg mx-auto px-4">
+      <div className="relative my-10 md:my-20 max-w-md mx-auto lg:mx-0 lg:max-w-[50%] lg:left-[40%] lg:pl-36 pr-8">
         <p className="text-violet text-xl">
           <span className="n27 text-4xl">2012,</span> Notre histoire commence.
         </p>
 
-        <div ref={bubble} className="relative hystory__bubble my-6 px-7 py-4 origin-bottom-right">
+        <div ref={bubble} className="relative hystory__bubble flex justify-center items-center my-6 px-7 py-4 origin-bottom-right min-h-[150px]">
           <div ref={bubbleText} className="relative hystory__msg  text-2xl z-20">
             <TextSplit input="Et si on pouvait faire monter ses vidéos à tout moment peu importe le lieu où l’on se trouve ?" />
           </div>
@@ -249,9 +232,10 @@ export const HistorySection = ({ data }: any) => {
       </div>
 
       <div ref={scrollParent} className="md:h-[170vh]">
-        <div className="flex justify-between items-start gap-8 md:h-[65vh] lg:h-[80vh] md:sticky md:top-[25vh] lg:top-[15vh]">
-          <div className="relative border md:border-l-0 rounded-r-3xl bg-primary hidden md:flex justify-end md:w-4/12 lg::w-2/5 self-stretch z-10">
-            <div className="md:flex flex-col md:justify-center lg:justify-start h-full items-center lg:p-16 lg:pb-4 lg:pr-28 lg:pt-32 relative overflow-hidden w-full">
+        <div className="flex justify-between items-start gap-8 md:h-[80vh] lg:h-[80vh] md:sticky md:top-[15vh] lg:top-[15vh]">
+          
+          <div className="relative shrink-0 border md:border-l-0 rounded-r-3xl bg-primary hidden md:flex justify-end items-center md:w-4/12 lg:w-2/5 self-stretch z-10">
+            <div className="md:flex flex-col md:justify-center md:items-center lg:justify-start h-max items-center lg:p-16 lg:pr-28 relative overflow-hidden w-full">
               <Tag 
                 date='2012'
                 text='Une idée'
@@ -277,19 +261,19 @@ export const HistorySection = ({ data }: any) => {
             <div className="absolute top-0 left-0 w-full h-full z-0 pointer-events-none opacity-20 bg-pattern"></div>
           </div>
 
-          <div className="relative h-full no-scroll-bar overflow-scroll bg-010304 border md:border-r-0 rounded-3xl md:rounded-r-none md:rounded-l-3xl p-8 md:p-4 mx-4 md:mx-0 md:px-28 md:pt-24 md:pb-8 md:w-8/12 lg:w-3/5 z-10">
-            <div ref={scrollContent} className="max-w-3xl text-2xl text-ebebeb">
+          <div className="relative flex items-center h-full no-scroll-bar overflow-scroll bg-010304 border md:border-r-0 rounded-3xl md:rounded-r-none md:rounded-l-3xl p-8 md:p-4 mx-4 md:mx-0 md:px-16 lg:px-28 md:py-24 md:w-8/12 lg:w-3/5 z-10">
+            <div ref={scrollContent} className="max-w-3xl text-xl text-base-text">
               <div ref={p1}>
-              <span className='font-medium'>Notre histoire commence quand <span className="items-baseline w-max"><Image  className='relative inline align-baseline mx-4 top-2' src={'/img/whoweare/francois.png'} width={42} height={42} alt='Photo de François Herard' /><span className="underline capitalize">françois Herard</span></span></span>
+                <span className='font-medium'>Notre histoire commence quand <span className="items-baseline w-max"><Image  className='relative inline align-baseline mx-4 top-2' src={'/img/whoweare/francois.png'} width={42} height={42} alt='Photo de François Herard' /><span className="underline capitalize">françois Herard</span></span></span>
                 <p className="mt-3">après avoir travaillé 25 ans chez France Télévisions a une idée qui a changé la donne... </p>
                 <p className="mt-3">En 2012, il a tenté pour la première fois de créer un service de montage vidéo à distance, mais l&rsquo;époque était trop prématurée pour cette idée.</p>
               </div>
 
-              <div ref={p2} className="text-xl mt-12 md:mt-24 md:opacity-10">
-              Puis, en 2019, le COVID-19 a forcé le monde à s&rsquo;adapter rapidement au télétravail. À France Télévisions, les rédactions ont mis en place un dispositif pour permettre aux monteur.se.s de monter les sujets JT depuis leur domicile. Les conditions idéales étaient enfin réunies pour EDY ! 
+              <div ref={p2} className="text-xl mt-12 md:mt-8 md:opacity-90">
+                Puis, en 2019, le COVID-19 a forcé le monde à s&rsquo;adapter rapidement au télétravail. À France Télévisions, les rédactions ont mis en place un dispositif pour permettre aux monteur.se.s de monter les sujets JT depuis leur domicile. Les conditions idéales étaient enfin réunies pour EDY ! 
               </div>
 
-              <div ref={p3} className="text-xl mt-12 md:mt-24 md:opacity-10">
+              <div ref={p3} className="text-xl mt-12 md:mt-8 md:opacity-90">
               Après deux versions de test, nous sommes enfin prêts à vous aider à <span className="text-violet font-medium">transformer vos vidéos en véritables œuvres d&rsquo;art</span> grâce à toutes les fonctionnalités que nous avons développées.
               </div>
             </div>
@@ -314,11 +298,6 @@ const Tag = ({date, text, readed, offset = 0, onClick}:tagProps) => {
   const textEl = useRef(null)
 
   useEffect(() => {
-    // gsap.to(el.current, {
-    //   y: readed ? 0 : 50 + offset,
-    //   duration: 0.8,
-    //   ease: 'power2.inOut'
-    // })
 
     gsap.to(textEl.current, {
       opacity: readed ? 1 : 0,
