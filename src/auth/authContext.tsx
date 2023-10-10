@@ -71,7 +71,12 @@ export const UserProvider: React.FC<any> = ({ children }: any) => {
 
   return (
     <UserContext.Provider
-      value={[userInfo, Object.keys(userInfo.user).length > 0, isLoading]}
+      value={[
+        userInfo,
+        Object.keys(userInfo.user).length > 0,
+        isLoading,
+        setUserInfo,
+      ]}
     >
       {children}
     </UserContext.Provider>

@@ -12,10 +12,7 @@ type LayoutDashboardProps = {
   topSectionBackground?: boolean;
   quoteNavbar?: boolean;
 };
-const LayoutDashboard = ({
-  children,
-  topSectionBackground,
-}: LayoutDashboardProps) => {
+const LayoutDashboard = ({ children }: LayoutDashboardProps) => {
   const lenis = useLenis();
   const [, isLoggedIn] = useUser();
 
