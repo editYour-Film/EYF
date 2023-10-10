@@ -3,7 +3,7 @@ const client = require('@sendgrid/client');
 
 client.setApiKey(process.env.SENDGRID_API_KEY);
 
-const contactListId = "e4e454a1-ddce-43d0-be03-82c903737169";
+const contactListId = process.env.SENDGRID_CONTACT_LIST_ID;
 
 
 export const addEmailToNewsletter = async (emailAdress) => {
@@ -24,12 +24,12 @@ export const addEmailToNewsletter = async (emailAdress) => {
     body: data
   }
   
-  client.request(request)
-    .then(([response, body]) => {
-      console.log("Added user to Newsletter contact list");
-    })
-    .catch(error => {
-      console.error(error);
-      res.status(500).json({ message: 'Error sending mail' });
-    });
+  try {
+    client.request(request)
+    console.log("Added user to Newsletter contact list");
+  } catch (error) {
+    console.log("Error adding user to Newsletter contact list");
+    console.error(error);
+    throw new Error('Error adding user to Newsletter contact list');
+  }
 }
