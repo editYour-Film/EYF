@@ -11,18 +11,23 @@ export const TitleReveal = ({}: TitleRevealProps) => {
   const titles = [
     {
       text: 'CRÉATEURS DE CONTENUS',
+      content: "1 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
       isActive: true
     },{
       text: 'Réalisateurs',
+      content: "2 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
       isActive: false
     },{
       text: 'journalistes',
+      content: "3 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
       isActive: false
     },{
       text: 'vlogueurs',
+      content: "4 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
       isActive: false
     },{
       text: 'VIDÉASTES',
+      content: "5 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
       isActive: false
     },{
       text: '...',
@@ -36,6 +41,8 @@ export const TitleReveal = ({}: TitleRevealProps) => {
     return createRef<HTMLDivElement>()
   }))
 
+  const contents = useRef<HTMLDivElement>(null)
+
   const DirectionRef = useRef(titles.map<1 | -1>(() => 1 ))
 
   const titlesNumber = titles.length;
@@ -43,7 +50,17 @@ export const TitleReveal = ({}: TitleRevealProps) => {
   const parent = useRef<HTMLDivElement>(null)
 
   const stepHeight = window.innerHeight / 2
-  
+
+  const moveContent = (i: number) => {
+    const tl = gsap.timeline()
+
+    tl.to(contents.current, {
+      x: -i * (contents.current!.offsetWidth + 400),
+      ease: 'power2.inOut',
+      duration: 0.8
+    })
+  }
+
   useEffect(() => {    
     const ctx = gsap.context(() => {
       titlesRef.current.forEach((title, i) => {
@@ -54,10 +71,12 @@ export const TitleReveal = ({}: TitleRevealProps) => {
           id: `step${i}`,
           onEnter: () => {
             setTitleActive(i)
+            moveContent(i)
             DirectionRef.current[i] = 1
           },
           onEnterBack: () => {
             setTitleActive(i)
+            moveContent(i)
             DirectionRef.current[i] = -1
           },
           onLeave: () => {
@@ -83,7 +102,7 @@ export const TitleReveal = ({}: TitleRevealProps) => {
       className="title-reveal w-full"
       style={{height: `${stepHeight * (titlesNumber + 1)}px`}}
     >
-      <div className="title-reveal__container sticky h-[100vh] w-full flex top-0 justify-center items-center">
+      <div className="title-reveal__container sticky h-[100vh] w-full flex top-0 justify-center items-center overflow-hidden">
         <div className="title-reveal__content">
           <div className="title-reveal__suptitle text-center text-violet font-medium text-2xl n27">Une nouvelle façon de travailler pour les</div>
           <div className="relative title-reveal__titles text-center grid place-content-center text-[40px] md:text-[50px] leading-[100%] mt-8 n27 font-bold">
@@ -97,6 +116,18 @@ export const TitleReveal = ({}: TitleRevealProps) => {
                   direction={DirectionRef.current[i]}/>
               )
             })}
+          </div>
+          <div className="relative w-1/4 mx-auto">
+            <div className="absolute gradient-dark-transparent w-[37.5vw] h-full -translate-x-[100%] z-10"></div>
+            <div className="absolute gradient-dark-transparent w-[37.5vw] h-full rotate-[180deg] translate-x-[100%] z-10"></div>
+
+            <div ref={contents} className="relative w-full mt-12 flex gap-[400px] z-0">
+              {titles.length && titles.map((title, i) => {
+                  return (
+                    <div className="basis-[100%] shrink-0 text-center">{title.content}</div>
+                  )
+                })}
+            </div>
           </div>
         </div>
       </div>
