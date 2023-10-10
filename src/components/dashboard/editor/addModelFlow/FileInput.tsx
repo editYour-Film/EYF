@@ -43,6 +43,7 @@ export const FileInput = ({}: FileInputProps) => {
     const formData = new FormData();
     const elementData: any = {};
 
+    elementData["publishedAt"] = null;
     elementData["user_info"] = user[0].details.id;
     Array.from(form.current!.elements).map((input: any) => {
       if (!["file"].includes(input.type)) elementData[input.name] = input.value;
@@ -156,7 +157,7 @@ export const FileInput = ({}: FileInputProps) => {
                 handleSubmit(e);
               }}
             >
-              <label htmlFor="video" className="opacity-0 ">
+              <label htmlFor="video" className="opacity-0">
                 {" "}
                 Sélectionnez une video{" "}
               </label>
