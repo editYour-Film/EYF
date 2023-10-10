@@ -1,23 +1,22 @@
-import sgMail from '@sendgrid/mail';
+import sgMail from "@sendgrid/mail";
 
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+sgMail.setApiKey(process.env.SENDGRID_API_KEY as string);
 
-export const sendNewsletterEmail = async (to) => {
+export const sendNewsletterEmail = async (to: string) => {
   const msg = {
     to,
     from: "contact@edityour.film",
     subject: "Bienvenue sur la newsletter",
-    templateId: "d-d3ef58b024e345e4aaee5effe7970ffa",
-    dynamic_template_data: {
-    }
+    templateId: process.env.SENDGRID_TEMPLATE_ID as string,
+    dynamic_template_data: {},
   };
 
   try {
     await sgMail.send(msg);
-    console.log('Newsletter email sent');
+    console.log("Newsletter email sent");
   } catch (error) {
-    console.log('Error sending newsletter email');
+    console.log("Error sending newsletter email");
     console.error(error);
-    throw new Error('Error sending newsletter email');
+    throw new Error("Error sending newsletter email");
   }
 };
