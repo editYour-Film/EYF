@@ -17,6 +17,8 @@ export const CreatorToEditor = ({}:CreatorToEditorProps) => {
   const pans = useRef<HTMLDivElement>(null)
   const creatorPan = useRef<HTMLDivElement>(null)
   const editorPan = useRef<HTMLDivElement>(null)
+  const editorPanInner = useRef<HTMLDivElement>(null)
+
   const section = useRef<HTMLDivElement>(null)
   const img1 = useRef<HTMLImageElement>(null)
 
@@ -66,7 +68,7 @@ export const CreatorToEditor = ({}:CreatorToEditorProps) => {
         end: `top+=${window.innerHeight} top`,
         id: 'triggerPan',
         onUpdate: (self) => {
-          if (self.progress > 0.5) inViewSection && setShowTitle1(true)
+          if (self.progress > 0.3) inViewSection && setShowTitle1(true)
           else setShowTitle1(false)
           
           tlTop.progress(self.progress)
@@ -77,14 +79,37 @@ export const CreatorToEditor = ({}:CreatorToEditorProps) => {
       const tlLeft = gsap.timeline({
         paused: true
       })
+
+      tlLeft.fromTo(creatorPan.current!.querySelector('.title'), {
+        xPercent: 0,
+      },{
+        xPercent: -20,
+        duration: 0.3,
+        ease: 'power3.inOut'
+      }, 0.1)
+
       tlLeft.fromTo(editorPan.current, {
         xPercent: 0,
         x: 0,
       },{
         xPercent: -100,
         x: -60,
-        ease: 'power2.out'
-      })
+        ease: 'power2.inOut'
+      }, 0)
+
+      tlLeft.fromTo(editorPanInner.current, {
+        xPercent: -100,
+      },{
+        xPercent: 0,
+        ease: 'power2.inOut'
+      }, 0)
+
+      tlLeft.fromTo(editorPanInner.current!.querySelector('.title'), {
+        xPercent: 50,
+      },{
+        xPercent: 0,
+        ease: 'power3.inOut'
+      }, 0)
 
       const triggerPanLeft = ScrollTrigger.create({
         trigger: section.current,
@@ -129,11 +154,13 @@ export const CreatorToEditor = ({}:CreatorToEditorProps) => {
             <Title titleType='none' anim charDelay={'0.03s'} className='pt-[60px]'>Créateur</Title>
           </div>
           <div ref={editorPan} className={`creator-to-editor__editor-pan absolute bottom-0 left-[calc(100%+60px)] h-screen w-[calc(100%+60px)] basis-full shrink-0 z-10 overflow-hidden ${showTitle2 ? 'inView' : ''}`}>
-            <div className='absolute top-0 left-1/2 w-full h-1/2 bg-signin opacity-100 z-0'></div>
-            <div 
-              className='absolute top-0 left-0 w-full h-full text-title-large lg:text-[260px] font-medium rounded-l-[60px] flex justify-center items-center z-10 text-black bg-white mix-blend-lighten'
-            >
-              <Title titleType='none' anim fromRight charDelay={'0.1s'} className='pl-[60px]'>Monteur</Title>
+            <div ref={editorPanInner} className='absolute top-0 left-0 w-full h-full'>
+              <div className='absolute top-0 left-1/2 w-full h-1/2 bg-signin opacity-100 z-0'></div>
+              <div 
+                className='absolute top-0 left-0 w-full h-full text-title-large lg:text-[260px] font-medium rounded-l-[60px] flex justify-center items-center z-10 text-black bg-white mix-blend-lighten'
+              >
+                <Title titleType='none' /*anim fromRight charDelay={'-0.1s'} */ className='relative pl-[60px] -top-[50px]'>Monteur</Title>
+              </div>
             </div>
           </div>
         </div>
