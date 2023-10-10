@@ -87,6 +87,9 @@ module.exports = {
           `,
           opacity: '1'
         },
+        '.gradient-dark-transparent': {
+          background: `linear-gradient(-90deg, rgba(1, 3, 4, 0.00) 0%, ${theme('colors.black')} 50%)`,
+        },
         '.gradient-to-top-black-transparent': {
           background: 'linear-gradient(180deg, rgba(1, 3, 4, 0.00) 0%, #010304 100%)',
         },

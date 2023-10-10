@@ -231,7 +231,7 @@ export const TopVideoSection = ({ data }: any) => {
           >
             <div className="relative w-full h-full sm:h-auto rounded-xl lg:rounded-3xl overflow-hidden pointer-events-auto z-10">
               {data.video && <video 
-                  className="relative w-full h-full sm:h-auto object-cover"
+                  className="relative w-full h-full sm:h-auto object-cover pointer-events-none md:pointer-events-auto"
                   autoPlay={true}
                   loop
                   muted={isVideoMute}
