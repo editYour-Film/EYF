@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: false,
-  output: "export",
+  output: "server",
   images: {
     unoptimized: true,
     domains: [
@@ -18,6 +18,8 @@ const nextConfig = {
       issuer: /\.[jt]sx?$/,
       use: ["@svgr/webpack"],
     });
+
+    config.resolve.fallback = { fs: false };
 
     return config;
   },
