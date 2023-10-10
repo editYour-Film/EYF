@@ -12,6 +12,7 @@ import useLocalStorage, { getStoredValue } from "@/hooks/useLocalStorage";
 import { useStrapiPost, useStrapiPut } from "@/hooks/useStrapi";
 import { setToken, unsetToken } from "@/auth/auth";
 import { RegisterUser, initRegisterUser } from "@/components/model/register";
+import { useUser } from "@/auth/authContext";
 
 export default function SignUpInfo() {
   const { push } = useRouter();
@@ -23,6 +24,8 @@ export default function SignUpInfo() {
     "user_register",
     initRegisterUser
   );
+
+  const [, , , setUserInfo] = useUser();
 
   const [info, setInfo] = useState({
     fname: "",
@@ -83,10 +86,10 @@ export default function SignUpInfo() {
       setCityError(inputErrors.invalid);
       isValid = false;
     }
-    if (!validator.isMobilePhone(info.phone, "fr-FR", { strictMode: false })) {
+    /*if (!validator.isMobilePhone(info.phone, "fr-FR", { strictMode: false })) {
       setPhoneError(inputErrors.invalid);
       isValid = false;
-    }
+    }*/
 
     if (isValid) {
       setRegisterUser((previousState: RegisterUser) => ({
@@ -131,10 +134,21 @@ export default function SignUpInfo() {
             },
             true
           );
-          if (createAccountResponse.status === 200) push(routes.SIGNUP_SUCCESS);
-          else alert("erreur lors de création du compte");
+          if (createAccountResponse.status === 200) {
+            console.log("createAccountResponse", createAccountResponse);
+            setUserInfo({
+              user: signupResponse.data.user,
+              details: {
+                id: createAccountResponse.data.data.id,
+                ...createAccountResponse.data.data.attributes,
+              },
+            });
+            push(routes.SIGNUP_SUCCESS);
+          } else alert("erreur lors de création du compte");
         } else alert("erreur lors de configuration du role");
-      } else alert("erreur lors de sign up");
+      } else if (signupResponse.data.message.inludes("already taken"))
+        alert("Compte existant.");
+      else alert("erreur lors de sign up");
     }
   };
   return (

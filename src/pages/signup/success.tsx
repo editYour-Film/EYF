@@ -4,6 +4,7 @@ import Button from "@/components/_shared/form/Button";
 import Link from "next/link";
 import { getStoredValue } from "@/hooks/useLocalStorage";
 import { RegisterUser, initRegisterUser } from "@/components/model/register";
+import routes from "@/routes";
 
 export default function SignUpSuccess() {
   const registerUser = getStoredValue(
@@ -27,7 +28,7 @@ export default function SignUpSuccess() {
               vos compétences pour vos futurs clients.
             </p>
 
-            <Link href="#">
+            <Link href={routes.DASHBOARD_EDITOR_HOME}>
               <Button text="Découvrir mon profil" />
             </Link>
 

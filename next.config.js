@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: false,
-  output: "server",
+  output: "export",
   images: {
     unoptimized: true,
     domains: [

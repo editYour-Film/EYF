@@ -10,7 +10,7 @@ export const InfoSection = () => {
           <div className="flex flex-wrap gap-8 items-center justify-start">
             <div
               className="relative bg-cover bg-center w-32 h-32"
-              style={{ backgroundImage: "url(/img/profile/profile-pic.png)" }}
+              style={{ backgroundImage: "url(/img/profile/avatar.png)" }}
             >
               <Image
                 src="/icons/like.svg"
