@@ -1,6 +1,6 @@
 import sgMail from "@sendgrid/mail";
 
-sgMail.setApiKey(process.env.SENDGRID_API_KEY as string);
+sgMail.setApiKey(process.env.NEXT_PUBLIC_SENDGRID_API_KEY as string);
 
 export const sendNewsletterEmail = async (to: string) => {
   const msg = {
@@ -11,12 +11,5 @@ export const sendNewsletterEmail = async (to: string) => {
     dynamic_template_data: {},
   };
 
-  try {
-    await sgMail.send(msg);
-    console.log("Newsletter email sent");
-  } catch (error) {
-    console.log("Error sending newsletter email");
-    console.error(error);
-    throw new Error("Error sending newsletter email");
-  }
+  return await sgMail.send(msg);
 };
