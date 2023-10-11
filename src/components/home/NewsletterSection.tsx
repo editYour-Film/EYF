@@ -3,8 +3,7 @@ import { H1 } from "../_shared/typography/H1";
 import Button from "../_shared/form/Button";
 import validator from "validator";
 import { inputErrors } from "@/const";
-import { useStrapi } from "@/hooks/useStrapi";
-import { sendNewsletterEmail } from "@/lib/sendNewsletterEmail";
+import { useStrapi, useStrapiPost } from "@/hooks/useStrapi";
 import { addEmailToNewsletter } from "@/lib/addEmailToNewsletter";
 
 export const NewsletterSection = () => {
@@ -16,8 +15,17 @@ export const NewsletterSection = () => {
   const [email, setEmail] = useState("");
   const [emailResponse, setEmailResponse] = useState("");
 
+  /*const handleResponse = (status: any, msg: string) => {
+    if (status === 200)
+      setEmailResponse("L'email a bien été ajouté à la newsletter.");
+    else
+      setEmailResponse(
+        "L'envoi de l'email a échoué, veuillez réessayer plus tard."
+      );
+  };*/
+
   const sendgrid = async () => {
-    try {
+    /*   try {
       await sendNewsletterEmail(email)
         .then(async () => {
           await addEmailToNewsletter(email)
@@ -39,7 +47,27 @@ export const NewsletterSection = () => {
       setEmailResponse(
         "L'envoi de l'email a échoué, veuillez réessayer plus tard."
       );
-    }
+    }*/
+
+    /*const res = await fetch("/api/send", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(email),
+    });
+    const text = await res.text();
+    handleResponse(res.status, text);*/
+
+    const sendRes = await useStrapiPost(
+      "send-mail",
+      { email: email, subject: "Bienvenue sur la newsletter" },
+      false
+    );
+    if (sendRes.status === 200)
+      await addEmailToNewsletter(email).then(() => {
+        setEmailResponse("L'email a bien été ajouté à la newsletter.");
+      });
   };
 
   useEffect(() => {
