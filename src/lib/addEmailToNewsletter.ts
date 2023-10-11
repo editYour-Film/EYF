@@ -5,7 +5,6 @@ client.setApiKey(process.env.NEXT_PUBLIC_SENDGRID_API_KEY);
 const contactListId = process.env.NEXT_PUBLIC_SENDGRID_CONTACT_LIST_ID;
 
 export const addEmailToNewsletter = async (emailAdress: string) => {
-  console.log("contactListId", contactListId);
   const data = {
     contacts: [
       {
