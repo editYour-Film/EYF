@@ -114,6 +114,14 @@ module.exports = {
         '.gradient-text': {
           background: 'linear-gradient(270deg, #c985fe 6.21%, #999dff 103.42%)',
         },
+        '.gradient-svg-linear': {
+          'path[fill]': {
+            'fill' : 'url(/icons/gradients.svg#linear)',
+          },
+          'path[stroke]': {
+            'stroke' : 'url(/icons/gradients.svg#linear)',
+          }
+        },
         '.bg-signin': {
           background: `radial-gradient(50.00% 50.00% at 50.00% 50.00%, #7E5EFF 0%, rgba(205, 3, 255, 0.60) 100%)`,
           mixBlendMode: 'lighten',

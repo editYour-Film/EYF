@@ -261,19 +261,19 @@ export const HistorySection = ({ data }: any) => {
             <div className="absolute top-0 left-0 w-full h-full z-0 pointer-events-none opacity-20 bg-pattern"></div>
           </div>
 
-          <div className="relative flex items-center h-full no-scroll-bar overflow-scroll bg-010304 border md:border-r-0 rounded-3xl md:rounded-r-none md:rounded-l-3xl p-8 md:p-4 mx-4 md:mx-0 md:px-16 lg:px-28 md:py-24 md:w-8/12 lg:w-3/5 z-10">
-            <div ref={scrollContent} className="max-w-3xl text-xl text-base-text">
+          <div className="relative flex items-center h-full text-base no-scroll-bar overflow-scroll bg-010304 border md:border-r-0 rounded-3xl md:rounded-r-none md:rounded-l-3xl p-8 md:p-4 mx-4 md:mx-0 md:px-16 lg:px-28 md:py-24 md:w-8/12 lg:w-3/5 z-10">
+            <div ref={scrollContent} className="max-w-3xl text-base-text">
               <div ref={p1}>
                 <span className='font-medium'>Notre histoire commence quand <span className="items-baseline w-max"><Image  className='relative inline align-baseline mx-4 top-2' src={'/img/whoweare/francois.png'} width={42} height={42} alt='Photo de François Herard' /><span className="underline capitalize">françois Herard</span></span></span>
                 <p className="mt-3">après avoir travaillé 25 ans chez France Télévisions a une idée qui a changé la donne... </p>
                 <p className="mt-3">En 2012, il a tenté pour la première fois de créer un service de montage vidéo à distance, mais l&rsquo;époque était trop prématurée pour cette idée.</p>
               </div>
 
-              <div ref={p2} className="text-xl mt-12 md:mt-8 md:opacity-90">
+              <div ref={p2} className="mt-12 md:mt-8 md:opacity-90">
                 Puis, en 2019, le COVID-19 a forcé le monde à s&rsquo;adapter rapidement au télétravail. À France Télévisions, les rédactions ont mis en place un dispositif pour permettre aux monteur.se.s de monter les sujets JT depuis leur domicile. Les conditions idéales étaient enfin réunies pour EDY ! 
               </div>
 
-              <div ref={p3} className="text-xl mt-12 md:mt-8 md:opacity-90">
+              <div ref={p3} className="mt-12 md:mt-8 md:opacity-90">
               Après deux versions de test, nous sommes enfin prêts à vous aider à <span className="text-violet font-medium">transformer vos vidéos en véritables œuvres d&rsquo;art</span> grâce à toutes les fonctionnalités que nous avons développées.
               </div>
             </div>

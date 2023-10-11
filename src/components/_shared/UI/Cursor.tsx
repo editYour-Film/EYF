@@ -391,13 +391,13 @@ export const Cursor = () => {
             className="absolute top-[25%] left-[25%] w-[50%] h-[50%] overflow-hidden"
           >
             <div ref={muteIcon} className="absolute top-0 lef-0 w-full h-full">
-              <Mute className="absolute top-0 left-0 w-full h-full" />
+              <Mute className="absolute top-0 left-0 w-full h-full gradient-svg-linear" />
             </div>
             <div
               ref={unmuteIcon}
               className="absolute top-0 lef-0 w-full h-full"
             >
-              <Unmute className="absolute top-0 left-0 w-full h-full" />
+              <Unmute className="absolute top-0 left-0 w-full h-full gradient-svg-linear" />
             </div>
           </div>
         </div>
