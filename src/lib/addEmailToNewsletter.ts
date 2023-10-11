@@ -1,11 +1,11 @@
-const axios = require("axios");
 const client = require("@sendgrid/client");
 
-client.setApiKey(process.env.SENDGRID_API_KEY);
+client.setApiKey(process.env.NEXT_PUBLIC_SENDGRID_API_KEY);
 
-const contactListId = process.env.SENDGRID_CONTACT_LIST_ID;
+const contactListId = process.env.NEXT_PUBLIC_SENDGRID_CONTACT_LIST_ID;
 
 export const addEmailToNewsletter = async (emailAdress: string) => {
+  console.log("contactListId", contactListId);
   const data = {
     contacts: [
       {
@@ -21,12 +21,5 @@ export const addEmailToNewsletter = async (emailAdress: string) => {
     body: data,
   };
 
-  try {
-    client.request(request);
-    console.log("Added user to Newsletter contact list");
-  } catch (error) {
-    console.log("Error adding user to Newsletter contact list");
-    console.error(error);
-    throw new Error("Error adding user to Newsletter contact list");
-  }
+  client.request(request);
 };

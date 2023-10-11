@@ -1,34 +1,49 @@
 import { useEffect, useState } from "react";
 import { H1 } from "../_shared/typography/H1";
 import Button from "../_shared/form/Button";
-import Image from "next/image";
 import validator from "validator";
 import { inputErrors } from "@/const";
 import { useStrapi } from "@/hooks/useStrapi";
-import axios from "axios";
+import { sendNewsletterEmail } from "@/lib/sendNewsletterEmail";
+import { addEmailToNewsletter } from "@/lib/addEmailToNewsletter";
 
-type NewsletterSectionProps = {
-  type?: 'newsletter' | 'sponsor'
-}
-
-export const NewsletterSection = ({type = 'newsletter'}:NewsletterSectionProps) => {  
-  const { data: newsletterData, mutate: getNewsLetterData } = useStrapi("newsletter-section", false);
+export const NewsletterSection = () => {
+  const { data: newsletterData, mutate: getNewsLetterData } = useStrapi(
+    "newsletter-section",
+    false
+  );
 
   const [email, setEmail] = useState("");
-  const [emailError, setEmailError] = useState("");
+  const [emailResponse, setEmailResponse] = useState("");
 
   const sendgrid = async () => {
     try {
-      await axios.post('/api/send-newsletter-email', { email })
-
-      setEmailError("L'email a bien été ajouté à la newsletter.");
+      await sendNewsletterEmail(email)
+        .then(async () => {
+          await addEmailToNewsletter(email)
+            .then(() => {
+              setEmailResponse("L'email a bien été ajouté à la newsletter.");
+            })
+            .catch(() => {
+              setEmailResponse(
+                "L'envoi de l'email a échoué, veuillez réessayer plus tard."
+              );
+            });
+        })
+        .catch(() => {
+          setEmailResponse(
+            "L'envoi de l'email a échoué, veuillez réessayer plus tard."
+          );
+        });
     } catch (error) {
-      setEmailError("L'envoi de l'email a échoué, veuillez réessayer plus tard.");
+      setEmailResponse(
+        "L'envoi de l'email a échoué, veuillez réessayer plus tard."
+      );
     }
   };
 
-  useEffect(() => { 
-    getNewsLetterData();   
+  useEffect(() => {
+    getNewsLetterData();
   }, []);
 
   return (
@@ -42,7 +57,12 @@ export const NewsletterSection = ({type = 'newsletter'}:NewsletterSectionProps) 
         </div>
 
         <div className="relative z-50">
-          <H1 className="text-black max-w-sm font-bold text-[45px] leading-[110%]" fake>{newsletterData?.title}</H1>
+          <H1
+            className="text-black max-w-sm font-bold text-[45px] leading-[110%]"
+            fake
+          >
+            {newsletterData?.title}
+          </H1>
           <p className="text-xl  text-black md:max-w-md mt-2">
             {newsletterData?.content}
           </p>
@@ -66,21 +86,22 @@ export const NewsletterSection = ({type = 'newsletter'}:NewsletterSectionProps) 
                   type="button"
                   id="submitInput"
                   onClick={() => {
-                    setEmailError("");
+                    setEmailResponse("");
 
                     if (validator.isEmpty(email))
-                      setEmailError(inputErrors.required);
+                      setEmailResponse(inputErrors.required);
                     else if (!validator.isEmail(email))
-                      setEmailError(inputErrors.invalid);
-                    else
-                      sendgrid();
+                      setEmailResponse(inputErrors.invalid);
+                    else sendgrid();
                   }}
                 >
                   Rejoindre la newsletter
                 </button>
               </div>
             </div>
-            {emailError && <p className="text-red-500 mt-1.5 ">{emailError}</p>}
+            {emailResponse && (
+              <p className="text-red-500 mt-1.5 ">{emailResponse}</p>
+            )}
 
             <div id="div-submitInput">
               <Button
@@ -89,14 +110,13 @@ export const NewsletterSection = ({type = 'newsletter'}:NewsletterSectionProps) 
                 text="Rejoindre la newsletter"
                 id="submitInput"
                 onClick={() => {
-                  setEmailError("");
+                  setEmailResponse("");
 
                   if (validator.isEmpty(email))
-                    setEmailError(inputErrors.required);
+                    setEmailResponse(inputErrors.required);
                   else if (!validator.isEmail(email))
-                    setEmailError(inputErrors.invalid);
-                  else
-                    sendgrid();
+                    setEmailResponse(inputErrors.invalid);
+                  else sendgrid();
                 }}
               />
             </div>
