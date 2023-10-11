@@ -116,20 +116,9 @@ export const AddModelContextProvider: React.FC<any> = (props) => {
           //       value.files[i].name
           //   );
           // }
-          else if (key === "is_highlighted") {
-            if (value === true) {
-              // eslint-disable-next-line react-hooks/rules-of-hooks
-              const updateHighlight = await useStrapiPut(
-                `user-infos/${user[0].details.id}?populate=*`,
-                {
-                  data: {
-                    highlighted_video: currentEditorVideo,
-                  },
-                },
-                false
-              );
-            }
-          } else if (key === "tags") {
+          else if (key === "is_highlighted")
+            fieldsData["is_highlighted"] = value;
+          else if (key === "tags") {
             const tagArray = value;
 
             const existingTags = await useStrapiGet("video-tags", true);

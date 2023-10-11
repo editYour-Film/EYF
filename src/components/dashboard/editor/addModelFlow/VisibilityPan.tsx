@@ -138,13 +138,15 @@ export const VisibilityPan = () => {
             <div className="text-lg font-medium uppercase tracking-widest">
               {context.modifiedData?.title}
             </div>
-            <div className="text-sm">
-              &#40;
-              {videoDuration?.min !== 0 &&
-                videoDuration?.min.toString() + "minutes"}
-              {videoDuration?.sec.toString()}
-              {videoDuration?.min === 0 && "secondes"}&#41;
-            </div>
+            {videoDuration && (
+              <div className="text-sm">
+                &#40;
+                {videoDuration?.min !== 0 &&
+                  videoDuration?.min.toString() + " minutes"}
+                {videoDuration?.sec.toString()}
+                {videoDuration?.min === 0 && " secondes"}&#41;
+              </div>
+            )}
           </div>
           <div className="text-base-text font-light text-[17px] uppercase n27">
             {user[0].details.f_name}

@@ -74,25 +74,34 @@ export const InfosPan = ({}: InfosPanProps) => {
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    if(context.strapiObject) {
-      setEntry(context.strapiObject.attributes)
+    if (context.strapiObject) {
+      setEntry(context.strapiObject.attributes);
       setIsHighlightedValue(
-        user[0].details.highlighted_video.data &&
+        user[0].details.highlighted_video &&
+          user[0].details.highlighted_video.data &&
           user[0].details.highlighted_video.data.id === context.strapiObject.id
           ? highlightedOptions[0].value
           : highlightedOptions[1].value
       );
-      setFormatValue(context.strapiObject.attributes.model ?? formatOption[0].value)
-      setTitleValue(context.strapiObject.attributes.title ?? undefined)
-      setDescriptionValue(context.strapiObject.attributes.description ?? undefined)
-      setDefaultImage(context.strapiObject.attributes.thumbnail.data ? 
-        context.strapiObject.attributes.thumbnail.data.attributes.url : 
-        context.defaultImage
-      )
-      setTags(context.strapiObject.attributes.video_tags?.data ? 
-        context.strapiObject.attributes.video_tags.data.map((tag: any) => {return {name: tag.attributes.name, slug: tag.attributes.slug}}) :
-        []
-      )
+      setFormatValue(
+        context.strapiObject.attributes.model ?? formatOption[0].value
+      );
+      setTitleValue(context.strapiObject.attributes.title ?? undefined);
+      setDescriptionValue(
+        context.strapiObject.attributes.description ?? undefined
+      );
+      setDefaultImage(
+        context.strapiObject.attributes.thumbnail.data
+          ? context.strapiObject.attributes.thumbnail.data.attributes.url
+          : context.defaultImage
+      );
+      setTags(
+        context.strapiObject.attributes.video_tags?.data
+          ? context.strapiObject.attributes.video_tags.data.map((tag: any) => {
+              return { name: tag.attributes.name, slug: tag.attributes.slug };
+            })
+          : []
+      );
     }
   }, [context.strapiObject]);
 
@@ -109,6 +118,11 @@ export const InfosPan = ({}: InfosPanProps) => {
       tags: tags.length ? tags : undefined,
       user_info: user[0].details.id,
       is_highlighted: isHighlightedValue,
+      length: duration
+        ? duration?.min !== 0
+          ? duration?.min.toString() + " minutes"
+          : duration?.sec.toString() + " secondes"
+        : "",
     };
 
     context.setModifiedData(data);
@@ -172,11 +186,13 @@ export const InfosPan = ({}: InfosPanProps) => {
 
       <div className="info-pan__title flex items-baseline gap-2">
         <div className="n27 text-lg font-medium">{entry?.title}</div>
-        <div className="n27 text-sm font-light">
-          &#40;{duration?.min !== 0 && duration?.min.toString() + "minutes"}
-          {duration?.sec.toString()}
-          {duration?.min === 0 && "secondes"}&#41;
-        </div>
+        {duration && (
+          <div className="n27 text-sm font-light">
+            &#40;{duration?.min !== 0 && duration?.min.toString() + " minutes"}
+            {duration?.sec.toString()}
+            {duration?.min === 0 && " secondes"}&#41;
+          </div>
+        )}
       </div>
 
       <hr />
@@ -250,10 +266,10 @@ export const InfosPan = ({}: InfosPanProps) => {
           </div>
 
           <div className="md:basis-5/12">
-            <InputVignet 
-              label="Miniature" 
+            <InputVignet
+              label="Miniature"
               buttonLabel="Modifier la miniature"
-              desc="Importez une image qui donne un aperçu du contenu de votre vidéo. Une bonne image se remarque et attire l'attention des spectateurs." 
+              desc="Importez une image qui donne un aperçu du contenu de votre vidéo. Une bonne image se remarque et attire l'attention des spectateurs."
               image={defaultImage}
               onChange={(file) => {
                 setVignet(file);
@@ -354,7 +370,7 @@ const KeyWords = ({ onChange }: keyWordsProps) => {
       <Input
         type="search"
         bg="card"
-        label="Référencementpar mot clès"
+        label="Référencement par mot clès"
         labelType="dashboard"
         helpIconText="help"
         roundedFull
@@ -384,4 +400,3 @@ const KeyWords = ({ onChange }: keyWordsProps) => {
     </>
   );
 };
-
