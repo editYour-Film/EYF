@@ -26,7 +26,7 @@ import { disableTransition } from "@/store/slices/transitionSlice";
 
 export default function SignInEmail() {
   const { push } = useRouter();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const [, setSigninUser] = useLocalStorage<SigninUser>(
     "user_signin",
@@ -54,7 +54,7 @@ export default function SignInEmail() {
         ...previousState,
         email: email,
       }));
-      
+
       push(routes.SIGNIN_PASSWORD);
     }
   };
@@ -112,7 +112,9 @@ export default function SignInEmail() {
           </div>
         ) : (
           <div>
-            <a href={process.env.NEXT_PUBLIC_API_STRAPI + "connect/google"}>
+            <a
+              href="#" /*href={process.env.NEXT_PUBLIC_API_STRAPI + "connect/google"}*/
+            >
               <Button
                 text="Se connecter avec Google"
                 borderRadiusSm
@@ -140,7 +142,7 @@ export default function SignInEmail() {
           text="Continuer avec un email"
           variant="dark"
           onClick={() => {
-            dispatch(disableTransition())
+            dispatch(disableTransition());
             push(routes.SIGNIN_EMAIL);
           }}
           borderRadiusSm
