@@ -32,14 +32,14 @@ export default function SignUpSuccess() {
               <Button text="Découvrir mon profil" />
             </Link>
 
-            <Link href="#">
+            <Link href={routes.DASHBOARD_EDITOR_HOME}>
               <Button
                 variant="secondary"
                 text="Ajouter une réalisation au catalogue"
               />
             </Link>
 
-            <Link href="#">
+            <Link href={routes.DASHBOARD_EDITOR_PROFIL}>
               <Button variant="secondary" text="Compléter mes informations" />
             </Link>
           </>
@@ -56,7 +56,7 @@ export default function SignUpSuccess() {
             </Link>
 
             <Link href="#">
-              <Button variant="secondary" text="Accéder au catalogue" />
+              <Button variant="secondary" text="Accéder aux catalogues" />
             </Link>
           </>
         )}

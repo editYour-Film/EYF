@@ -109,7 +109,7 @@ export const VisibilityPan = () => {
   }, [context.strapiObject]);
 
   const handleCopyWriteChange = (e: any) => {
-    checkAlphanumeric(e.target.value, setCopyWriteError);
+    //checkAlphanumeric(e.target.value, setCopyWriteError);
     setCopyWriteValue(e.target.value);
   };
 
