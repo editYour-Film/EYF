@@ -106,7 +106,7 @@ const SideBarDesktop = ({ className, menu, userInfos }: SidebarChildProps) => {
       <div className="sidebar__logo w-max flex justify-center items-center pt-12 -translate-y-1">
         <Logo />
       </div>
-      <div className="sidebar__menu flex flex-col gap-4 w-40">
+      <div className="sidebar__menu flex flex-col gap-4 w-60">
         {menu &&
           menu.map((item: any, i: number) => {
             return (
