@@ -39,16 +39,35 @@ export const FileInput = ({}: FileInputProps) => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+    setError(false);
+    setErrorMsg(<></>);
     const formData = new FormData();
     const elementData: any = {};
 
     elementData["publishedAt"] = null;
     elementData["user_info"] = user[0].details.id;
+    let _error = false;
     Array.from(form.current!.elements).map((input: any) => {
       if (!["file"].includes(input.type)) elementData[input.name] = input.value;
       else if (input.type === "file")
         for (let i = 0; i < input.files.length; i++) {
+          const fileSize = (input.files[i].size / 1024 / 1024).toFixed(2);
+
+          if (
+            parseInt(fileSize) >
+            parseInt(process.env.NEXT_PUBLIC_MAX_FILE_SIZE as string)
+          ) {
+            setError(true);
+            _error = true;
+            setErrorMsg(
+              <span>
+                Le fichier {input.files[i].name} est très volumineux, il ne doit
+                pas dépasser les{" "}
+                {process.env.NEXT_PUBLIC_MAX_FILE_SIZE as string} mb.
+              </span>
+            );
+            return;
+          }
           formData.append(
             `files.${input.name}`,
             input.files[i],
@@ -57,25 +76,27 @@ export const FileInput = ({}: FileInputProps) => {
         }
     });
 
-    formData.append("data", JSON.stringify(elementData));
+    if (!_error) {
+      formData.append("data", JSON.stringify(elementData));
 
-    setLoading(true);
-    const resEditorVideo = await useStrapiPost(
-      "editor-videos",
-      formData,
-      true,
-      true
-    );
-    setLoading(false);
+      setLoading(true);
+      const resEditorVideo = await useStrapiPost(
+        "editor-videos",
+        formData,
+        true,
+        true
+      );
+      setLoading(false);
 
-    if (resEditorVideo.status === 200) {
-      context.setStep(1);
-      context.setCurrentEditorVideo(resEditorVideo.data.data.id);
-    } else {
-      setError(true);
-      setErrorMsg(unknowError);
+      if (resEditorVideo.status === 200) {
+        context.setStep(1);
+        context.setCurrentEditorVideo(resEditorVideo.data.data.id);
+      } else {
+        setError(true);
+        setErrorMsg(unknowError);
+      }
+      resEditorVideo;
     }
-    resEditorVideo;
   };
 
   const handleDragOver = () => {
@@ -87,12 +108,14 @@ export const FileInput = ({}: FileInputProps) => {
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (!["video/mp4"].includes(e.target.files![0].type)) {
-      setError(true);
-      setErrorMsg(formatError);
-    } else {
-      setSelectedFile(e.target.files![0]);
-      form.current?.requestSubmit();
+    if (e.target.files![0]) {
+      if (!["video/mp4"].includes(e.target.files![0].type)) {
+        setError(true);
+        setErrorMsg(formatError);
+      } else {
+        setSelectedFile(e.target.files![0]);
+        form.current?.requestSubmit();
+      }
     }
   };
 

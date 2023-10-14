@@ -151,12 +151,12 @@ export const InfosPan = ({}: InfosPanProps) => {
   };
 
   const handleTitleChange = (e: any) => {
-    checkAlphanumeric(e.target.value, setTitleError);
+    //checkAlphanumeric(e.target.value, setTitleError);
     setTitleValue(e.target.value);
   };
 
   const handleDescriptionChange = (e: any) => {
-    checkAlphanumeric(e.target.value, setDescriptionError);
+    //checkAlphanumeric(e.target.value, setDescriptionError);
     setDescriptionValue(e.target.value);
   };
 
