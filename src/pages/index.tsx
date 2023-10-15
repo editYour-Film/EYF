@@ -24,16 +24,16 @@ import useStrapi from "@/hooks/useStrapi";
 import { useEffect } from "react";
 import useMediaQuery from "@/hooks/useMediaQuery";
 
-export async function getStaticProps() {
+/*export async function getStaticProps() {
   const data = await getStrapiData(
     "page-home?populate[seo][populate]=*",
     false
   );
 
   return { props: { seodata: data.seo } };
-}
+}*/
 
-export default function Home({ seodata }: any) {
+export default function Home(/*{ seodata }: any*/) {
   const { data, mutate: getStrapi } = useStrapi(
     "page-home?" +
       "populate[head][populate]=*&" +
@@ -52,9 +52,15 @@ export default function Home({ seodata }: any) {
   );
   const { data: dataFaqs, mutate: getStrapiFaq } = useStrapi("faqs", false);
 
+  const { data: seodata, mutate: getSeoData } = useStrapi(
+    "page-home?populate[seo][populate]=*",
+    false
+  );
+
   useEffect(() => {
     getStrapi();
     getStrapiFaq();
+    getSeoData();
   }, []);
 
   const isMobile = useMediaQuery("(max-width: 768px)");
