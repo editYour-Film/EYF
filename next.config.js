@@ -9,6 +9,7 @@ const nextConfig = {
       "res.cloudinary.com",
       "s3.fr-par.scw.cloud",
       "1b48b31f-5be7-4ddd-a28d-1d70627c1cfe.pub.instances.scw.cloud",
+      "dev-edy.fr",
       "edityour.film",
     ],
   },
