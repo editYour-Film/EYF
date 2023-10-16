@@ -6,7 +6,19 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        'alphaWhite': 'rgba(252, 252, 252)',
+        'alphaWhite': {
+          DEFAULT: 'rgba(252, 252, 252)',
+          50: 'rgba(252, 252, 252, 0.05)',
+          100: 'rgba(252, 252, 252, 0.1)',
+          200: 'rgba(252, 252, 252, 0.2)',
+          300: 'rgba(252, 252, 252, 0.3)',
+          400: 'rgba(252, 252, 252, 0.4)',
+          500: 'rgba(252, 252, 252, 0.5)',
+          600: 'rgba(252, 252, 252, 0.6)',
+          700: 'rgba(252, 252, 252, 0.7)',
+          800: 'rgba(252, 252, 252, 0.8)',
+          900: 'rgba(252, 252, 252, 0.9)'
+        },
         'borderWhite': 'rgba(252, 252, 252, 0.2)',
         'darkpurple': 'rgba(55, 11, 78, 1)',
         'lightpurple': 'rgba(90, 84, 119, 0.50)',
@@ -131,6 +143,22 @@ module.exports = {
         '.bg-pattern-linear-top': {
           backgroundImage: 'linear-gradient(to bottom,rgba(0,0,0,1) 0%, rgba(0,0,0,0.7) 100%), url("/img/pattern.png")'
         },
+        '.border-linear': {
+          position: 'relative',
+          zIndex: 0,
+          overflow: 'hidden',
+
+          '&::before': {
+            position: 'absolute',
+            zIndex: -1,
+            content: '""',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            backgroundImage: `linear-gradient(120deg, ${theme('colors.alphaWhite.200')} 0%, ${theme('colors.alphaWhite.50')} 100%);`
+          }
+        },
         '.no-scroll-bar': {
           msOverflowStyle: 'none',
           scrollbarWidth: 'none',
@@ -181,6 +209,24 @@ module.exports = {
           '&:checked::before': {
             transform: 'translate(-50%, -50%)',
           }
+        },
+        '.hide-search-input-reset': {
+          /* clears the ‘X’ from Internet Explorer */
+          '&::-ms-clear': { 
+            display: 'none',
+            width : 0,
+            height: 0,
+          },
+          '&::-ms-reveal': { 
+            display: 'none',
+            width : 0,
+            height: 0, 
+          },
+          /* clears the ‘X’ from Chrome */
+          '&::-webkit-search-decoration': { display: 'none' },
+          '&::-webkit-search-cancel-button': { display: 'none' },
+          '&::-webkit-search-results-button': { display: 'none' },
+          '&::-webkit-search-results-decoration': { display: 'none'}
         }
       })
     })

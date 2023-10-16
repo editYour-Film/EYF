@@ -30,6 +30,7 @@ type inputProps = {
   bg?: "white" | "black" | "light" | "card";
   roundedFull?: boolean;
   iconRight?: boolean;
+  disabled?: boolean;
 
   /** text / text-area */
   maxlength?: number | undefined;
@@ -62,6 +63,7 @@ const Input = ({
   bg = "white",
   roundedFull = false,
   iconRight,
+  disabled,
   /** text */
   maxlength,
   /** radio / checkbox */
@@ -97,6 +99,7 @@ const Input = ({
     (bg === "card" ? "bg-background-card text-white text-opacity-50 border border-0.5 " : '') +
     (roundedFull ? "rounded-full " : "rounded-lg ") +
     (size === 'sm' ? 'py-2 min-h-[40px] ' : 'p-4 min-h-[52px] ') +
+    (disabled === true ? 'opacity-50 ' : '') +
     className;
 
   const labelClass = labelType === 'dashboard' ? 'flex items-center justify-between mb-3 font-bold' : " flex flex-wrap items-center gap-3 mb-2 text-sm text-base-text";
@@ -123,6 +126,7 @@ const Input = ({
               name={name}
               placeholder={placeholder}
               maxLength={maxlength}
+              disabled={disabled}
             />
             {maxlength && <div className="input__maxlength text-xs">{`${(value as string).length} / ${maxlength}`}</div>}
           </div>
@@ -150,6 +154,7 @@ const Input = ({
               name={name}
               placeholder={placeholder}
               maxLength={maxlength}
+              disabled={disabled}
             ></textarea>
             {maxlength && <div className="input__maxlength text-xs">{`${(value as string).length} / ${maxlength}`}</div>}
           </div>
@@ -175,6 +180,7 @@ const Input = ({
               value={value as string}
               name={name}
               placeholder={placeholder}
+              disabled={disabled}
             />
           </div>
           {helper && <p className={helperClass}>{helper}</p>}
@@ -198,7 +204,8 @@ const Input = ({
               className={inputClass}
               value={value as string}
               name={name}
-                placeholder={placeholder}
+              placeholder={placeholder}
+              disabled={disabled}
             />
             {isPassword ? (
               <Image
@@ -234,7 +241,7 @@ const Input = ({
               {helpIconText && <Help text={helpIconText} label={label} />}
             </label>
           )}
-          <div className={`relative flex justify-end items-center mt-8 ${inputClass}`}>
+          <div className={`relative flex justify-end items-center ${inputClass}`}>
             {!iconRight && (
               <Image
                 width={17}
@@ -257,6 +264,7 @@ const Input = ({
               placeholder={placeholder}
               className="bg-transparent top-0 left-0 w-full h-full"
               list={datalist}
+              disabled={disabled}
             />
             {iconRight && (
               <div className="flex h-full flex-row gap-4">
@@ -305,6 +313,7 @@ const Input = ({
                         onClick={() => {
                           onChange(x.value)
                         }}
+                        disabled={disabled}
                       />
                       <div
                         className={
@@ -351,6 +360,7 @@ const Input = ({
                         onClick={() => {
                           onChange(x.value)
                         }}
+                        disabled={disabled}
                       />
                       <div
                         className={
@@ -390,6 +400,7 @@ const Input = ({
                     (selectedOption === x.value ? "bg-violet" : "bg-gray-light")
                   }
                   onClick={() => onChange(x.value)}
+                  disabled={disabled}
                 >
                   {x.label}
                 </button>
@@ -420,6 +431,7 @@ const Input = ({
               placeholder="__"
               max={31}
               ref={dayRef}
+              disabled={disabled}
             />
             /
             <input
@@ -437,6 +449,7 @@ const Input = ({
               placeholder="__"
               max={12}
               ref={monthRef}
+              disabled={disabled}
             />
             /
             <input
@@ -453,6 +466,7 @@ const Input = ({
               maxLength={4}
               placeholder="____"
               ref={yearRef}
+              disabled={disabled}
             />
           </div>
           {error && <p className="text-red-500 mt-1.5 ">{error}</p>}
@@ -483,6 +497,7 @@ const Input = ({
                     e.preventDefault();
                     onChange(x.value)
                   }}
+                  disabled={disabled}
                 >
                   {x.label}
                 </button>

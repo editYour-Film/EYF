@@ -4,22 +4,24 @@ import { useDispatch } from "react-redux";
 import { toClick, toRegular } from "@/store/slices/cursorSlice";
 import { landings } from "@/routes";
 import { useRouter } from 'next/router';
+import { ReactNode, forwardRef } from "react";
 
 type buttonProps = {
   variant?: "primary" | "secondary" | "black" | "light" | "dark";
   text: string;
   size?: "xs" | "sm" | "lg";
-  onClick?: () => void;
+  onClick?: (e?:any) => void;
   disabled?: boolean;
-  icon?: "menu" | "arrow-left" | "arrow-right" | "arrow-down" | "google" | "apple" | "cross";
+  icon?: "menu" | "arrow-left" | "arrow-right" | "arrow-down" | "arrow-up" | "google" | "apple" | "cross";
   iconLeft?: boolean;
   iconRight?: boolean;
   className?: string;
   borderRadiusSm?: boolean;
   id?: string;
+  children?: ReactNode
 };
 
-const Button = ({
+const Button = forwardRef<HTMLButtonElement, buttonProps>(function Button({
   variant = "primary",
   text,
   size = "sm",
@@ -31,7 +33,8 @@ const Button = ({
   className = "",
   id = "",
   borderRadiusSm,
-}: buttonProps) => {
+  children = null,
+}, ref) {
 
   const router = useRouter()
   const enableTwist = landings.includes(router.pathname)
@@ -60,7 +63,7 @@ const Button = ({
             width="30"
             height="20"
             alt=""
-            className="rotate-180"
+            className="rotate-180 z-30"
           />
         );
       case "arrow-right":
@@ -70,6 +73,7 @@ const Button = ({
             width="30"
             height="20"
             alt=""
+            className=" z-30"
           />
         );
       case "arrow-down":
@@ -79,6 +83,17 @@ const Button = ({
             width="20"
             height="20"
             alt=""
+            className=" z-30"
+          />
+        );
+      case "arrow-up":
+        return (
+          <Image
+            src="/icons/arrow-down-circle.svg"
+            width="20"
+            height="20"
+            alt=""
+            className="rotate-180 z-30"
           />
         );
       case "google":
@@ -88,6 +103,7 @@ const Button = ({
             width="20"
             height="20"
             alt=""
+            className=" z-30"
           />
         );
       case "apple":
@@ -97,7 +113,7 @@ const Button = ({
             width="20"
             height="20"
             alt=""
-            className="relative -top-[3px]"
+            className="relative -top-[3px] z-30"
           />
         );
       case "cross":
@@ -107,7 +123,7 @@ const Button = ({
             width="20"
             height="20"
             alt=""
-            className="relative"
+            className="relative z-30"
           />
         );
       default:
@@ -119,6 +135,7 @@ const Button = ({
     case "primary":
       return (
         <button
+          ref={ref}
           type="button"
           className={
             buttonClass +
@@ -127,7 +144,7 @@ const Button = ({
             " anim-cta"
           }
           disabled={disabled}
-          onClick={onClick ? onClick : () => {}}
+          onClick={(e) => {onClick ? onClick(e) : () => {}}}
           onMouseEnter={() => {
             dispatch(toClick());
           }}
@@ -136,19 +153,22 @@ const Button = ({
           }}
           id={id}
         >
-          {iconLeft && <Icon />} {enableTwist ? <TextSplit input={text} type="word" noLH /> : <span>{text}</span>}{" "}
+          {iconLeft && <Icon />} 
+          {enableTwist ? <TextSplit input={text} type="word" noLH /> : <span>{text}</span>}{" "}
+          {children && children}
           {iconRight && <Icon />}
         </button>
       );
     case "secondary":
       return (
         <button
+          ref={ref}
           type="button"
           className={
             buttonClass + " bg-transparent hover:border-white " + className
           }
           disabled={disabled}
-          onClick={onClick ? onClick : () => {}}
+          onClick={(e) => {onClick ? onClick(e) : () => {}}}
           onMouseEnter={() => {
             dispatch(toClick());
           }}
@@ -156,16 +176,20 @@ const Button = ({
             dispatch(toRegular());
           }}
         >
-          {iconLeft && <Icon />} {text} {iconRight && <Icon />}
+          {iconLeft && <Icon />} 
+          {text}
+          {children && children} 
+          {iconRight && <Icon />}
         </button>
       );
     case "black":
       return (
         <button
+          ref={ref}
           type="button"
           className={buttonClass + " bg-black hover:border-white " + className}
           disabled={disabled}
-          onClick={onClick ? onClick : () => {}}
+          onClick={(e) => {onClick ? onClick(e) : () => {}}}
           onMouseEnter={() => {
             dispatch(toClick());
           }}
@@ -173,16 +197,20 @@ const Button = ({
             dispatch(toRegular());
           }}
         >
-          {iconLeft && <Icon />} {text} {iconRight && <Icon />}
+          {iconLeft && <Icon />} 
+          <span className="relative z-20">{text}</span>
+          {children && children}
+          {iconRight && <Icon />}
         </button>
       );
     case "dark":
       return (
         <button
+          ref={ref}
           type="button"
           className={buttonClass + " bg-darkgrey bg-opacity-50 hover:border-white " + className}
           disabled={disabled}
-          onClick={onClick ? onClick : () => {}}
+          onClick={(e) => {onClick ? onClick(e) : () => {}}}
           onMouseEnter={() => {
             dispatch(toClick());
           }}
@@ -190,16 +218,21 @@ const Button = ({
             dispatch(toRegular());
           }}
         >
-          <span className="relative z-20 flex gap-3">{iconLeft && <Icon />} {text} {iconRight && <Icon />}</span>
+          <span className="relative z-20 flex gap-3">
+            {iconLeft && <Icon />} 
+            {text} 
+            {children && children}
+            {iconRight && <Icon />}</span>
         </button>
       );
     case "light":
       return (
         <button
+          ref={ref}
           type="button"
           className={buttonClass + " bg-white border-white bg-opacity-10 hover:bg-opacity-40 " + className}
           disabled={disabled}
-          onClick={onClick ? onClick : () => {}}
+          onClick={(e) => {onClick ? onClick(e) : () => {}}}
           onMouseEnter={() => {
             dispatch(toClick());
           }}
@@ -207,10 +240,14 @@ const Button = ({
             dispatch(toRegular());
           }}
         >
-          <span className="relative z-20 flex gap-3 items-center">{iconLeft && <Icon />} {text} {iconRight && <Icon />}</span>
+          <span className="relative z-20 flex gap-3 items-center">
+            {iconLeft && <Icon />} 
+            {text} 
+            {children && children}
+            {iconRight && <Icon />}</span>
         </button>
       );
   }
-};
+})
 
 export default Button;
