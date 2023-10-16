@@ -292,9 +292,9 @@ export const InfosPan = ({}: InfosPanProps) => {
             return (
               <Tag
                 key={i}
-                icon
+                icon='cross'
                 text={tag.name}
-                onClick={() => {
+                onClose={() => {
                   handleRemoveTag(tag.slug);
                 }}
               />

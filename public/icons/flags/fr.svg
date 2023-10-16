@@ -1,0 +1,12 @@
+<svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Country=france" clip-path="url(#clip0_30168_246218)">
+<path id="Vector" d="M12 24.6001C18.6274 24.6001 24 19.2275 24 12.6001C24 5.97268 18.6274 0.600098 12 0.600098C5.37258 0.600098 0 5.97268 0 12.6001C0 19.2275 5.37258 24.6001 12 24.6001Z" fill="#F0F0F0"/>
+<path id="Vector_2" d="M23.9999 12.6C23.9999 7.44047 20.7434 3.04195 16.1738 1.34644V23.8537C20.7434 22.1581 23.9999 17.7596 23.9999 12.6Z" fill="#D80027"/>
+<path id="Vector_3" d="M0 12.6C0 17.7596 3.25655 22.1581 7.82611 23.8537V1.34644C3.25655 3.04195 0 7.44047 0 12.6Z" fill="#0052B4"/>
+</g>
+<defs>
+<clipPath id="clip0_30168_246218">
+<rect width="24" height="24" fill="white" transform="translate(0 0.600098)"/>
+</clipPath>
+</defs>
+</svg>
