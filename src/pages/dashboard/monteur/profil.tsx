@@ -6,10 +6,12 @@ import LayoutDashBoard from "@/components/layouts/LayoutDashBoard";
 import { useUser } from "@/auth/authContext";
 import { DashboardEditorProfil } from "@/components/dashboard/editor/DashboardEditorProfil";
 import Head from "next/head";
+import useMediaQuery from "@/hooks/useMediaQuery";
 
 export default function DashBoardContentProfile() {
   const [userInfo, isLoggedIn] = useUser();
-
+  const isDesktop = useMediaQuery('(min-width:768px)')
+  
   return (
     <>
       <Head>
@@ -26,7 +28,9 @@ export default function DashBoardContentProfile() {
             />
           )}
           <div className="lg:basis-9/12 main_content">
-            <DashboardContainer>
+            <DashboardContainer
+              hasBg={isDesktop}
+            >
               <DashboardEditorProfil />
             </DashboardContainer>
             <NewsletterSection />
