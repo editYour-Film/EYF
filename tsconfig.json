@@ -21,6 +21,6 @@
       "@/icons/*": ["./public/icons/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/components/_shared/videoCatalog/VideoElementtsx", "src/routes.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/components/_shared/videoCatalog/VideoElementtsx", "src/routes.ts", "theme.js"],
   "exclude": ["node_modules"]
 }
