@@ -1,3 +1,6 @@
+import * as tokens from './theme.js';
+import flattenColorPalette from "tailwindcss/lib/util/flattenColorPalette"
+
 /** @type {import('tailwindcss').Config} */
 const plugin = require('tailwindcss/plugin')
 
@@ -6,6 +9,39 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        // v1
+        'appleRed' : {
+          DEFAULT: tokens.base_Edy_appleRed,
+          200: tokens.base_Edy_appleRed_200
+        },
+        'blackBerry' : tokens.base_Edy_blackBerry,
+        'blueBerry' : tokens.base_Edy_blueBerry,
+        'soyMilk' : {
+          DEFAULT: tokens.base_Edy_soyMilk,
+          100: tokens.base_Edy_soyMilk_100,
+          200: tokens.base_Edy_soyMilk_200,
+          500: tokens.base_Edy_soyMilk_500
+        },
+
+        // Backgrounds
+        'dashboard-button-island-BlueBerry-default' : tokens.dashboard_button_island_BlueBerry_default,
+        'dashboard-button-island-disabled' : tokens.dashboard_button_island_disabled,
+        'dashboard-button-island-hover' : tokens.dashboard_button_island_hover,
+        'dashboard-button-white-default' : tokens.dashboard_button_white_default,
+        'dashboard-button-white-hover' : tokens.dashboard_button_white_hover,
+
+        'dashboard-background-content-area' : tokens.dashboard_background_content_area,
+        'dashboard-button-alert' : tokens.dashboard_button_alert,
+        'dashboard-button-dark' : tokens.dashboard_button_dark,
+
+        // Texts
+        'dashboard-text-button-white-contrast-low': tokens.dashboard_text_button_white_contrast_low,
+        'dashboard-text-description-base': tokens.dashboard_text_description_base,
+        'dashboard-text-description-base-low': tokens.dashboard_text_description_base_low,
+        'dashboard-text-disabled': tokens.dashboard_text_disabled,
+        'dashboard-text-title-white-high': tokens.dashboard_text_title_white_high,
+
+        // v0
         'alphaWhite': {
           DEFAULT: 'rgba(252, 252, 252)',
           50: 'rgba(252, 252, 252, 0.05)',
@@ -52,32 +88,123 @@ module.exports = {
         'fullHd' : '1920px',
         'regularH': { 'raw': '(min-height: 750px))' }
       },
+      spacing: {
+        'dashboard-button-separation-spacing': tokens.dashboard_button_separation_spacing,
+        'dashboard-mention-padding-right-left': tokens.dashboard_mention_padding_right_left,
+        'dashboard-mention-padding-top-bottom': tokens.dashboard_mention_padding_top_bottom,
+        'dashboard-spacing-element-medium': tokens.dashboard_spacing_element_medium,
+        'DashboardPaddingNul': tokens.padding_DashboardPaddingNul,
+        'dashboard-specific-radius' : tokens.dashboard_specific_radius,
+      },
+      borderWidth: {
+        DEFAULT: tokens.dashboard_border_width_button_default,
+        'dashboard-border-width-button-default': tokens.dashboard_border_width_button_default
+      },
       borderRadius: {
+        //v1
+        'dashboard-mention-radius': tokens.dashboard_mention_radius,
+        'dashboard-button-square-radius' : tokens.dashboard_button_square_radius,
+        'dashboard-specific-radius' : tokens.dashboard_specific_radius,
+        'dashboard-medium-radius' : tokens.dashboard_medium_radius,
+        'dashboard-large-radius' : tokens.dashboard_large_radius,
+        //v0
         '4xl' : '40px'
       },
       fontSize: {
+        //v1
+        DEFAULT: [tokens.text_base, tokens.lh_default],
+        'small': [tokens.text_small, tokens.lh_default],
+        'base': [tokens.text_base, tokens.lh_default],
+        'medium': [tokens.text_medium, tokens.lh_default],
+        'large': [tokens.text_large, tokens.lh_default],
+        'small-light': [tokens.text_small_light, tokens.lh_default],
+        'base-light': [tokens.text_base_ligth, tokens.lh_default],
+        'base-bold': [tokens.text_base_bold, tokens.lh_default],
+
+        'title-small': [tokens.title_small, tokens.lineheight_title_small],
+        'title-medium': [tokens.title_medium, tokens.lineheight_title_medium],
+        'title-large': [tokens.title_large, tokens.lh_title_large],
+
+        //v0
         'title': '40px',
         'title-large': '60px',
         'base-lg': '22px',
       },
+      fontFamily: {
+        DEFAULT: tokens.font_default,
+        'text': tokens.font_text,
+        'title': tokens.font_title
+      },
       borderColor: ({theme}) => ({
-        DEFAULT: theme('colors.borderWhite')
+        DEFAULT: theme('colors.borderWhite'),
+
+        // Strokes
+        'dashboard-button-dark-border': tokens.dashboard_button_dark_border,
+        'dashboard-button-focus-stroke': tokens.dashboard_button_focus_stroke,
+        'dashboard-button-stroke-default': tokens.dashboard_button_stroke_default,
+        'dashboard-button-stroke-disabled': tokens.dashboard_button_stroke_disabled,
+        'dashboard-button-stroke-hover': tokens.dashboard_button_stroke_hover,
+        'dashboard-separator-white-low-opacity': tokens.dashboard_separator_white_low_opacity,
       })
     },
   },
   plugins: [
-    plugin(function({ addUtilities }) {
+    plugin(function({ addUtilities, theme }) {
       addUtilities({
         '.perspective': {
           'perspective': '1000px',
         },
-        // 'gradient-violet-left': {
-        //   background: "radial-gradient()"
-        // }
+        'bg-rose-sunset': {
+          background: `linear-gradient(var(--linear-direction, 180deg), ${tokens.base_rose_sunset_blue} 38.45%, ${tokens.base_rose_sunset_violet} 93.75%);`
+        },
+        'bg-border-component': {
+          background: `linear-gradient(var(--linear-direction, 180deg), ${tokens.base_Edy_soyMilk} 38.45%, ${tokens.base_Edy_soyMilk_250} 93.75%);`
+        }
       })
     }),
+    plugin(function({matchUtilities, theme}){
+      matchUtilities({
+        'linear-orientation': (value) => ({
+          '--linear-orientation': value,
+        }),
+      },
+      { values: {
+        0: '0deg',
+        90: '90deg',
+        180: '180deg',
+        270: '270deg',
+      }})
+    }),
+    plugin(function({matchComponents, theme}) {
+      matchComponents(
+        {
+          'svg-color': (value) => {({
+            '*[fill]': {
+              'fill': value
+            },
+            '*[stroke]': {
+              'stroke': value
+            },
+          })},
+        },
+        { 
+          values: theme('colors')
+        },
+      )
+    }),
+    
     plugin(function({ addComponents, theme }) {
       addComponents({
+        //v1
+        '.text-linear-sunset' : {
+          background: `linear-gradient(var(--linear-orientation, 180deg), ${tokens.base_rose_sunset_blue} 38.45%, ${tokens.base_rose_sunset_violet} 93.75%);`,
+          '-webkit-background-clip': 'text',
+          '-webkit-text-fill-color': 'transparent',
+          'background-clip': 'text',
+          'text-fill-color': 'transparent',
+          'transform': 'translateZ(0)',
+        },
+        //v0
         '.dashboard-title': {
           fontFamily: 'n27',
           fontSize: '28px',
