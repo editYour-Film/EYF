@@ -3,12 +3,10 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import { createRef, forwardRef, useEffect, useRef, useState } from "react";
 
-type TitleRevealProps = {};
-
 export const TitleReveal = ({ data }: any) => {
   const titles = [];
 
-  data.forEach((element: any) => {
+  data?.forEach((element: any) => {
     titles.push({
       text: element.title,
       content: element.content,
