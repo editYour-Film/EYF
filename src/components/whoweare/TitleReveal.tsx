@@ -1,138 +1,163 @@
-import { TextSplit } from "@/utils/TextSplit"
-import { gsap } from "gsap"
-import { ScrollTrigger } from "gsap/dist/ScrollTrigger"
-import { createRef, forwardRef, useEffect, useRef, useState } from "react"
+import { TextSplit } from "@/utils/TextSplit";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
+import { createRef, forwardRef, useEffect, useRef, useState } from "react";
 
-type TitleRevealProps = {
-
-}
+type TitleRevealProps = {};
 
 export const TitleReveal = ({ data }: any) => {
-  const titles = []
+  const titles = [];
 
-  data.forEach(element => {
-    titles.push({text: element.title, content: element.content, isActive: false})
+  data.forEach((element: any) => {
+    titles.push({
+      text: element.title,
+      content: element.content,
+      isActive: false,
+    });
   });
 
-  titles.push({text: '...', isActive: false})
+  titles.push({ text: "...", isActive: false });
 
-  const [titleActive, setTitleActive] = useState<number | null>(null)
+  const [titleActive, setTitleActive] = useState<number | null>(null);
 
-  const titlesRef = useRef(titles.map<React.RefObject<HTMLDivElement>>(() => {
-    return createRef<HTMLDivElement>()
-  }))
+  const titlesRef = useRef(
+    titles.map<React.RefObject<HTMLDivElement>>(() => {
+      return createRef<HTMLDivElement>();
+    })
+  );
 
-  const contents = useRef<HTMLDivElement>(null)
+  const contents = useRef<HTMLDivElement>(null);
 
-  const DirectionRef = useRef(titles.map<1 | -1>(() => 1 ))
+  const DirectionRef = useRef(titles.map<1 | -1>(() => 1));
 
   const titlesNumber = titles.length;
 
-  const parent = useRef<HTMLDivElement>(null)
+  const parent = useRef<HTMLDivElement>(null);
 
-  const stepHeight = window.innerHeight / 2
+  const stepHeight = window.innerHeight / 2;
 
   const moveContent = (i: number) => {
-    const tl = gsap.timeline()
+    const tl = gsap.timeline();
 
     tl.to(contents.current, {
       x: -i * (contents.current!.offsetWidth + 400),
-      ease: 'power2.inOut',
-      duration: 0.8
-    })
-  }
+      ease: "power2.inOut",
+      duration: 0.8,
+    });
+  };
 
-  useEffect(() => {    
+  useEffect(() => {
     const ctx = gsap.context(() => {
       titlesRef.current.forEach((title, i) => {
         ScrollTrigger.create({
           trigger: parent.current,
-          start: `top+=${stepHeight * ( i + 1)} ${i === 0 ? 'bottom' : 'center'}`,
-          end: `top+=${stepHeight * (i + 2)} ${i === titlesRef.current.length - 1 ? 'top' : 'center'}`,
+          start: `top+=${stepHeight * (i + 1)} ${
+            i === 0 ? "bottom" : "center"
+          }`,
+          end: `top+=${stepHeight * (i + 2)} ${
+            i === titlesRef.current.length - 1 ? "top" : "center"
+          }`,
           id: `step${i}`,
           onEnter: () => {
-            setTitleActive(i)
-            moveContent(i)
-            DirectionRef.current[i] = 1
+            setTitleActive(i);
+            moveContent(i);
+            DirectionRef.current[i] = 1;
           },
           onEnterBack: () => {
-            setTitleActive(i)
-            moveContent(i)
-            DirectionRef.current[i] = -1
+            setTitleActive(i);
+            moveContent(i);
+            DirectionRef.current[i] = -1;
           },
           onLeave: () => {
-            setTitleActive(null)
-            DirectionRef.current[i] = -1
+            setTitleActive(null);
+            DirectionRef.current[i] = -1;
           },
           onLeaveBack: () => {
-            setTitleActive(null)
-            DirectionRef.current[i] = 1
-          }
-        })
+            setTitleActive(null);
+            DirectionRef.current[i] = 1;
+          },
+        });
       });
-    })
+    });
 
     return () => {
-      ctx.revert()
-    }
-  }, [])
+      ctx.revert();
+    };
+  }, []);
 
   return (
-    <div 
+    <div
       ref={parent}
       className="title-reveal w-full"
-      style={{height: `${stepHeight * (titlesNumber + 1)}px`}}
+      style={{ height: `${stepHeight * (titlesNumber + 1)}px` }}
     >
       <div className="title-reveal__container sticky h-[100vh] w-full flex top-0 justify-center items-center">
         <div className="title-reveal__content w-full overflow-hidden">
-          <div className="title-reveal__suptitle text-center text-violet font-medium text-2xl n27">Une nouvelle façon de travailler pour les</div>
+          <div className="title-reveal__suptitle text-center text-violet font-medium text-2xl n27">
+            Une nouvelle façon de travailler pour les
+          </div>
           <div className="relative title-reveal__titles text-center grid place-content-center text-[40px] md:text-[70px] leading-[100%] mt-8 n27 font-bold">
-            {titles.length && titles.map((title, i) => {
-              return (
-                <Title 
-                  key={i} 
-                  ref={titlesRef.current[i]} 
-                  text={title.text} 
-                  isActive={titleActive === i} 
-                  direction={DirectionRef.current[i]}/>
-              )
-            })}
+            {titles.length &&
+              titles.map((title, i) => {
+                return (
+                  <Title
+                    key={i}
+                    ref={titlesRef.current[i]}
+                    text={title.text}
+                    isActive={titleActive === i}
+                    direction={DirectionRef.current[i]}
+                  />
+                );
+              })}
           </div>
           <div className="relative w-full p-4 md:p-0 md:w-1/2 mx-auto">
             <div className="absolute gradient-dark-transparent w-[37.5vw] h-full -translate-x-[100%] z-10"></div>
             <div className="absolute gradient-dark-transparent w-[37.5vw] h-full right-0 rotate-[180deg] translate-x-[100%] z-10"></div>
 
-            <div ref={contents} className="relative w-full mt-12 flex gap-[400px] z-0">
-              {titles.length && titles.map((title, i) => {
+            <div
+              ref={contents}
+              className="relative w-full mt-12 flex gap-[400px] z-0"
+            >
+              {titles.length &&
+                titles.map((title: any, i) => {
                   return (
-                    <div className="basis-[100%] shrink-0 text-center text-base-text text-xl">{title.content}</div>
-                  )
+                    <div className="basis-[100%] shrink-0 text-center text-base-text text-xl">
+                      {title.content}
+                    </div>
+                  );
                 })}
             </div>
           </div>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 type TitleProps = {
-  text: string,
-  isActive: boolean,
-  direction: 1 | -1
-}
+  text: string;
+  isActive: boolean;
+  direction: 1 | -1;
+};
 
-const Title = forwardRef<HTMLDivElement, TitleProps>(function Title({text, isActive, direction}, ref) {
+const Title = forwardRef<HTMLDivElement, TitleProps>(function Title(
+  { text, isActive, direction },
+  ref
+) {
   return (
-    <div 
-      ref={ref} 
-      className={`title-reveal__first col-[1/2] row-[1/2] top-0 uppercase anim-title anim-title-reveal ${isActive && 'title-active'}`} 
-      style={{
-        '--direction': direction,
-        '--char-delay': '0.01s',
-      } as React.CSSProperties}
+    <div
+      ref={ref}
+      className={`title-reveal__first col-[1/2] row-[1/2] top-0 uppercase anim-title anim-title-reveal ${
+        isActive && "title-active"
+      }`}
+      style={
+        {
+          "--direction": direction,
+          "--char-delay": "0.01s",
+        } as React.CSSProperties
+      }
     >
       <TextSplit input={text} />
     </div>
-  )
-})
+  );
+});
