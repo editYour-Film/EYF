@@ -35,24 +35,12 @@ export default function Document() {
           }}
         />
 
-        <script
-          dangerouslySetInnerHTML={{
-            __html:
-              "(function(){var w=window;var ic=w.Intercom;if(typeof ic==='function'){ic('reattach_activator');ic('update',w.intercomSettings);}else{var d=document;var i=function(){i.c(arguments);};i.q=[];i.c=function(args){i.q.push(args);};w.Intercom=i;var l=function(){var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://widget.intercom.io/widget/av0ctpsx';var x=d.getElementsByTagName('script')[0];x.parentNode.insertBefore(s,x);};if(document.readyState==='complete'){l();}else if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})();",
-          }}
-        ></script>
-
-        {/* INTERCOM */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html:
-              "window.Intercom('boot', { api_base: 'https://api-iam.intercom.io', app_id: 'av0ctpsx'});",
-          }}
-        ></script>
       </Head>
       <body>
         <Main />
         <NextScript />
+        {/* Tracking Hubspot */}
+        <script type="text/javascript" id="hs-script-loader" async defer src="//js-eu1.hs-scripts.com/139855704.js"></script>
       </body>
     </Html>
   );
