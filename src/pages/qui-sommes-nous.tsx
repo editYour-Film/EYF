@@ -31,7 +31,8 @@ export default function WhoWeAre(/*{ data, dataFaqs }: any*/) {
     "populate[head][populate]=*&" +
     "populate=message_img&" +
     "populate[text_image][populate]=*&" +
-    "populate[arrow_cards][populate]=*",
+    "populate[arrow_cards][populate]=*&" +
+    "populate[text_content][populate]=*",
     false);
   const { data: dataFaqs, mutate: getStrapiFaqs } = useStrapi("faqs", false);
 
@@ -53,7 +54,7 @@ export default function WhoWeAre(/*{ data, dataFaqs }: any*/) {
 
           {data && <HistorySection data={data} />}
 
-          {data && <TitleReveal />}
+          {data && <TitleReveal data={data.text_content} />}
 
           <ContainerFullWidth>
             {data && <NewWaySection data={data.text_image}/>}

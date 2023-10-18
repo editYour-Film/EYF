@@ -7,33 +7,14 @@ type TitleRevealProps = {
 
 }
 
-export const TitleReveal = ({}: TitleRevealProps) => {
-  const titles = [
-    {
-      text: 'CRÉATEURS DE CONTENUS',
-      content: "1 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
-      isActive: true
-    },{
-      text: 'Réalisateurs',
-      content: "2 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
-      isActive: false
-    },{
-      text: 'journalistes',
-      content: "3 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
-      isActive: false
-    },{
-      text: 'vlogueurs',
-      content: "4 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
-      isActive: false
-    },{
-      text: 'VIDÉASTES',
-      content: "5 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
-      isActive: false
-    },{
-      text: '...',
-      isActive: false
-    },
-  ]
+export const TitleReveal = ({ data }: any) => {
+  const titles = []
+
+  data.forEach(element => {
+    titles.push({text: element.title, content: element.content, isActive: false})
+  });
+
+  titles.push({text: '...', isActive: false})
 
   const [titleActive, setTitleActive] = useState<number | null>(null)
 
