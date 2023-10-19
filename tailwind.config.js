@@ -18,6 +18,7 @@ module.exports = {
         'blueBerry' : tokens.base_Edy_blueBerry,
         'soyMilk' : {
           DEFAULT: tokens.base_Edy_soyMilk,
+          40: tokens.base_Edy_soyMilk_40,
           100: tokens.base_Edy_soyMilk_100,
           200: tokens.base_Edy_soyMilk_200,
           500: tokens.base_Edy_soyMilk_500
@@ -159,6 +160,9 @@ module.exports = {
         },
         'bg-border-component': {
           background: `linear-gradient(var(--linear-direction, 180deg), ${tokens.base_Edy_soyMilk} 38.45%, ${tokens.base_Edy_soyMilk_250} 93.75%);`
+        },
+        '.shadow-large' : {
+          boxShadow: `0px 6px 24px 0px rgba(0, 0, 0, 0.65), 0px 4px 4px 0px rgba(0, 0, 0, 0.55), 0px 0px 44px 0px rgba(0, 0, 0, 0.32);`
         }
       })
     }),

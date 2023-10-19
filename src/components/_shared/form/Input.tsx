@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { ReactNode, useRef, useState } from "react";
 import Image from "next/image";
 import { Help } from "./Help";
 
@@ -20,13 +20,14 @@ type inputProps = {
   onChange?: (e: any) => void;
   onKeyDown?: (e: any) => void;
   label?: string;
+  noLabel?: boolean;
   labelType?: undefined | 'dashboard';
   placeholder?: string;
   className?: string;
   size?: "sm" | undefined;
   helper?: string;
   helpIconText?: string;
-  error?: string;
+  error?: string | ReactNode;
   bg?: "white" | "black" | "light" | "card";
   roundedFull?: boolean;
   iconRight?: boolean;
@@ -53,6 +54,7 @@ const Input = ({
   onChange = () => {},
   onKeyDown = () => {},
   label,
+  noLabel,
   labelType,
   placeholder = "",
   className = "",
@@ -92,7 +94,7 @@ const Input = ({
       : type === "search" && !iconRight
       ? "pl-4 "
       : "") +
-    (error ? "border-red-500 " : "") +
+    (error ? "border-appleRed " : "") +
     (bg === "white" ? "border bg-white text-alpha-black-600 " : '') +
     (bg === "light" ? "border bg-white bg-opacity-10 text-white text-opacity-70 " : '') +
     (bg === "black" ? "bg-darkgrey bg-opacity-50 text-white border border-0.5 " : '') +
@@ -102,7 +104,13 @@ const Input = ({
     (disabled === true ? 'opacity-50 ' : '') +
     className;
 
-  const labelClass = labelType === 'dashboard' ? 'flex items-center justify-between mb-3 font-bold' : " flex flex-wrap items-center gap-3 mb-2 text-sm text-base-text";
+  let labelClass
+  if (noLabel) {
+    labelClass = 'opacity-0 width-0 height-0 pointer-events-none'
+  } else {
+    labelClass = labelType === 'dashboard' ? 'flex items-center justify-between mb-3 font-bold' : " flex flex-wrap items-center gap-3 mb-2 text-sm text-base-text";
+  }
+  
 
   const helperClass = "text-sm text-base-text mt-3 mb-8";
 
@@ -132,7 +140,7 @@ const Input = ({
           </div>
 
           {helper && <p className={helperClass}>{helper}</p>}
-          {error && <p className="text-red-500 mt-1.5 ">{error}</p>}
+          {error && <p className="text-appleRed mt-1.5 ">{error}</p>}
         </div>
       );
     case "textarea":
@@ -159,12 +167,12 @@ const Input = ({
             {maxlength && <div className="input__maxlength text-xs">{`${(value as string).length} / ${maxlength}`}</div>}
           </div>
 
-          {error && <p className="text-red-500 mt-1.5 ">{error}</p>}
+          {error && <p className="text-appleRed mt-1.5 ">{error}</p>}
         </div>
       );
     case "email":
       return (
-        <div>
+        <div className="w-full">
           {label && (
             <label className={labelClass}>
               {label}
@@ -184,7 +192,7 @@ const Input = ({
             />
           </div>
           {helper && <p className={helperClass}>{helper}</p>}
-          {error && <p className="text-red-500 mt-1.5 ">{error}</p>}
+          {error && <p className="text-appleRed mt-1.5 ">{error}</p>}
         </div>
       );
     case "password":
@@ -228,7 +236,7 @@ const Input = ({
             )}
           </div>
           {helper && <p className={helperClass}>{helper}</p>}
-          {error && <p className="text-red-500 mt-1.5 ">{error}</p>}
+          {error && <p className="text-appleRed mt-1.5 ">{error}</p>}
         </div>
       );
     case "search":
@@ -284,7 +292,7 @@ const Input = ({
             )}
           </div>
           {helper && <p className={helperClass}>{helper}</p>}
-          {error && <p className="text-red-500 mt-1.5 ">{error}</p>}
+          {error && <p className="text-appleRed mt-1.5 ">{error}</p>}
         </div>
       );
     case "radio":
@@ -469,7 +477,7 @@ const Input = ({
               disabled={disabled}
             />
           </div>
-          {error && <p className="text-red-500 mt-1.5 ">{error}</p>}
+          {error && <p className="text-appleRed mt-1.5 ">{error}</p>}
         </div>
       );
     case "switch":

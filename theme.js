@@ -9,6 +9,7 @@ export const base_Edy_blackBerry = 'rgb(1, 3, 4)';
 export const base_Edy_blueBerry = 'rgb(126, 94, 255)';
 
 export const base_Edy_soyMilk = 'rgb(252, 252, 252)';
+export const base_Edy_soyMilk_40 = 'rgba(252, 252, 252, 0.04)';
 export const base_Edy_soyMilk_100 = 'rgba(252, 252, 252, 0.1)';
 export const base_Edy_soyMilk_200 = 'rgba(252, 252, 252, 0.2)';
 export const base_Edy_soyMilk_250 = 'rgba(252, 252, 252, 0.25)';
