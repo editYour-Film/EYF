@@ -43,5 +43,5 @@ export const FooterSignin  = ({height}: FooterSigninProps) => {
         }
       </div>
     )
-  } else return
+  } else return <></>
 }

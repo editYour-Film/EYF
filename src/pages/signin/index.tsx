@@ -11,7 +11,7 @@ import Link from "next/link";
 import { FooterSignin } from "@/components/_shared/FooterSignin";
 
 
-export default function SignInEmail() {
+export default function SignIn() {
   return (
     <>
       <Head>

@@ -7,7 +7,7 @@ import { AvatarInput } from "@/components/_shared/form/AvatarInput"
 import { Dropdown } from "@/components/_shared/form/Dropdown"
 import { EditorProfilContext, EditorProfilContextProvider } from "./_context/EditorProfilContext"
 import useMediaQuery from "@/hooks/useMediaQuery"
-import { Card } from "@/components/_shared/UI/Card"
+import { Card } from "@/components/_shared/UI/CardLinear"
 import Image from "next/image"
 import gsap from "gsap"
 
