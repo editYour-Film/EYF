@@ -8,8 +8,8 @@ import { useUser } from "@/auth/authContext";
 import Head from "next/head";
 
 export default function DashBoardContentHome() {
-  const [userInfo, isLoggedIn] = useUser()
-  
+  const [userInfo, isLoggedIn] = useUser();
+
   return (
     <>
       <Head>
@@ -27,7 +27,7 @@ export default function DashBoardContentHome() {
           )}
           <div className="lg:basis-9/12 main_content">
             <DashboardContainer>
-              <DashboardEditorHome/>
+              <DashboardEditorHome />
             </DashboardContainer>
             <NewsletterSection />
             <Footer />
