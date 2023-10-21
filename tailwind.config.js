@@ -163,6 +163,9 @@ module.exports = {
         },
         '.shadow-large' : {
           boxShadow: `0px 6px 24px 0px rgba(0, 0, 0, 0.65), 0px 4px 4px 0px rgba(0, 0, 0, 0.55), 0px 0px 44px 0px rgba(0, 0, 0, 0.32);`
+        },
+        '.shadow-text' : {
+          textShadow: '0px 4px 4px rgba(0, 0, 0, 0.45);'
         }
       })
     }),
@@ -180,19 +183,18 @@ module.exports = {
       }})
     }),
     plugin(function({matchComponents, theme}) {
-      matchComponents(
-        {
-          'svg-color': (value) => {({
+      matchComponents({
+          'svg-color': (value) => ({
             '*[fill]': {
-              'fill': value
+              fill: value
             },
             '*[stroke]': {
-              'stroke': value
+              stroke: value
             },
-          })},
+          }),
         },
         { 
-          values: theme('colors')
+          values: flattenColorPalette(theme('colors'))
         },
       )
     }),
@@ -207,6 +209,32 @@ module.exports = {
           'background-clip': 'text',
           'text-fill-color': 'transparent',
           'transform': 'translateZ(0)',
+        },
+        '.form-separator' : {
+          display: 'none',
+          '@media screen and (min-width: 640px)': {
+            display: 'block',
+            width: '100%',
+            borderWidth: 0.5,
+          }
+        },
+        '.bg-radial-gradient': {
+          background: `radial-gradient(50% 50% at 50% 50%, #7E5EFF 0%, rgba(205, 3, 255, 0.60) 100%);`,
+          mixBlendMode: 'lighten',
+          filter: 'blur(47px)',
+          opacity: 0.4
+        },
+        '.bg-radial-gradient-violet': {
+          background: `radial-gradient(50% 50% at 50% 50%, #999DFF 18%, #BF8BFF 61%);`,
+          mixBlendMode: 'lighten',
+          filter: 'blur(47px)',
+          opacity: 0.4
+        },
+        '.bg-radial-gradient-blue': {
+          background: `radial-gradient(50% 50% at 50% 50%, #7977FF 0%, #78E3D2 90%);`,
+          mixBlendMode: 'lighten',
+          filter: 'blur(47px)',
+          opacity: 0.4
         },
         //v0
         '.dashboard-title': {

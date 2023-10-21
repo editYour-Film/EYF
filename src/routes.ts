@@ -39,6 +39,7 @@ let routes = {
   SIGNIN_RESET_PWD_P2: "/signin/reset/update",
   SIGNIN_RESET_PWD_P3: "/signin/reset/link",
 
+  SIGNUP: "/signup",
   SIGNUP_EMAIL: "/signup/email",
   SIGNUP_ACCOUNT_TYPE: "/signup/type",
   SIGNUP_PASSWORD: "/signup/password",

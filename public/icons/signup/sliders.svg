@@ -1,0 +1,14 @@
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="sliders">
+<g id="Vector">
+<path d="M4 21V14M4 10V3M12 21V12M12 8V3M20 21V16M20 12V3M1 14H7M9 8H15M17 16H23" stroke="url(#paint0_linear_159_37935)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M4 21V14M4 10V3M12 21V12M12 8V3M20 21V16M20 12V3M1 14H7M9 8H15M17 16H23" stroke="black" stroke-opacity="0.2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+</g>
+<defs>
+<linearGradient id="paint0_linear_159_37935" x1="13.8592" y1="9.375" x2="13.8592" y2="19.875" gradientUnits="userSpaceOnUse">
+<stop offset="0.0520833" stop-color="#999DFF"/>
+<stop offset="1" stop-color="#C985FE"/>
+</linearGradient>
+</defs>
+</svg>

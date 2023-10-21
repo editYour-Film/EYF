@@ -13,9 +13,10 @@ type tagProps = {
   active?: boolean,
   wFull?: boolean,
   size?: 'sm',
+  selected?: boolean
 }
-export const Tag = forwardRef<HTMLDivElement, tagProps>(function Tag ({text, icon = '', onClick = null, onClose = null, bg = "primary", hoverColor, className, active = 'true', size, wFull}, ref) {
-  let bgColor = "bg-primary-middle";
+export const Tag = forwardRef<HTMLDivElement, tagProps>(function Tag ({text, icon = '', onClick = null, onClose = null, selected, bg, hoverColor, className, active = 'true', size, wFull}, ref) {
+  let bgColor = "bg-background-dashboard-button-dark hover:bg-dashboard-button-white-default";
   
   switch (bg) {
     case "primary":
@@ -29,24 +30,39 @@ export const Tag = forwardRef<HTMLDivElement, tagProps>(function Tag ({text, ico
   let sizeClass = 'py-2 px-3 sm:py-3 sm:px-4 md:p-4 rounded-2xl'
   switch (size) {
     case "sm":
-      sizeClass = "p-3 rounded-lg"
+      sizeClass = "p-dashboard-mention-padding-right-left pr-[38px] rounded-lg"
       break;
   }
+
+  let selectedClass = 'bg-dashboard-button-white-default'
 
   return (
     <div 
       ref={ref}
-      className={`${wFull ? 'w-full' : 'w-max'} ${sizeClass} flex gap-3 items-center ${active ? 'block' : 'hidden'} ${bgColor} ${className ?? ''}`}
-      onClick={ (e) => { onClick && onClick(e) } }
+      className={`${wFull ? 'w-full' : 'w-max'} ${sizeClass} group flex gap-3 items-center ${active ? 'block' : 'hidden'} ${bgColor} ${selected && selectedClass} ${className ?? ''}`}
+      onClick={ (e) => {
+        switch (selected) {
+          case false:
+            onClick && onClick(e)
+            break;
+          case true:
+            onClose && onClose()
+            break;
+        }
+       } }
     >
-      {icon && 
-        <div className='rounded-full w-[22px] h-[22px] border border-white overflow-hidden'>
-          { icon === 'cross' && <CloseIcon
-            onClick={() => { onClose && onClose() }} 
-            className="scale-75"
-          />}
+      {(icon || selected) && 
+        <div className='rounded-full absolute left-dashboard-mention-padding-right-left w-[22px] h-[22px] border border-white group-hover:border-appleRed overflow-hidden'>
+          { (icon === 'cross' || selected) && <CloseIcon
+            onClick={(e:MouseEvent) => { 
+              e.stopPropagation()
+              onClose && onClose() 
+            }} 
+            className="scale-75 group-hover:svg-color-appleRed"
+          />
+          }
           {
-            icon !== 'cross' &&
+            (icon && icon !== 'cross' && !selected) &&
             <Image 
               src={icon}
               alt={''}
@@ -56,7 +72,7 @@ export const Tag = forwardRef<HTMLDivElement, tagProps>(function Tag ({text, ico
           }
         </div>
       }
-      <span>{text}</span>
+      <span className={`transition-transform ${(icon || selected) ? 'translate-x-[30px]' : ''}`}>{text}</span>
     </div>
   )
 } )
