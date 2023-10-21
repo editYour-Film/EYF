@@ -170,10 +170,16 @@ export const EditorSection = ({ data }: EditorSectionProps) => {
               ref={largeCardInner}
               className="relative md:py-10 md:pl-32 md:pr-12"
             >
-              <div className={`pointer-events-none hidden md:block absolute top-0 left-0 w-full h-full`}>
-                <div className={`absolute w-[130%] h-[130%] left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] z-10 ${cardLargeStyles.filter}`}></div>
-                <div className={`absolute w-[130%] h-[130%] left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] z-10 bg-[#010304] opacity-[0.43]`}></div>
-                <ResponsiveImg 
+              <div
+                className={`pointer-events-none hidden md:block absolute top-0 left-0 w-full h-full`}
+              >
+                <div
+                  className={`absolute w-[130%] h-[130%] left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] z-10 ${cardLargeStyles.filter}`}
+                ></div>
+                <div
+                  className={`absolute w-[130%] h-[130%] left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] z-10 bg-[#010304] opacity-[0.43]`}
+                ></div>
+                <ResponsiveImg
                   isStatic
                   className={`${cardLargeStyles.image} scale-125 object-cover`}
                   data={data.large_card_img.data.attributes.url}
@@ -191,7 +197,7 @@ export const EditorSection = ({ data }: EditorSectionProps) => {
                     {data.large_card_content}
                   </p>
                   <div className="flex flex-wrap gap-2.5">
-                    <Link href={routes.SIGNIN_EMAIL}>
+                    <Link href={routes.SIGNIN}>
                       <Button
                         variant="primary"
                         text="Crée ton profil monteur"
@@ -328,10 +334,10 @@ const Item = ({ title, text, img, i, delay, inView }: ItemProps) => {
             className={`absolute w-[130%] h-[130%] left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] z-10 bg-[#010304] opacity-[0.2]`}
           ></div>
 
-          <ResponsiveImg 
+          <ResponsiveImg
             isStatic
             data={img.data.attributes.url}
-            w={{xs:300, sm:400, md:450, lg:550}}
+            w={{ xs: 300, sm: 400, md: 450, lg: 550 }}
             alt={img.data.attributes.alternativeText}
             className={`w-full h-full absolute object-cover`}
           />

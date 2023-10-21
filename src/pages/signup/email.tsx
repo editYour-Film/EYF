@@ -46,7 +46,7 @@ export default function SignUpEmail() {
         <meta name="description" content="" />
       </Head>
 
-      <LayoutSignin previousPath={routes.SIGNIN_EMAIL}>
+      <LayoutSignin previousPath={routes.SIGNIN}>
         <h3 className="text-2xl font-semibold">Entrez votre adresse e-mail</h3>
         <Input
           type="email"

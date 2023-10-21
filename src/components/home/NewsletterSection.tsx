@@ -61,7 +61,14 @@ export const NewsletterSection = () => {
 
     const sendRes = await useStrapiPost(
       "send-mail",
-      { email: email, subject: "Bienvenue sur la newsletter" },
+      {
+        email: email,
+        subject: "Bienvenue sur la newsletter",
+        text:
+          "Bonjour " +
+          email +
+          ", merci de vous inscrire sur la newsletter de EditYour.film.",
+      },
       false
     );
     if (sendRes.status === 200)
