@@ -35,13 +35,15 @@ const LayoutDashboard = ({ children }: LayoutDashboardProps) => {
 
   return (
     <>
-      <Lenis root>
-        <div className="bg-black min-h-screen flex flex-col justify-between gap-10">
-          <main className="pt-5 lg:pt-11">
-            <div className="lg:px-[113px] relative z-20 ">{children}</div>
-          </main>
-        </div>
-      </Lenis>
+      {isLoggedIn && (
+        <Lenis root>
+          <div className="bg-black min-h-screen flex flex-col justify-between gap-10">
+            <main className="pt-5 lg:pt-11">
+              <div className="lg:px-[113px] relative z-20 ">{children}</div>
+            </main>
+          </div>
+        </Lenis>
+      )}
     </>
   );
 };

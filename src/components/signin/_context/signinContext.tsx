@@ -131,7 +131,7 @@ export const SignInContextProvider: React.FC<any> = (props) => {
             details: signinResponse.data.details,
             models: signinResponse.data.models,
           });
-          push(routes.DASHBOARD_EDITOR_HOME);
+          location.reload();
         }, 2000);
       }
     } else setCodeState("error");
