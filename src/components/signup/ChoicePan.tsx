@@ -64,11 +64,13 @@ export const ChoicePan = () => {
           <div className="flex flex-col gap-dashboard-button-separation-spacing">
             <Toggle 
               label='Créateur.rice'
+              value={context.accountType === 'creator' || context.accountType === 'both'}
               onChange={(value) => { setIsCreator(value); }}
             />
             <hr />
             <Toggle 
               label='Monteur.se'
+              value={context.accountType === 'editor' || context.accountType === 'both'}
               onChange={(value) => { setIsEditor(value) }}
             />
           </div>
