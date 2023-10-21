@@ -8,6 +8,8 @@ import validator from "validator";
 import { getTokenFromLocalCookie, setToken } from "@/auth/auth";
 import { useUser } from "@/auth/authContext";
 import { useRouter } from "next/router";
+import useLocalStorage from "@/hooks/useLocalStorage";
+import { SignedInUser, initSignedInUser } from "@/components/model/signin";
 
 export type stepType = "type" | "email" | "code";
 export type codeStateType =
@@ -39,6 +41,10 @@ export const SignInContext = createContext({
 
 export const SignInContextProvider: React.FC<any> = (props) => {
   const { push } = useRouter();
+  const [userInfo, setUserInfo] = useLocalStorage<SignedInUser>(
+    "user",
+    initSignedInUser
+  );
   const [, isLoggedIn] = useUser();
 
   const emailErrors = {
@@ -120,7 +126,12 @@ export const SignInContextProvider: React.FC<any> = (props) => {
         setCodeState("success");
         setTimeout(() => {
           setToken(signinResponse.data);
-          location.reload();
+          setUserInfo({
+            user: signinResponse.data.user,
+            details: signinResponse.data.details,
+            models: signinResponse.data.models,
+          });
+          push(routes.DASHBOARD_EDITOR_HOME);
         }, 2000);
       }
     } else setCodeState("error");
