@@ -1,10 +1,14 @@
 import { useStrapiGet } from "@/hooks/useStrapi";
 import { useRouter } from "next/router";
 import routes from "@/routes";
+import { use, useEffect } from "react";
 
 export default function Profile() {
   const { push } = useRouter();
-  push(routes.DASHBOARD_EDITOR);
+  useEffect(() => {
+    push(routes.DASHBOARD_EDITOR);
+  }, []);
+
   /*useStrapiGet("users/me?populate=*", true)
     .then((res) => {
       switch (res.data.role.name) {
