@@ -20,6 +20,7 @@ type inputProps = {
   onChange?: (e: any) => void;
   onKeyDown?: (e: any) => void;
   label?: string;
+  noMargin?: boolean;
   noLabel?: boolean;
   labelType?: undefined | 'dashboard';
   placeholder?: string;
@@ -28,13 +29,15 @@ type inputProps = {
   helper?: string;
   helpIconText?: string;
   error?: string | ReactNode;
-  bg?: "white" | "black" | "light" | "card";
+  bg?: "white" | "black" | "light" | "card" | "underlined";
+  textSunset?: boolean;
   roundedFull?: boolean;
   iconRight?: boolean;
   disabled?: boolean;
 
   /** text / text-area */
   maxlength?: number | undefined;
+  minlength?: number | undefined;
 
   /** radio / radio-btn / checkbox */
   options?: any;
@@ -55,6 +58,7 @@ const Input = ({
   onKeyDown = () => {},
   label,
   noLabel,
+  noMargin,
   labelType,
   placeholder = "",
   className = "",
@@ -63,11 +67,13 @@ const Input = ({
   helpIconText,
   error,
   bg = "white",
+  textSunset = false,
   roundedFull = false,
   iconRight,
   disabled,
   /** text */
   maxlength,
+  minlength,
   /** radio / checkbox */
   options,
   selectedOption,
@@ -84,7 +90,8 @@ const Input = ({
   const yearRef = useRef<HTMLInputElement>(null);
 
   const inputClass =
-    "input-text w-full px-4 " +
+    "input-text w-full " +
+    (bg !== 'underlined' ? 'px-padding-dashboard-button-separation-spacing ' : '') +
     (type === "password"
       ? "pr-12 "
       : type === "email"
@@ -96,19 +103,20 @@ const Input = ({
       : "") +
     (error ? "border-appleRed " : "") +
     (bg === "white" ? "border bg-white text-alpha-black-600 " : '') +
-    (bg === "light" ? "border bg-white bg-opacity-10 text-white text-opacity-70 " : '') +
+    (bg === "light" ? "border bg-soyMilk-40 text-white text-opacity-70 " : '') +
     (bg === "black" ? "bg-darkgrey bg-opacity-50 text-white border border-0.5 " : '') +
     (bg === "card" ? "bg-background-card text-white text-opacity-50 border border-0.5 " : '') +
-    (roundedFull ? "rounded-full " : "rounded-lg ") +
-    (size === 'sm' ? 'py-2 min-h-[40px] ' : 'p-4 min-h-[52px] ') +
+    (bg === "underlined" ? "bg-transparent text-dashboard-text-title-white-high placeholder-text-dashboard-text-description-base border-b border-1 hover:border-stroke-dashboard-button-stroke-hover " : '') +
+    (bg !== "underlined" && (roundedFull ? "rounded-full " : "rounded-lg ")) +
+    (size === 'sm' ? ' py-2 min-h-[40px] ' : ' p-dashboard-button-separation-spacing min-h-[52px] ') +
     (disabled === true ? 'opacity-50 ' : '') +
     className;
 
   let labelClass
   if (noLabel) {
-    labelClass = 'opacity-0 width-0 height-0 pointer-events-none'
+    labelClass = 'block opacity-0 w-0 h-0 pointer-events-none'
   } else {
-    labelClass = labelType === 'dashboard' ? 'flex items-center justify-between mb-3 font-bold' : " flex flex-wrap items-center gap-3 mb-2 text-sm text-base-text";
+    labelClass = labelType === 'dashboard' ? 'flex items-center justify-between mb-3 font-bold text-dashboard-text-description-base' : " flex flex-wrap justify-between items-center gap-3 mb-2 text-sm text-dashboard-text-description-base";
   }
   
 
@@ -117,7 +125,7 @@ const Input = ({
   switch (type) {
     case "text":
       return (
-        <div>
+        <div className="flex flex-col gap-dashboard-button-separation-spacing">
           {label && (
             <label className={labelClass}>
               {label}
@@ -129,23 +137,24 @@ const Input = ({
             <input
               type="text"
               onChange={onChange}
-              className='bg-transparent w-full h-full'
+              className={`bg-transparent w-full h-full ${textSunset ? 'text-linear-sunset' : ''}`}
               value={value as string}
               name={name}
               placeholder={placeholder}
               maxLength={maxlength}
               disabled={disabled}
             />
-            {maxlength && <div className="input__maxlength text-xs">{`${(value as string).length} / ${maxlength}`}</div>}
           </div>
-
+          
+          {maxlength && <div className="input__maxlength ml-auto mr-0 text-xs text-dashboard-text-description-base">{`${(value as string).length} / ${maxlength}`}</div>}
+          {minlength && <div className="input__minlength ml-auto mr-0 text-xs text-dashboard-text-description-base">{`${(value as string).length} / ${minlength}`}</div>}
           {helper && <p className={helperClass}>{helper}</p>}
           {error && <p className="text-appleRed mt-1.5 ">{error}</p>}
         </div>
       );
     case "textarea":
       return (
-        <div>
+        <div className="flex flex-col justify-stretch h-full gap-dashboard-button-separation-spacing">
           {label && (
             <label className={labelClass}>
               {label}
@@ -154,7 +163,7 @@ const Input = ({
             </label>
           )}
           {helper && <p className={helperClass}>{helper}</p>}
-          <div className={`relative flex flex-col items-end ${inputClass}`}>
+          <div className={`relative flex flex-col grow items-end ${inputClass}`}>
             <textarea
               onChange={onChange}
               className='bg-transparent w-full h-full resize-none'
@@ -164,9 +173,10 @@ const Input = ({
               maxLength={maxlength}
               disabled={disabled}
             ></textarea>
-            {maxlength && <div className="input__maxlength text-xs">{`${(value as string).length} / ${maxlength}`}</div>}
           </div>
-
+          
+          {maxlength && <div className="input__maxlength ml-auto mr-0 text-xs text-dashboard-text-description-base">{`${(value as string).length} / ${maxlength}`}</div>}
+          {minlength && <div className="input__minlength ml-auto mr-0 text-xs text-dashboard-text-description-base">{`Minimum ${minlength} caractères ${(value as string).length} / ${minlength}`}</div>}
           {error && <p className="text-appleRed mt-1.5 ">{error}</p>}
         </div>
       );

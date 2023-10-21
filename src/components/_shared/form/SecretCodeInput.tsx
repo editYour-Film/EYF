@@ -102,7 +102,7 @@ const Enter = ({disabled, onClick}: EnterProps) => {
       className={`basis-2/3 flex justify-center items-center p-dashboard-button-separation-spacing border rounded-dashboard-button-square-radius ${disabled ? 'pointer-events-none bg-dashboard-button-island-disabled border-dashboard-button-stroke-disabled' : 'bg-soyMilk-40'} hover:bg-dashboard-button-white-hover hover:border-dashboard-button-stroke-default`}
       onClick={() => { !disabled && onClick() }}
     >
-      <EnterIcon className={`${disabled ? 'svg-color-dashboard-button-island-disabled' : 'svg-color-soyMilk'}`}/>
+      <EnterIcon className={`${disabled ? 'svg-color-dashboard-text-disabled' : 'svg-color-soyMilk'}`}/>
     </div>
   )
 }

@@ -3,10 +3,6 @@ import Link from "next/link";
 import { createContext, useEffect, useState } from "react"
 import { ReactElement } from "react-markdown/lib/react-markdown";
 
-import Send from '@/icons/signin/send.svg'
-import X from '@/icons/signin/x.svg'
-import Check from '@/icons/signin/check.svg'
-
 export type stepType = "type" | "email" | "code"
 export type codeStateType = "regular" | "loading" | "error" | "success"
 
