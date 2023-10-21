@@ -17,6 +17,6 @@ export default function Profile() {
       }
     })
     .catch((err) => {
-      push(routes.SIGNIN_TYPE);
+      push(routes.SIGNIN);
     });
 }

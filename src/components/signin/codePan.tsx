@@ -9,6 +9,7 @@ import X from "@/icons/signin/x.svg";
 import Connexion from "@/icons/signin/connexion.svg";
 import gsap from "gsap";
 import { ElementsIn } from "@/Animations/elementsIn";
+import { useStrapiPost } from "@/hooks/useStrapi";
 
 export const CodePan = () => {
   const container = useRef<HTMLDivElement>(null);
@@ -16,13 +17,26 @@ export const CodePan = () => {
 
   useEffect(() => {
     const elements = Array.from(container.current!.children);
-
+    context.setCodeState("regular");
     ElementsIn(elements);
   }, []);
 
-  const handleSendAgain = () => {};
+  const handleSendAgain = async () => {
+    context.setCodeState("loading");
+    const resendToken = await useStrapiPost(
+      "generate-token",
+      {
+        email: context.email,
+      },
+      false
+    );
+    if (resendToken.status === 200) context.setCodeState("successResend");
+    else context.setCodeState("errorResend");
+  };
 
-  const handleGoBack = () => {};
+  const handleGoBack = () => {
+    context.setCurrentStep("email");
+  };
 
   const switchMessage = (switchVal: codeStateType) => {
     switch (switchVal) {
@@ -44,12 +58,40 @@ export const CodePan = () => {
         return (
           <InfoMessage
             type="danger"
+            message="Une erreur inattendue s'est produite."
+            Icon={X}
+          />
+        );
+      case "errorInvalid":
+        return (
+          <InfoMessage
+            type="danger"
             message="Code saisi invalide. Rééssayez ou recevez un nouveau code."
+            Icon={X}
+          />
+        );
+      case "errorExpired":
+        return (
+          <InfoMessage
+            type="danger"
+            message="Code saisi expiré. Veuillez regénérer un nouveau code."
+            Icon={X}
+          />
+        );
+      case "errorResend":
+        return (
+          <InfoMessage
+            type="danger"
+            message="Erreur lors de regénération d'un nouveau code."
             Icon={X}
           />
         );
       case "success":
         return <InfoMessage message="Connexion ..." Icon={Connexion} />;
+      case "successResend":
+        return (
+          <InfoMessage message="Code de vérification envoyé." Icon={Send} />
+        );
       default:
         break;
     }
@@ -114,7 +156,7 @@ export const CodePan = () => {
               handleGoBack();
             }}
             className="w-full mt-dashboard-mention-padding-right-left"
-            disabled={context.codeState !== "success"}
+            disabled={context.codeState === "success"}
           />
         </div>
       </div>

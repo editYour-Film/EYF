@@ -1,23 +1,23 @@
-// getRoutesConnexion takes an array and return 
+// getRoutesConnexion takes an array and return
 //all possible combinations of two items
 
 const getRoutesConnexion = (array: string[]) => {
   const _array = array;
-  let r:string[][] = [];
+  let r: string[][] = [];
 
   array.forEach((item, i) => {
-    let connexions:string[][] = []
+    let connexions: string[][] = [];
     _array.forEach((element, j) => {
-      if (i > j) return
-      let connexion = [item, element]
-      item !== element && connexions.push(connexion)
+      if (i > j) return;
+      let connexion = [item, element];
+      item !== element && connexions.push(connexion);
     });
-    
-    r = [...r, ...connexions]
-  })
 
-  return r
-}
+    r = [...r, ...connexions];
+  });
+
+  return r;
+};
 
 let routes = {
   HOME: "/",
@@ -31,6 +31,7 @@ let routes = {
   CATALOGUE: "/catalogue",
   SEARCH_KEYWORD: "/catalogue/mot-cle",
 
+  SIGNIN: "/signin",
   SIGNIN_TYPE: "/signin/type",
   SIGNIN_EMAIL: "/signin/email",
   SIGNIN_PASSWORD: "/signin/password",
@@ -67,13 +68,9 @@ let routes = {
 
 export default routes;
 
-const landings = [
-  routes.HOME,
-  routes.WHOWEARE,
-  routes.BLOG
-]
+const landings = [routes.HOME, routes.WHOWEARE, routes.BLOG];
 
-export { landings }
+export { landings };
 
 const signin = [
   routes.SIGNIN_TYPE,
@@ -82,7 +79,7 @@ const signin = [
   routes.SIGNIN_RESET_PWD_P1,
   routes.SIGNIN_RESET_PWD_P2,
   routes.SIGNIN_RESET_PWD_P3,
-]
+];
 
 const signup = [
   routes.SIGNUP_EMAIL,
@@ -92,19 +89,15 @@ const signup = [
   routes.SIGNUP_CGU,
   routes.SIGNUP_INFO,
   routes.SIGNUP_SUCCESS,
-]
+];
 
-const quote = [
-  routes.QUOTE_STEP1,
-  routes.QUOTE_STEP2,
-  routes.QUOTE_STEP3,
-]
+const quote = [routes.QUOTE_STEP1, routes.QUOTE_STEP2, routes.QUOTE_STEP3];
 
 const navWithoutTransition = [
   [routes.BLOG_DETAIL, routes.BLOG_DETAIL],
   ...getRoutesConnexion(signin),
   ...getRoutesConnexion(signup),
   ...getRoutesConnexion(quote),
-]
+];
 
-export { navWithoutTransition }
+export { navWithoutTransition };

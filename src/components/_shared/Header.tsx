@@ -19,8 +19,8 @@ type HeaderProps = {
   activeNavItem?: string;
 };
 const Header = ({ activeNavItem = "" }: HeaderProps) => {
-  const dispatch = useDispatch()
-  const router = useRouter()
+  const dispatch = useDispatch();
+  const router = useRouter();
 
   const isMobileScreen = useMediaQuery("(max-width: 1024px)");
   const [isOpen, setIsOpen] = useState(false);
@@ -58,7 +58,7 @@ const Header = ({ activeNavItem = "" }: HeaderProps) => {
     } else setIsScrollUp(false);
   }, []);
 
-  const transitionMobile = `transform 0.5s ${isOpen ? 'ease-out' : 'ease-in'}`
+  const transitionMobile = `transform 0.5s ${isOpen ? "ease-out" : "ease-in"}`;
 
   return (
     <header
@@ -148,12 +148,12 @@ const Header = ({ activeNavItem = "" }: HeaderProps) => {
               onClientClick={() => {
                 setWaitingListType("client");
                 setIsModalDisplayed(true);
-                router.push(routes.SIGNIN_TYPE)
+                router.push(routes.SIGNIN);
               }}
               onMonteurClick={() => {
                 setWaitingListType("monteur");
                 setIsModalDisplayed(true);
-                router.push(routes.SIGNIN_TYPE)
+                router.push(routes.SIGNIN);
               }}
             />
 
@@ -162,9 +162,9 @@ const Header = ({ activeNavItem = "" }: HeaderProps) => {
               variant="primary"
               text="Rejoindre la beta"
               onClick={() => {
-                dispatch(setJoinBetaVisible())
-                setIsModalDisplayed(true)}
-              }
+                dispatch(setJoinBetaVisible());
+                setIsModalDisplayed(true);
+              }}
             />
             {/*</Link>*/}
           </div>
@@ -184,16 +184,16 @@ const Header = ({ activeNavItem = "" }: HeaderProps) => {
 
         <div
           className="fixed right-0 top-0 w-full h-[100vh] bg-opacity-80 bg-black z-10 border-r origin-top overflow-hidden"
-          style={{ 
+          style={{
             transform: isOpen ? "translateY(0)" : "translateY(-100%)",
-            transition: transitionMobile
+            transition: transitionMobile,
           }}
         >
-          <div 
+          <div
             className="menu-mobile__inner relative w-full h-full"
-            style={{ 
+            style={{
               transform: isOpen ? "translateY(0)" : "translateY(90%)",
-              transition: transitionMobile
+              transition: transitionMobile,
             }}
           >
             <div className="absolute z-0 w-full h-full gradient-menu-mobile pointer-events-none"></div>
@@ -206,7 +206,7 @@ const Header = ({ activeNavItem = "" }: HeaderProps) => {
                 alt=""
                 className="h-8 w-40"
               />
-              <Button 
+              <Button
                 text="Fermer"
                 variant="black"
                 onClick={() => setIsOpen(false)}
@@ -218,71 +218,79 @@ const Header = ({ activeNavItem = "" }: HeaderProps) => {
               <div className="relative flex flex-col min-h-screen justify-end">
                 <nav className="flex flex-col basis-1/2 grow mt-24 justify-center self-end gap-4 max-w-xs transition-all duration-500">
                   <Link
-                    href={routes.HOME} 
-                    className="text-gray text-right" 
+                    href={routes.HOME}
+                    className="text-gray text-right"
                     scroll={false}
-                    style={{ 
+                    style={{
                       opacity: isOpen ? "1" : "0",
-                      transition: 'opacity 1s ease-in-out 0.3s'
+                      transition: "opacity 1s ease-in-out 0.3s",
                     }}
                   >
-                    <span className="ml-4 text-title hover:text-violet transition-colors">Accueil</span>
+                    <span className="ml-4 text-title hover:text-violet transition-colors">
+                      Accueil
+                    </span>
                   </Link>
                   {/* <Link href={routes.CATALOGUE} className="text-gray text-right">
                     Modèles <span className="ml-4 text-2xl hover:text-violet transition-colors">Catalogue</span>
                   </Link> */}
-                  <Link 
-                    href={routes.WHOWEARE} 
-                    className="text-gray text-right" 
+                  <Link
+                    href={routes.WHOWEARE}
+                    className="text-gray text-right"
                     scroll={false}
-                    style={{ 
+                    style={{
                       opacity: isOpen ? "1" : "0",
-                      transition: 'opacity 1s ease-in-out 0.35s'
+                      transition: "opacity 1s ease-in-out 0.35s",
                     }}
                   >
-                    <span className="ml-4 text-title hover:text-violet transition-colors">Notre histoire</span>
+                    <span className="ml-4 text-title hover:text-violet transition-colors">
+                      Notre histoire
+                    </span>
                   </Link>
-                  <Link 
-                    href={routes.BLOG} 
-                    className="text-gray text-right" 
+                  <Link
+                    href={routes.BLOG}
+                    className="text-gray text-right"
                     scroll={false}
-                    style={{ 
+                    style={{
                       opacity: isOpen ? "1" : "0",
-                      transition: 'opacity 1s ease-in-out 0.40s'
-                    }}>
-                    <span className="ml-4 text-title hover:text-violet transition-colors">Blog</span>
+                      transition: "opacity 1s ease-in-out 0.40s",
+                    }}
+                  >
+                    <span className="ml-4 text-title hover:text-violet transition-colors">
+                      Blog
+                    </span>
                   </Link>
                   {/* <Link
                     href=""
                     onClick={() => setIsModalDisplayed(true)}
-                    href={routes.SIGNIN_EMAIL} className="text-gray text-right"
+                    href={routes.SIGNIN} className="text-gray text-right"
                   >
                     Commandes <span className="ml-4 text-2xl hover:text-violet transition-colors">Se connecter</span>
                   </Link> */}
                   <Link
                     onClick={() => setIsModalDisplayed(true)}
                     scroll={false}
-                    href={routes.SIGNIN_EMAIL} 
+                    href={routes.SIGNIN}
                     className="text-gray text-right"
-                    style={{ 
+                    style={{
                       opacity: isOpen ? "1" : "0",
-                      transition: 'opacity 1s ease-in-out 0.45s'
+                      transition: "opacity 1s ease-in-out 0.45s",
                     }}
                   >
-                    <span className="ml-4 text-title hover:text-violet transition-colors">Se connecter</span>
+                    <span className="ml-4 text-title hover:text-violet transition-colors">
+                      Se connecter
+                    </span>
                   </Link>
                 </nav>
 
-                <div 
+                <div
                   className="mt-10 regularH:mt-28"
-                  style={{ 
+                  style={{
                     opacity: isOpen ? "1" : "0",
-                    transition: 'opacity 1s ease-in-out 0.5s'
+                    transition: "opacity 1s ease-in-out 0.5s",
                   }}
                 >
                   <div className="text-base-text">Social</div>
                   <div className="footer__icons group flex flex-wrap gap-1 sm:gap-2 md:gap-4 mt-6">
-                    
                     <a
                       href="https://www.facebook.com/edityour.film"
                       target="_blank"
@@ -317,33 +325,29 @@ const Header = ({ activeNavItem = "" }: HeaderProps) => {
                     </a>
                   </div>
                 </div>
-                
 
                 {/*<Link href={routes.QUOTE_STEP1}>*/}
                 <div
-                    className="mt-16 mb-10"
-                    style={{ 
-                      opacity: isOpen ? "1" : "0",
-                      transition: 'opacity 1s ease-in-out 0.55s'
-                    }}
+                  className="mt-16 mb-10"
+                  style={{
+                    opacity: isOpen ? "1" : "0",
+                    transition: "opacity 1s ease-in-out 0.55s",
+                  }}
                 >
                   <Button
                     variant="primary"
                     text="Rejoindre la beta"
                     className="max-w-[100%] sm:max-w-[280px]"
                     onClick={() => {
-                      dispatch(setJoinBetaVisible())
-                      setIsModalDisplayed(true)}
-                    }
+                      dispatch(setJoinBetaVisible());
+                      setIsModalDisplayed(true);
+                    }}
                   />
                 </div>
                 {/*</Link>*/}
               </div>
-            
-            </div> 
+            </div>
           </div>
-
-
         </div>
       </ContainerFullWidth>
 
@@ -353,9 +357,6 @@ const Header = ({ activeNavItem = "" }: HeaderProps) => {
       >
         <WaitingListForm userType={waitingListType} />
       </Modal> */}
-
-
-
     </header>
   );
 };
@@ -388,7 +389,7 @@ const ConnectionOptions = ({ onClientClick, onMonteurClick }: any) => {
         }
       >
         <div className="absolute -top-2 left-0 w-full h-full z-0"></div>
-        {/*<Link href={routes.SIGNIN_EMAIL + "?type=client"}>*/}
+        {/*<Link href={routes.SIGNIN + "?type=client"}>*/}
         {/* <div
           className="relative flex items-start gap-4 transition-colors duration-300 hover:bg-black-light p-2 rounded-xl cursor-pointer z-1"
           onClick={onClientClick}
@@ -408,7 +409,7 @@ const ConnectionOptions = ({ onClientClick, onMonteurClick }: any) => {
           </div>
         </div> */}
         {/* </Link>*/}
-        {/* <Link href={routes.SIGNIN_EMAIL + "?type=editor"}>*/}
+        {/* <Link href={routes.SIGNIN + "?type=editor"}>*/}
         <div
           className="relative flex items-start gap-4 transition-colors duration-300 hover:bg-black-light p-2 rounded-xl z-1"
           onClick={onMonteurClick}

@@ -219,7 +219,8 @@ export const AddModelContextProvider: React.FC<any> = (props) => {
       "editor-videos?filters[user_info][id][$eq]=" +
         user[0].details.id +
         "&populate=*",
-      true
+      // should be updated to true (set to false for test purposes)
+      false
     );
 
     setCurrentModels(models.data.data);

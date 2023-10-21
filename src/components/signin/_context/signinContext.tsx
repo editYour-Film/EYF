@@ -1,75 +1,150 @@
 import routes from "@/routes";
 import Link from "next/link";
-import { createContext, useEffect, useState } from "react"
+import { createContext, useEffect, useState } from "react";
 import { ReactElement } from "react-markdown/lib/react-markdown";
 
-import Send from '@/icons/signin/send.svg'
-import X from '@/icons/signin/x.svg'
-import Check from '@/icons/signin/check.svg'
+import { useStrapiPost } from "@/hooks/useStrapi";
+import validator from "validator";
+import { getTokenFromLocalCookie, setToken } from "@/auth/auth";
+import { useUser } from "@/auth/authContext";
+import { useRouter } from "next/router";
+import useLocalStorage from "@/hooks/useLocalStorage";
+import { SignedInUser, initSignedInUser } from "@/components/model/signin";
 
-export type stepType = "type" | "email" | "code"
-export type codeStateType = "regular" | "loading" | "error" | "success"
+export type stepType = "type" | "email" | "code";
+export type codeStateType =
+  | "regular"
+  | "loading"
+  | "error"
+  | "errorInvalid"
+  | "errorExpired"
+  | "errorResend"
+  | "success"
+  | "successResend";
 
 export const SignInContext = createContext({
-  currentStep: 'type' as stepType,
+  currentStep: "type" as stepType,
   setCurrentStep: (payload: stepType) => {},
-  email: '',
+  email: "",
   setEmail: (payload: string) => {},
   emailErrorMessage: null as ReactElement | null | undefined,
-  handleConfirmEmail: ():Promise<boolean> => { return new Promise((resolve) => {}); },
+  handleConfirmEmail: (): Promise<boolean> => {
+    return new Promise((resolve) => {});
+  },
   handleGoogleConnection: () => {},
 
-  code: '',
-  setCode: (payload: string) => {},
-  codeState: 'regular' as codeStateType,
+  codeState: "regular" as codeStateType,
+  setCodeState: (payload: codeStateType) => {},
   resetCodeState: () => {},
   handleCodeVerification: (payload: string) => {},
-})
+});
 
 export const SignInContextProvider: React.FC<any> = (props) => {
+  const { push } = useRouter();
+  const [userInfo, setUserInfo] = useLocalStorage<SignedInUser>(
+    "user",
+    initSignedInUser
+  );
+  const [, isLoggedIn] = useUser();
+
   const emailErrors = {
-    notValid: <span>L’adresse mail renseignée n’est pas valide.</span> ,
-    notFound: <span>Aucun compte n'est lié à cette adresse mail. <Link href={routes.SIGNUP_ACCOUNT_TYPE}> <span className="text-dashboard-text-description-base">Créer un compte. </span> </Link> </span>
-  }
+    generalError: <span>Une erreur inattendue s'est produite.</span>,
+    emailNotSent: (
+      <span>Erreur lors de l'envoi de l'email de vérification.</span>
+    ),
+    notValid: <span>L’adresse mail renseignée n’est pas valide.</span>,
+    notFound: (
+      <span>
+        Aucun compte n'est lié à cette adresse mail.{" "}
+        <Link href={routes.SIGNUP_ACCOUNT_TYPE}>
+          {" "}
+          <span className="text-dashboard-text-description-base">
+            Créer un compte.{" "}
+          </span>{" "}
+        </Link>{" "}
+      </span>
+    ),
+  };
 
-  const [currentStep, setCurrentStep] = useState<stepType>('type')
+  const [currentStep, setCurrentStep] = useState<stepType>("type");
 
-  const [email, setEmail] = useState('')
-  const [emailErrorMessage, setEmailErrorMessage] = useState<ReactElement | null>()
-  
-  const [code, setCode] = useState('')
-  const [codeState, setCodeState] = useState<codeStateType>('regular')
+  const [email, setEmail] = useState("");
+  const [emailErrorMessage, setEmailErrorMessage] =
+    useState<ReactElement | null>();
+
+  const [codeState, setCodeState] = useState<codeStateType>("regular");
 
   const handleConfirmEmail = async () => {
-    // Verification logic + return if the email is valid and email is associated with an account
-    // Use setTimeout to fake the delay of api request sending
-    // if not ok define the emailErrorMessage
-    
-    return new Promise<boolean> ((resolve) => {      
-      setTimeout(() => { 
-        resolve(true)
-      }, 1000);
-    })
-  }
+    if (!validator.isEmail(email)) {
+      return new Promise<boolean>((resolve) => {
+        setEmailErrorMessage(emailErrors.notValid);
+      });
+    } else {
+      const generateToken = await useStrapiPost(
+        "generate-token",
+        {
+          email: email,
+        },
+        false
+      );
 
-  const handleGoogleConnection = () => {
+      return new Promise<boolean>((resolve) => {
+        setTimeout(() => {
+          if (generateToken.status === 200) {
+            if (typeof generateToken.data === "string") {
+              if (generateToken.data.includes("not found"))
+                setEmailErrorMessage(emailErrors.notFound);
+              else if (generateToken.data.includes("not sent"))
+                setEmailErrorMessage(emailErrors.emailNotSent);
+            } else if (generateToken.data === true) resolve(true);
+          } else setEmailErrorMessage(emailErrors.generalError);
+        }, 1000);
+      });
+    }
+  };
 
-  }
+  const handleGoogleConnection = () => {};
 
-  const handleCodeVerification = (value:string) => {
-    // check the code and set the code state accordingly
-    setCodeState('loading')
+  const handleCodeVerification = async (value: string) => {
+    setCodeState("loading");
+    const signinResponse = await useStrapiPost(
+      "custom-signin",
+      {
+        email: email,
+        token: value,
+      },
+      false
+    );
 
-    // Remove Timeout and set the verification
-    // on success redirect to dashboard ?
-    setTimeout(() => {
-      setCodeState('success')
-    }, 3000)
-  }
+    if (signinResponse.status === 200) {
+      if (typeof signinResponse.data === "string") {
+        if (signinResponse.data.includes("not valid"))
+          setCodeState("errorInvalid");
+        else if (signinResponse.data.includes("expired"))
+          setCodeState("errorExpired");
+      } else if (typeof signinResponse.data === "object") {
+        setCodeState("success");
+        setTimeout(() => {
+          setToken(signinResponse.data);
+          setUserInfo({
+            user: signinResponse.data.user,
+            details: signinResponse.data.details,
+            models: signinResponse.data.models,
+          });
+          push(routes.DASHBOARD_EDITOR_HOME);
+        }, 2000);
+      }
+    } else setCodeState("error");
+  };
 
   const resetCodeState = () => {
-    setCodeState('regular')
-  }
+    setCodeState("regular");
+  };
+
+  useEffect(() => {
+    const token = getTokenFromLocalCookie();
+    if (token && isLoggedIn) push(routes.DASHBOARD_EDITOR_HOME);
+  }, []);
 
   return (
     <SignInContext.Provider
@@ -83,14 +158,13 @@ export const SignInContextProvider: React.FC<any> = (props) => {
         handleConfirmEmail,
         handleGoogleConnection,
 
-        code,
-        setCode,
         codeState,
+        setCodeState,
         resetCodeState,
-        handleCodeVerification
+        handleCodeVerification,
       }}
     >
       {props.children}
     </SignInContext.Provider>
-  )
-}
+  );
+};

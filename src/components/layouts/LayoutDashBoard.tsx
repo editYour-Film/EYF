@@ -30,7 +30,7 @@ const LayoutDashboard = ({ children }: LayoutDashboardProps) => {
   }, [lenis]);
 
   useEffect(() => {
-    if (!getTokenFromLocalCookie()) Router.push(routes.SIGNIN_EMAIL);
+    if (!getTokenFromLocalCookie()) Router.push(routes.SIGNIN);
   }, []);
 
   return (

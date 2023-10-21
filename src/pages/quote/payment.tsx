@@ -95,7 +95,7 @@ export default function Payment() {
       isValid = false;
     }
 
-    if (isValid) alert("OK"); //push(routes.SIGNIN_PASSWORD);
+    if (isValid) alert("OK");
   };
 
   return (

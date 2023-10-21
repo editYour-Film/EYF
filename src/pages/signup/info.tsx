@@ -43,6 +43,8 @@ export default function SignUpInfo() {
   const [cityError, setCityError] = useState("");
   const [phoneError, setPhoneError] = useState("");
 
+  const [accountError, setAccountError] = useState("");
+
   useEffect(() => {
     if (!registerUser.cgu) push(routes.SIGNUP_CGU);
 
@@ -58,6 +60,7 @@ export default function SignUpInfo() {
   }, []);
 
   const onSubmit = async () => {
+    setAccountError("");
     setFnameError("");
     setLnameError("");
     setAddressError("");
@@ -135,7 +138,6 @@ export default function SignUpInfo() {
             true
           );
           if (createAccountResponse.status === 200) {
-            console.log("createAccountResponse", createAccountResponse);
             setUserInfo({
               user: signupResponse.data.user,
               details: {
@@ -144,11 +146,11 @@ export default function SignUpInfo() {
               },
             });
             push(routes.SIGNUP_SUCCESS);
-          } else alert("erreur lors de création du compte");
-        } else alert("erreur lors de configuration du role");
+          } else setAccountError("Erreur lors de la création de votre compte.");
+        } else setAccountError("Erreur lors de configuration de votre role.");
       } else if (signupResponse.data.message.inludes("already taken"))
-        alert("Compte existant.");
-      else alert("erreur lors de sign up");
+        setAccountError("Erreur lors de la création de votre compte.");
+      else setAccountError("Erreur lors de la création votre compte.");
     }
   };
   return (
@@ -232,6 +234,10 @@ export default function SignUpInfo() {
           }}
           error={phoneError}
         />
+
+        {accountError.length > 0 && (
+          <p className="text-appleRed mt-1.5">{accountError}</p>
+        )}
 
         <Button text="Continuer" onClick={() => onSubmit()} />
       </LayoutSignin>
