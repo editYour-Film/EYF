@@ -4,8 +4,8 @@ import routes from "@/routes";
 
 export default function Profile() {
   const { push } = useRouter();
-
-  useStrapiGet("users/me?populate=*", true)
+  push(routes.DASHBOARD_EDITOR);
+  /*useStrapiGet("users/me?populate=*", true)
     .then((res) => {
       switch (res.data.role.name) {
         case "editor":
@@ -18,5 +18,5 @@ export default function Profile() {
     })
     .catch((err) => {
       push(routes.SIGNIN);
-    });
+    });*/
 }
