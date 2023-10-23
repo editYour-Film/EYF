@@ -21,7 +21,7 @@ export const Loader = ({isLoading}:loaderProps) => {
     <div className="loader fixed w-full h-full top-0 left-0 perspective z-transition pointer-events-none">
     <div
       ref={loader}
-      className="fixed w-full h-full top-1 -left-1 flex justify-center items-center origin-center border-05 bg-black"
+      className="fixed w-full h-full flex justify-center items-center origin-center border-05 bg-black"
     >
       <EYFLogo className="z-10" />
 
