@@ -1,9 +1,11 @@
 import { H1 } from "../_shared/typography/H1";
 import Image from "next/image";
 import Button from "../_shared/form/Button";
-import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
+import { useRouter } from "next/router";
+import routes from "@/routes";
 
 export const TopSection = ({data}:any) => {
+  const router = useRouter()
   return (
     <div className="relative mt-16 lg:mt-24 w-full">
       <div className="absolute top-0 left-0 w-full h-[500px] -z-10 overflow-hidden">
@@ -63,6 +65,7 @@ export const TopSection = ({data}:any) => {
           iconRight icon="arrow-right" 
           variant="black" 
           className="absolute text-xl top-5 right-5 w-max px-9 py-7"
+          onClick={() => { router.push(routes.CATALOGUE) }}
         />
         {data.img.data && (
           <div className="relative w-full mt-14 ">
