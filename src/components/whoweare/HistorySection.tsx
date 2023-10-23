@@ -220,9 +220,9 @@ export const HistorySection = ({ data }: any) => {
 
         <div ref={bubble} className="relative hystory__bubble flex justify-center items-center my-6 px-7 py-4 origin-bottom-right min-h-[150px]">
           <div ref={bubbleText} className="relative hystory__msg  text-2xl z-20">
-            <TextSplit input="Et si on pouvait faire monter ses vidéos à tout moment peu importe le lieu où l’on se trouve ?" />
+            <TextSplit input="Et si on pouvait faire monter ses vidéos par un.e professionnel.le à tout moment, peu importe le lieu où on se trouve ?" />
           </div>
-          <div className="absolute top-0 left-0 w-full h-full object-cover z-0 bg-[#9747FF] rounded-3xl z-10" ></div>
+          <div className="absolute top-0 left-0 w-full h-full object-cover bg-[#9747FF] rounded-3xl z-10" ></div>
           <Bubble ref={bubbleSvg} className="absolute hidden md:block top-6 left-4 w-full h-full object-cover z-0" ></Bubble>
         </div>
 
