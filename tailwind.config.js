@@ -99,6 +99,7 @@ module.exports = {
       },
       borderWidth: {
         DEFAULT: tokens.dashboard_border_width_button_default,
+        '05': '0.5px',
         'dashboard-border-width-button-default': tokens.dashboard_border_width_button_default
       },
       borderRadius: {

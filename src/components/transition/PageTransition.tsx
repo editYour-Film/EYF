@@ -116,7 +116,7 @@ export const PageTransition = ({
       <div className="fixed w-full h-full top-0 left-0 perspective z-transition pointer-events-none">
         <div
           ref={transitionEl}
-          className="fixed w-full h-full flex justify-center items-center origin-center border-2 bg-black rounded-2xl"
+          className="fixed w-full h-full flex justify-center items-center origin-center border-05 bg-black"
         >
           <EYFLogo className="z-10" />
 
