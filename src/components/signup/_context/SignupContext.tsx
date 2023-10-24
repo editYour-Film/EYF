@@ -16,6 +16,13 @@ import { MessageType } from "@/components/_shared/UI/InfoMessage";
 import { StepBubbleProps } from "@/components/_shared/buttons/StepBubble";
 import { ElementsIn } from "@/Animations/elementsIn";
 import { ElementsOut } from "@/Animations/elementsOut";
+import { useStrapiGet, useStrapiPost } from "@/hooks/useStrapi";
+import { inputErrors } from "@/const";
+import validator from "validator";
+import { getTokenFromLocalCookie, setToken } from "@/auth/auth";
+import useLocalStorage from "@/hooks/useLocalStorage";
+import { SignedInUser, initSignedInUser } from "@/components/model/signin";
+import { useUser } from "@/auth/authContext";
 import { MentionInteraction } from "@/components/_shared/buttons/MentionInteraction";
 import { useRouter } from "next/router";
 
@@ -23,8 +30,8 @@ export type accountType = "editor" | "creator" | "both" | undefined;
 export type maxStepType = 5 | 6 | 7 | undefined;
 
 export const SignUpContext = createContext({
-  langOptions: [] as spokenLanguageInterface[],
-  skillsOptions: [] as skillsInterface[],
+  langOptions: [] as spokenLanguageInterface[] | undefined,
+  skillsOptions: [] as skillsInterface[] | undefined,
 
   accountType: undefined as accountType,
   setAccountType: (accountType: accountType) => {},
@@ -38,10 +45,11 @@ export const SignUpContext = createContext({
 
   email: undefined as string | undefined,
   setEmail: (payload: string) => {},
-  emailValid: false as boolean,
   emailErrorMessage: undefined as ReactElement | undefined | undefined | string,
-  handleConfirmEmail: () => {},
+  setEmailErrorMessage: (payload: string) => {},
   handleGoogleConnection: () => {},
+  handleSendAgain: () => {},
+  handleGoToCode: () => {},
 
   code: "" as string | undefined,
   setCode: (payload: string) => {},
@@ -59,6 +67,7 @@ export const SignUpContext = createContext({
 
   username: undefined as string | undefined,
   setUsername: (payload: string) => {},
+  handleUserNameVerification: () => {},
   userNameAvailable: undefined as boolean | undefined,
   userNameMessage: undefined as MessageType | undefined,
 
@@ -66,6 +75,8 @@ export const SignUpContext = createContext({
 
   editorPicture: undefined as any,
   setEditorPicture: (payload: any) => {},
+  editorPictureName: undefined as string | undefined,
+  setEditorPictureName: (payload: any) => {},
   editorPictureOk: undefined as boolean | undefined,
 
   editorDescription: undefined as string | undefined,
@@ -74,6 +85,8 @@ export const SignUpContext = createContext({
 
   creatorPicture: undefined as any,
   setCreatorPicture: (payload: any) => {},
+  creatorPictureName: undefined as string | undefined,
+  setCreatorPictureName: (payload: any) => {},
   creatorPictureOk: undefined as boolean | undefined,
 
   spokenLanguages: undefined as spokenLanguageInterface[] | undefined,
@@ -86,14 +99,22 @@ export const SignUpContext = createContext({
   setJoinNewsletter: (payload: boolean) => {
     false;
   },
+  lastStepError: undefined as string | undefined,
+  handleGoToDashboard: () => {},
 
   setContainer: (payload: any) => {},
-  entrance: (payload:RefObject<HTMLDivElement>) => {},
+  entrance: (payload: RefObject<HTMLDivElement>) => {},
   goBack: () => {},
-  goNext: () => {}
+  goNext: () => {},
 });
 
 export const SignUpContextProvider: React.FC<any> = (props) => {
+  const [, setUserInfo] = useLocalStorage<SignedInUser>(
+    "user",
+    initSignedInUser
+  );
+  const [, isLoggedIn] = useUser();
+
   const userNameMessages = {
     default: {
       message: "Votre nom d'utilisateur est unique.",
@@ -110,68 +131,83 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
       Icon: Check,
       type: "regular",
     } as MessageType,
+    generalError: {
+      message: inputErrors.general,
+      Icon: X,
+      type: "danger",
+    } as MessageType,
   };
 
-  const langOptions: spokenLanguageInterface[] = [
-    {
-      label: "Français",
-      id: "fr",
-      icon: "",
-    },
-    {
-      label: "Anglais",
-      id: "en",
-      icon: "",
-    },
-    {
-      label: "Italien",
-      id: "it",
-      icon: "",
-    },
-    {
-      label: "Allemand",
-      id: "it",
-      icon: "",
-    },
-    {
-      label: "Espagnol",
-      id: "it",
-      icon: "",
-    },
-  ];
+  const [langOptions, setLangOptions] = useState<spokenLanguageInterface[]>();
 
-  const skillsOptions: skillsInterface[] = [
-    {
-      label: "After Effects",
-      id: "after-effects",
-    },
-    {
-      label: "Maya",
-      id: "maya",
-    },
-    {
-      label: "Première pro",
-      id: "premiere-pro",
-    },
-  ];
+  const [skillsOptions, setSkillsOptions] = useState<skillsInterface[]>();
+
+  useEffect(() => {
+    const token = getTokenFromLocalCookie();
+    if (token && isLoggedIn) router.push(routes.DASHBOARD_EDITOR_HOME);
+
+    // get languages
+    let _langOptions: any = [];
+    useStrapiGet("languages").then((res) => {
+      if (res.status === 200) {
+        res.data.data.map((x: any) => {
+          _langOptions.push({
+            label: x.attributes.name,
+            id: x.id,
+            icon: "",
+          });
+        });
+        setLangOptions(_langOptions);
+      } else {
+      }
+    });
+
+    // get skills
+    let _skills: any = [];
+    useStrapiGet("skills").then((res) => {
+      if (res.status === 200) {
+        res.data.data.map((x: any) => {
+          _skills.push({
+            label: x.attributes.name,
+            id: x.id,
+          });
+        });
+        setSkillsOptions(_skills);
+      } else {
+      }
+    });
+  }, []);
 
   const [accountType, setAccountType] = useState<accountType>("both");
   const [maxSteps, setMaxSteps] = useState<maxStepType>(undefined);
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [dots, setDots] = useState<StepBubbleProps[] | undefined>(undefined);
 
-  const router = useRouter()
+  const router = useRouter();
 
   const disclaimer = (
     <span>
-      En continuant j’accepte les <MentionInteraction onClick={() => { router.push(routes.ML)}}>mentions légales</MentionInteraction>{" "}
-      et la <MentionInteraction onClick={() => { router.push(routes.PC)}}>Politique de confidentialité</MentionInteraction> de
-      editYour.Film.
+      En continuant j’accepte les{" "}
+      <MentionInteraction
+        onClick={() => {
+          router.push(routes.ML);
+        }}
+      >
+        mentions légales
+      </MentionInteraction>{" "}
+      et la{" "}
+      <MentionInteraction
+        onClick={() => {
+          router.push(routes.PC);
+        }}
+      >
+        Politique de confidentialité
+      </MentionInteraction>{" "}
+      de editYour.Film.
     </span>
   );
 
   const [email, setEmail] = useState<string | undefined>(undefined);
-  const [emailValid, setEmailValid] = useState<boolean>(false);
   const [emailErrorMessage, setEmailErrorMessage] = useState<
     ReactElement | undefined | undefined | string
   >(undefined);
@@ -197,9 +233,12 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
     f_name && l_name ? f_name[0] + l_name[0] : undefined
   );
 
-  const [editorPicture, setEditorPicture] = useState<string | undefined>(
+  const [editorPicture, setEditorPicture] = useState<FileList[0] | undefined>(
     undefined
   );
+  const [editorPictureName, setEditorPictureName] = useState<
+    string | undefined
+  >(undefined);
   const [editorPictureOk, setEditorPictureOk] = useState<boolean | undefined>(
     undefined
   );
@@ -211,16 +250,19 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
     boolean | undefined
   >(undefined);
 
-  const [creatorPicture, setCreatorPicture] = useState<string | undefined>(
+  const [creatorPicture, setCreatorPicture] = useState<FileList[0] | undefined>(
     undefined
   );
+  const [creatorPictureName, setCreatorPictureName] = useState<
+    string | undefined
+  >(undefined);
   const [creatorPictureOk, setCreatorPictureOk] = useState<boolean | undefined>(
     undefined
   );
 
   const [spokenLanguages, setSpokenLanguages] = useState<
     spokenLanguageInterface[] | undefined
-  >([langOptions[0]]);
+  >(langOptions ? [langOptions[0]] : undefined);
   const [skills, setSkills] = useState<skillsInterface[] | undefined>(
     undefined
   );
@@ -228,6 +270,8 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
   const [joinNewsletter, setJoinNewsletter] = useState<boolean | undefined>(
     true
   );
+
+  const [lastStepError, setLastStepError] = useState<string | undefined>();
 
   const defineMaxSteps = () => {
     switch (accountType) {
@@ -259,24 +303,79 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
     defineMaxSteps();
   };
 
-  const handleConfirmEmail = () => {
-    // Check if the email is valid
+  const handleGoToCode = async () => {
+    setEmailErrorMessage(undefined);
+    if (!email) {
+      setEmailErrorMessage(inputErrors.required);
+      return;
+    } else if (!validator.isEmpty(email) && !validator.isEmail(email)) {
+      setEmailErrorMessage(inputErrors.invalidEmail);
+      return;
+    }
 
-    if (email) setEmailValid(true);
-    else setEmailValid(false);
+    const sendToken = await useStrapiPost(
+      "generate-token-signup",
+      {
+        email: email,
+        role: accountType === "editor" ? 4 : 3,
+      },
+      false
+    );
+    if (sendToken.status && sendToken.status === 200) {
+      if (typeof sendToken.data === "string") {
+        if (sendToken.data.includes("exist"))
+          setEmailErrorMessage(inputErrors.accountExist);
+      } else if (sendToken.data === true) goNext();
+    } else setEmailErrorMessage(inputErrors.general);
   };
 
   const handleGoogleConnection = () => {};
 
-  const handleCodeVerification = (value: string) => {
+  const handleCodeVerification = async (value: string) => {
     // check the code and set the code state accordingly
     setCodeState("loading");
 
-    // Remove Timeout and set the verification
-    // on success redirect to dashboard ?
-    setTimeout(() => {
-      setCodeState("success");
-    }, 3000);
+    const verifyToken = await useStrapiPost(
+      "custom-signup",
+      {
+        email: email,
+        token: value,
+      },
+      false
+    );
+
+    if (verifyToken.status && verifyToken.status === 200) {
+      if (typeof verifyToken.data === "string") {
+        if (
+          verifyToken.data.includes("error") ||
+          verifyToken.data.includes("not sent")
+        )
+          setCodeState("error");
+        if (verifyToken.data.includes("not valid"))
+          setCodeState("errorInvalid");
+        if (verifyToken.data.includes("expired")) setCodeState("errorExpired");
+      } else if (verifyToken.data === true) setCodeState("success");
+    } else setCodeState("error");
+  };
+
+  const handleSendAgain = async () => {
+    const regenerateToken = await useStrapiPost(
+      "generate-token-signup",
+      {
+        email: email,
+      },
+      false
+    );
+
+    if (regenerateToken.status && regenerateToken.status === 200) {
+      if (typeof regenerateToken.data === "string") {
+        if (
+          regenerateToken.data.includes("error") ||
+          regenerateToken.data.includes("not sent")
+        )
+          setCodeState("error");
+      } else if (regenerateToken.data === true) setCodeState("successResend");
+    } else setCodeState("error");
   };
 
   const resetCodeState = () => {
@@ -287,18 +386,30 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
     setInitials(f_name && l_name ? f_name[0] + l_name[0] : undefined);
   }, [l_name, f_name]);
 
-  const handleUserNameVerification = () => {
+  const handleUserNameVerification = async () => {
     // check availability of username and change the username message accordingly
-    if (username) {
+    if (username && username?.length > 0) {
       //if Availiable
-      if (username?.length) {
-        setUserNameAvailable(true);
-        setUserNameMessage(userNameMessages.success);
-      }
-      //if Not
-      else {
+
+      const checkUsername = await useStrapiPost(
+        "check-username",
+        {
+          username: username,
+        },
+        false
+      );
+
+      if (checkUsername.status && checkUsername.status === 200) {
+        if (checkUsername.data === true) {
+          setUserNameAvailable(true);
+          setUserNameMessage(userNameMessages.success);
+        } else {
+          setUserNameAvailable(false);
+          setUserNameMessage(userNameMessages.error);
+        }
+      } else {
         setUserNameAvailable(false);
-        setUserNameMessage(userNameMessages.error);
+        setUserNameMessage(userNameMessages.generalError);
       }
     }
     //if Undefined
@@ -308,13 +419,15 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
     }
   };
 
-  useEffect(() => {
-    handleUserNameVerification();
-  }, [username]);
-
   const handleEditorPicturVerification = () => {
-    // Verify if the file is ok
-    if (editorPicture) setEditorPictureOk(true);
+    if (editorPicture) {
+      const fileSize = (editorPicture?.size / 1024 / 1024).toFixed(2);
+      // Verify if the file size < 20 mb
+      setEditorPictureOk(
+        parseInt(fileSize) <=
+          parseInt(process.env.NEXT_PUBLIC_MAX_FILE_SIZE_PROFILE as string)
+      );
+    } else setEditorPictureOk(true);
   };
 
   useEffect(() => {
@@ -331,8 +444,14 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
   }, [editorDescription]);
 
   const handleCreatorPicturVerification = () => {
-    // Verify if the file is ok
-    if (creatorPicture) setCreatorPictureOk(true);
+    if (creatorPicture) {
+      const fileSize = (creatorPicture?.size / 1024 / 1024).toFixed(2);
+      // Verify if the file size < 20 mb
+      setCreatorPictureOk(
+        parseInt(fileSize) <=
+          parseInt(process.env.NEXT_PUBLIC_MAX_FILE_SIZE_PROFILE as string)
+      );
+    } else setCreatorPictureOk(true);
   };
 
   useEffect(() => {
@@ -355,40 +474,111 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
     handleSkillsVerification();
   }, [skills]);
 
-  const handleJoinNewsletterVrification = () => {
+  const handleJoinNewsletterVerification = () => {
     // Subscribe or unsubscribe to the newsletter
   };
 
   useEffect(() => {
-    handleJoinNewsletterVrification();
+    handleJoinNewsletterVerification();
   }, [joinNewsletter]);
 
-  const [container, setContainer] = useState<RefObject<HTMLDivElement> | null>(null)
+  const handleGoToDashboard = async () => {
+    if (container) {
+      setLastStepError(undefined);
 
-  const entrance = (_container:RefObject<HTMLDivElement>) => {
+      const elements = Array.from(container.current!.children);
+
+      let _spokenLanguages: any = [];
+      spokenLanguages?.map((x) => {
+        _spokenLanguages.push(x.id);
+      });
+
+      let _skills: any = [];
+      skills?.map((x) => {
+        _skills.push(x.id);
+      });
+
+      const register = await useStrapiPost(
+        "custom-register",
+        {
+          email: email,
+          username: username,
+          f_name: f_name,
+          l_name: l_name,
+          description: editorDescription,
+          languages: _spokenLanguages,
+          skills: _skills,
+          picture: editorPicture,
+        },
+        false,
+        true
+      );
+      if (register.status && register.status === 200) {
+        if (typeof register.data === "string") {
+          if (register.data.includes("error")) alert("error");
+        } else if (typeof register.data === "object") {
+          setToken(register.data);
+          setUserInfo({
+            user: register.data.user,
+            details: register.data.details,
+          });
+          const cb = () => {
+            switch (accountType) {
+              case "editor":
+                location.reload();
+                break;
+              case "creator":
+                setLastStepError(
+                  "Compte créé avec succés mais le dashboard client n'est pas encore prêt."
+                );
+                break;
+              case "both":
+                location.reload();
+                break;
+            }
+          };
+          ElementsOut(elements, { onComplete: cb });
+        }
+      } else setLastStepError(inputErrors.general);
+    }
+  };
+
+  const [container, setContainer] = useState<RefObject<HTMLDivElement> | null>(
+    null
+  );
+
+  const entrance = (_container: RefObject<HTMLDivElement>) => {
     if (_container) {
       setContainer(_container);
       const elements = Array.from(_container.current!.children);
 
       ElementsIn(elements);
     }
-  }
+  };
 
-  const goBack = () => {    
+  const goBack = () => {
     if (container) {
       const elements = Array.from(container.current!.children);
 
-      ElementsOut(elements, {onComplete: () => { setCurrentStep(currentStep - 1) }});
+      ElementsOut(elements, {
+        onComplete: () => {
+          setCurrentStep(currentStep - 1);
+        },
+      });
     }
-  }
+  };
 
   const goNext = () => {
     if (container) {
       const elements = Array.from(container.current!.children);
 
-      ElementsOut(elements, {onComplete: () => { setCurrentStep(currentStep + 1) }});
+      ElementsOut(elements, {
+        onComplete: () => {
+          setCurrentStep(currentStep + 1);
+        },
+      });
     }
-  }
+  };
 
   return (
     <SignUpContext.Provider
@@ -409,10 +599,11 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
 
         email,
         setEmail,
-        emailValid,
         emailErrorMessage,
-        handleConfirmEmail,
+        setEmailErrorMessage,
         handleGoogleConnection,
+        handleSendAgain,
+        handleGoToCode,
 
         code,
         setCode,
@@ -430,6 +621,7 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
 
         username,
         setUsername,
+        handleUserNameVerification,
         userNameAvailable,
         userNameMessage,
 
@@ -437,6 +629,8 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
 
         editorPicture,
         setEditorPicture,
+        editorPictureName,
+        setEditorPictureName,
         editorPictureOk,
 
         editorDescription,
@@ -445,6 +639,8 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
 
         creatorPicture,
         setCreatorPicture,
+        creatorPictureName,
+        setCreatorPictureName,
         creatorPictureOk,
 
         spokenLanguages,
@@ -455,6 +651,8 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
 
         joinNewsletter,
         setJoinNewsletter,
+        lastStepError,
+        handleGoToDashboard,
 
         setContainer,
         entrance,

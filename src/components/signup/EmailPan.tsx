@@ -14,33 +14,29 @@ export const EmailPan = () => {
   const container = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    context.entrance(container)
-  }, [])
+    context.entrance(container);
+  }, []);
 
-  const handleKeyDown = (e:KeyboardEvent) => {  
-    context.setContainer(container)  
+  const handleKeyDown = (e: KeyboardEvent) => {
+    context.setContainer(container);
 
-    if (context.emailValid && e.key === 'Enter') {
-      context.goNext()
-    }
-  }
+    if (e.key === "Enter") context.handleGoToCode();
+  };
 
   useEffect(() => {
-    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
 
     return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    }
-  }, [])
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
 
   return (
     <div className="signUp_email max-w-[100vw] w-[360px] px-dashboard-specific-radius md:px-0 pb-[75px]">
       <SignInSignUpContainer ref={container}>
         <LogoSignup />
         <hr className="w-full border-05" />
-        <div className="text-large text-center">
-          Ajouter votre mail
-        </div>
+        <div className="text-large text-center">Ajouter votre mail</div>
         <hr className="w-full border-05" />
 
         <Input
@@ -54,15 +50,15 @@ export const EmailPan = () => {
           value={context.email}
           onChange={(e) => {
             context.setEmail(e.target.value);
-            context.handleConfirmEmail();
           }}
         />
 
         <Button
           type="primary"
           label="Recevoir un code de confirmation"
-          disabled={!context.emailValid}
-          onClick={() => { context.goNext() }}
+          onClick={() => {
+            context.handleGoToCode();
+          }}
           className="w-full"
         />
 

@@ -11,6 +11,7 @@ import { useRouter } from "next/router";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { SignedInUser, initSignedInUser } from "@/components/model/signin";
 import { ElementsOut } from "@/Animations/elementsOut";
+import { inputErrors } from "@/const";
 
 export type stepType = number;
 export type codeStateType =
@@ -19,6 +20,7 @@ export type codeStateType =
   | "error"
   | "errorInvalid"
   | "errorExpired"
+  | "errorAccountExist"
   | "errorResend"
   | "success"
   | "successResend";
@@ -38,10 +40,10 @@ export const SignInContext = createContext({
   setCodeState: (payload: codeStateType) => {},
   resetCodeState: () => {},
   handleCodeVerification: (payload: string) => {},
-  
+
   setContainer: (payload: any) => {},
   goBack: () => {},
-  goNext: () => {}
+  goNext: () => {},
 });
 
 export const SignInContextProvider: React.FC<any> = (props) => {
@@ -53,15 +55,15 @@ export const SignInContextProvider: React.FC<any> = (props) => {
   const [, isLoggedIn] = useUser();
 
   const emailErrors = {
-    generalError: <span>Une erreur inattendue s'est produite.</span>,
+    generalError: <span>{inputErrors.general}</span>,
     emailNotSent: (
       <span>Erreur lors de l'envoi de l'email de vérification.</span>
     ),
-    notValid: <span>L’adresse mail renseignée n’est pas valide.</span>,
+    notValid: <span>{inputErrors.invalidEmail}</span>,
     notFound: (
       <span>
         Aucun compte n'est lié à cette adresse mail.{" "}
-        <Link href={routes.SIGNUP_ACCOUNT_TYPE}>
+        <Link href={routes.SIGNUP}>
           {" "}
           <span className="text-dashboard-text-description-base">
             Créer un compte.{" "}
@@ -95,7 +97,7 @@ export const SignInContextProvider: React.FC<any> = (props) => {
 
       return new Promise<boolean>((resolve) => {
         setTimeout(() => {
-          if (generateToken.status === 200) {
+          if (generateToken.status && generateToken.status === 200) {
             if (typeof generateToken.data === "string") {
               if (generateToken.data.includes("not found"))
                 setEmailErrorMessage(emailErrors.notFound);
@@ -121,7 +123,7 @@ export const SignInContextProvider: React.FC<any> = (props) => {
       false
     );
 
-    if (signinResponse.status === 200) {
+    if (signinResponse.status && signinResponse.status === 200) {
       if (typeof signinResponse.data === "string") {
         if (signinResponse.data.includes("not valid"))
           setCodeState("errorInvalid");
@@ -151,23 +153,33 @@ export const SignInContextProvider: React.FC<any> = (props) => {
     if (token && isLoggedIn) push(routes.DASHBOARD_EDITOR_HOME);
   }, []);
 
-  const [container, setContainer] = useState<RefObject<HTMLDivElement> | null>(null)
+  const [container, setContainer] = useState<RefObject<HTMLDivElement> | null>(
+    null
+  );
 
-  const goBack = () => {    
+  const goBack = () => {
     if (container) {
       const elements = Array.from(container.current!.children);
 
-      ElementsOut(elements, {onComplete: () => { setCurrentStep(currentStep - 1) }});
+      ElementsOut(elements, {
+        onComplete: () => {
+          setCurrentStep(currentStep - 1);
+        },
+      });
     }
-  }
+  };
 
   const goNext = () => {
     if (container) {
       const elements = Array.from(container.current!.children);
 
-      ElementsOut(elements, {onComplete: () => { setCurrentStep(currentStep + 1) }});
+      ElementsOut(elements, {
+        onComplete: () => {
+          setCurrentStep(currentStep + 1);
+        },
+      });
     }
-  }
+  };
 
   return (
     <SignInContext.Provider
@@ -188,7 +200,7 @@ export const SignInContextProvider: React.FC<any> = (props) => {
 
         setContainer,
         goBack,
-        goNext
+        goNext,
       }}
     >
       {props.children}
