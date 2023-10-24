@@ -17,7 +17,9 @@ export const EmailPan = () => {
     context.entrance(container)
   }, [])
 
-  const handleKeyDown = (e:KeyboardEvent) => {
+  const handleKeyDown = (e:KeyboardEvent) => {  
+    context.setContainer(container)  
+
     if (context.emailValid && e.key === 'Enter') {
       context.goNext()
     }
