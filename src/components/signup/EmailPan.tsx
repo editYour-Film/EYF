@@ -20,9 +20,7 @@ export const EmailPan = () => {
   const handleKeyDown = (e: KeyboardEvent) => {
     context.setContainer(container);
 
-    if (context.emailValid && e.key === "Enter") {
-      context.goNext();
-    }
+    if (e.key === "Enter") context.handleGoToCode();
   };
 
   useEffect(() => {
@@ -58,7 +56,6 @@ export const EmailPan = () => {
         <Button
           type="primary"
           label="Recevoir un code de confirmation"
-          disabled={!context.emailValid}
           onClick={() => {
             context.handleGoToCode();
           }}

@@ -290,7 +290,7 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
       if (typeof sendToken.data === "string") {
         if (sendToken.data.includes("exist"))
           setEmailErrorMessage(inputErrors.accountExist);
-      } else if (sendToken.data === true) setCurrentStep(currentStep + 1);
+      } else if (sendToken.data === true) goNext();
     } else setEmailErrorMessage(inputErrors.general);
   };
 
