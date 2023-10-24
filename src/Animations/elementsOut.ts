@@ -20,8 +20,8 @@ export const ElementsOut = (elements:Element[], callbacks: CbType = {}) => {
       x: -50,
       opacity: 0,
       stagger: 0.1,
-      ease: 'power.in',
-      duration: 0.5
+      ease: 'power2.in',
+      duration: 0.6
     }, i * 0.05)
   });
 

@@ -1,11 +1,11 @@
 import { Button } from "@/components/_shared/buttons/Button";
-import { ReactElement, useContext, useRef } from "react";
+import { ReactElement, useContext, useEffect, useRef } from "react";
 import { SignInContext } from "./_context/signinContext";
 
 import Logo from "@/icons/logo.svg";
 import Google from "@/icons/google.svg";
 import Arrow from "@/icons/right-arrow-white.svg";
-import { ElementsOut } from "@/Animations/elementsOut";
+import { ElementsIn } from "@/Animations/elementsIn";
 
 type TypePanProps = {
   disclaimer?: ReactElement;
@@ -15,14 +15,13 @@ export const TypePan = ({ disclaimer }: TypePanProps) => {
   const context = useContext(SignInContext);
   const container = useRef<HTMLDivElement>(null);
 
-  const handleGoToEmail = () => {
-    const elements = Array.from(container.current!.children);
-    const cb = () => {
-      context.setCurrentStep("email");
-    };
+  useEffect(() => {
+    context.setContainer(container);
 
-    ElementsOut(elements, { onComplete: cb });
-  };
+    const elements = Array.from(container.current!.children);
+
+    ElementsIn(elements);
+  }, []);
 
   return (
     <div className="signIn_type max-w-[100vw] w-[360px] px-dashboard-specific-radius md:px-0 pb-[75px]">
@@ -30,7 +29,7 @@ export const TypePan = ({ disclaimer }: TypePanProps) => {
         ref={container}
         className="flex flex-col items-center gap-dashboard-spacing-element-medium"
       >
-        <Logo />
+        <Logo className="w-10 h-10" />
         <hr className="w-full" />
         <div className="text-large text-center">
           Se connecter à editYour.film
@@ -51,7 +50,7 @@ export const TypePan = ({ disclaimer }: TypePanProps) => {
           label="Continuer avec un email"
           Icon={Arrow}
           onClick={() => {
-            handleGoToEmail();
+            context.goNext();
           }}
           className="w-full"
         />

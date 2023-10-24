@@ -1,13 +1,11 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { SignInSignUpContainer } from "../_shared/UI/SignInSignUpContainer";
-import { ElementsIn } from "@/Animations/elementsIn";
 import { SimpleCard } from "../_shared/UI/CardSimple";
 import Input from "../_shared/form/Input";
 import { InfoMessage } from "../_shared/UI/InfoMessage";
 
 import { SignUpContext } from "./_context/SignupContext";
 import { Button } from "../_shared/buttons/Button";
-import { ElementsOut } from "@/Animations/elementsOut";
 import { ProgressDots } from "../_shared/UI/ProgressDots";
 
 import VideoIcon from "@/icons/signup/video.svg";
@@ -19,19 +17,12 @@ export const PersoInfosPan = () => {
   const container = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const elements = Array.from(container.current!.children);
-
-    ElementsIn(elements);
+    context.entrance(container);
   }, []);
 
   const handleGoToNext = () => {
     if (context.f_name && context.l_name && context.userNameAvailable) {
-      const elements = Array.from(container.current!.children);
-      const cb = () => {
-        context.setCurrentStep(context.currentStep + 1);
-      };
-
-      ElementsOut(elements, { onComplete: cb });
+      context.goNext();
     }
   };
 

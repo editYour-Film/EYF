@@ -1,10 +1,9 @@
-import { useContext, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { SignInSignUpContainer } from "../_shared/UI/SignInSignUpContainer";
 import { InfoMessage } from "../_shared/UI/InfoMessage";
 
 import InfoIcon from "@/icons/info.svg";
 import { Button } from "../_shared/buttons/Button";
-import { ElementsOut } from "@/Animations/elementsOut";
 import { SignUpContext } from "./_context/SignupContext";
 import { Dropdown } from "../_shared/form/DropdownV2";
 import useMediaQuery from "@/hooks/useMediaQuery";
@@ -17,16 +16,15 @@ export const LangAndSkillsPan = () => {
   const [mobileStep, setMobileStep] = useState<0 | 1>(0);
   const isMobile = useMediaQuery(`(max-width:500px`);
 
+  useEffect(() => {
+    context.entrance(container);
+  }, []);
+
   const handleGoToNext = () => {
     if (isMobile && mobileStep === 0) {
       setMobileStep(1);
     } else {
-      const elements = Array.from(container.current!.children);
-      const cb = () => {
-        context.setCurrentStep(context.currentStep + 1);
-      };
-
-      ElementsOut(elements, { onComplete: cb });
+      context.goNext();
     }
   };
 

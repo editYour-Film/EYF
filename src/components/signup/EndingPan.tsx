@@ -1,12 +1,9 @@
 import { useContext, useEffect, useRef } from "react";
 import { SignInSignUpContainer } from "../_shared/UI/SignInSignUpContainer";
-import { ElementsIn } from "@/Animations/elementsIn";
-import { ElementsOut } from "@/Animations/elementsOut";
 import { SignUpContext } from "./_context/SignupContext";
 import { useRouter } from "next/router";
 import routes from "@/routes";
 
-import Logo from "@/icons/logo.svg";
 import InstaIcon from "@/icons/instagram.svg";
 import TailRight from "@/icons/right-arrow-white.svg";
 
@@ -14,6 +11,7 @@ import { SimpleCard } from "../_shared/UI/CardSimple";
 import { Toggle } from "../_shared/buttons/Toggle";
 import { Button } from "../_shared/buttons/Button";
 import { ProgressDots } from "../_shared/UI/ProgressDots";
+import { LogoSignup } from "./LogoSignup";
 import { useStrapiPost } from "@/hooks/useStrapi";
 
 export const EndingPan = () => {
@@ -23,9 +21,7 @@ export const EndingPan = () => {
   const router = useRouter();
 
   useEffect(() => {
-    const elements = Array.from(container.current!.children);
-
-    ElementsIn(elements);
+    context.entrance(container);
   }, []);
 
   const handleGoToDashboard = async () => {
@@ -86,7 +82,7 @@ export const EndingPan = () => {
   return (
     <div className="editor-picture__pan max-w-[100vw] w-[360px]">
       <SignInSignUpContainer ref={container}>
-        <Logo />
+        <LogoSignup />
 
         <div className="flex flex-col items-center gap-dashboard-spacing-element-medium px-dashboard-specific-radius md:p-0">
           <hr className="w-full" />

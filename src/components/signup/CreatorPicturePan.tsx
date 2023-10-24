@@ -1,13 +1,11 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { SignInSignUpContainer } from "../_shared/UI/SignInSignUpContainer";
 import { SignUpContext } from "./_context/SignupContext";
-import { ElementsOut } from "@/Animations/elementsOut";
 import { SimpleCard } from "../_shared/UI/CardSimple";
 import { Button } from "../_shared/buttons/Button";
 import { InfoMessage } from "../_shared/UI/InfoMessage";
 import { GeneratedAvatar } from "../_shared/badges/GeneratedAvatar";
 import { MentionInteraction } from "../_shared/buttons/MentionInteraction";
-import { ElementsIn } from "@/Animations/elementsIn";
 import { ProgressDots } from "../_shared/UI/ProgressDots";
 
 import InfoIcon from "@/icons/info.svg";
@@ -20,28 +18,12 @@ export const CreatorPicturePan = () => {
   const [imageToDisplay, setImageToDisplay] = useState<string | undefined>();
 
   useEffect(() => {
-    const elements = Array.from(container.current!.children);
-
-    ElementsIn(elements);
+    context.entrance(container);
   }, []);
-
-  const handleGoToNext = () => {
-    const elements = Array.from(container.current!.children);
-    const cb = () => {
-      context.setCurrentStep(context.currentStep + 1);
-    };
-
-    ElementsOut(elements, { onComplete: cb });
-  };
 
   const handleContinue = () => {
     if (context.creatorPictureOk) {
-      const elements = Array.from(container.current!.children);
-      const cb = () => {
-        context.setCurrentStep(context.currentStep + 1);
-      };
-
-      ElementsOut(elements, { onComplete: cb });
+      context.goNext();
     }
   };
 
@@ -50,6 +32,20 @@ export const CreatorPicturePan = () => {
 
     if (file) setImageToDisplay(URL.createObjectURL(file));
   }, [context.creatorPicture]);
+
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (e.key === "Enter") {
+      handleContinue();
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
 
   return (
     <div className="creator-picture__pan max-w-[100vw] w-[360px]">
@@ -124,7 +120,7 @@ export const CreatorPicturePan = () => {
 
           <MentionInteraction
             onClick={() => {
-              handleGoToNext();
+              context.goNext();
             }}
             className="mt-dashboard-mention-padding-right-left"
           >

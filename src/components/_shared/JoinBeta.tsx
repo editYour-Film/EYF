@@ -3,6 +3,8 @@ import { useRef, useState } from "react"
 import Image from 'next/image'
 import validator from "validator"
 import { inputErrors } from "@/const";
+import { useStrapi, useStrapiPost } from "@/hooks/useStrapi";
+import { addEmailToNewsletter } from "@/lib/addEmailToNewsletter";
 
 type JoinBetaProps = {
   isVisible: boolean,
@@ -60,6 +62,27 @@ export const JoinBeta = ({ isVisible = false, onClose }: JoinBetaProps) => {
   const handleClose = () => {
     onClose()
   }
+
+  
+  const sendgrid = async () => {
+    const sendRes = await useStrapiPost(
+      "send-mail",
+      {
+        email: email,
+        subject: "Bienvenue sur EditYourFilm",
+        text:
+          "Bonjour " +
+          name +
+          ", merci d'avoir rejoins la béta de EditYourFilm.",
+      },
+      false
+    );
+    if (sendRes.status === 200)
+      await addEmailToNewsletter(email).then(() => {
+        console.log("Vous avez rejoins la béta.");
+        // setResponse("Vous avez rejoins la béta.");
+      });
+  };
 
   return <div className={`joinBeta fixed top-0 left-0 w-full h-[100vh] min-h-[100vh] bg-black flex flex-col lg:flex-row justify-start lg:justify-around items-center gap-10 lg:gap-12 xl:gap-24 fullHd:gap-10 fullHd:justify-center transition-transform duration-700 ease-in-out z-popup overflow-scroll lg:overflow-hidden ${isVisible ? 'translate-y-0 pointer-events-all' : 'translate-y-[130%] pointer-events-none'}`}>
     <Button text="Fermer" variant="black" onClick={handleClose} className="sticky md:absolute md:right-10 top-10 ml-auto mr-10 px-[20px] py-[10px] border rounded-full z-20 w-max"></Button>
@@ -131,7 +154,7 @@ export const JoinBeta = ({ isVisible = false, onClose }: JoinBetaProps) => {
         </div>
         {chkbxErr && <p className="text-red-500 mt-1.5 ">{chkbxErr}</p>}
 
-        <Button text="Rejoindre la beta" onClick={() => { handleSubmit() }} className="mt-8"></Button>
+        <Button text="Rejoindre la beta" onClick={() => { sendgrid() }} className="mt-8"></Button>
 
       </form>
     </div>

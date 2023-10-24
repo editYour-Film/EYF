@@ -1,33 +1,44 @@
 import { SignInSignUpContainer } from "@/components/_shared/UI/SignInSignUpContainer";
 
-import Logo from "@/icons/logo.svg";
 import Input from "../_shared/form/Input";
 import Google from "@/icons/google.svg";
 
 import { useContext, useEffect, useRef } from "react";
 import { SignUpContext } from "./_context/SignupContext";
 import { Button } from "../_shared/buttons/Button";
-import { ElementsIn } from "@/Animations/elementsIn";
 import { ProgressDots } from "../_shared/UI/ProgressDots";
+import { LogoSignup } from "./LogoSignup";
 
 export const EmailPan = () => {
   const context = useContext(SignUpContext);
   const container = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const elements = Array.from(container.current!.children);
+    context.entrance(container);
+  }, []);
 
-    ElementsIn(elements);
+  const handleKeyDown = (e: KeyboardEvent) => {
+    context.setContainer(container);
+
+    if (context.emailValid && e.key === "Enter") {
+      context.goNext();
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
   }, []);
 
   return (
     <div className="signUp_email max-w-[100vw] w-[360px] px-dashboard-specific-radius md:px-0 pb-[75px]">
       <SignInSignUpContainer ref={container}>
-        <Logo />
+        <LogoSignup />
         <hr className="w-full" />
-        <div className="text-large text-center">
-          Se connecter à editYour.film
-        </div>
+        <div className="text-large text-center">Ajouter votre mail</div>
         <hr className="w-full" />
 
         <Input
@@ -44,6 +55,16 @@ export const EmailPan = () => {
           }}
         />
 
+        <Button
+          type="primary"
+          label="Recevoir un code de confirmation"
+          disabled={!context.emailValid}
+          onClick={() => {
+            context.handleGoToCode();
+          }}
+          className="w-full"
+        />
+
         <div className="flex flex-row w-full items-center gap-[35px]">
           <div className="basis-full sm:basis-1/2 border-t h-[1px]"></div>
           <span className="hidden sm:block">ou</span>
@@ -56,17 +77,6 @@ export const EmailPan = () => {
           Icon={Google}
           onClick={() => {
             context.handleGoogleConnection();
-          }}
-          className="w-full"
-        />
-
-        <hr className="w-full" />
-
-        <Button
-          type="primary"
-          label="Recevoir un code de confirmation"
-          onClick={() => {
-            context.handleGoToCode();
           }}
           className="w-full"
         />
