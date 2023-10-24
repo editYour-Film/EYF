@@ -295,7 +295,7 @@ module.exports = {
           }
         },
         '.bg-signin': {
-          background: `radial-gradient(50.00% 50.00% at 50.00% 50.00%, #7E5EFF 0%, rgba(205, 3, 255, 0.60) 100%)`,
+          background: `radial-gradient(50.00% 50.00% at 50.00% 50.00%, #7E5EFF 0%, rgba(126, 94, 255, 0.61) 100%)`,
           mixBlendMode: 'lighten',
           filter: 'blur(107px)',
           opacity: 0.15
