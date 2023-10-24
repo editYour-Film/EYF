@@ -34,7 +34,7 @@ export const CreatorPicturePan = () => {
     ElementsOut(elements, {onComplete: cb})
   }
 
-  const handleContinue = () => {
+  const handleContinue = () => {    
     if(context.creatorPictureOk) {
       const elements = Array.from(container.current!.children)
       const cb = () => {
@@ -53,6 +53,20 @@ export const CreatorPicturePan = () => {
     }
 
   }, [context.creatorPicture])
+
+  const handleKeyDown = (e:KeyboardEvent) => {    
+    if (e.key === 'Enter') {
+      handleContinue()
+    }
+  }
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    }
+  }, [])
 
   return (
     <div className="creator-picture__pan max-w-[100vw] w-[360px]">
