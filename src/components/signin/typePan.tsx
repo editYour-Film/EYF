@@ -30,11 +30,11 @@ export const TypePan = ({ disclaimer }: TypePanProps) => {
         className="flex flex-col items-center gap-dashboard-spacing-element-medium"
       >
         <Logo className="w-10 h-10" />
-        <hr className="w-full" />
+        <hr className="w-full border-05" />
         <div className="text-large text-center">
           Se connecter à editYour.film
         </div>
-        <hr className="w-full" />
+        <hr className="w-full border-05" />
         <Button
           type="secondary"
           label="Se connecter avec Google"
@@ -44,7 +44,7 @@ export const TypePan = ({ disclaimer }: TypePanProps) => {
           }}
           className="w-full"
         />
-        <hr className="w-full" />
+        <hr className="w-full border-05" />
         <Button
           type="primary"
           label="Continuer avec un email"

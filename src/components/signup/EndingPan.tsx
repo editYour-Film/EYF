@@ -85,7 +85,7 @@ export const EndingPan = () => {
         <LogoSignup />
 
         <div className="flex flex-col items-center gap-dashboard-spacing-element-medium px-dashboard-specific-radius md:p-0">
-          <hr className="w-full" />
+          <hr className="w-full border-05" />
 
           <div className="text-center">
             <div className="text-dashboard-text-title-white-high text-large font-medium">
@@ -116,7 +116,7 @@ export const EndingPan = () => {
             />
           </div>
 
-          <hr className="w-full" />
+          <hr className="w-full border-05" />
 
           <div className="flex items-center gap-dashboard-spacing-element-medium">
             <div>
