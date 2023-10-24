@@ -77,10 +77,6 @@ export const SecretCodeInput = ({enterCb, backSpaceCb, state = 'regular'}:Secret
     handleInputChange(pastedData)
   }
 
-  useEffect(() => {
-    console.log(value)
-  }, [value])
-
   return (
     <div className="sercret-code_input w-full">
       <SimpleCard className="flex flex-col items-center">
