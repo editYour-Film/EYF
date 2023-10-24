@@ -309,7 +309,7 @@ export const Cursor = () => {
 
       ctx.current?.revert();
 
-      cancelAnimationFrame(raf.current);
+      // cancelAnimationFrame(raf.current);
     };
   }, []);
 
