@@ -4,7 +4,7 @@ import {
 } from "@/components/dashboard/editor/_context/EditorProfilContext";
 import { codeStateType } from "@/components/signin/_context/signinContext";
 import routes from "@/routes";
-import { createContext, useEffect, useState } from "react";
+import { RefObject, createContext, useEffect, useState } from "react";
 import { ReactElement } from "react-markdown/lib/react-markdown";
 import Link from "next/link";
 
@@ -14,6 +14,8 @@ import X from "@/icons/signin/x.svg";
 
 import { MessageType } from "@/components/_shared/UI/InfoMessage";
 import { StepBubbleProps } from "@/components/_shared/buttons/StepBubble";
+import { ElementsIn } from "@/animations/elementsIn";
+import { ElementsOut } from "@/animations/elementsOut";
 
 export type accountType = "editor" | "creator" | "both" | undefined;
 export type maxStepType = 5 | 6 | 7 | undefined;
@@ -82,6 +84,11 @@ export const SignUpContext = createContext({
   setJoinNewsletter: (payload: boolean) => {
     false;
   },
+
+  setContainer: (payload: any) => {},
+  entrance: (payload:RefObject<HTMLDivElement>) => {},
+  goBack: () => {},
+  goNext: () => {}
 });
 
 export const SignUpContextProvider: React.FC<any> = (props) => {
@@ -352,6 +359,33 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
     handleJoinNewsletterVrification();
   }, [joinNewsletter]);
 
+  const [container, setContainer] = useState<RefObject<HTMLDivElement> | null>(null)
+
+  const entrance = (_container:RefObject<HTMLDivElement>) => {
+    if (_container) {
+      setContainer(_container);
+      const elements = Array.from(_container.current!.children);
+
+      ElementsIn(elements);
+    }
+  }
+
+  const goBack = () => {    
+    if (container) {
+      const elements = Array.from(container.current!.children);
+
+      ElementsOut(elements, {onComplete: () => { setCurrentStep(currentStep - 1) }});
+    }
+  }
+
+  const goNext = () => {
+    if (container) {
+      const elements = Array.from(container.current!.children);
+
+      ElementsOut(elements, {onComplete: () => { setCurrentStep(currentStep + 1) }});
+    }
+  }
+
   return (
     <SignUpContext.Provider
       value={{
@@ -417,6 +451,11 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
 
         joinNewsletter,
         setJoinNewsletter,
+
+        setContainer,
+        entrance,
+        goBack,
+        goNext,
       }}
     >
       {props.children}

@@ -7,7 +7,6 @@ import { SignUpContext } from './_context/SignupContext'
 import { useContext, useState, useEffect, useRef } from 'react'
 import { Toggle } from '../_shared/buttons/Toggle'
 
-import { ElementsOut } from "@/Animations/elementsOut"
 import { ProgressDots } from '../_shared/UI/ProgressDots'
 import { LogoSignup } from './LogoSignup'
 
@@ -18,12 +17,17 @@ export const ChoicePan = () => {
   const [isEditor, setIsEditor] = useState(false)
 
   const container = useRef<HTMLDivElement>(null)
+
   const handleChange = () => {
     if(isCreator && isEditor) context.setAccountType('both');
     else if (isCreator && !isEditor) context.setAccountType('creator');
     else if (isEditor && !isCreator) context.setAccountType('editor');
     else context.setAccountType(undefined);
   }
+
+  useEffect(() => {
+    context.entrance(container)
+  }, [])
 
   useEffect(() => {
     handleChange()
@@ -33,13 +37,7 @@ export const ChoicePan = () => {
     context.handleStart()
 
     if(context.accountType) {
-      const elements = Array.from(container.current!.children)
-
-      const cb = () => {
-        context.setCurrentStep(context.currentStep + 1)
-      }
-
-      ElementsOut(elements, {onComplete: cb})
+      context.goNext()
     }
   }
 

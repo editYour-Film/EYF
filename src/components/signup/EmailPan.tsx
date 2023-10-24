@@ -6,8 +6,6 @@ import Google from "@/icons/google.svg";
 import { useContext, useEffect, useRef } from "react";
 import { SignUpContext } from "./_context/SignupContext";
 import { Button } from "../_shared/buttons/Button";
-import { ElementsOut } from "@/Animations/elementsOut";
-import { ElementsIn } from "@/Animations/elementsIn";
 import { ProgressDots } from "../_shared/UI/ProgressDots";
 import { LogoSignup } from "./LogoSignup";
 
@@ -16,23 +14,14 @@ export const EmailPan = () => {
   const container = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const elements = Array.from(container.current!.children);
+    context.entrance(container)
+  }, [])
 
-    ElementsIn(elements);
-  }, []);
+  const handleKeyDown = (e:KeyboardEvent) => {  
+    context.setContainer(container)  
 
-  const handleGoToCode = () => {
-    const elements = Array.from(container.current!.children);
-    const cb = () => {
-      context.setCurrentStep(context.currentStep + 1);
-    };
-
-    ElementsOut(elements, { onComplete: cb });
-  };
-
-  const handleKeyDown = (e:KeyboardEvent) => {
     if (context.emailValid && e.key === 'Enter') {
-      handleGoToCode()
+      context.goNext()
     }
   }
 
@@ -73,9 +62,7 @@ export const EmailPan = () => {
           type="primary"
           label="Recevoir un code de confirmation"
           disabled={!context.emailValid}
-          onClick={() => {
-            handleGoToCode();
-          }}
+          onClick={() => { context.goNext() }}
           className="w-full"
         />
 

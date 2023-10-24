@@ -1,4 +1,4 @@
-import LayoutSignin from "@/components/layouts/LayoutSignin";
+import LayoutSignin, { layoutProps } from "@/components/layouts/LayoutSignin";
 import { ChoicePan } from "@/components/signup/ChoicePan";
 import { ConfirmEmailPan } from "@/components/signup/ConfirnEmailPan";
 import { CreatorPicturePan } from "@/components/signup/CreatorPicturePan";
@@ -11,7 +11,10 @@ import { SignUpContext, SignUpContextProvider, accountType } from "@/components/
 import Head from "next/head";
 import { useContext } from "react";
 
-export default function SignUp() {
+import HeaderSignin from "@/components/_shared/HeaderSignin";
+
+
+const SignUp: React.FC<layoutProps> = ({previousPath}) => {
   return (
     <>
       <Head>
@@ -21,6 +24,8 @@ export default function SignUp() {
 
       <SignUpContextProvider>
         <LayoutSignin>
+        <HeaderSignin previousPath={previousPath} ctx={SignUpContext} />
+
          <SwitchScreen />
         </LayoutSignin>
       </SignUpContextProvider>
@@ -95,3 +100,5 @@ const SwitchScreen = () => {
     switcher(context.accountType, context.currentStep)
   )
 }
+
+export default SignUp

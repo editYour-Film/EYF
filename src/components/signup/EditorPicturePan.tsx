@@ -1,7 +1,6 @@
 import { useContext, useEffect, useRef, useState } from "react"
 import { SignInSignUpContainer } from "../_shared/UI/SignInSignUpContainer"
 import { SignUpContext } from "./_context/SignupContext"
-import { ElementsOut } from "@/Animations/elementsOut"
 import { SimpleCard } from "../_shared/UI/CardSimple"
 import { Button } from "../_shared/buttons/Button"
 import Input from "../_shared/form/Input"
@@ -10,7 +9,6 @@ import { InfoMessage } from "../_shared/UI/InfoMessage"
 import InfoIcon from '@/icons/info.svg'
 import { GeneratedAvatar } from "../_shared/badges/GeneratedAvatar"
 import { MentionInteraction } from "../_shared/buttons/MentionInteraction"
-import { ElementsIn } from "@/Animations/elementsIn"
 import useMediaQuery from "@/hooks/useMediaQuery"
 import { ProgressDots } from "../_shared/UI/ProgressDots"
 
@@ -25,31 +23,15 @@ export const EditorPicturePan = () => {
   const [imageToDisplay, setImageToDisplay] = useState<string | undefined>()
 
   useEffect(() => {
-    const elements = Array.from(container.current!.children)
-
-    ElementsIn(elements)
+    context.entrance(container)
   }, [])
-
-  const handleGoToNext = () => {
-    const elements = Array.from(container.current!.children)
-    const cb = () => {
-      context.setCurrentStep(context.currentStep + 1)
-    }
-
-    ElementsOut(elements, {onComplete: cb})
-  }
 
   const handleContinue = () => {
     if (isMobile && mobileStep === 0) {
       setMobileStep(1)
     } else {
       if(context.editorPictureOk && context.editorDescriptionOk) {
-        const elements = Array.from(container.current!.children)
-        const cb = () => {
-          context.setCurrentStep(context.currentStep + 1)
-        }
-    
-        ElementsOut(elements, {onComplete: cb})
+        context.goNext()
       }
     }
   }
@@ -140,9 +122,7 @@ export const EditorPicturePan = () => {
           />
 
           <MentionInteraction
-            onClick={() => {
-              handleGoToNext();
-            }}
+            onClick={() => { context.goNext() }}
             className="mt-dashboard-mention-padding-right-left"
           >
             Passer

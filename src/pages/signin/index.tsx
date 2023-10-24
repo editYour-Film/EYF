@@ -1,6 +1,6 @@
 import { useContext, useEffect } from "react";
 import Head from "next/head";
-import LayoutSignin from "@/components/layouts/LayoutSignin";
+import LayoutSignin, { layoutProps } from "@/components/layouts/LayoutSignin";
 import {
   SignInContext,
   SignInContextProvider,
@@ -17,7 +17,9 @@ import { useUser } from "@/auth/authContext";
 import { getTokenFromLocalCookie } from "@/auth/auth";
 import { useRouter } from "next/router";
 
-export default function SignIn() {
+import HeaderSignin from "@/components/_shared/HeaderSignin"
+
+const SignIn:React.FC<layoutProps> = ({previousPath}) => {
   const { push } = useRouter();
   const [userInfo, isLoggedIn] = useUser();
 
@@ -35,6 +37,7 @@ export default function SignIn() {
 
       <SignInContextProvider>
         <LayoutSignin>
+          <HeaderSignin previousPath={previousPath} ctx={SignInContext} />
           <SignInPanSwitcher />
           <FooterSignin height={"75px"} />
         </LayoutSignin>
@@ -56,13 +59,13 @@ const SignInPanSwitcher = () => {
 
   const renderPan = (step: stepType) => {
     switch (step) {
-      case "type":
+      case 0:
         return <TypePan disclaimer={disclaimer} />;
         break;
-      case "email":
+      case 1:
         return <EmailPan disclaimer={disclaimer} />;
         break;
-      case "code":
+      case 2:
         return <CodePan />;
         break;
     }
@@ -70,3 +73,5 @@ const SignInPanSwitcher = () => {
 
   return renderPan(context.currentStep);
 };
+
+export default SignIn

@@ -1,7 +1,6 @@
 import { useContext, useEffect, useRef } from "react"
 import { SignInSignUpContainer } from "../_shared/UI/SignInSignUpContainer"
-import { ElementsIn } from "@/Animations/elementsIn"
-import { ElementsOut } from "@/Animations/elementsOut"
+import { ElementsOut } from "@/animations/elementsOut"
 import { SignUpContext } from "./_context/SignupContext"
 import { useRouter } from "next/router"
 import routes from "@/routes"
@@ -22,9 +21,7 @@ export const EndingPan = () => {
   const router = useRouter()
 
   useEffect(() => {
-    const elements = Array.from(container.current!.children)
-
-    ElementsIn(elements)
+    context.entrance(container)
   }, [])
 
   const handleGoToDashboard = () => {
