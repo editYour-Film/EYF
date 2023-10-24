@@ -48,7 +48,7 @@ export const EmailPan = ({disclaimer}: EmailPanProps) => {
   return (
     <div className="signIn_email max-w-[100vw] w-[360px] px-dashboard-specific-radius md:px-0 pb-[75px]">
       <div ref={container} className="flex flex-col items-center gap-dashboard-spacing-element-medium">
-        <Logo />
+        <Logo className="w-10 h-10" />
         <hr className='w-full'/>
         <div className='text-large text-center'>Se connecter à editYour.film</div>
         <hr className='w-full'/>
