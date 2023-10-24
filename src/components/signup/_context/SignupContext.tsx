@@ -14,8 +14,8 @@ import X from "@/icons/signin/x.svg";
 
 import { MessageType } from "@/components/_shared/UI/InfoMessage";
 import { StepBubbleProps } from "@/components/_shared/buttons/StepBubble";
-import { ElementsIn } from "@/animations/elementsIn";
-import { ElementsOut } from "@/animations/elementsOut";
+import { ElementsIn } from "@/Animations/elementsIn";
+import { ElementsOut } from "@/Animations/elementsOut";
 
 export type accountType = "editor" | "creator" | "both" | undefined;
 export type maxStepType = 5 | 6 | 7 | undefined;

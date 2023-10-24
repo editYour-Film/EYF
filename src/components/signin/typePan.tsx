@@ -6,7 +6,7 @@ import Logo from '@/icons/logo.svg'
 import Google from '@/icons/google.svg'
 import Arrow from '@/icons/right-arrow-white.svg'
 import gsap from 'gsap'
-import { ElementsIn } from '@/animations/elementsIn'
+import { ElementsIn } from '@/Animations/elementsIn'
 
 type TypePanProps = {
   disclaimer?: ReactElement
