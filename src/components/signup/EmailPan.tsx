@@ -36,7 +36,7 @@ export const EmailPan = () => {
         <Logo />
         <hr className="w-full" />
         <div className="text-large text-center">
-          Se connecter à editYour.film
+          Ajouter votre mail
         </div>
         <hr className="w-full" />
 
@@ -55,6 +55,16 @@ export const EmailPan = () => {
           }}
         />
 
+        <Button
+          type="primary"
+          label="Recevoir un code de confirmation"
+          disabled={!context.emailValid}
+          onClick={() => {
+            handleGoToCode();
+          }}
+          className="w-full"
+        />
+
         <div className="flex flex-row w-full items-center gap-[35px]">
           <div className="basis-full sm:basis-1/2 border-t h-[1px]"></div>
           <span className="hidden sm:block">ou</span>
@@ -67,18 +77,6 @@ export const EmailPan = () => {
           Icon={Google}
           onClick={() => {
             context.handleGoogleConnection();
-          }}
-          className="w-full"
-        />
-
-        <hr className="w-full" />
-
-        <Button
-          type="primary"
-          label="Recevoir un code de confirmation"
-          disabled={!context.emailValid}
-          onClick={() => {
-            handleGoToCode();
           }}
           className="w-full"
         />
