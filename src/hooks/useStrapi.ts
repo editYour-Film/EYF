@@ -87,7 +87,11 @@ export const useStrapiPost = async (
                 : "application/json",
               Authorization: "bearer " + token,
             }
-          : { "Content-Type": "application/json" },
+          : {
+              "Content-Type": isMedia
+                ? "multipart/form-data"
+                : "application/json",
+            },
     })
     .then((response) => {
       return {

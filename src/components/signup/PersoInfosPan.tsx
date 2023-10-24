@@ -94,7 +94,7 @@ export const PersoInfosPan = () => {
               name="f_name"
               label="Renseignez votre prénom"
               noLabel
-              className=" font-medium text-base"
+              className="font-medium text-base"
               value={context.f_name}
               onChange={(e) => {
                 context.setF_name(e.target.value);
@@ -108,7 +108,7 @@ export const PersoInfosPan = () => {
               name="l_name"
               label="Renseignez votre nom de famille"
               noLabel
-              className=" font-medium text-base"
+              className="font-medium text-base"
               value={context.l_name}
               onChange={(e) => {
                 context.setL_name(e.target.value);

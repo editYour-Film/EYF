@@ -14,7 +14,7 @@ import X from "@/icons/signin/x.svg";
 
 import { MessageType } from "@/components/_shared/UI/InfoMessage";
 import { StepBubbleProps } from "@/components/_shared/buttons/StepBubble";
-import { useStrapiPost } from "@/hooks/useStrapi";
+import { useStrapiGet, useStrapiPost } from "@/hooks/useStrapi";
 import validator from "validator";
 import { inputErrors } from "@/const";
 
@@ -22,8 +22,8 @@ export type accountType = "editor" | "creator" | "both" | undefined;
 export type maxStepType = 5 | 6 | 7 | undefined;
 
 export const SignUpContext = createContext({
-  langOptions: [] as spokenLanguageInterface[],
-  skillsOptions: [] as skillsInterface[],
+  langOptions: [] as spokenLanguageInterface[] | undefined,
+  skillsOptions: [] as skillsInterface[] | undefined,
 
   accountType: undefined as accountType,
   setAccountType: (accountType: accountType) => {},
@@ -67,6 +67,8 @@ export const SignUpContext = createContext({
 
   editorPicture: undefined as any,
   setEditorPicture: (payload: any) => {},
+  editorPictureName: undefined as string | undefined,
+  setEditorPictureName: (payload: any) => {},
   editorPictureOk: undefined as boolean | undefined,
 
   editorDescription: undefined as string | undefined,
@@ -75,6 +77,8 @@ export const SignUpContext = createContext({
 
   creatorPicture: undefined as any,
   setCreatorPicture: (payload: any) => {},
+  creatorPictureName: undefined as string | undefined,
+  setCreatorPictureName: (payload: any) => {},
   creatorPictureOk: undefined as boolean | undefined,
 
   spokenLanguages: undefined as spokenLanguageInterface[] | undefined,
@@ -113,48 +117,42 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
     } as MessageType,
   };
 
-  const langOptions: spokenLanguageInterface[] = [
-    {
-      label: "Français",
-      id: "fr",
-      icon: "",
-    },
-    {
-      label: "Anglais",
-      id: "en",
-      icon: "",
-    },
-    {
-      label: "Italien",
-      id: "it",
-      icon: "",
-    },
-    {
-      label: "Allemand",
-      id: "it",
-      icon: "",
-    },
-    {
-      label: "Espagnol",
-      id: "it",
-      icon: "",
-    },
-  ];
+  const [langOptions, setLangOptions] = useState<spokenLanguageInterface[]>();
 
-  const skillsOptions: skillsInterface[] = [
-    {
-      label: "After Effects",
-      id: "after-effects",
-    },
-    {
-      label: "Maya",
-      id: "maya",
-    },
-    {
-      label: "Première pro",
-      id: "premiere-pro",
-    },
-  ];
+  const [skillsOptions, setSkillsOptions] = useState<skillsInterface[]>();
+
+  useEffect(() => {
+    // get languages
+    let _langOptions: any = [];
+    useStrapiGet("languages").then((res) => {
+      if (res.status === 200) {
+        res.data.data.map((x: any) => {
+          _langOptions.push({
+            label: x.attributes.name,
+            id: x.id,
+            icon: "",
+          });
+        });
+        setLangOptions(_langOptions);
+      } else {
+      }
+    });
+
+    // get skills
+    let _skills: any = [];
+    useStrapiGet("skills").then((res) => {
+      if (res.status === 200) {
+        res.data.data.map((x: any) => {
+          _skills.push({
+            label: x.attributes.name,
+            id: x.id,
+          });
+        });
+        setSkillsOptions(_skills);
+      } else {
+      }
+    });
+  }, []);
 
   const [accountType, setAccountType] = useState<accountType>("both");
   const [maxSteps, setMaxSteps] = useState<maxStepType>(undefined);
@@ -195,9 +193,12 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
     f_name && l_name ? f_name[0] + l_name[0] : undefined
   );
 
-  const [editorPicture, setEditorPicture] = useState<string | undefined>(
+  const [editorPicture, setEditorPicture] = useState<FileList[0] | undefined>(
     undefined
   );
+  const [editorPictureName, setEditorPictureName] = useState<
+    string | undefined
+  >(undefined);
   const [editorPictureOk, setEditorPictureOk] = useState<boolean | undefined>(
     undefined
   );
@@ -209,16 +210,19 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
     boolean | undefined
   >(undefined);
 
-  const [creatorPicture, setCreatorPicture] = useState<string | undefined>(
+  const [creatorPicture, setCreatorPicture] = useState<FileList[0] | undefined>(
     undefined
   );
+  const [creatorPictureName, setCreatorPictureName] = useState<
+    string | undefined
+  >(undefined);
   const [creatorPictureOk, setCreatorPictureOk] = useState<boolean | undefined>(
     undefined
   );
 
   const [spokenLanguages, setSpokenLanguages] = useState<
     spokenLanguageInterface[] | undefined
-  >([langOptions[0]]);
+  >(langOptions ? [langOptions[0]] : undefined);
   const [skills, setSkills] = useState<skillsInterface[] | undefined>(
     undefined
   );
@@ -374,8 +378,14 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
   };
 
   const handleEditorPicturVerification = () => {
-    // Verify if the file is ok
-    if (editorPicture) setEditorPictureOk(true);
+    if (editorPicture) {
+      const fileSize = (editorPicture?.size / 1024 / 1024).toFixed(2);
+      // Verify if the file size < 20 mb
+      setEditorPictureOk(
+        parseInt(fileSize) <=
+          parseInt(process.env.NEXT_PUBLIC_MAX_FILE_SIZE_PROFILE as string)
+      );
+    } else setEditorPictureOk(true);
   };
 
   useEffect(() => {
@@ -392,8 +402,14 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
   }, [editorDescription]);
 
   const handleCreatorPicturVerification = () => {
-    // Verify if the file is ok
-    if (creatorPicture) setCreatorPictureOk(true);
+    if (creatorPicture) {
+      const fileSize = (creatorPicture?.size / 1024 / 1024).toFixed(2);
+      // Verify if the file size < 20 mb
+      setCreatorPictureOk(
+        parseInt(fileSize) <=
+          parseInt(process.env.NEXT_PUBLIC_MAX_FILE_SIZE_PROFILE as string)
+      );
+    } else setCreatorPictureOk(true);
   };
 
   useEffect(() => {
@@ -473,6 +489,8 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
 
         editorPicture,
         setEditorPicture,
+        editorPictureName,
+        setEditorPictureName,
         editorPictureOk,
 
         editorDescription,
@@ -481,6 +499,8 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
 
         creatorPicture,
         setCreatorPicture,
+        creatorPictureName,
+        setCreatorPictureName,
         creatorPictureOk,
 
         spokenLanguages,

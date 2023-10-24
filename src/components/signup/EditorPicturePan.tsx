@@ -104,10 +104,14 @@ export const EditorPicturePan = () => {
                   type="file"
                   id="avatar"
                   ref={fileInput}
-                  value={context.editorPicture || ""}
+                  value={context.editorPictureName || ""}
                   onChange={(e) => {
-                    e.target.files && context.setEditorPicture(e.target.value);
+                    if (e.target.files) {
+                      context.setEditorPictureName(e.target.value);
+                      context.setEditorPicture(e.target.files[0]);
+                    }
                   }}
+                  accept="image/*"
                   className="absolute w-0 h-0 opacity-0 pointer-events-none"
                 />
 
