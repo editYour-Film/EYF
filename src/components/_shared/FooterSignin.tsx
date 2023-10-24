@@ -13,7 +13,7 @@ export const FooterSignin = ({ height }: FooterSigninProps) => {
   const router = useRouter();
   const context = useContext(SignInContext);
 
-  if (context.currentStep !== "code") {
+  if (context.currentStep !== 2) {
     return (
       <div
         className={`FooterSignin absolute bottom-0 flex justify-center items-center w-screen mt-auto mb-0 h-[75px] border-t`}
