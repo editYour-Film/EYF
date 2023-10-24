@@ -68,6 +68,8 @@ const SignInPanSwitcher = () => {
       case 2:
         return <CodePan />;
         break;
+      default:
+         return <></> 
     }
   };
 

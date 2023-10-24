@@ -10,14 +10,15 @@ type headerProps = {
 };
 
 const Header = ({ previousPath, ctx }: headerProps) => {
-  const context = useContext(ctx);
+  const context = useContext<any>(ctx);
   const router = useRouter();
 
   const handleBack = () => {
-    console.log(context);
-
-    if (context.currentStep !== 0) context.goBack();
-    else router.push(previousPath ? previousPath : routes.HOME);
+    if (context.currentStep !== 0) {
+      context.goBack();
+    } else {
+      router.push(previousPath ? previousPath : routes.HOME);
+    }
   };
 
   return (

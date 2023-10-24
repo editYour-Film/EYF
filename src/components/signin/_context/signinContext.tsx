@@ -10,8 +10,8 @@ import { useUser } from "@/auth/authContext";
 import { useRouter } from "next/router";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { SignedInUser, initSignedInUser } from "@/components/model/signin";
-import { inputErrors } from "@/const";
 import { ElementsOut } from "@/Animations/elementsOut";
+import { inputErrors } from "@/const";
 
 export type stepType = number;
 export type codeStateType =
