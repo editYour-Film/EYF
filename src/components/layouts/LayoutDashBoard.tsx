@@ -5,6 +5,8 @@ import Router from "next/router";
 import { getTokenFromLocalCookie } from "@/auth/auth";
 import routes from "@/routes";
 import { useUser } from "@/auth/authContext";
+import { useDispatch } from "react-redux";
+import { disableCustomCursor } from "@/store/slices/cursorSlice";
 
 type LayoutDashboardProps = {
   children: React.ReactNode;
@@ -15,6 +17,12 @@ type LayoutDashboardProps = {
 const LayoutDashboard = ({ children }: LayoutDashboardProps) => {
   const lenis = useLenis();
   const [, isLoggedIn] = useUser();
+
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(disableCustomCursor())
+  }, [])
 
   useEffect(() => {
     function onHashChangeStart(url: string) {

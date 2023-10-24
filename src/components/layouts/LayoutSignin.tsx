@@ -1,9 +1,19 @@
+import { useEffect } from "react";
+import { disableCustomCursor } from "@/store/slices/cursorSlice";
+import { useDispatch } from "react-redux";
+
 export type layoutProps = {
   children: React.ReactNode;
   previousPath?: string;
 };
 
-const LayoutSignin: React.FC<layoutProps> = ({ children, previousPath }) => {
+const LayoutSignin: React.FC<layoutProps> = ({ children }) => {
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(disableCustomCursor())
+  }, [])
+
   return (
     <>
       <div className={"bg-black relative min-h-screen overflow-hidden"}>
