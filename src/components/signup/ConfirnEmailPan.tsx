@@ -8,11 +8,9 @@ import Send from '@/icons/signin/send.svg'
 import X from '@/icons/signin/x.svg'
 import Check from '@/icons/signin/check.svg'
 
-import { ElementsIn } from "@/Animations/elementsIn"
 import { SignUpContext } from "./_context/SignupContext"
 import { codeStateType } from "../signin/_context/signinContext"
 import { SignInSignUpContainer } from "../_shared/UI/SignInSignUpContainer"
-import { ElementsOut } from "@/Animations/elementsOut"
 import { ProgressDots } from "../_shared/UI/ProgressDots"
 
 
@@ -22,22 +20,11 @@ export const ConfirmEmailPan = () => {
   const messageContainer = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const elements = Array.from(container.current!.children)
-
-    ElementsIn(elements)
+    context.entrance(container)
   }, [])
 
   const handleSendAgain = () => {
 
-  }
-
-  const handleGoNext = () => {
-    const elements = Array.from(container.current!.children)
-    const cb = () => {
-      context.setCurrentStep(context.currentStep + 1)
-    }
-
-    ElementsOut(elements, {onComplete: cb})
   }
 
   const switchMessage = (switchVal:codeStateType) => {
@@ -110,7 +97,7 @@ export const ConfirmEmailPan = () => {
           <Button 
             type='primary'
             label='Continuer'
-            onClick={() => { handleGoNext()}}
+            onClick={() => { context.goNext() }}
             className="w-full mt-dashboard-mention-padding-right-left"
             disabled={context.codeState !== 'success'}
           />

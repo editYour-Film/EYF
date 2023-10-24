@@ -6,8 +6,7 @@ import Logo from '@/icons/logo.svg'
 import Google from '@/icons/google.svg'
 import Arrow from '@/icons/right-arrow-white.svg'
 import gsap from 'gsap'
-import { ElementsOut } from '@/Animations/elementsOut'
-import { ElementsIn } from '@/Animations/elementsIn'
+import { ElementsIn } from '@/animations/elementsIn'
 
 type TypePanProps = {
   disclaimer?: ReactElement
@@ -17,14 +16,13 @@ export const TypePan = ({disclaimer}: TypePanProps) => {
   const context = useContext(SignInContext)
   const container = useRef<HTMLDivElement>(null)
 
-  const handleGoToEmail = () => {
-    const elements = Array.from(container.current!.children)
-    const cb = () => {
-      context.setCurrentStep('email')
-    }
+  useEffect(() => {
+    context.setContainer(container)
 
-    ElementsOut(elements, {onComplete: cb })
-  }
+    const elements = Array.from(container.current!.children)
+
+    ElementsIn(elements)
+  }, [])
 
   return (
     <div className="signIn_type max-w-[100vw] w-[360px] px-dashboard-specific-radius md:px-0 pb-[75px]">
@@ -45,7 +43,7 @@ export const TypePan = ({disclaimer}: TypePanProps) => {
           type='primary'
           label='Continuer avec un email'
           Icon={Arrow}
-          onClick={() => { handleGoToEmail()}}
+          onClick={() => { context.goNext() }}
           className='w-full'
         />
 

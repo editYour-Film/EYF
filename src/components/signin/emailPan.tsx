@@ -1,4 +1,4 @@
-import { ElementsIn } from "@/Animations/elementsIn"
+import { ElementsIn } from "@/animations/elementsIn"
 import { ReactElement, useContext, useEffect, useRef } from "react"
 import Input from "@/components/_shared/form/Input"
 import { Button } from "@/components/_shared/buttons/Button"
@@ -6,7 +6,6 @@ import { SignInContext } from "./_context/signinContext"
 
 import Logo from "@/icons/logo.svg"
 import Arrow from "@/icons/tailLeft.svg"
-import { ElementsOut } from "@/Animations/elementsOut"
 
 type EmailPanProps = {
   disclaimer?: ReactElement
@@ -17,32 +16,17 @@ export const EmailPan = ({disclaimer}: EmailPanProps) => {
   const container = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
+    context.setContainer(container)
+    
     const elements = Array.from(container.current!.children)
 
     ElementsIn(elements)
   }, [])
 
-  const handleGoToType = () => {
-    const elements = Array.from(container.current!.children)
-    const cb = () => {
-      context.setCurrentStep('type')
-    }
-
-    ElementsOut(elements, {onComplete: cb })
-  }
-
   const handleConfirmEmail = async () => {
     const emailOk = await context.handleConfirmEmail()
 
-    if(emailOk) {
-      const elements = Array.from(container.current!.children)
-
-      const cb = () => {
-        context.setCurrentStep('code')
-      }
-  
-      ElementsOut(elements, {onComplete: cb })
-    }
+    if(emailOk) context.goNext()
   }
 
   return (
@@ -82,7 +66,7 @@ export const EmailPan = ({disclaimer}: EmailPanProps) => {
           label="Autre méthode de connexion"
           Icon={Arrow} 
 
-          onClick={() => { handleGoToType() }}
+          onClick={() => { context.goNext() }}
           className="w-full"
         />
 

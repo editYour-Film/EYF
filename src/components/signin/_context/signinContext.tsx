@@ -1,6 +1,6 @@
 import routes from "@/routes";
 import Link from "next/link";
-import { createContext, useEffect, useState } from "react";
+import { RefObject, createContext, useEffect, useState } from "react";
 import { ReactElement } from "react-markdown/lib/react-markdown";
 
 import { useStrapiPost } from "@/hooks/useStrapi";
@@ -10,8 +10,9 @@ import { useUser } from "@/auth/authContext";
 import { useRouter } from "next/router";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { SignedInUser, initSignedInUser } from "@/components/model/signin";
+import { ElementsOut } from "@/animations/elementsOut";
 
-export type stepType = "type" | "email" | "code";
+export type stepType = number;
 export type codeStateType =
   | "regular"
   | "loading"
@@ -23,7 +24,7 @@ export type codeStateType =
   | "successResend";
 
 export const SignInContext = createContext({
-  currentStep: "type" as stepType,
+  currentStep: 0 as stepType,
   setCurrentStep: (payload: stepType) => {},
   email: "",
   setEmail: (payload: string) => {},
@@ -37,6 +38,10 @@ export const SignInContext = createContext({
   setCodeState: (payload: codeStateType) => {},
   resetCodeState: () => {},
   handleCodeVerification: (payload: string) => {},
+  
+  setContainer: (payload: any) => {},
+  goBack: () => {},
+  goNext: () => {}
 });
 
 export const SignInContextProvider: React.FC<any> = (props) => {
@@ -66,7 +71,7 @@ export const SignInContextProvider: React.FC<any> = (props) => {
     ),
   };
 
-  const [currentStep, setCurrentStep] = useState<stepType>("type");
+  const [currentStep, setCurrentStep] = useState<stepType>(0);
 
   const [email, setEmail] = useState("");
   const [emailErrorMessage, setEmailErrorMessage] =
@@ -146,6 +151,24 @@ export const SignInContextProvider: React.FC<any> = (props) => {
     if (token && isLoggedIn) push(routes.DASHBOARD_EDITOR_HOME);
   }, []);
 
+  const [container, setContainer] = useState<RefObject<HTMLDivElement> | null>(null)
+
+  const goBack = () => {    
+    if (container) {
+      const elements = Array.from(container.current!.children);
+
+      ElementsOut(elements, {onComplete: () => { setCurrentStep(currentStep - 1) }});
+    }
+  }
+
+  const goNext = () => {
+    if (container) {
+      const elements = Array.from(container.current!.children);
+
+      ElementsOut(elements, {onComplete: () => { setCurrentStep(currentStep + 1) }});
+    }
+  }
+
   return (
     <SignInContext.Provider
       value={{
@@ -162,6 +185,10 @@ export const SignInContextProvider: React.FC<any> = (props) => {
         setCodeState,
         resetCodeState,
         handleCodeVerification,
+
+        setContainer,
+        goBack,
+        goNext
       }}
     >
       {props.children}
