@@ -10,6 +10,7 @@ import { useUser } from "@/auth/authContext";
 import { useRouter } from "next/router";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { SignedInUser, initSignedInUser } from "@/components/model/signin";
+import { inputErrors } from "@/const";
 
 export type stepType = "type" | "email" | "code";
 export type codeStateType =
@@ -18,6 +19,7 @@ export type codeStateType =
   | "error"
   | "errorInvalid"
   | "errorExpired"
+  | "errorAccountExist"
   | "errorResend"
   | "success"
   | "successResend";
@@ -48,11 +50,11 @@ export const SignInContextProvider: React.FC<any> = (props) => {
   const [, isLoggedIn] = useUser();
 
   const emailErrors = {
-    generalError: <span>Une erreur inattendue s'est produite.</span>,
+    generalError: <span>{inputErrors.general}</span>,
     emailNotSent: (
       <span>Erreur lors de l'envoi de l'email de vérification.</span>
     ),
-    notValid: <span>L’adresse mail renseignée n’est pas valide.</span>,
+    notValid: <span>{inputErrors.invalidEmail}</span>,
     notFound: (
       <span>
         Aucun compte n'est lié à cette adresse mail.{" "}
@@ -90,7 +92,7 @@ export const SignInContextProvider: React.FC<any> = (props) => {
 
       return new Promise<boolean>((resolve) => {
         setTimeout(() => {
-          if (generateToken.status === 200) {
+          if (generateToken.status && generateToken.status === 200) {
             if (typeof generateToken.data === "string") {
               if (generateToken.data.includes("not found"))
                 setEmailErrorMessage(emailErrors.notFound);
@@ -116,7 +118,7 @@ export const SignInContextProvider: React.FC<any> = (props) => {
       false
     );
 
-    if (signinResponse.status === 200) {
+    if (signinResponse.status && signinResponse.status === 200) {
       if (typeof signinResponse.data === "string") {
         if (signinResponse.data.includes("not valid"))
           setCodeState("errorInvalid");

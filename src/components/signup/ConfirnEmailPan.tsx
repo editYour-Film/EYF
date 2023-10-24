@@ -1,87 +1,110 @@
-import { Button } from "@/components/_shared/buttons/Button"
-import { useContext, useEffect, useRef, useState } from "react"
-import { SecretCodeInput } from "../_shared/form/SecretCodeInput"
+import { Button } from "@/components/_shared/buttons/Button";
+import { useContext, useEffect, useRef, useState } from "react";
+import { SecretCodeInput } from "../_shared/form/SecretCodeInput";
 
-import { InfoMessage } from "../_shared/UI/InfoMessage"
+import { InfoMessage } from "../_shared/UI/InfoMessage";
 
-import Send from '@/icons/signin/send.svg'
-import X from '@/icons/signin/x.svg'
-import Check from '@/icons/signin/check.svg'
+import Send from "@/icons/signin/send.svg";
+import X from "@/icons/signin/x.svg";
+import Check from "@/icons/signin/check.svg";
 
-import { ElementsIn } from "@/Animations/elementsIn"
-import { SignUpContext } from "./_context/SignupContext"
-import { codeStateType } from "../signin/_context/signinContext"
-import { SignInSignUpContainer } from "../_shared/UI/SignInSignUpContainer"
-import { ElementsOut } from "@/Animations/elementsOut"
-import { ProgressDots } from "../_shared/UI/ProgressDots"
-
+import { ElementsIn } from "@/Animations/elementsIn";
+import { SignUpContext } from "./_context/SignupContext";
+import { codeStateType } from "../signin/_context/signinContext";
+import { SignInSignUpContainer } from "../_shared/UI/SignInSignUpContainer";
+import { ElementsOut } from "@/Animations/elementsOut";
+import { ProgressDots } from "../_shared/UI/ProgressDots";
+import { useStrapiPost } from "@/hooks/useStrapi";
 
 export const ConfirmEmailPan = () => {
-  const container = useRef<HTMLDivElement>(null)
-  const context = useContext(SignUpContext)
-  const messageContainer = useRef<HTMLDivElement>(null)
+  const container = useRef<HTMLDivElement>(null);
+  const context = useContext(SignUpContext);
+  const messageContainer = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const elements = Array.from(container.current!.children)
+    const elements = Array.from(container.current!.children);
 
-    ElementsIn(elements)
-  }, [])
-
-  const handleSendAgain = () => {
-
-  }
+    ElementsIn(elements);
+  }, []);
 
   const handleGoNext = () => {
-    const elements = Array.from(container.current!.children)
+    const elements = Array.from(container.current!.children);
+
     const cb = () => {
-      context.setCurrentStep(context.currentStep + 1)
-    }
+      context.setCurrentStep(context.currentStep + 1);
+    };
 
-    ElementsOut(elements, {onComplete: cb})
-  }
+    ElementsOut(elements, { onComplete: cb });
+  };
 
-  const switchMessage = (switchVal:codeStateType) => {
+  const switchMessage = (switchVal: codeStateType) => {
     switch (switchVal) {
-      case 'regular':
+      case "regular":
         return (
-          <InfoMessage 
-            message="Ouvrez votre boite mail et ajoutez votre code à 6 chiffres." 
-            Icon={Send} 
+          <InfoMessage
+            message="Ouvrez votre boite mail et ajoutez votre code à 6 chiffres."
+            Icon={Send}
           />
-        )
-      case 'loading':
+        );
+      case "loading":
         return (
-          <InfoMessage 
-            message="Ouvrez votre boite mail et ajoutez votre code à 6 chiffres." 
-            Icon={Send} 
+          <InfoMessage
+            message="Ouvrez votre boite mail et ajoutez votre code à 6 chiffres."
+            Icon={Send}
           />
-        )
-      case 'error':
+        );
+      case "error":
         return (
-          <InfoMessage 
-            type='danger' 
-            message="Code saisi invalide. Rééssayez ou recevez un nouveau code." 
+          <InfoMessage
+            type="danger"
+            message="Une erreur inattendue s'est produite."
             Icon={X}
           />
-        )
-      case 'success':
+        );
+      case "errorInvalid":
         return (
-          <InfoMessage message='Email Validé !' Icon={Check}/>
-        )
+          <InfoMessage
+            type="danger"
+            message="Code saisi invalide. Rééssayez ou recevez un nouveau code."
+            Icon={X}
+          />
+        );
+      case "errorExpired":
+        return (
+          <InfoMessage
+            type="danger"
+            message="Code saisi expiré. Veuillez regénérer un nouveau code."
+            Icon={X}
+          />
+        );
+      case "errorResend":
+        return (
+          <InfoMessage
+            type="danger"
+            message="Erreur lors de regénération d'un nouveau code."
+            Icon={X}
+          />
+        );
+      case "success":
+        return <InfoMessage message="Email Validé !" Icon={Check} />;
+      case "successResend":
+        return (
+          <InfoMessage message="Code de vérification envoyé." Icon={Send} />
+        );
       default:
         break;
     }
-  }
+  };
 
   return (
     <div className="confirm-email__pan max-w-[100vw] w-[424px]">
       <SignInSignUpContainer ref={container}>
-        <hr className='form-separator'/>
+        <hr className="form-separator" />
 
         <div className="flex flex-col items-center px-dashboard-specific-radius md:p-0">
-          <div className='text-large text-center'>Confirmez votre Email</div>
-          
-          <div 
+          <div className="text-large text-center">Confirmez votre Email</div>
+
+          <div
             ref={messageContainer}
             className="px-dashboard-specific-radius md:p-0 mt-dashboard-button-separation-spacing"
           >
@@ -89,36 +112,43 @@ export const ConfirmEmailPan = () => {
           </div>
         </div>
 
-        <hr className='form-separator'/>
+        <hr className="form-separator" />
 
-        <SecretCodeInput 
+        <SecretCodeInput
           state={context.codeState}
-          enterCb={(val:string) => { context.handleCodeVerification(val)}}
-          backSpaceCb={() => { context.resetCodeState()}}
+          enterCb={(val: string) => {
+            context.handleCodeVerification(val);
+          }}
+          backSpaceCb={() => {
+            context.resetCodeState();
+          }}
         />
-          
-        <hr className='form-separator'/>  
+
+        <hr className="form-separator" />
 
         <div className="w-full px-dashboard-specific-radius md:p-0">
           <Button
-            type='secondary'
-            label='Renvoyer le code'
-            onClick={() => { handleSendAgain()}}
+            type="secondary"
+            label="Renvoyer le code"
+            onClick={() => {
+              context.handleSendAgain();
+            }}
             className="w-full"
-            disabled={context.codeState === 'success'}
+            disabled={context.codeState === "success"}
           />
-          <Button 
-            type='primary'
-            label='Continuer'
-            onClick={() => { handleGoNext()}}
+          <Button
+            type="primary"
+            label="Continuer"
+            onClick={() => {
+              handleGoNext();
+            }}
             className="w-full mt-dashboard-mention-padding-right-left"
-            disabled={context.codeState !== 'success'}
+            disabled={context.codeState !== "success"}
           />
         </div>
 
         {context.dots && <ProgressDots dots={context.dots} />}
-
       </SignInSignUpContainer>
     </div>
-  )
-}
+  );
+};

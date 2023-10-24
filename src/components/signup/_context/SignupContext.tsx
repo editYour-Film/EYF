@@ -14,6 +14,9 @@ import X from "@/icons/signin/x.svg";
 
 import { MessageType } from "@/components/_shared/UI/InfoMessage";
 import { StepBubbleProps } from "@/components/_shared/buttons/StepBubble";
+import { useStrapiPost } from "@/hooks/useStrapi";
+import validator from "validator";
+import { inputErrors } from "@/const";
 
 export type accountType = "editor" | "creator" | "both" | undefined;
 export type maxStepType = 5 | 6 | 7 | undefined;
@@ -34,10 +37,11 @@ export const SignUpContext = createContext({
 
   email: undefined as string | undefined,
   setEmail: (payload: string) => {},
-  emailValid: false as boolean,
   emailErrorMessage: undefined as ReactElement | undefined | undefined | string,
-  handleConfirmEmail: () => {},
+  setEmailErrorMessage: (payload: string) => {},
   handleGoogleConnection: () => {},
+  handleSendAgain: () => {},
+  handleGoToCode: () => {},
 
   code: "" as string | undefined,
   setCode: (payload: string) => {},
@@ -55,6 +59,7 @@ export const SignUpContext = createContext({
 
   username: undefined as string | undefined,
   setUsername: (payload: string) => {},
+  handleUserNameVerification: () => {},
   userNameAvailable: undefined as boolean | undefined,
   userNameMessage: undefined as MessageType | undefined,
 
@@ -100,6 +105,11 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
       message: "Nom d'utilisateur disponible.",
       Icon: Check,
       type: "regular",
+    } as MessageType,
+    generalError: {
+      message: inputErrors.general,
+      Icon: X,
+      type: "danger",
     } as MessageType,
   };
 
@@ -160,7 +170,6 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
   );
 
   const [email, setEmail] = useState<string | undefined>(undefined);
-  const [emailValid, setEmailValid] = useState<boolean>(false);
   const [emailErrorMessage, setEmailErrorMessage] = useState<
     ReactElement | undefined | undefined | string
   >(undefined);
@@ -248,24 +257,79 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
     defineMaxSteps();
   };
 
-  const handleConfirmEmail = () => {
-    // Check if the email is valid
+  const handleGoToCode = async () => {
+    setEmailErrorMessage(undefined);
+    if (!email) {
+      setEmailErrorMessage(inputErrors.required);
+      return;
+    } else if (!validator.isEmpty(email) && !validator.isEmail(email)) {
+      setEmailErrorMessage(inputErrors.invalidEmail);
+      return;
+    }
 
-    if (email) setEmailValid(true);
-    else setEmailValid(false);
+    const sendToken = await useStrapiPost(
+      "generate-token-signup",
+      {
+        email: email,
+        role: accountType === "editor" ? 4 : 3,
+      },
+      false
+    );
+    if (sendToken.status && sendToken.status === 200) {
+      if (typeof sendToken.data === "string") {
+        if (sendToken.data.includes("exist"))
+          setEmailErrorMessage(inputErrors.accountExist);
+      } else if (sendToken.data === true) setCurrentStep(currentStep + 1);
+    } else setEmailErrorMessage(inputErrors.general);
   };
 
   const handleGoogleConnection = () => {};
 
-  const handleCodeVerification = (value: string) => {
+  const handleCodeVerification = async (value: string) => {
     // check the code and set the code state accordingly
     setCodeState("loading");
 
-    // Remove Timeout and set the verification
-    // on success redirect to dashboard ?
-    setTimeout(() => {
-      setCodeState("success");
-    }, 3000);
+    const verifyToken = await useStrapiPost(
+      "custom-signup",
+      {
+        email: email,
+        token: value,
+      },
+      false
+    );
+
+    if (verifyToken.status && verifyToken.status === 200) {
+      if (typeof verifyToken.data === "string") {
+        if (
+          verifyToken.data.includes("error") ||
+          verifyToken.data.includes("not sent")
+        )
+          setCodeState("error");
+        if (verifyToken.data.includes("not valid"))
+          setCodeState("errorInvalid");
+        if (verifyToken.data.includes("expired")) setCodeState("errorExpired");
+      } else if (verifyToken.data === true) setCodeState("success");
+    } else setCodeState("error");
+  };
+
+  const handleSendAgain = async () => {
+    const regenerateToken = await useStrapiPost(
+      "generate-token-signup",
+      {
+        email: email,
+      },
+      false
+    );
+
+    if (regenerateToken.status && regenerateToken.status === 200) {
+      if (typeof regenerateToken.data === "string") {
+        if (
+          regenerateToken.data.includes("error") ||
+          regenerateToken.data.includes("not sent")
+        )
+          setCodeState("error");
+      } else if (regenerateToken.data === true) setCodeState("successResend");
+    } else setCodeState("error");
   };
 
   const resetCodeState = () => {
@@ -276,18 +340,30 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
     setInitials(f_name && l_name ? f_name[0] + l_name[0] : undefined);
   }, [l_name, f_name]);
 
-  const handleUserNameVerification = () => {
+  const handleUserNameVerification = async () => {
     // check availability of username and change the username message accordingly
-    if (username) {
+    if (username && username?.length > 0) {
       //if Availiable
-      if (username?.length) {
-        setUserNameAvailable(true);
-        setUserNameMessage(userNameMessages.success);
-      }
-      //if Not
-      else {
+
+      const checkUsername = await useStrapiPost(
+        "check-username",
+        {
+          username: username,
+        },
+        false
+      );
+
+      if (checkUsername.status && checkUsername.status === 200) {
+        if (checkUsername.data === true) {
+          setUserNameAvailable(true);
+          setUserNameMessage(userNameMessages.success);
+        } else {
+          setUserNameAvailable(false);
+          setUserNameMessage(userNameMessages.error);
+        }
+      } else {
         setUserNameAvailable(false);
-        setUserNameMessage(userNameMessages.error);
+        setUserNameMessage(userNameMessages.generalError);
       }
     }
     //if Undefined
@@ -296,10 +372,6 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
       setUserNameMessage(userNameMessages.default);
     }
   };
-
-  useEffect(() => {
-    handleUserNameVerification();
-  }, [username]);
 
   const handleEditorPicturVerification = () => {
     // Verify if the file is ok
@@ -344,12 +416,12 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
     handleSkillsVerification();
   }, [skills]);
 
-  const handleJoinNewsletterVrification = () => {
+  const handleJoinNewsletterVerification = () => {
     // Subscribe or unsubscribe to the newsletter
   };
 
   useEffect(() => {
-    handleJoinNewsletterVrification();
+    handleJoinNewsletterVerification();
   }, [joinNewsletter]);
 
   return (
@@ -371,10 +443,11 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
 
         email,
         setEmail,
-        emailValid,
         emailErrorMessage,
-        handleConfirmEmail,
+        setEmailErrorMessage,
         handleGoogleConnection,
+        handleSendAgain,
+        handleGoToCode,
 
         code,
         setCode,
@@ -392,6 +465,7 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
 
         username,
         setUsername,
+        handleUserNameVerification,
         userNameAvailable,
         userNameMessage,
 

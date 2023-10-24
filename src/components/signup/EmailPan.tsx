@@ -7,7 +7,6 @@ import Google from "@/icons/google.svg";
 import { useContext, useEffect, useRef } from "react";
 import { SignUpContext } from "./_context/SignupContext";
 import { Button } from "../_shared/buttons/Button";
-import { ElementsOut } from "@/Animations/elementsOut";
 import { ElementsIn } from "@/Animations/elementsIn";
 import { ProgressDots } from "../_shared/UI/ProgressDots";
 
@@ -20,15 +19,6 @@ export const EmailPan = () => {
 
     ElementsIn(elements);
   }, []);
-
-  const handleGoToCode = () => {
-    const elements = Array.from(container.current!.children);
-    const cb = () => {
-      context.setCurrentStep(context.currentStep + 1);
-    };
-
-    ElementsOut(elements, { onComplete: cb });
-  };
 
   return (
     <div className="signUp_email max-w-[100vw] w-[360px] px-dashboard-specific-radius md:px-0 pb-[75px]">
@@ -51,7 +41,6 @@ export const EmailPan = () => {
           value={context.email}
           onChange={(e) => {
             context.setEmail(e.target.value);
-            context.handleConfirmEmail();
           }}
         />
 
@@ -76,9 +65,8 @@ export const EmailPan = () => {
         <Button
           type="primary"
           label="Recevoir un code de confirmation"
-          disabled={!context.emailValid}
           onClick={() => {
-            handleGoToCode();
+            context.handleGoToCode();
           }}
           className="w-full"
         />
