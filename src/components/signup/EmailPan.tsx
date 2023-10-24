@@ -30,6 +30,20 @@ export const EmailPan = () => {
     ElementsOut(elements, { onComplete: cb });
   };
 
+  const handleKeyDown = (e:KeyboardEvent) => {
+    if (context.emailValid && e.key === 'Enter') {
+      handleGoToCode()
+    }
+  }
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    }
+  }, [])
+
   return (
     <div className="signUp_email max-w-[100vw] w-[360px] px-dashboard-specific-radius md:px-0 pb-[75px]">
       <SignInSignUpContainer ref={container}>
