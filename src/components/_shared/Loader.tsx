@@ -23,7 +23,7 @@ export const Loader = ({isLoading}:loaderProps) => {
       ref={loader}
       className="fixed w-full h-full top-1 -left-1 flex justify-center items-center origin-center border-2 bg-black rounded-2xl"
     >
-      <EYFLogo className="z-10" />
+      <EYFLogo className="z-10 w-[70px] h-[70px]" />
 
       <div className="absolute w-full h-full bottom-0 z-0 overflow-hidden">
         <div className="absolute w-[2000px] h-[500px] -left-96 bottom-0 opacity-[0.9] translate-y-[75%] bg-top-section"></div>
