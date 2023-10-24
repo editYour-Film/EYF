@@ -48,7 +48,8 @@ export const useStrapi = (path: string, populate = true) => {
       return data.data.attributes;
     }
 
-    if (path.includes("blog-categories") || path.includes("video-tags")) return data.data;
+    if (path.includes("blog-categories") || path.includes("video-tags"))
+      return data.data;
 
     if (process.env.NEXT_PUBLIC_ENV === "production")
       return data.data.filter((x: any) => x.attributes.production === true);
@@ -86,7 +87,11 @@ export const useStrapiPost = async (
                 : "application/json",
               Authorization: "bearer " + token,
             }
-          : { "Content-Type": "application/json" },
+          : {
+              "Content-Type": isMedia
+                ? "multipart/form-data"
+                : "application/json",
+            },
     })
     .then((response) => {
       return {
@@ -97,7 +102,7 @@ export const useStrapiPost = async (
     .catch((error) => {
       return {
         status: 400,
-        data: error.response.data.error,
+        data: error.response ? error.response.data.error : error,
       };
     });
 
@@ -114,7 +119,7 @@ export const useStrapiPut = async (
     return {
       status: 400,
       data: "token not set",
-    };    
+    };
 
   const response: StrapiResponse = await axios
     .put<any>(process.env.NEXT_PUBLIC_API_STRAPI + path, body, {
@@ -132,7 +137,7 @@ export const useStrapiPut = async (
     .catch((error) => {
       return {
         status: 400,
-        data: error.response.data.error,
+        data: error.response ? error.response.data.error : error,
       };
     });
 
@@ -175,7 +180,7 @@ export const useStrapiGet = async (
     .catch((error) => {
       return {
         status: 400,
-        data: error.response.data.error,
+        data: error.response ? error.response.data.error : error,
       };
     });
 
@@ -218,7 +223,7 @@ export const useStrapiDelete = async (
     .catch((error) => {
       return {
         status: 400,
-        data: error.response.data.error,
+        data: error.response ? error.response.data.error : error,
       };
     });
 

@@ -19,10 +19,11 @@ type inputProps = {
   name?: string;
   onChange?: (e: any) => void;
   onKeyDown?: (e: any) => void;
+  onBlur?: (e: any) => void;
   label?: string;
   noMargin?: boolean;
   noLabel?: boolean;
-  labelType?: undefined | 'dashboard';
+  labelType?: undefined | "dashboard";
   placeholder?: string;
   className?: string;
   size?: "sm" | undefined;
@@ -48,7 +49,7 @@ type inputProps = {
   setDate?: (e: any) => void;
 
   /** search */
-  datalist?: string; 
+  datalist?: string;
 };
 const Input = ({
   type,
@@ -56,6 +57,7 @@ const Input = ({
   name = "",
   onChange = () => {},
   onKeyDown = () => {},
+  onBlur = () => {},
   label,
   noLabel,
   noMargin,
@@ -91,7 +93,9 @@ const Input = ({
 
   const inputClass =
     "input-text w-full " +
-    (bg !== 'underlined' ? 'px-padding-dashboard-button-separation-spacing ' : '') +
+    (bg !== "underlined"
+      ? "px-padding-dashboard-button-separation-spacing "
+      : "") +
     (type === "password"
       ? "pr-12 "
       : type === "email"
@@ -102,23 +106,33 @@ const Input = ({
       ? "pl-4 "
       : "") +
     (error ? "border-appleRed " : "") +
-    (bg === "white" ? "border bg-white text-alpha-black-600 " : '') +
-    (bg === "light" ? "border bg-soyMilk-40 text-white text-opacity-70 " : '') +
-    (bg === "black" ? "bg-darkgrey bg-opacity-50 text-white border border-0.5 " : '') +
-    (bg === "card" ? "bg-background-card text-white text-opacity-50 border border-0.5 " : '') +
-    (bg === "underlined" ? "bg-transparent text-dashboard-text-title-white-high placeholder-text-dashboard-text-description-base border-b border-1 hover:border-stroke-dashboard-button-stroke-hover " : '') +
+    (bg === "white" ? "border bg-white text-alpha-black-600 " : "") +
+    (bg === "light" ? "border bg-soyMilk-40 text-white text-opacity-70 " : "") +
+    (bg === "black"
+      ? "bg-darkgrey bg-opacity-50 text-white border border-0.5 "
+      : "") +
+    (bg === "card"
+      ? "bg-background-card text-white text-opacity-50 border border-0.5 "
+      : "") +
+    (bg === "underlined"
+      ? "bg-transparent text-dashboard-text-title-white-high placeholder-text-dashboard-text-description-base border-b border-1 hover:border-stroke-dashboard-button-stroke-hover "
+      : "") +
     (bg !== "underlined" && (roundedFull ? "rounded-full " : "rounded-lg ")) +
-    (size === 'sm' ? ' py-2 min-h-[40px] ' : ' p-dashboard-button-separation-spacing min-h-[52px] ') +
-    (disabled === true ? 'opacity-50 ' : '') +
+    (size === "sm"
+      ? " py-2 min-h-[40px] "
+      : " p-dashboard-button-separation-spacing min-h-[52px] ") +
+    (disabled === true ? "opacity-50 " : "") +
     className;
 
-  let labelClass
+  let labelClass;
   if (noLabel) {
-    labelClass = 'block opacity-0 w-0 h-0 pointer-events-none'
+    labelClass = "block opacity-0 w-0 h-0 pointer-events-none";
   } else {
-    labelClass = labelType === 'dashboard' ? 'flex items-center justify-between mb-3 font-bold text-dashboard-text-description-base' : " flex flex-wrap justify-between items-center gap-3 mb-2 text-sm text-dashboard-text-description-base";
+    labelClass =
+      labelType === "dashboard"
+        ? "flex items-center justify-between mb-3 font-bold text-dashboard-text-description-base"
+        : " flex flex-wrap justify-between items-center gap-3 mb-2 text-sm text-dashboard-text-description-base";
   }
-  
 
   const helperClass = "text-sm text-base-text mt-3 mb-8";
 
@@ -137,7 +151,10 @@ const Input = ({
             <input
               type="text"
               onChange={onChange}
-              className={`bg-transparent w-full h-full ${textSunset ? 'text-linear-sunset' : ''}`}
+              onBlur={onBlur}
+              className={`bg-transparent w-full h-full ${
+                textSunset ? "text-linear-sunset" : ""
+              }`}
               value={value as string}
               name={name}
               placeholder={placeholder}
@@ -145,9 +162,17 @@ const Input = ({
               disabled={disabled}
             />
           </div>
-          
-          {maxlength && <div className="input__maxlength ml-auto mr-0 text-xs text-dashboard-text-description-base">{`${(value as string).length} / ${maxlength}`}</div>}
-          {minlength && <div className="input__minlength ml-auto mr-0 text-xs text-dashboard-text-description-base">{`${(value as string).length} / ${minlength}`}</div>}
+
+          {maxlength && (
+            <div className="input__maxlength ml-auto mr-0 text-xs text-dashboard-text-description-base">{`${
+              (value as string).length
+            } / ${maxlength}`}</div>
+          )}
+          {minlength && (
+            <div className="input__minlength ml-auto mr-0 text-xs text-dashboard-text-description-base">{`${
+              (value as string).length
+            } / ${minlength}`}</div>
+          )}
           {helper && <p className={helperClass}>{helper}</p>}
           {error && <p className="text-appleRed mt-1.5 ">{error}</p>}
         </div>
@@ -163,10 +188,13 @@ const Input = ({
             </label>
           )}
           {helper && <p className={helperClass}>{helper}</p>}
-          <div className={`relative flex flex-col grow items-end ${inputClass}`}>
+          <div
+            className={`relative flex flex-col grow items-end ${inputClass}`}
+          >
             <textarea
               onChange={onChange}
-              className='bg-transparent w-full h-full resize-none'
+              onBlur={onBlur}
+              className="bg-transparent w-full h-full resize-none"
               value={value as string}
               name={name}
               placeholder={placeholder}
@@ -174,9 +202,17 @@ const Input = ({
               disabled={disabled}
             ></textarea>
           </div>
-          
-          {maxlength && <div className="input__maxlength ml-auto mr-0 text-xs text-dashboard-text-description-base">{`${(value as string).length} / ${maxlength}`}</div>}
-          {minlength && <div className="input__minlength ml-auto mr-0 text-xs text-dashboard-text-description-base">{`Minimum ${minlength} caractères ${(value as string).length} / ${minlength}`}</div>}
+
+          {maxlength && (
+            <div className="input__maxlength ml-auto mr-0 text-xs text-dashboard-text-description-base">{`${
+              (value as string).length
+            } / ${maxlength}`}</div>
+          )}
+          {minlength && (
+            <div className="input__minlength ml-auto mr-0 text-xs text-dashboard-text-description-base">{`Minimum ${minlength} caractères ${
+              (value as string).length
+            } / ${minlength}`}</div>
+          )}
           {error && <p className="text-appleRed mt-1.5 ">{error}</p>}
         </div>
       );
@@ -194,6 +230,7 @@ const Input = ({
             <input
               type="text"
               onChange={onChange}
+              onBlur={onBlur}
               className={inputClass}
               value={value as string}
               name={name}
@@ -219,6 +256,7 @@ const Input = ({
             <input
               type={isPassword ? "password" : "text"}
               onChange={onChange}
+              onBlur={onBlur}
               className={inputClass}
               value={value as string}
               name={name}
@@ -259,7 +297,9 @@ const Input = ({
               {helpIconText && <Help text={helpIconText} label={label} />}
             </label>
           )}
-          <div className={`relative flex justify-end items-center ${inputClass}`}>
+          <div
+            className={`relative flex justify-end items-center ${inputClass}`}
+          >
             {!iconRight && (
               <Image
                 width={17}
@@ -277,6 +317,7 @@ const Input = ({
               type="text"
               onChange={onChange}
               onKeyDown={onKeyDown}
+              onBlur={onBlur}
               value={value as string}
               name={name}
               placeholder={placeholder}
@@ -329,7 +370,7 @@ const Input = ({
                         name={name}
                         className="opacity-0 absolute w-full h-full z-20 cursor-pointer "
                         onClick={() => {
-                          onChange(x.value)
+                          onChange(x.value);
                         }}
                         disabled={disabled}
                       />
@@ -376,7 +417,7 @@ const Input = ({
                         name={name}
                         className="opacity-0 absolute w-full h-full z-20 cursor-pointer "
                         onClick={() => {
-                          onChange(x.value)
+                          onChange(x.value);
                         }}
                         disabled={disabled}
                       />
@@ -391,7 +432,11 @@ const Input = ({
                     </div>
                     <div className="flex flex-col">
                       {x.label}
-                      {x.helper && <span className="text-sm text-base-text mt-2">{x.helper}</span>}
+                      {x.helper && (
+                        <span className="text-sm text-base-text mt-2">
+                          {x.helper}
+                        </span>
+                      )}
                     </div>
                   </label>
                 </div>
@@ -513,7 +558,7 @@ const Input = ({
                   }
                   onClick={(e) => {
                     e.preventDefault();
-                    onChange(x.value)
+                    onChange(x.value);
                   }}
                   disabled={disabled}
                 >

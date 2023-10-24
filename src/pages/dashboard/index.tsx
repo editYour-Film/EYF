@@ -8,19 +8,4 @@ export default function Profile() {
   useEffect(() => {
     push(routes.DASHBOARD_EDITOR);
   }, []);
-
-  /*useStrapiGet("users/me?populate=*", true)
-    .then((res) => {
-      switch (res.data.role.name) {
-        case "editor":
-          push(routes.DASHBOARD_EDITOR);
-          break;
-        case "client":
-          // push(routes.DASHBOARD_CLIENT)
-          break;
-      }
-    })
-    .catch((err) => {
-      push(routes.SIGNIN);
-    });*/
 }
