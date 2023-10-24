@@ -2,7 +2,6 @@ import { SignInSignUpContainer } from '../_shared/UI/SignInSignUpContainer'
 import { SimpleCard } from '../_shared/UI/CardSimple'
 import { Button } from '../_shared/buttons/Button'
 
-import Logo from '@/icons/logo.svg'
 import TailRight from '@/icons/right-arrow-white.svg'
 import { SignUpContext } from './_context/SignupContext'
 import { useContext, useState, useEffect, useRef } from 'react'
@@ -10,6 +9,7 @@ import { Toggle } from '../_shared/buttons/Toggle'
 
 import { ElementsOut } from "@/Animations/elementsOut"
 import { ProgressDots } from '../_shared/UI/ProgressDots'
+import { LogoSignup } from './LogoSignup'
 
 export const ChoicePan = () => {
   const context = useContext(SignUpContext)
@@ -46,7 +46,7 @@ export const ChoicePan = () => {
   return (
     <div className="choice-pan w-[421px] max-w-[100vw]">
       <SignInSignUpContainer ref={container}>
-        <Logo />
+        <LogoSignup />
 
         <div className='w-full flex flex-col gap-dashboard-spacing-element-medium px-dashboard-specific-radius md:px-0'>
           <hr className="block w-full "/>

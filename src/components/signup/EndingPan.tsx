@@ -6,7 +6,6 @@ import { SignUpContext } from "./_context/SignupContext"
 import { useRouter } from "next/router"
 import routes from "@/routes"
 
-import Logo from '@/icons/logo.svg'
 import InstaIcon from '@/icons/instagram.svg'
 import TailRight from '@/icons/right-arrow-white.svg'
 
@@ -14,6 +13,7 @@ import { SimpleCard } from "../_shared/UI/CardSimple"
 import { Toggle } from "../_shared/buttons/Toggle"
 import { Button } from "../_shared/buttons/Button"
 import { ProgressDots } from "../_shared/UI/ProgressDots"
+import { LogoSignup } from "./LogoSignup"
 
 export const EndingPan = () => {
   const container = useRef<HTMLDivElement>(null)
@@ -56,7 +56,7 @@ export const EndingPan = () => {
   return (
     <div className="editor-picture__pan max-w-[100vw] w-[360px]">
       <SignInSignUpContainer ref={container}>
-        <Logo />
+        <LogoSignup />
         
         <div className="flex flex-col items-center gap-dashboard-spacing-element-medium px-dashboard-specific-radius md:p-0">
           <hr className='w-full'/>

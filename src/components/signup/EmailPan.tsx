@@ -1,6 +1,5 @@
 import { SignInSignUpContainer } from "@/components/_shared/UI/SignInSignUpContainer";
 
-import Logo from "@/icons/logo.svg";
 import Input from "../_shared/form/Input";
 import Google from "@/icons/google.svg";
 
@@ -10,6 +9,7 @@ import { Button } from "../_shared/buttons/Button";
 import { ElementsOut } from "@/Animations/elementsOut";
 import { ElementsIn } from "@/Animations/elementsIn";
 import { ProgressDots } from "../_shared/UI/ProgressDots";
+import { LogoSignup } from "./LogoSignup";
 
 export const EmailPan = () => {
   const context = useContext(SignUpContext);
@@ -33,7 +33,7 @@ export const EmailPan = () => {
   return (
     <div className="signUp_email max-w-[100vw] w-[360px] px-dashboard-specific-radius md:px-0 pb-[75px]">
       <SignInSignUpContainer ref={container}>
-        <Logo />
+        <LogoSignup />
         <hr className="w-full" />
         <div className="text-large text-center">
           Se connecter à editYour.film
