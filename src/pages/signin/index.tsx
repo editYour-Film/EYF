@@ -16,6 +16,7 @@ import { FooterSignin } from "@/components/_shared/FooterSignin";
 import { useUser } from "@/auth/authContext";
 import { getTokenFromLocalCookie } from "@/auth/auth";
 import { useRouter } from "next/router";
+import { MentionInteraction } from "@/components/_shared/buttons/MentionInteraction";
 
 import HeaderSignin from "@/components/_shared/HeaderSignin"
 
@@ -48,11 +49,12 @@ const SignIn:React.FC<layoutProps> = ({previousPath}) => {
 
 const SignInPanSwitcher = () => {
   const context = useContext(SignInContext);
+  const router = useRouter()
 
   const disclaimer = (
     <span>
-      En continuant j’accepte les <Link href={routes.ML}>mentions légales</Link>{" "}
-      et la <Link href={routes.PC}>Politique de confidentialité</Link> de
+      En continuant j’accepte les <MentionInteraction onClick={() => { router.push(routes.ML) }}>mentions légales</MentionInteraction>{" "}
+      et la <MentionInteraction  onClick={() => { router.push(routes.ML) }}>Politique de confidentialité</MentionInteraction> de
       editYour.Film.
     </span>
   );
