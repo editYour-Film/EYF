@@ -1,12 +1,22 @@
 import { ContainerFullWidth } from "@/components/_shared/UI/Container";
 import "react-multi-carousel/lib/styles.css";
 import HeaderQuote from "../_shared/HeaderQuote";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { disableCustomCursor } from "@/store/slices/cursorSlice";
 
 type LayoutMainProps = {
   children: React.ReactNode;
   step: number;
 };
+
 const LayoutQuote = ({ step, children }: LayoutMainProps) => {
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(disableCustomCursor())
+  }, [])
+
   return (
     <>
       <div className="bg-black min-h-screen flex flex-col gap-10 pt-20 md:pt-0">

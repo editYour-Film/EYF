@@ -2,8 +2,17 @@ import Container from "@/components/_shared/UI/Container";
 import styles from "@/styles/SigninLayout.module.css";
 import Footer from "../_shared/Footer";
 import Header from "../_shared/Header";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { disableCustomCursor } from "@/store/slices/cursorSlice";
 
 const LayoutPayment = ({ children }: any) => {
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(disableCustomCursor())
+  }, [])
+
   return (
     <>
       <div

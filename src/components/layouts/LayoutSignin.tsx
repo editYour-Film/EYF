@@ -1,6 +1,9 @@
 import { ContainerSm } from "@/components/_shared/UI/Container";
 import HeaderSignin from "../_shared/HeaderSignin";
 import { FooterSignin } from "../_shared/FooterSignin";
+import { useEffect } from "react";
+import { disableCustomCursor } from "@/store/slices/cursorSlice";
+import { useDispatch } from "react-redux";
 
 export type layoutProps = {
   children: React.ReactNode;
@@ -8,6 +11,13 @@ export type layoutProps = {
 };
 const LayoutSignin: React.FC<layoutProps> = ({ children, previousPath }) => {
   const footerHeight = "75px";
+
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(disableCustomCursor())
+  }, [])
+
   return (
     <>
       <HeaderSignin previousPath={previousPath} />

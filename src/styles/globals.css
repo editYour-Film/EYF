@@ -23,8 +23,10 @@ html {
   outline: none;
 }
 
-* {
-  cursor: none !important;
+.no-cursor {
+  * {
+    cursor: none !important;
+  }
 }
 
 .n27 {

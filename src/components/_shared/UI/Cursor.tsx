@@ -14,6 +14,8 @@ import Unmute from "@/icons/unmute.svg";
 export const Cursor = () => {
   const router = useRouter();
   const state = useSelector((state: RootState) => state.cursor.value);
+  const enabled = useSelector((state: RootState) => state.cursor.enabled);
+
   const cursor = useRef<HTMLDivElement>(null);
   const cursor2 = useRef<HTMLDivElement>(null);
 
@@ -70,8 +72,12 @@ export const Cursor = () => {
   };
 
   useEffect(() => {
-    switchFn(state, lockAnim);
+    enabled && switchFn(state, lockAnim);
   }, [state]);
+
+  useEffect(() => {
+    console.log(enabled);
+  }, [enabled])
 
   const textAnim = (text: string) => {
     const tl = gsap.timeline();
@@ -239,10 +245,6 @@ export const Cursor = () => {
     iconAnim("unmute");
   };
 
-  const getVel = (xPrev: number, x: number, yPrev: number, y: number) => {
-    return Math.sqrt((x - xPrev) ** 2 + (y - yPrev) ** 2);
-  };
-
   const [cursor2Pos, setCursor2Pos] = useState<{ x: number; y: number }>({
     x: 0,
     y: 0,
@@ -289,42 +291,6 @@ export const Cursor = () => {
       });
     });
 
-    // const start = Date.now()
-    // let then = start
-    // let fps = 60
-    // let fpsInterval = 1000 / fps
-
-    // const anim = () => {
-    //   raf.current = requestAnimationFrame(anim)
-
-    //   const now = Date.now()
-    //   const delta = now - then
-    //   const time = now - start
-    //   const ratio = 0.8
-
-    //   x.current = lerp(posXPrev.current, posX.current, ratio)
-    //   y.current = lerp(posYPrev.current, posY.current, ratio)
-
-    //   if (delta > fpsInterval) {
-    //     posXPrev.current = posX.current
-    //     posYPrev.current = posY.current
-
-    //     posX.current = x.current
-    //     posY.current = y.current
-
-    //     then = now - (delta % fpsInterval);
-
-    //     gsap.set(cursor.current, {
-    //       x: x.current - shape.current?.offsetWidth! / 2,
-    //       y: y.current - shape.current?.offsetHeight! / 2,
-    //     })
-    //   }
-    // }
-
-    // if(!started.current) {
-    //   anim()
-    // }
-
     router.events.on("routeChangeStart", () => {
       setLockAnim(true);
       dispatch(toRegular());
@@ -347,67 +313,52 @@ export const Cursor = () => {
     };
   }, []);
 
-  // useEffect(() => {
-  //   let timer = null
-  //   lenis.on('scroll', () => {
-  //     if(!lockAnim) {
-  //       setLockAnim(true)
-  //       dispatch( toRegular() )
-  //     }
-
-  //     if(timer !== null) {
-  //       clearTimeout(timer);
-  //     }
-
-  //     timer = setTimeout(function() {
-  //       setLockAnim(false)
-  //       // switchFn(store.getState().cursor.value, false)
-  //     }, 150);
-  //   })
-  // }, [])
-
-  return (
-    <div className="fixed top-0 left-0 w-full h-full z-cursor pointer-events-none">
-      <div
-        ref={cursor}
-        className="absolute w-[60px] h-[60px] flex justify-center items-center backdrop-blur-[3px] rounded-full border-white border-[3px] overflow-hidden"
-      >
+  if(enabled) {
+    return (
+      <div className="fixed top-0 left-0 w-full h-full z-cursor pointer-events-none">
         <div
-          ref={shape}
-          className="absolute w-full h-full origin-center translate-z-0"
-        >
-          {/* <div className="absolute top-0 left-0 w-full h-full scale-120 rounded-full"></div> */}
-          <div className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] w-[100%] h-[100%] bg-cursor z-20 opacity-30"></div>
-        </div>
-
-        <CursorText active={showText} text={text} />
-
-        <div
-          ref={iconW}
-          className="cursor__icons absolute top-0 left-0 w-full h-full"
+          ref={cursor}
+          className="absolute w-[60px] h-[60px] flex justify-center items-center backdrop-blur-[3px] rounded-full border-white border-[3px] overflow-hidden"
         >
           <div
-            ref={icons}
-            className="absolute top-[25%] left-[25%] w-[50%] h-[50%] overflow-hidden"
+            ref={shape}
+            className="absolute w-full h-full origin-center translate-z-0"
           >
-            <div ref={muteIcon} className="absolute top-0 lef-0 w-full h-full">
-              <Mute className="absolute top-0 left-0 w-full h-full gradient-svg-linear" />
-            </div>
+            {/* <div className="absolute top-0 left-0 w-full h-full scale-120 rounded-full"></div> */}
+            <div className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] w-[100%] h-[100%] bg-cursor z-20 opacity-30"></div>
+          </div>
+  
+          <CursorText active={showText} text={text} />
+  
+          <div
+            ref={iconW}
+            className="cursor__icons absolute top-0 left-0 w-full h-full"
+          >
             <div
-              ref={unmuteIcon}
-              className="absolute top-0 lef-0 w-full h-full"
+              ref={icons}
+              className="absolute top-[25%] left-[25%] w-[50%] h-[50%] overflow-hidden"
             >
-              <Unmute className="absolute top-0 left-0 w-full h-full gradient-svg-linear" />
+              <div ref={muteIcon} className="absolute top-0 lef-0 w-full h-full">
+                <Mute className="absolute top-0 left-0 w-full h-full gradient-svg-linear" />
+              </div>
+              <div
+                ref={unmuteIcon}
+                className="absolute top-0 lef-0 w-full h-full"
+              >
+                <Unmute className="absolute top-0 left-0 w-full h-full gradient-svg-linear" />
+              </div>
             </div>
           </div>
         </div>
+        <div
+          ref={cursor2}
+          className="hidden absolute w-[60px] h-[60px] rounded-full border-error border-[3px] overflow-hidden"
+        ></div>
       </div>
-      <div
-        ref={cursor2}
-        className="hidden absolute w-[60px] h-[60px] rounded-full border-error border-[3px] overflow-hidden"
-      ></div>
-    </div>
-  );
+    );
+  } else {
+    return <></>
+  }
 };
 
 type CursorTextProps = {

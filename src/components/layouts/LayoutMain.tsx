@@ -9,6 +9,7 @@ import { JoinBeta } from "@/components/_shared/JoinBeta";
 import { useSelector, useDispatch } from 'react-redux'
 import {RootState} from "@/store/store"
 import { setJoinBetaInvisible } from "@/store/slices/joinBetaSlice";
+import { enableCustomCursor } from "@/store/slices/cursorSlice";
 
 type LayoutMainProps = {
   children: React.ReactNode;
@@ -29,6 +30,10 @@ const LayoutMain = ({
   const dispatch = useDispatch()
 
   useEffect(() => {
+    dispatch(enableCustomCursor())
+  }, [])
+
+  useEffect(() => {
     function onHashChangeStart(url: string) {
       url = "#" + url.split("#").pop();
       lenis.scrollTo(url);
@@ -43,7 +48,7 @@ const LayoutMain = ({
 
   return (
     <>
-        <div className="bg-black min-h-screen flex flex-col justify-between gap-10">
+        <div className="bg-black min-h-screen flex flex-col justify-between gap-10 no-cursor">
           {quoteNavbar ? (
             <HeaderQuote step={2} />
           ) : (
@@ -55,7 +60,7 @@ const LayoutMain = ({
             onClose={() => {dispatch(setJoinBetaInvisible())}}
           />
 
-          <main className="pt-24 md:pt-25">
+          <main className="pt-24 md:pt-25 no-cursor">
             {topSectionBackground && (
               <>
                 <div className="top-section-bg1"></div>
