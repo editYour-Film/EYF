@@ -16,6 +16,8 @@ import { MessageType } from "@/components/_shared/UI/InfoMessage";
 import { StepBubbleProps } from "@/components/_shared/buttons/StepBubble";
 import { ElementsIn } from "@/Animations/elementsIn";
 import { ElementsOut } from "@/Animations/elementsOut";
+import { MentionInteraction } from "@/components/_shared/buttons/MentionInteraction";
+import { useRouter } from "next/router";
 
 export type accountType = "editor" | "creator" | "both" | undefined;
 export type maxStepType = 5 | 6 | 7 | undefined;
@@ -158,10 +160,12 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [dots, setDots] = useState<StepBubbleProps[] | undefined>(undefined);
 
+  const router = useRouter()
+
   const disclaimer = (
     <span>
-      En continuant j’accepte les <Link href={routes.ML}>mentions légales</Link>{" "}
-      et la <Link href={routes.PC}>Politique de confidentialité</Link> de
+      En continuant j’accepte les <MentionInteraction onClick={() => { router.push(routes.ML)}}>mentions légales</MentionInteraction>{" "}
+      et la <MentionInteraction onClick={() => { router.push(routes.PC)}}>Politique de confidentialité</MentionInteraction> de
       editYour.Film.
     </span>
   );
