@@ -63,7 +63,7 @@ export const SignInContextProvider: React.FC<any> = (props) => {
     notFound: (
       <span>
         Aucun compte n'est lié à cette adresse mail.{" "}
-        <Link href={routes.SIGNUP_ACCOUNT_TYPE}>
+        <Link href={routes.SIGNUP}>
           {" "}
           <span className="text-dashboard-text-description-base">
             Créer un compte.{" "}

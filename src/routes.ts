@@ -40,13 +40,6 @@ let routes = {
   SIGNIN_RESET_PWD_P3: "/signin/reset/link",
 
   SIGNUP: "/signup",
-  SIGNUP_EMAIL: "/signup/email",
-  SIGNUP_ACCOUNT_TYPE: "/signup/type",
-  SIGNUP_PASSWORD: "/signup/password",
-  SIGNUP_CONFIRM_PASSWORD: "/signup/confirm-password",
-  SIGNUP_CGU: "/signup/cgu",
-  SIGNUP_INFO: "/signup/info",
-  SIGNUP_SUCCESS: "/signup/success",
 
   QUOTE_STEP1: "/quote/",
   QUOTE_STEP2: "/quote/model",
@@ -82,22 +75,12 @@ const signin = [
   routes.SIGNIN_RESET_PWD_P3,
 ];
 
-const signup = [
-  routes.SIGNUP_EMAIL,
-  routes.SIGNUP_ACCOUNT_TYPE,
-  routes.SIGNUP_PASSWORD,
-  routes.SIGNUP_CONFIRM_PASSWORD,
-  routes.SIGNUP_CGU,
-  routes.SIGNUP_INFO,
-  routes.SIGNUP_SUCCESS,
-];
-
 const quote = [routes.QUOTE_STEP1, routes.QUOTE_STEP2, routes.QUOTE_STEP3];
 
 const navWithoutTransition = [
   [routes.BLOG_DETAIL, routes.BLOG_DETAIL],
   ...getRoutesConnexion(signin),
-  ...getRoutesConnexion(signup),
+  ...getRoutesConnexion([routes.SIGNUP]),
   ...getRoutesConnexion(quote),
 ];
 

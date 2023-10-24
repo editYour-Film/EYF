@@ -19,6 +19,11 @@ import { ElementsOut } from "@/Animations/elementsOut";
 import { useStrapiGet, useStrapiPost } from "@/hooks/useStrapi";
 import { inputErrors } from "@/const";
 import validator from "validator";
+import router from "next/router";
+import { getTokenFromLocalCookie, setToken } from "@/auth/auth";
+import useLocalStorage from "@/hooks/useLocalStorage";
+import { SignedInUser, initSignedInUser } from "@/components/model/signin";
+import { useUser } from "@/auth/authContext";
 
 export type accountType = "editor" | "creator" | "both" | undefined;
 export type maxStepType = 5 | 6 | 7 | undefined;
@@ -93,6 +98,8 @@ export const SignUpContext = createContext({
   setJoinNewsletter: (payload: boolean) => {
     false;
   },
+  lastStepError: undefined as string | undefined,
+  handleGoToDashboard: () => {},
 
   setContainer: (payload: any) => {},
   entrance: (payload: RefObject<HTMLDivElement>) => {},
@@ -101,6 +108,12 @@ export const SignUpContext = createContext({
 });
 
 export const SignUpContextProvider: React.FC<any> = (props) => {
+  const [, setUserInfo] = useLocalStorage<SignedInUser>(
+    "user",
+    initSignedInUser
+  );
+  const [, isLoggedIn] = useUser();
+
   const userNameMessages = {
     default: {
       message: "Votre nom d'utilisateur est unique.",
@@ -129,6 +142,9 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
   const [skillsOptions, setSkillsOptions] = useState<skillsInterface[]>();
 
   useEffect(() => {
+    const token = getTokenFromLocalCookie();
+    if (token && isLoggedIn) router.push(routes.DASHBOARD_EDITOR_HOME);
+
     // get languages
     let _langOptions: any = [];
     useStrapiGet("languages").then((res) => {
@@ -237,6 +253,8 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
   const [joinNewsletter, setJoinNewsletter] = useState<boolean | undefined>(
     true
   );
+
+  const [lastStepError, setLastStepError] = useState<string | undefined>();
 
   const defineMaxSteps = () => {
     switch (accountType) {
@@ -447,6 +465,67 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
     handleJoinNewsletterVerification();
   }, [joinNewsletter]);
 
+  const handleGoToDashboard = async () => {
+    if (container) {
+      setLastStepError(undefined);
+
+      const elements = Array.from(container.current!.children);
+
+      let _spokenLanguages: any = [];
+      spokenLanguages?.map((x) => {
+        _spokenLanguages.push(x.id);
+      });
+
+      let _skills: any = [];
+      skills?.map((x) => {
+        _skills.push(x.id);
+      });
+
+      const register = await useStrapiPost(
+        "custom-register",
+        {
+          email: email,
+          username: username,
+          f_name: f_name,
+          l_name: l_name,
+          description: editorDescription,
+          languages: _spokenLanguages,
+          skills: _skills,
+          picture: editorPicture,
+        },
+        false,
+        true
+      );
+      if (register.status && register.status === 200) {
+        if (typeof register.data === "string") {
+          if (register.data.includes("error")) alert("error");
+        } else if (typeof register.data === "object") {
+          setToken(register.data);
+          setUserInfo({
+            user: register.data.user,
+            details: register.data.details,
+          });
+          const cb = () => {
+            switch (accountType) {
+              case "editor":
+                location.reload();
+                break;
+              case "creator":
+                setLastStepError(
+                  "Compte créé avec succés mais le dashboard client n'est pas encore prêt."
+                );
+                break;
+              case "both":
+                location.reload();
+                break;
+            }
+          };
+          ElementsOut(elements, { onComplete: cb });
+        }
+      } else setLastStepError(inputErrors.general);
+    }
+  };
+
   const [container, setContainer] = useState<RefObject<HTMLDivElement> | null>(
     null
   );
@@ -555,6 +634,8 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
 
         joinNewsletter,
         setJoinNewsletter,
+        lastStepError,
+        handleGoToDashboard,
 
         setContainer,
         entrance,

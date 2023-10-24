@@ -155,7 +155,7 @@ const SideBarDesktop = ({ className, menu, userInfos }: SidebarChildProps) => {
             ) : (
               <Image
                 src={"/img/profile/avatar.png"}
-                alt={userInfos.details.f_name}
+                alt={userInfos.details.f_name ? userInfos.details.f_name : ""}
                 width={52}
                 height={52}
                 className="w-full h-full"
@@ -163,7 +163,11 @@ const SideBarDesktop = ({ className, menu, userInfos }: SidebarChildProps) => {
             )}
           </div>
           <div className="w-full overflow-hidden">
-            <div className="profile__name capitalize">{`${userInfos.details.f_name} ${userInfos.details.l_name[0]}`}</div>
+            <div className="profile__name capitalize">{`${
+              userInfos.details.f_name ? userInfos.details.f_name : ""
+            } ${
+              userInfos.details.l_name ? userInfos.details.l_name : ""
+            }`}</div>
             <div className="profil__adress text-base-text whitespace-nowrap">
               {userInfos.user.email.length > 17 &&
                 userInfos.user.email.slice(0, 15) + "..."}

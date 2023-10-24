@@ -13,70 +13,16 @@ import { Toggle } from "../_shared/buttons/Toggle";
 import { Button } from "../_shared/buttons/Button";
 import { ProgressDots } from "../_shared/UI/ProgressDots";
 import { LogoSignup } from "./LogoSignup";
-import { useStrapiPost } from "@/hooks/useStrapi";
+import { InfoMessage } from "../_shared/UI/InfoMessage";
+import X from "@/icons/signin/x.svg";
 
 export const EndingPan = () => {
   const container = useRef<HTMLDivElement>(null);
   const context = useContext(SignUpContext);
 
-  const router = useRouter();
-
   useEffect(() => {
     context.entrance(container);
   }, []);
-
-  const handleGoToDashboard = async () => {
-    // const elements = Array.from(container.current!.children);
-    const cb = () => {
-      //switch (context.accountType) {
-      //  case 'editor':
-      //    router.push(routes.DASHBOARD_EDITOR_HOME)
-      //    break;
-      //  case 'creator':
-      // router.push(routes.DASHBOARD_CREATOR_HOME)
-      //    break;
-      //  case 'both':
-      // I dont know the route in this case
-      // router.push(routes.DASHBOARD_CREATOR_HOME)
-      //   break;
-      // }
-    };
-
-    console.log("editorPicture", context.editorPicture);
-
-    let _spokenLanguages: any = [];
-    context.spokenLanguages?.map((x) => {
-      _spokenLanguages.push(x.id);
-    });
-
-    let _skills: any = [];
-    context.skills?.map((x) => {
-      _skills.push(x.id);
-    });
-
-    const register = await useStrapiPost(
-      "custom-register",
-      {
-        email: context.email,
-        username: context.username,
-        f_name: context.f_name,
-        l_name: context.l_name,
-        description: context.editorDescription,
-        languages: _spokenLanguages,
-        skills: _skills,
-        picture: context.editorPicture,
-      },
-      false,
-      true
-    );
-    if (register.status && register.status === 200) {
-      if (typeof register.data === "string") {
-        if (register.data.includes("error")) alert("error");
-      } else if (register.data === true) alert("success");
-    } else alert("error");
-
-    // ElementsOut(elements, { onComplete: cb });
-  };
 
   const handleGoToInsta = () => {};
 
@@ -144,9 +90,13 @@ export const EndingPan = () => {
           type="primary"
           Icon={TailRight}
           onClick={() => {
-            handleGoToDashboard();
+            context.handleGoToDashboard();
           }}
         />
+
+        {context.lastStepError && (
+          <InfoMessage message="Profil Monteur.se" Icon={X} small />
+        )}
 
         {context.dots && <ProgressDots dots={context.dots} />}
       </SignInSignUpContainer>
