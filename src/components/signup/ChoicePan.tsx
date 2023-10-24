@@ -49,9 +49,9 @@ export const ChoicePan = () => {
         <LogoSignup />
 
         <div className='w-full flex flex-col gap-dashboard-spacing-element-medium px-dashboard-specific-radius md:px-0'>
-          <hr className="block w-full "/>
+          <hr className="block w-full border-05 "/>
           <div className='text-center shadow-text text-large font-medium'>Bienvenue sur editYour.Film</div>
-          <hr className='w-full'/>
+          <hr className='w-full border-05'/>
         </div>
 
 
@@ -67,7 +67,7 @@ export const ChoicePan = () => {
               value={context.accountType === 'creator' || context.accountType === 'both'}
               onChange={(value) => { setIsCreator(value); }}
             />
-            <hr />
+            <hr className='w-full border-05'/>
             <Toggle 
               label='Monteur.se'
               value={context.accountType === 'editor' || context.accountType === 'both'}

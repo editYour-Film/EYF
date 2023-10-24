@@ -48,11 +48,11 @@ export const EmailPan = () => {
     <div className="signUp_email max-w-[100vw] w-[360px] px-dashboard-specific-radius md:px-0 pb-[75px]">
       <SignInSignUpContainer ref={container}>
         <LogoSignup />
-        <hr className="w-full" />
+        <hr className="w-full border-05" />
         <div className="text-large text-center">
           Ajouter votre mail
         </div>
-        <hr className="w-full" />
+        <hr className="w-full border-05" />
 
         <Input
           type="email"

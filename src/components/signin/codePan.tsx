@@ -113,7 +113,7 @@ export const CodePan = () => {
         ref={container}
         className="flex flex-col items-center justify-center gap-dashboard-spacing-element-medium"
       >
-        <hr className="w-full" />
+        <hr className="w-full border-05" />
         <div className="text-large px-dashboard-specific-radius md:p-0 text-center">
           Vérification de votre compte
         </div>
@@ -137,7 +137,7 @@ export const CodePan = () => {
           }}
         />
 
-        <hr className="w-full" />
+        <hr className="w-full border-05" />
 
         <div className="w-full px-dashboard-specific-radius md:p-0">
           <Button
