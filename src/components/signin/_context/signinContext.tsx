@@ -73,6 +73,16 @@ export const SignInContextProvider: React.FC<any> = (props) => {
     ),
   };
 
+  useEffect(() => {
+    const token = getTokenFromLocalCookie();
+    if (token && isLoggedIn) {
+      /*if (userInfo && userInfo.user.role)
+        if (userInfo.user.role.name === "editor")
+          push(routes.DASHBOARD_EDITOR_HOME);*/
+      //else alert("Dashboard client en cours de developpment");
+    }
+  }, [userInfo]);
+
   const [currentStep, setCurrentStep] = useState<stepType>(0);
 
   const [email, setEmail] = useState("");
@@ -147,11 +157,6 @@ export const SignInContextProvider: React.FC<any> = (props) => {
   const resetCodeState = () => {
     setCodeState("regular");
   };
-
-  useEffect(() => {
-    const token = getTokenFromLocalCookie();
-    if (token && isLoggedIn) push(routes.DASHBOARD_EDITOR_HOME);
-  }, []);
 
   const [container, setContainer] = useState<RefObject<HTMLDivElement> | null>(
     null

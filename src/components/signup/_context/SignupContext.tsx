@@ -19,12 +19,13 @@ import { ElementsOut } from "@/Animations/elementsOut";
 import { useStrapiGet, useStrapiPost } from "@/hooks/useStrapi";
 import { inputErrors } from "@/const";
 import validator from "validator";
-import { getTokenFromLocalCookie, setToken } from "@/auth/auth";
+import { getTokenFromLocalCookie, setToken, unsetToken } from "@/auth/auth";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { SignedInUser, initSignedInUser } from "@/components/model/signin";
 import { useUser } from "@/auth/authContext";
 import { MentionInteraction } from "@/components/_shared/buttons/MentionInteraction";
 import { useRouter } from "next/router";
+import { getUrlParam } from "@/utils/UrlParams";
 
 export type accountType = "editor" | "creator" | "both" | undefined;
 export type maxStepType = 5 | 6 | 7 | undefined;
@@ -47,7 +48,6 @@ export const SignUpContext = createContext({
   setEmail: (payload: string) => {},
   emailErrorMessage: undefined as ReactElement | undefined | undefined | string,
   setEmailErrorMessage: (payload: string) => {},
-  handleGoogleConnection: () => {},
   handleSendAgain: () => {},
   handleGoToCode: () => {},
 
@@ -109,7 +109,7 @@ export const SignUpContext = createContext({
 });
 
 export const SignUpContextProvider: React.FC<any> = (props) => {
-  const [, setUserInfo] = useLocalStorage<SignedInUser>(
+  const [userInfo, setUserInfo] = useLocalStorage<SignedInUser>(
     "user",
     initSignedInUser
   );
@@ -144,8 +144,17 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
 
   useEffect(() => {
     const token = getTokenFromLocalCookie();
-    if (token && isLoggedIn) router.push(routes.DASHBOARD_EDITOR_HOME);
+    if (token && isLoggedIn) {
+      if (
+        userInfo &&
+        userInfo.user.role &&
+        userInfo.user.role.name === "editor"
+      )
+        router.push(routes.DASHBOARD_EDITOR_HOME);
+    }
+  }, [userInfo]);
 
+  useEffect(() => {
     // get languages
     let _langOptions: any = [];
     useStrapiGet("languages").then((res) => {
@@ -299,6 +308,25 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
     }
   }, [currentStep]);
 
+  useEffect(() => {
+    const token = getUrlParam("id_token");
+    if (token) {
+      useStrapiGet("auth/google/callback" + location.search, false, false)
+        .then((response) => {
+          if (response.status === 200) {
+            setToken(response.data);
+            alert(
+              "sign in / register successfully, should redirect to 'complete info' if user info is not set"
+            );
+          } else unsetToken();
+        })
+        .catch(() => {
+          console.log("error on sign in");
+          unsetToken();
+        });
+    }
+  }, []);
+
   const handleStart = () => {
     defineMaxSteps();
   };
@@ -328,8 +356,6 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
       } else if (sendToken.data === true) goNext();
     } else setEmailErrorMessage(inputErrors.general);
   };
-
-  const handleGoogleConnection = () => {};
 
   const handleCodeVerification = async (value: string) => {
     // check the code and set the code state accordingly
@@ -515,7 +541,8 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
       );
       if (register.status && register.status === 200) {
         if (typeof register.data === "string") {
-          if (register.data.includes("error")) alert("error");
+          if (register.data.includes("error"))
+            setLastStepError(inputErrors.general);
         } else if (typeof register.data === "object") {
           setToken(register.data);
           setUserInfo({
@@ -526,6 +553,7 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
             switch (accountType) {
               case "editor":
                 location.reload();
+                //router.push(routes.DASHBOARD_EDITOR_HOME);
                 break;
               case "creator":
                 setLastStepError(
@@ -534,6 +562,7 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
                 break;
               case "both":
                 location.reload();
+                //router.push(routes.DASHBOARD_EDITOR_HOME)
                 break;
             }
           };
@@ -601,7 +630,6 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
         setEmail,
         emailErrorMessage,
         setEmailErrorMessage,
-        handleGoogleConnection,
         handleSendAgain,
         handleGoToCode,
 

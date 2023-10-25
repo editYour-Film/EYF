@@ -68,7 +68,8 @@ const LayoutSignin: React.FC<layoutProps> = ({ children }) => {
             1 - lateAnim.progress()
           );
 
-          bgGradient.current!.style.transform = `translateX(${lerpx}px) translateY(${lerpy}px)`;
+          if (bgGradient.current?.style)
+            bgGradient.current.style.transform = `translateX(${lerpx}px) translateY(${lerpy}px)`;
         },
       });
     }

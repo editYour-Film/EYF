@@ -95,7 +95,7 @@ export const EndingPan = () => {
         />
 
         {context.lastStepError && (
-          <InfoMessage message="Profil Monteur.se" Icon={X} small />
+          <InfoMessage message={context.lastStepError} Icon={X} small />
         )}
 
         {context.dots && <ProgressDots dots={context.dots} />}

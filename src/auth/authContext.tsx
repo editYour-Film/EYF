@@ -3,6 +3,8 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { getTokenFromLocalCookie, unsetToken } from "./auth";
 import useLocalStorage, { removeStorage } from "@/hooks/useLocalStorage";
 import { SignedInUser, initSignedInUser } from "@/components/model/signin";
+import router from "next/router";
+import routes from "@/routes";
 
 export const UserContext = createContext<any>(["", false]);
 
@@ -14,8 +16,17 @@ export const UserProvider: React.FC<any> = ({ children }: any) => {
   );
 
   useEffect(() => {
-    if (!getTokenFromLocalCookie()) removeStorage("user");
-  }, []);
+    if (!getTokenFromLocalCookie()) {
+      removeStorage("user");
+      router.push(routes.SIGNIN);
+    }
+    if (userInfo.user.role) {
+      if (userInfo.user.role.name !== "editor") {
+        removeStorage("user");
+        unsetToken();
+      }
+    }
+  }, [userInfo]);
 
   return (
     <UserContext.Provider

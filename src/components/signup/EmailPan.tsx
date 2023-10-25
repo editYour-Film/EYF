@@ -68,15 +68,18 @@ export const EmailPan = () => {
           <div className="hidden sm:block basis-1/2 border-t h-[1px]"></div>
         </div>
 
-        <Button
-          type="secondary"
-          label="S'inscrire avec Google"
-          Icon={Google}
-          onClick={() => {
+        <a href={process.env.NEXT_PUBLIC_API_STRAPI + "connect/google"}>
+          <Button
+            type="secondary"
+            label="S'inscrire avec Google"
+            Icon={Google}
+            /*onClick={() => {
             context.handleGoogleConnection();
-          }}
-          className="w-full"
-        />
+          }}*/
+            onClick={() => {}}
+            className="w-full"
+          />
+        </a>
 
         {context.dots && <ProgressDots dots={context.dots} />}
       </SignInSignUpContainer>
