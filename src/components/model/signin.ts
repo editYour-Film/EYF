@@ -6,9 +6,9 @@ export type SigninUser = {
 };
 
 export type SignedInUser = {
-  user: object;
-  details?: object;
-  models?: object | undefined;
+  user: any;
+  details?: any;
+  models?: any | undefined;
 };
 export const initSignedInUser = {
   user: {},

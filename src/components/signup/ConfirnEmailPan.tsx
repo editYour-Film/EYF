@@ -1,5 +1,5 @@
 import { Button } from "@/components/_shared/buttons/Button";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { SecretCodeInput } from "../_shared/form/SecretCodeInput";
 
 import { InfoMessage } from "../_shared/UI/InfoMessage";
@@ -8,7 +8,6 @@ import Send from "@/icons/signin/send.svg";
 import X from "@/icons/signin/x.svg";
 import Check from "@/icons/signin/check.svg";
 import { SignUpContext } from "./_context/SignupContext";
-import { ElementsIn } from "@/Animations/elementsIn";
 import { codeStateType } from "../signin/_context/signinContext";
 import { SignInSignUpContainer } from "../_shared/UI/SignInSignUpContainer";
 import { ProgressDots } from "../_shared/UI/ProgressDots";
