@@ -125,7 +125,7 @@ export const useStrapiPut = async (
     .put<any>(process.env.NEXT_PUBLIC_API_STRAPI + path, body, {
       headers: {
         "Content-Type": isMedia ? "multipart/form-data" : "application/json",
-        Authorization: "bearer " + token,
+        //Authorization: "bearer " + token,
       },
     })
     .then((response) => {

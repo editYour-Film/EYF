@@ -147,7 +147,8 @@ export const AddModelContextProvider: React.FC<any> = (props) => {
                         slug: slugify(tag.slug, { lower: true }),
                       },
                     },
-                    user[1]
+                    // user[1]
+                    false
                   );
 
                   tagsIds.push(newTag.data.data.id);
