@@ -83,7 +83,7 @@ export const FileInput = ({}: FileInputProps) => {
       const resEditorVideo = await useStrapiPost(
         "editor-videos",
         formData,
-        true,
+        false /*true*/,
         true
       );
       setLoading(false);
