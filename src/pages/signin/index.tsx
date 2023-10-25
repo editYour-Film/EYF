@@ -52,7 +52,7 @@ const SignInPanSwitcher = () => {
   const router = useRouter()
 
   const disclaimer = (
-    <span>
+    <span className="text-dashboard-text-description-base-low">
       En continuant j’accepte les <MentionInteraction onClick={() => { router.push(routes.ML) }}>mentions légales</MentionInteraction>{" "}
       et la <MentionInteraction  onClick={() => { router.push(routes.ML) }}>Politique de confidentialité</MentionInteraction> de
       editYour.Film.

@@ -195,7 +195,7 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
   const router = useRouter();
 
   const disclaimer = (
-    <span>
+    <span className="text-dashboard-text-description-base-low">
       En continuant j’accepte les{" "}
       <MentionInteraction
         onClick={() => {
