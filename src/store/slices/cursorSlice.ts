@@ -15,9 +15,9 @@ export const cursorSlice = createSlice({
     toPause: state => { state.value = 'pause' },
     toUnmute: state => { state.value = 'unmute' },
     toMute: state => { state.value = 'mute' },
-    enableCustomCursor: state => { 
-      state.value = 'regular'
+    enableCustomCursor: state => {
       state.enabled = true
+      state.value = 'regular'
     },
     disableCustomCursor: state => { state.enabled = false },
   } 

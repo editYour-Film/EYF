@@ -73,7 +73,7 @@ export const Cursor = () => {
 
   useEffect(() => {
     enabled && switchFn(state, lockAnim);
-  }, [state]);
+  }, [state, enabled]);
 
   useEffect(() => {
     console.log(enabled);
