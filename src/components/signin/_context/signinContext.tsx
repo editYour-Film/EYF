@@ -76,10 +76,10 @@ export const SignInContextProvider: React.FC<any> = (props) => {
   useEffect(() => {
     const token = getTokenFromLocalCookie();
     if (token && isLoggedIn) {
-      /*if (userInfo && userInfo.user.role)
+      if (userInfo && userInfo.user.role)
         if (userInfo.user.role.name === "editor")
-          push(routes.DASHBOARD_EDITOR_HOME);*/
-      //else alert("Dashboard client en cours de developpment");
+          push(routes.DASHBOARD_EDITOR_HOME);
+        else alert("Dashboard client en cours de developpment");
     }
   }, [userInfo]);
 
