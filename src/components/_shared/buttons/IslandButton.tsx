@@ -2,13 +2,14 @@ import { ReactNode } from "react";
 
 type IslandButtonProps = {
   type: "primary" | "secondary" | "tertiary" | "danger" | "small";
-  label: string;
+  label?: string;
   Icon?: any; //() => JSX.Element,
   IconRight?: any; //() => JSX.Element,
   disabled?: boolean;
   className?: string;
   onClick: () => void;
   wmax?: boolean;
+  iconColor?: string;
   id?: string;
   children?: ReactNode;
 };
@@ -22,21 +23,23 @@ export const IslandButton: React.FC<IslandButtonProps> = ({
   className,
   onClick,
   wmax = false,
+  iconColor = 'soyMilk',
   id,
   children,
 }) => {
   const baseStyle = `${
     wmax && "w-max"
-  } font-medium border rounded-full transition-colors duration-200`;
+  } font-medium rounded-full transition-colors duration-200`;
+
   const focusedStyle = `focus:border-2 focus:border-dashboard-button-focus-stroke focus:-translate-x-[0.5px] focus:-translate-y-[0.5px]`;
 
   const size = `${
-    type === "small" ? "px-[16px] py-[7px] " : "px-[20px] py-[10px]"
-  } min-w-[80px]`;
+    type === "small" ? "px-dashboard-specific-radius py-dashboard-mention-padding-right-left " : "px-[20px] py-[10px]"
+  }`;
 
   let typeStyle;
   let disabledStyle;
-  let iconColor = "svg-color-soyMilk";
+  let iconClass = "svg-color-" + iconColor;
 
   switch (type) {
     case "primary":
@@ -44,19 +47,19 @@ export const IslandButton: React.FC<IslandButtonProps> = ({
         disabled
           ? "bg-dashboard-button-island-disabled"
           : "bg-dashboard-button-island-BlueBerry-default"
-      } ${size} hover:border-dashboard-button-stroke-hover hover:bg-dashboard-button-island-hover focus:bg-dashboard-button-island-hover`;
+      } ${size} border hover:border-dashboard-button-stroke-hover hover:bg-dashboard-button-island-hover focus:bg-dashboard-button-island-hover`;
       disabledStyle = ``;
       break;
     case "secondary":
-      typeStyle = `bg-dashboard-button-dark ${size} hover:border-dashboard-button-stroke-hover`;
+      typeStyle = `bg-dashboard-button-dark ${size} border hover:border-dashboard-button-stroke-hover`;
       disabledStyle = ``;
       break;
     case "tertiary":
-      typeStyle = `bg-dashboard-button-dark ${size} hover:border-dashboard-button-stroke-hover`;
+      typeStyle = `bg-dashboard-button-dark ${size} border hover:border-dashboard-button-stroke-hover`;
       disabledStyle = ``;
       break;
     case "danger":
-      typeStyle = `bg-dashboard-button-dark ${size} text-appleRed hover:bg-dashboard-button-alert hover:border-dashboard-button-stroke-hover`;
+      typeStyle = `bg-dashboard-button-dark ${size} border text-appleRed hover:bg-dashboard-button-alert hover:border-dashboard-button-stroke-hover`;
       iconColor = "svg-color-appleRed";
       disabledStyle = ``;
       break;
@@ -84,13 +87,15 @@ export const IslandButton: React.FC<IslandButtonProps> = ({
           disabled ? "opacity-30" : ""
         }`}
       >
-        {Icon && <Icon className={`${iconColor}`} />}
+        {Icon && <Icon className={`${iconClass}`} />}
 
-        <span className={`${type === "secondary" ? "text-linear-sunset" : ""}`}>
-          {label}
-        </span>
+        {label && 
+          <span className={`${type === "secondary" ? "text-linear-sunset" : ""}`}>
+            {label}
+          </span>
+        }
 
-        {IconRight && <IconRight className={`${iconColor}`} />}
+        {IconRight && <IconRight className={`${iconClass}`} />}
       </div>
     </button>
   );

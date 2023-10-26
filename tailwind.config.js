@@ -42,6 +42,29 @@ module.exports = {
         'dashboard-text-disabled': tokens.dashboard_text_disabled,
         'dashboard-text-title-white-high': tokens.dashboard_text_title_white_high,
 
+        //Article Category
+        'edit': {
+          DEFAULT: '#E3E178',
+          dark:'#323325'
+        },
+        'partnership': {
+          DEFAULT: '#A878E3',
+          dark: tokens.dashboard_button_island_disabled
+        },
+        'filming': {
+          DEFAULT: '#7B8E8B',
+          dark:'#202726'
+        },
+        'social-networks': {
+          DEFAULT: '#E39778',
+          dark:'#372621'
+        },
+        'television': {
+          DEFAULT: '#78E3D2',
+          dark:'#273F3C'
+        },
+
+
         // v0
         'alphaWhite': {
           DEFAULT: 'rgba(252, 252, 252)',
@@ -96,9 +119,11 @@ module.exports = {
         'dashboard-spacing-element-medium': tokens.dashboard_spacing_element_medium,
         'DashboardPaddingNul': tokens.padding_DashboardPaddingNul,
         'dashboard-specific-radius' : tokens.dashboard_specific_radius,
+        'padding-medium': tokens.padding_medium
       },
       borderWidth: {
         DEFAULT: tokens.dashboard_border_width_button_default,
+        '03': '0.33px',
         '05': '0.5px',
         'dashboard-border-width-button-default': tokens.dashboard_border_width_button_default
       },
@@ -106,6 +131,7 @@ module.exports = {
         //v1
         'dashboard-mention-radius': tokens.dashboard_mention_radius,
         'dashboard-button-square-radius' : tokens.dashboard_button_square_radius,
+        'dashboard-button-separation-spacing': tokens.dashboard_button_separation_spacing,
         'dashboard-specific-radius' : tokens.dashboard_specific_radius,
         'dashboard-medium-radius' : tokens.dashboard_medium_radius,
         'dashboard-large-radius' : tokens.dashboard_large_radius,
@@ -124,6 +150,7 @@ module.exports = {
         'base-bold': [tokens.text_base_bold, tokens.lh_default],
 
         'title-small': [tokens.title_small, tokens.lineheight_title_small],
+        'title-m': [tokens.title_m, '1.27'],
         'title-medium': [tokens.title_medium, tokens.lineheight_title_medium],
         'title-large': [tokens.title_large, tokens.lh_title_large],
 
@@ -237,6 +264,15 @@ module.exports = {
           filter: 'blur(47px)',
           opacity: 0.4
         },
+        '.grid-dashboard' : {
+          gridTemplateColumns: '1fr',
+          '@media screen and (min-width: 768px)': {
+            gap: '55px',
+            gridTemplateColumns: '[sidebar-start] 258px [sidebar-end content-start] 1fr [content-end]',
+          }
+        },
+
+
         //v0
         '.dashboard-title': {
           fontFamily: 'n27',
@@ -287,11 +323,11 @@ module.exports = {
           background: 'linear-gradient(270deg, #c985fe 6.21%, #999dff 103.42%)',
         },
         '.gradient-svg-linear': {
-          'path[fill]': {
-            'fill' : 'url(/icons/gradients.svg#linear)',
+          '*[fill]': {
+            'fill' : 'url(/icons/gradients.svg#linear-gradient)',
           },
-          'path[stroke]': {
-            'stroke' : 'url(/icons/gradients.svg#linear)',
+          '*[stroke]': {
+            'stroke' : 'url(/icons/gradients.svg#linear-gradient)',
           }
         },
         '.bg-signin': {

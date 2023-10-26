@@ -61,6 +61,7 @@ export const text_base_ligth = '16px';
 export const text_base_bold = '14px';
 
 export const title_small = '16px';
+export const title_m = '22px';
 export const title_medium = '28px';
 export const title_large = '40px';
 
@@ -85,6 +86,7 @@ export const dashboard_mention_padding_right_left = '8px';
 export const dashboard_mention_padding_top_bottom = '4px';
 export const dashboard_spacing_element_medium = '32px';
 export const padding_DashboardPaddingNul = '0px';
+export const padding_medium = '24px';
 
 //Border Width
 export const dashboard_border_width_button_default = '1px';
