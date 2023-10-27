@@ -514,15 +514,17 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
 
       const elements = Array.from(container.current!.children);
 
-      let _spokenLanguages: any = [];
+      let _spokenLanguages: any[] = [];
       spokenLanguages?.map((x) => {
         _spokenLanguages.push(x.id);
       });
 
-      let _skills: any = [];
+      let _skills: any[] = [];
       skills?.map((x) => {
         _skills.push(x.id);
       });
+
+      let imageId: number | undefined = undefined;
 
       const register = await useStrapiPost(
         "custom-register",
@@ -534,7 +536,7 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
           description: editorDescription,
           languages: _spokenLanguages,
           skills: _skills,
-          picture: editorPicture,
+          picture: imageId,
         },
         false,
         true
@@ -544,29 +546,52 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
           if (register.data.includes("error"))
             setLastStepError(inputErrors.general);
         } else if (typeof register.data === "object") {
+          if (editorPicture) {
+            const formData = new FormData();
+
+            formData.append("files", editorPicture, editorPicture?.name);
+            formData.append("ref", "api::user-info.user-info");
+            formData.append("refId", register.data.details.id);
+            formData.append("field", "picture");
+
+            const uploadRes = await useStrapiPost(
+              "upload",
+              formData,
+              false,
+              true
+            );
+            if (uploadRes.status === 200) imageId = uploadRes.data[0].id;
+            else
+              setLastStepError(
+                "Votre compte est créé avec succés mais il y a eu une erreur lors de l'upload de votre photo de profil."
+              );
+          }
           setToken(register.data);
           setUserInfo({
             user: register.data.user,
             details: register.data.details,
           });
-          const cb = () => {
-            switch (accountType) {
-              case "editor":
-                location.reload();
-                //router.push(routes.DASHBOARD_EDITOR_HOME);
-                break;
-              case "creator":
-                setLastStepError(
-                  "Compte créé avec succés mais le dashboard client n'est pas encore prêt."
-                );
-                break;
-              case "both":
-                location.reload();
-                //router.push(routes.DASHBOARD_EDITOR_HOME)
-                break;
-            }
-          };
-          ElementsOut(elements, { onComplete: cb });
+          setTimeout(() => {
+            const cb = () => {
+              switch (accountType) {
+                case "editor":
+                  location.reload();
+                  //router.push(routes.DASHBOARD_EDITOR_HOME);
+                  break;
+                case "creator":
+                  setLastStepError(
+                    "Votre compte est créé avec succés mais le dashboard client n'est pas encore prêt."
+                  );
+                  break;
+                case "both":
+                  location.reload();
+                  //router.push(routes.DASHBOARD_EDITOR_HOME)
+                  break;
+              }
+            };
+
+            ElementsOut(elements, { onComplete: cb });
+          }, 2000);
         }
       } else setLastStepError(inputErrors.general);
     }

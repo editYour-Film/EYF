@@ -16,6 +16,7 @@ import { disableTransition } from "@/store/slices/transitionSlice";
 import { useUser } from "@/auth/authContext";
 
 import { SignOut } from "@/auth/auth";
+import { SignedInUser, SigninUser } from "@/components/model/signin";
 
 type SideBarProps = {
   type: "editor" | "client";
@@ -71,7 +72,7 @@ export const SideBar = ({ type, className }: SideBarProps) => {
 type SidebarChildProps = {
   className?: string;
   menu: any;
-  userInfos: any;
+  userInfos: SignedInUser;
 };
 
 const SideBarMobile = ({ className, menu, userInfos }: SidebarChildProps) => {
@@ -80,13 +81,19 @@ const SideBarMobile = ({ className, menu, userInfos }: SidebarChildProps) => {
       <div className="sidebar__user flex flex-row items-center gap-5 n27 text-xl uppercase">
         <div className="profil__img rounded-full overflow-hidden">
           <Image
-            src={"/img/profile/avatar.png"}
-            alt={"Sebastien Soriano"}
+            src={
+              userInfos.details.picture && userInfos.details.picture.url
+                ? userInfos.details.picture.url
+                : "/img/profile/avatar.png"
+            }
+            alt={userInfos.user.username}
             width={52}
             height={52}
           ></Image>
         </div>
-        <div className="sidebar__userName">Sebastien S</div>
+        <div className="sidebar__userName">
+          {userInfos.details.f_name} {userInfos.details.l_name}
+        </div>
       </div>
 
       <div className="sidebar-switch">
@@ -139,28 +146,17 @@ const SideBarDesktop = ({ className, menu, userInfos }: SidebarChildProps) => {
       <div className="sidebar__infos px-6">
         <div className="sidebar__profil flex flex-row gap-6 py-4">
           <div className="profil__img rounded-full overflow-hidden w-[52px] h-[52px] shrink-0">
-            {userInfos.details.picture && userInfos.details.picture.data ? (
-              <Image
-                src={
-                  userInfos.details.picture.data.attributes.formats.thumbnail
-                    ? userInfos.details.picture.data.attributes.formats
-                        .thumbnail.url
-                    : userInfos.details.picture.data.attributes.url
-                }
-                alt={userInfos.details.f_name}
-                width={52}
-                height={52}
-                className="w-full h-full"
-              />
-            ) : (
-              <Image
-                src={"/img/profile/avatar.png"}
-                alt={userInfos.details.f_name ? userInfos.details.f_name : ""}
-                width={52}
-                height={52}
-                className="w-full h-full"
-              ></Image>
-            )}
+            <Image
+              src={
+                userInfos.details.picture && userInfos.details.picture.url
+                  ? userInfos.details.picture.url
+                  : "/img/profile/avatar.png"
+              }
+              alt={userInfos.user.username}
+              width={52}
+              height={52}
+              className="w-full h-full"
+            />
           </div>
           <div className="w-full overflow-hidden">
             <div className="profile__name capitalize">{`${
