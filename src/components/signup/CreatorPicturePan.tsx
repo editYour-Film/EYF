@@ -81,7 +81,7 @@ export const CreatorPicturePan = () => {
                 type="file"
                 id="avatar"
                 ref={fileInput}
-                value={context.creatorPicture || ""}
+                value={context.creatorPictureName || ""}
                 onChange={(e) => {
                   if (e.target.files) {
                     context.setCreatorPictureName(e.target.value);
