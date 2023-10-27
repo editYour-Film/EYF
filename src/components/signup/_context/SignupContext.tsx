@@ -566,6 +566,26 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
                 "Votre compte est créé avec succés mais il y a eu une erreur lors de l'upload de votre photo de profil."
               );
           }
+          if (creatorPicture) {
+            const formData = new FormData();
+
+            formData.append("files", creatorPicture, creatorPicture?.name);
+            formData.append("ref", "api::user-info.user-info");
+            formData.append("refId", register.data.details.id);
+            formData.append("field", "picture");
+
+            const uploadRes = await useStrapiPost(
+              "upload",
+              formData,
+              false,
+              true
+            );
+            if (uploadRes.status === 200) imageId = uploadRes.data[0].id;
+            else
+              setLastStepError(
+                "Votre compte est créé avec succés mais il y a eu une erreur lors de l'upload de votre photo de profil."
+              );
+          }
           setToken(register.data);
           setUserInfo({
             user: register.data.user,
