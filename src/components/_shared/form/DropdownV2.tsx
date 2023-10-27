@@ -139,7 +139,7 @@ export const Dropdown = ({
 
   const handleSearch = (q: string) => {
     const find = options?.filter((option, i) => {
-      return option.label.toLowerCase().startsWith(q.toLowerCase());
+      return option?.label.toLowerCase().startsWith(q.toLowerCase());
     });
 
     if (find?.length) {
@@ -247,7 +247,7 @@ export const Dropdown = ({
                     e.stopPropagation();
                   }}
                   key={i}
-                  text={option.label}
+                  text={option?.label}
                   bg="light"
                   className={`dropdown_tag hover:bg-alphaWhite-300 w-full`}
                   wFull
@@ -290,7 +290,7 @@ export const Dropdown = ({
                     }}
                     selected={selected.includes(option)}
                     icon={option.icon}
-                    text={option.label}
+                    text={option?.label}
                     className={`dropdown_tag hover:bg-alphaWhite-300 ${
                       selectedOption === i ? "bg-alphaWhite-300" : ""
                     } w-full ${

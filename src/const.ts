@@ -1,6 +1,6 @@
 export const inputErrors = {
   general: "Une erreur inattendue s'est produite.",
-  required: "Champ requis.",
+  required: "Champ obligatoire.",
   invalid: "Champ invalide.",
   invalidEmail: "L’adresse email renseignée n’est pas valide.",
   accountExist: "L’adresse email renseignée est deja utlisée.",
