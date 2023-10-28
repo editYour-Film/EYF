@@ -524,6 +524,7 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
           languages: _spokenLanguages,
           skills: _skills,
           picture: imageId,
+          role: accountType === "editor" ? 4 : 3,
         },
         false,
         true
@@ -623,7 +624,6 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
 
       ElementsOut(elements, {
         onComplete: () => {
-          alert(currentStep);
           if (getGoogleAuthEmailCookie() && currentStep === 3)
             setCurrentStep(0);
           else setCurrentStep(currentStep - 1);

@@ -80,16 +80,27 @@ const SideBarMobile = ({ className, menu, userInfos }: SidebarChildProps) => {
     <div className="sidebar flex pl-4 pr-7 width-full justify-between items-center">
       <div className="sidebar__user flex flex-row items-center gap-5 n27 text-xl uppercase">
         <div className="profil__img rounded-full overflow-hidden">
-          <Image
-            src={
-              userInfos.details.picture && userInfos.details.picture.url
-                ? userInfos.details.picture.url
-                : "/img/profile/avatar.png"
-            }
-            alt={userInfos.user.username}
-            width={52}
-            height={52}
-          ></Image>
+          {userInfos.details.picture &&
+          userInfos.details.picture.data &&
+          userInfos.details.picture.data.attributes ? (
+            <Image
+              src={userInfos.details.picture.data.attributes.url}
+              alt={userInfos.user.username}
+              width={52}
+              height={52}
+            ></Image>
+          ) : (
+            <Image
+              src={
+                userInfos.details.picture && userInfos.details.picture.url
+                  ? userInfos.details.picture.url
+                  : "/img/profile/avatar.png"
+              }
+              alt={userInfos.user.username}
+              width={52}
+              height={52}
+            ></Image>
+          )}
         </div>
         <div className="sidebar__userName">
           {userInfos.details.f_name} {userInfos.details.l_name}
@@ -146,17 +157,29 @@ const SideBarDesktop = ({ className, menu, userInfos }: SidebarChildProps) => {
       <div className="sidebar__infos px-6">
         <div className="sidebar__profil flex flex-row gap-6 py-4">
           <div className="profil__img rounded-full overflow-hidden w-[52px] h-[52px] shrink-0">
-            <Image
-              src={
-                userInfos.details.picture && userInfos.details.picture.url
-                  ? userInfos.details.picture.url
-                  : "/img/profile/avatar.png"
-              }
-              alt={userInfos.user.username}
-              width={52}
-              height={52}
-              className="w-full h-full"
-            />
+            {userInfos.details.picture &&
+            userInfos.details.picture.data &&
+            userInfos.details.picture.data.attributes ? (
+              <Image
+                src={userInfos.details.picture.data.attributes.url}
+                alt={userInfos.user.username}
+                width={52}
+                height={52}
+                className="w-full h-full"
+              ></Image>
+            ) : (
+              <Image
+                src={
+                  userInfos.details.picture && userInfos.details.picture.url
+                    ? userInfos.details.picture.url
+                    : "/img/profile/avatar.png"
+                }
+                alt={userInfos.user.username}
+                width={52}
+                height={52}
+                className="w-full h-full"
+              ></Image>
+            )}
           </div>
           <div className="w-full overflow-hidden">
             <div className="profile__name capitalize">{`${
@@ -165,8 +188,9 @@ const SideBarDesktop = ({ className, menu, userInfos }: SidebarChildProps) => {
               userInfos.details.l_name ? userInfos.details.l_name : ""
             }`}</div>
             <div className="profil__adress text-base-text whitespace-nowrap">
-              {userInfos.user.email.length > 17 &&
-                userInfos.user.email.slice(0, 15) + "..."}
+              {userInfos.user.email.length > 17
+                ? userInfos.user.email.slice(0, 15) + "..."
+                : userInfos.user.email}
             </div>
           </div>
         </div>
