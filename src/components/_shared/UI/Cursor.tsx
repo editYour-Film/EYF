@@ -75,10 +75,6 @@ export const Cursor = () => {
     enabled && switchFn(state, lockAnim);
   }, [state, enabled]);
 
-  useEffect(() => {
-    console.log(enabled);
-  }, [enabled])
-
   const textAnim = (text: string) => {
     const tl = gsap.timeline();
 
@@ -313,7 +309,7 @@ export const Cursor = () => {
     };
   }, []);
 
-  if(enabled) {
+  if (enabled) {
     return (
       <div className="fixed top-0 left-0 w-full h-full z-cursor pointer-events-none">
         <div
@@ -327,9 +323,9 @@ export const Cursor = () => {
             {/* <div className="absolute top-0 left-0 w-full h-full scale-120 rounded-full"></div> */}
             <div className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] w-[100%] h-[100%] bg-cursor z-20 opacity-30"></div>
           </div>
-  
+
           <CursorText active={showText} text={text} />
-  
+
           <div
             ref={iconW}
             className="cursor__icons absolute top-0 left-0 w-full h-full"
@@ -338,7 +334,10 @@ export const Cursor = () => {
               ref={icons}
               className="absolute top-[25%] left-[25%] w-[50%] h-[50%] overflow-hidden"
             >
-              <div ref={muteIcon} className="absolute top-0 lef-0 w-full h-full">
+              <div
+                ref={muteIcon}
+                className="absolute top-0 lef-0 w-full h-full"
+              >
                 <Mute className="absolute top-0 left-0 w-full h-full gradient-svg-linear" />
               </div>
               <div
@@ -357,7 +356,7 @@ export const Cursor = () => {
       </div>
     );
   } else {
-    return <></>
+    return <></>;
   }
 };
 

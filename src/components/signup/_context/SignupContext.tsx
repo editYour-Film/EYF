@@ -19,13 +19,16 @@ import { ElementsOut } from "@/Animations/elementsOut";
 import { useStrapiGet, useStrapiPost } from "@/hooks/useStrapi";
 import { inputErrors } from "@/const";
 import validator from "validator";
-import { getTokenFromLocalCookie, setToken, unsetToken } from "@/auth/auth";
+import {
+  getGoogleAuthEmailCookie,
+  getTokenFromLocalCookie,
+  setToken,
+} from "@/auth/auth";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { SignedInUser, initSignedInUser } from "@/components/model/signin";
 import { useUser } from "@/auth/authContext";
 import { MentionInteraction } from "@/components/_shared/buttons/MentionInteraction";
 import { useRouter } from "next/router";
-import { getUrlParam } from "@/utils/UrlParams";
 
 export type accountType = "editor" | "creator" | "both" | undefined;
 export type maxStepType = 5 | 6 | 7 | undefined;
@@ -106,6 +109,7 @@ export const SignUpContext = createContext({
   entrance: (payload: RefObject<HTMLDivElement>) => {},
   goBack: () => {},
   goNext: () => {},
+  goNextNoAnimation: () => {},
 });
 
 export const SignUpContextProvider: React.FC<any> = (props) => {
@@ -216,7 +220,9 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
     </span>
   );
 
-  const [email, setEmail] = useState<string | undefined>(undefined);
+  const [email, setEmail] = useState<string | undefined>(
+    getGoogleAuthEmailCookie()
+  );
   const [emailErrorMessage, setEmailErrorMessage] = useState<
     ReactElement | undefined | undefined | string
   >(undefined);
@@ -307,25 +313,6 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
       setDots(_dots);
     }
   }, [currentStep]);
-
-  useEffect(() => {
-    const token = getUrlParam("id_token");
-    if (token) {
-      useStrapiGet("auth/google/callback" + location.search, false, false)
-        .then((response) => {
-          if (response.status === 200) {
-            setToken(response.data);
-            alert(
-              "sign in / register successfully, should redirect to 'complete info' if user info is not set"
-            );
-          } else unsetToken();
-        })
-        .catch(() => {
-          console.log("error on sign in");
-          unsetToken();
-        });
-    }
-  }, []);
 
   const handleStart = () => {
     defineMaxSteps();
@@ -636,7 +623,10 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
 
       ElementsOut(elements, {
         onComplete: () => {
-          setCurrentStep(currentStep - 1);
+          alert(currentStep);
+          if (getGoogleAuthEmailCookie() && currentStep === 3)
+            setCurrentStep(0);
+          else setCurrentStep(currentStep - 1);
         },
       });
     }
@@ -652,6 +642,10 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
         },
       });
     }
+  };
+
+  const goNextNoAnimation = () => {
+    setCurrentStep(currentStep + 1);
   };
 
   return (
@@ -731,6 +725,7 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
         entrance,
         goBack,
         goNext,
+        goNextNoAnimation,
       }}
     >
       {props.children}

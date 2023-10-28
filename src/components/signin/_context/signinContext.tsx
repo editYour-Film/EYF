@@ -3,15 +3,22 @@ import Link from "next/link";
 import { RefObject, createContext, useEffect, useState } from "react";
 import { ReactElement } from "react-markdown/lib/react-markdown";
 
-import { useStrapiPost } from "@/hooks/useStrapi";
+import { useStrapiGet, useStrapiPost } from "@/hooks/useStrapi";
 import validator from "validator";
-import { getTokenFromLocalCookie, setToken } from "@/auth/auth";
+import {
+  getTokenFromLocalCookie,
+  setGoogleAuthEmailCookie,
+  setToken,
+  unsetGoogleAuthEmailCookie,
+  unsetToken,
+} from "@/auth/auth";
 import { useUser } from "@/auth/authContext";
 import { useRouter } from "next/router";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { SignedInUser, initSignedInUser } from "@/components/model/signin";
 import { ElementsOut } from "@/Animations/elementsOut";
 import { inputErrors } from "@/const";
+import { getUrlParam } from "@/utils/UrlParams";
 
 export type stepType = number;
 export type codeStateType =
@@ -34,7 +41,8 @@ export const SignInContext = createContext({
   handleConfirmEmail: (): Promise<boolean> => {
     return new Promise((resolve) => {});
   },
-  handleGoogleConnection: () => {},
+
+  signUpInError: undefined as string | undefined,
 
   codeState: "regular" as codeStateType,
   setCodeState: (payload: codeStateType) => {},
@@ -79,9 +87,110 @@ export const SignInContextProvider: React.FC<any> = (props) => {
       if (userInfo && userInfo.user.role)
         if (userInfo.user.role.name === "editor")
           push(routes.DASHBOARD_EDITOR_HOME);
-        else alert("Dashboard client en cours de developpment");
+        else setSignUpInError("Dashboard client en cours de developpment");
     }
   }, [userInfo]);
+
+  // handle google auth
+
+  const [signUpInError, setSignUpInError] = useState<string | undefined>();
+
+  useEffect(() => {
+    const token = getUrlParam("id_token");
+    unsetGoogleAuthEmailCookie();
+
+    if (token) {
+      useStrapiGet("auth/google/callback" + location.search, false, false)
+        .then(async (response) => {
+          setSignUpInError(inputErrors.general);
+
+          if (response.status === 200) {
+            const userId = response.data.user.id;
+
+            // get user info
+            const userInfo = await useStrapiGet(
+              "user-infos?filters[user_account][id][$eq]=" +
+                userId +
+                "&populate=*",
+              false,
+              false
+            );
+
+            if (userInfo.status === 200) {
+              // user exist => sign in
+              if (userInfo.data.data.length > 0) {
+                // get user role
+                const userRole = await useStrapiGet(
+                  "users/" + userId + "?populate=*",
+                  false,
+                  false
+                );
+
+                if (userRole.status === 200) {
+                  // get account token
+                  const token = await useStrapiGet(
+                    "api-token/" + userRole.data.role.type,
+                    false,
+                    false
+                  );
+                  if (token.status === 200) {
+                    // assign role to user
+                    const role = userRole.data.role;
+                    const user =
+                      userInfo.data.data[0].attributes.user_account.data
+                        .attributes;
+                    user.role = role;
+                    setToken({ jwt: token.data });
+                    setUserInfo({
+                      user: user,
+                      details: userInfo.data.data[0].attributes,
+                      models: userInfo.data.data[0].attributes?.editor_videos,
+                    });
+                    location.reload();
+                  } else {
+                    setSignUpInError(inputErrors.general);
+                    unsetToken();
+                  }
+                } else {
+                  setSignUpInError(inputErrors.general);
+                  unsetToken();
+                }
+              }
+
+              // user not exist => sign up
+              else {
+                // create empty account
+                const createAccount = await useStrapiPost(
+                  "signup-empty",
+                  {
+                    accountId: userId,
+                  },
+                  false
+                );
+                if (createAccount.status === 200) {
+                  setGoogleAuthEmailCookie(response.data.user.email);
+                  push(routes.SIGNUP);
+                } else setSignUpInError(inputErrors.general);
+              }
+            } else {
+              setSignUpInError(inputErrors.general);
+              unsetToken();
+            }
+          } else {
+            setSignUpInError(inputErrors.general);
+            unsetToken();
+          }
+        })
+        .catch(() => {
+          setSignUpInError(inputErrors.general);
+          unsetToken();
+        });
+    }
+  }, []);
+
+  useEffect(() => {
+    if (signUpInError) setSignUpInError(signUpInError);
+  }, [signUpInError]);
 
   const [currentStep, setCurrentStep] = useState<stepType>(0);
 
@@ -196,7 +305,8 @@ export const SignInContextProvider: React.FC<any> = (props) => {
         setEmail,
         emailErrorMessage,
         handleConfirmEmail,
-        handleGoogleConnection,
+
+        signUpInError,
 
         codeState,
         setCodeState,

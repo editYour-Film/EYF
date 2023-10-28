@@ -126,7 +126,7 @@ export const EditorProfilContextProvider: React.FC<any> = (props) => {
   }
 
   const handleAddSkill = (skill:skillsInterface) => {
-    console.log('add skill')
+    'add skill')
 
     if(!skills.includes(skill)) {
       setSkills([...skills, skill])
