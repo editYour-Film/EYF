@@ -92,12 +92,15 @@ export const CreatorPicturePan = () => {
                 className="absolute w-0 h-0 opacity-0 pointer-events-none"
               />
 
-              <GeneratedAvatar
-                type="blue"
-                label={context.initials}
-                className="pointer-events-auto"
-                img={imageToDisplay}
-              />
+              <div className="w-[145px] h-[145px]">
+                <GeneratedAvatar
+                  type="blue"
+                  label={context.initials}
+                  className="pointer-events-auto"
+                  img={imageToDisplay}
+                />
+              </div>
+ 
               <MentionInteraction className="pointer-events-auto">
                 Ajoutez votre photo de profil
               </MentionInteraction>

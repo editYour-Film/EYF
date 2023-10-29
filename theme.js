@@ -51,6 +51,10 @@ export const dashboard_text_description_base_low = 'rgba(239, 237, 253, 0.3)';
 export const dashboard_text_disabled = 'rgb(66, 67, 68)';
 export const dashboard_text_title_white_high = 'rgb(255, 255, 255)';
 
+// Icons
+export const dashboard_icon_color_default = 'rgba(168, 167, 178, 1)';
+
+
 // Texts Sizes
 export const text_small = '14px';
 export const text_base = '16px';

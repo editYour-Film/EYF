@@ -2,7 +2,7 @@ import { Video } from "../model/videos";
 
 export const videos: Video[] = [
   {
-    id: "1",
+    id: 1,
     title: "Titre",
     madeBy: "Réalisé par Pseudo",
     thumbnail: "/img/img.png",
@@ -12,7 +12,7 @@ export const videos: Video[] = [
     profilePath: "/img/img.png",
   },
   {
-    id: "2",
+    id: 2,
     title: "Titre",
     madeBy: "Réalisé par Pseudo",
     thumbnail: "/img/img2.png",
@@ -22,7 +22,7 @@ export const videos: Video[] = [
     profilePath: "/img/img2.png",
   },
   {
-    id: "3",
+    id: 3,
     title: "Titre",
     madeBy: "Réalisé par Pseudo",
     thumbnail: "/img/img3.png",
@@ -32,7 +32,7 @@ export const videos: Video[] = [
     profilePath: "/img/img3.png",
   },
   {
-    id: "4",
+    id: 4,
     title: "Titre",
     madeBy: "Réalisé par Pseudo",
     thumbnail: "/img/img.png",
@@ -42,7 +42,7 @@ export const videos: Video[] = [
     profilePath: "/img/img.png",
   },
   {
-    id: "5",
+    id: 5,
     title: "Titre",
     madeBy: "Réalisé par Pseudo",
     thumbnail: "/img/img.png",
@@ -52,7 +52,7 @@ export const videos: Video[] = [
     profilePath: "/img/img.png",
   },
   {
-    id: "6",
+    id: 6,
     title: "Titre",
     madeBy: "Réalisé par Pseudo",
     thumbnail: "/img/img.png",
@@ -62,7 +62,7 @@ export const videos: Video[] = [
     profilePath: "/img/img.png",
   },
   {
-    id: "7",
+    id: 7,
     title: "Titre",
     madeBy: "Réalisé par Pseudo",
     thumbnail: "/img/img.png",
@@ -72,7 +72,7 @@ export const videos: Video[] = [
     profilePath: "/img/img.png",
   },
   {
-    id: "8",
+    id: 8,
     title: "Titre",
     madeBy: "Réalisé par Pseudo",
     thumbnail: "/img/img.png",
@@ -82,7 +82,7 @@ export const videos: Video[] = [
     profilePath: "/img/img.png",
   },
   {
-    id: "8",
+    id: 9,
     title: "Titre",
     madeBy: "Réalisé par Pseudo",
     thumbnail: "/img/img.png",

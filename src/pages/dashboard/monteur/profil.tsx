@@ -28,9 +28,7 @@ export default function DashBoardContentProfile() {
             />
           )}
           <div className="lg:basis-9/12 main_content">
-            <DashboardContainer
-              hasBg={isDesktop}
-            >
+            <DashboardContainer >
               <DashboardEditorProfil />
             </DashboardContainer>
             <NewsletterSection />

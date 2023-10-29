@@ -1,13 +1,13 @@
-import { ReactNode } from "react";
+import { ReactNode, useRef } from "react";
 
 type IslandButtonProps = {
-  type: "primary" | "secondary" | "tertiary" | "danger" | "small";
+  type: "primary" | "secondary" | "tertiary" | "danger" | "small" | "small-secondary";
   label?: string;
   Icon?: any; //() => JSX.Element,
   IconRight?: any; //() => JSX.Element,
   disabled?: boolean;
   className?: string;
-  onClick: () => void;
+  onClick: (e?:any) => void;
   wmax?: boolean;
   iconColor?: string;
   id?: string;
@@ -27,9 +27,10 @@ export const IslandButton: React.FC<IslandButtonProps> = ({
   id,
   children,
 }) => {
+  const buttonEl = useRef<HTMLButtonElement>(null)
   const baseStyle = `${
     wmax && "w-max"
-  } font-medium rounded-full transition-colors duration-200`;
+  } h-max font-medium rounded-full transition-colors duration-200`;
 
   const focusedStyle = `focus:border-2 focus:border-dashboard-button-focus-stroke focus:-translate-x-[0.5px] focus:-translate-y-[0.5px]`;
 
@@ -41,6 +42,7 @@ export const IslandButton: React.FC<IslandButtonProps> = ({
   let disabledStyle;
   let iconClass = "svg-color-" + iconColor;
 
+  let iconSize = 'w-[24px] h-[24px]';
   switch (type) {
     case "primary":
       typeStyle = `${
@@ -64,20 +66,31 @@ export const IslandButton: React.FC<IslandButtonProps> = ({
       disabledStyle = ``;
       break;
     case "small":
+      iconSize = 'w-[20px] h-[20px]';
       typeStyle = `${
         disabled
-          ? "bg-background-dashboard-button-dark"
+          ? "bg-background-dashboard-button-dark border"
           : "bg-dashboard-button-white-default "
       } text-small text-dashboard-text-description-base ${size} hover:bg-dashboard-button-white-hover hover:text-dashboard-text-title-white-high focus:bg-dashboard-button-white-hover focus:text-dashboard-text-title-white-high hover:border-dashboard-button-stroke-hover`;
+      break;
+    case "small-secondary":
+      iconSize = 'w-[20px] h-[20px]';
+      typeStyle = `bg-dashboard-button-dark border ${
+        disabled
+          ? "boder-dashboard-button-stroke-disabled"
+          : " "
+      } text-small text-dashboard-text-description-base ${size} hover:text-dashboard-text-title-white-high focus:text-dashboard-text-title-white-high hover:border-dashboard-button-stroke-hover`;
       break;
   }
 
   return (
     <button
+      ref={buttonEl}
       className={`button ${baseStyle} ${typeStyle} ${focusedStyle} ${
-        disabled ? "pointer-events-none" + disabledStyle : ""
+        disabled ? "pointer-events-none " + disabledStyle : ""
       } ${className ?? ""}`}
       onClick={() => {
+        buttonEl.current && buttonEl.current.blur()
         onClick();
       }}
       disabled={disabled}
@@ -87,7 +100,7 @@ export const IslandButton: React.FC<IslandButtonProps> = ({
           disabled ? "opacity-30" : ""
         }`}
       >
-        {Icon && <Icon className={`${iconClass}`} />}
+        {Icon && <Icon className={`${iconSize} ${iconClass}`} />}
 
         {label && 
           <span className={`${type === "secondary" ? "text-linear-sunset" : ""}`}>
@@ -95,7 +108,7 @@ export const IslandButton: React.FC<IslandButtonProps> = ({
           </span>
         }
 
-        {IconRight && <IconRight className={`${iconClass}`} />}
+        {IconRight && <IconRight className={`${iconSize} ${iconClass}`} />}
       </div>
     </button>
   );

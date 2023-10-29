@@ -1,9 +1,8 @@
-import { VideoModel } from "./VideoModel";
-import Button from "@/components/_shared/form/Button";
-import { VideoCard } from "@/components/_shared/video/VideoCard";
-import { Video } from "@/components/model/videos";
 import { useContext } from "react";
-import { AddModelContext } from "./_context/AddModelContext";
+import { Model } from "@/components/_shared/video/Model";
+import { EditorContext } from "./_context/EditorContext";
+
+import { Formats as possibleModelFormat} from "./data/metaValues";
 
 type DashboardEditorModelsProps = {
   models: any;
@@ -12,108 +11,55 @@ type DashboardEditorModelsProps = {
 export const DashboardEditorModels = ({
   models,
 }: DashboardEditorModelsProps) => {
-  const context = useContext(AddModelContext);
-  const testVideo: Video = {
-    id: "id",
-    title: "title",
-    madeBy: "nobody",
-    path: "/video/top_video_5bc1b8a04f.webm",
-    thumbnail: "",
-    type: "type",
-    isMobile: false,
-    profilePath: "",
-  };
+  const editorContext = useContext(EditorContext);
 
-  const handleModify = (id: number) => {
-    context.setCurrentEditorVideo(id);
-    context.setStep(1);
-    context.showAddModel();
-    context.setIsModify(true);
-  };
+  const Grids = possibleModelFormat.map((type) => {
+    
+    let items = []
 
-  const handleDelete = (id: number) => {
-    context.deleteEditorVideo(id);
-  };
+    models && models.map((model: any, i: number) => {
+      if(model.model === type) {
+        items.push(
+          <Model
+            key={i}
+            video={model}
+            thumbnail={ model.thumbnail }
+            active= { model.visibility === 'public' }
+            handleModify={() => {
+              editorContext.handleModifyVideo(model.id);
+            }}
+            handleDisable={() => {
+              editorContext.handleDisableVideo(model.id);
+            }}
+          />
+        )
+      }
+    })
+
+    if(items.length > 0 && items.length < 3) {
+      for (let i = 0; i <= 3 - items.length; i++) {
+        items.push(<div className="w-full h-full bg-dashboard-button-dark rounded-dashboard-button-square-radius"></div>)
+      }
+    }
+
+    if(items.length > 0) {
+      return (
+        <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-dashboard-mention-padding-right-left">
+          {items}
+        </div>
+      )
+    }
+  })
 
   return (
     <div className="dashboard-editor-models">
       <div className="dashboard-editor-models__head flex flex-col sm:flex-row flex-wrap sm:justify-between sm:items-center">
-        <h2 className="dashboard-title mt-0 mb-4">Modeles Importés</h2>
-        <Button
-          variant="primary"
-          text={
-            models && models.length
-              ? "Ajouter un modèle"
-              : "Pourquoi ajouter un modèle ?"
-          }
-          onClick={() => {
-            if (models && models.length) {
-              context.initAddModel();
-            } else {
-              // Push some route
-            }
-          }}
-          className="w-max"
-        />
+        <h2 className="dashboard-title pl-dashboard-mention-padding-right-left md:pl-0 mt-0 mb-4">Modeles Importés</h2>
       </div>
-      <div
-        className={`dashboard-editor-models__models ${
-          models &&
-          models.length &&
-          "grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-x-3 gap-y-4 lg:gap-y-12"
-        } mt-12`}
-      >
-        {models && models.length ? (
-          models.map((model: any, i: number) => {
-            return (
-              <VideoModel
-                key={i}
-                data={model.attributes.video.data}
-                thumbnail={
-                  model.attributes.thumbnail.data
-                    ? model.attributes.thumbnail.data.attributes.url
-                    : context.defaultImage
-                }
-                onModify={() => {
-                  handleModify(model.id);
-                }}
-                onDelete={() => {
-                  handleDelete(model.id);
-                }}
-              />
-            );
-          })
-        ) : (
-          <div
-            className={`dashboard-editor-models__placeholder relative flex flex-col-reverse md:flex-row lg:flex-col-reverse xl:flex-row md:items-center lg:items-stretch gap-8 gradient-pastel w-full rounded-3xl p-4 lg:p-8 xl:p-14`}
-          >
-            <div className="bg-pattern opacity-10 absolute w-full h-full top-0 left-0"></div>
+      <div className={`dashboard-editor-models__models mt-12 flex flex-col gap-dashboard-spacing-element-medium`} >
+        
+        {Grids}
 
-            <div className="dashboard-editor-models__content text-black basis-5/12 flex flex-col gap-4">
-              <div className="n27 text-2xl font-medium ">
-                Devenez visible, ajoutez un modèle
-              </div>
-              <div>
-                Korem ipsum dolor sit amet, consectetur adipiscing elit. Nunc
-                vulputate libero et velit interdum, ac aliquet odio mattis.
-              </div>
-              <Button
-                variant="black"
-                text="Ajouter un modèle"
-                onClick={() => {
-                  context.initAddModel();
-                }}
-                className="w-max z-10"
-              />
-            </div>
-
-            <div className="dashboard-editor-models__video basis-1/2 flex-grow">
-              <div className="relative h-0 w-full pb-[56%] rounded-2xl overflow-hidden">
-                <VideoCard video={testVideo} />
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );

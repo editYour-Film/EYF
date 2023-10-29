@@ -4,12 +4,15 @@ type GeneratedAvatarProps = {
   type?: 'blue' | undefined,
   label?: string,
   img?: string,
-  className?: string
+  className?: string,
+  textSize?: 'sm' | 'default',
 }
 
-export const GeneratedAvatar = ({type, label, img, className}:GeneratedAvatarProps) => {
+export const GeneratedAvatar = ({type, label, img, className, textSize}:GeneratedAvatarProps) => {
+  const textSizeClass = textSize === 'sm' ? 'text-base' : 'text-[40px]' 
+
   return (
-    <div className={`generated-avatar group relative flex justify-center items-center w-[145px] h-[145px] border-[1.5px] bg-dashboard-button-dark hover:border-dashboard-button-stroke-hover rounded-full overflow-hidden translate-z-0 transition-color ${className}`}>
+    <div className={`generated-avatar group relative flex justify-center items-center border-[1.5px] bg-dashboard-button-dark hover:border-dashboard-button-stroke-hover rounded-full overflow-hidden translate-z-0 transition-color ${className}`}>
       { img ? 
           <Image
             src={img}
@@ -24,7 +27,7 @@ export const GeneratedAvatar = ({type, label, img, className}:GeneratedAvatarPro
           </div>
           <div className="generated-avatar__black-circle absolute top-[55%] w-full h-full rounded-full bg-dashboard-button-dark z-10 group-hover:translate-y-[15px] transition-transform"></div>
 
-          {label && <div className="relative z-20 text-[40px] n27 -translate-y-1/4">{label}</div>}
+          {label && <div className={`relative z-20 ${textSizeClass} n27 -translate-y-1/4`}>{label}</div>}
         </>
       }
     </div>

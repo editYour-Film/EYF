@@ -3,11 +3,12 @@ import { IslandButton } from "@/components/_shared/buttons/IslandButton"
 import Bell from '@/icons/bell.svg'
 import X from '@/icons/dashboard/x.svg'
 
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "@/store/store"
 import { useContext, useEffect, useRef } from "react"
 import { DashBoardContext } from "../_context/DashBoardContext"
 import gsap from "gsap"
+import { setNotificationRead } from "@/store/slices/NotificationsSlice"
 
 type NotificationButtonProps = {
   onClick: () => void,
@@ -15,8 +16,11 @@ type NotificationButtonProps = {
 }
 
 export const NotificationButton = ({onClick, onClose}:NotificationButtonProps) => {
+  const dispatch = useDispatch()
   const context = useContext(DashBoardContext)
-  const unReadNotifications = useSelector((state: RootState) => state.notification.unReadNotifications)
+  
+  const notifications = useSelector((state: RootState) => state.notification.notifications)
+  const unReadNotifications = notifications.filter((notif) => notif.state === 'unread')
 
   const iconsWrapper = useRef<HTMLDivElement>(null)
 
@@ -55,22 +59,29 @@ export const NotificationButton = ({onClick, onClose}:NotificationButtonProps) =
     }
   }, [context.notificationCenterOpen])
 
+  const handleNotifClick = () => {
+    unReadNotifications.length > 0 && unReadNotifications.forEach((notif) => {
+      notif && dispatch(setNotificationRead(notif.id))
+    })
+
+    onClick && onClick()
+  }
   return (
     <div className="notification-button relative overflow-hidden">
       <div className="relative">
         <div ref={iconsWrapper}>
           <div className="relative">
             <IslandButton
-              type="small"
+              type="small-secondary"
               Icon={Bell}
               label={unReadNotifications.length > 0 ? unReadNotifications.length.toString() : undefined}
-              onClick={() => { onClick && onClick() }}
+              onClick={() => { handleNotifClick() }}
             />
           </div>
 
-          <div className="absolute top-full left-1/2 -translate-x-1/2 translate-y-[10px]">
+          <div className={`absolute top-full left-1/2 -translate-x-1/2 translate-y-[10px] ${context.notificationCenterOpen ? 'block' : 'hidden'}`}>
             <IslandButton
-              type="small"
+              type="small-secondary"
               Icon={X}
               onClick={() => { 
                 console.log('click');

@@ -24,6 +24,10 @@ module.exports = {
           500: tokens.base_Edy_soyMilk_500
         },
 
+        'neutral': {
+          '02': '#777777'
+        },
+
         // Backgrounds
         'dashboard-button-island-BlueBerry-default' : tokens.dashboard_button_island_BlueBerry_default,
         'dashboard-button-island-disabled' : tokens.dashboard_button_island_disabled,
@@ -42,6 +46,8 @@ module.exports = {
         'dashboard-text-disabled': tokens.dashboard_text_disabled,
         'dashboard-text-title-white-high': tokens.dashboard_text_title_white_high,
 
+        // Icons
+        'dashboard-icon-color-default': tokens.dashboard_icon_color_default,
         //Article Category
         'edit': {
           DEFAULT: '#E3E178',
@@ -264,11 +270,31 @@ module.exports = {
           filter: 'blur(47px)',
           opacity: 0.4
         },
+        '.player-bg-gradient': {
+          background: `linear-gradient(to top, ${theme('colors')['dashboard-button-dark']} 0%, transparent 50%)`
+        },
         '.grid-dashboard' : {
           gridTemplateColumns: '1fr',
+          gridTemplateRows: '100px 1fr',
+          '@media screen and (min-width: 768px)': {
+            columnGap: '35px',
+            rowGap: '12px',
+            gridTemplateColumns: '[sidebar-start] 200px [sidebar-end content-start] 1fr [content-end]',
+            gridTemplateRows: 'auto',
+          },
+          '@media screen and (min-width: 1024px)': {
+            columnGap: '55px',
+            gridTemplateColumns: '[sidebar-start] 258px [sidebar-end content-start] 1fr [content-end]',
+          }
+        },
+        '.grid-modify-video' : {
+          gridTemplateColumns: '1fr',
+          gap: '40px',
           '@media screen and (min-width: 768px)': {
             gap: '55px',
-            gridTemplateColumns: '[sidebar-start] 258px [sidebar-end content-start] 1fr [content-end]',
+            gridTemplateColumns: '[main-start] 50px [inner-start sidebar-start] 190px [sidebar-end content-start] 1fr [content-end inner-end] 50px [main-end]',
+            gridAutoRows: 'max-content',
+            gap: 0
           }
         },
 
