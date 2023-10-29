@@ -6,7 +6,6 @@ import { codeStateType } from "@/components/signin/_context/signinContext";
 import routes from "@/routes";
 import { RefObject, createContext, useEffect, useState } from "react";
 import { ReactElement } from "react-markdown/lib/react-markdown";
-import Link from "next/link";
 
 import InfoIcon from "@/icons/info.svg";
 import Check from "@/icons/signin/check.svg";
@@ -149,7 +148,7 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
         userInfo &&
         userInfo.user.role &&
         userInfo.user.role.name === "editor"
-      )
+      )        
         router.push(routes.DASHBOARD_EDITOR_HOME);
     }
   }, [userInfo]);

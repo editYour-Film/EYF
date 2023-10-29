@@ -1,0 +1,96 @@
+{
+  "user": {
+    "createdAt": "2023-10-25T09:53:31.952Z",
+    "email": "robinnavas@gmail.com",
+    "id": 85,
+    "username": "robinNavas",
+    "role": {
+      "id": 4,
+      "name": "editor",
+      "description": "Monteur",
+      "type": "editor",
+      "createdAt": "2023-08-30T12:05:26.687Z",
+      "updatedAt": "2023-10-25T14:17:36.081Z"
+    }
+  },
+  "details": {
+    "id": 49,
+    "f_name": "Robin",
+    "l_name": "Navas",
+    "address": "2 route de la gare",
+    "post_code": "26310",
+    "city": "Beaurières",
+    "phone": "0000000000",
+    "createdAt": "2023-10-25T09:55:30.505Z",
+    "updatedAt": "2023-10-25T09:55:30.505Z",
+    "bio": "Ma bio",
+    "address_more": null,
+    "email_contact": "robinnavas@gmail.com",
+    "picture": {
+      "id": 108,
+      "name": "1673020408422.jpeg",
+      "alternativeText": null,
+      "caption": null,
+      "width": 440,
+      "height": 440,
+      "formats": {
+        "thumbnail": {
+          "ext": ".jpeg",
+          "url": "https://edityourfilm.s3.fr-par.scw.cloud/thumbnail_1673020408422_207b6d5712.jpeg",
+          "hash": "thumbnail_1673020408422_207b6d5712",
+          "mime": "image/jpeg",
+          "name": "thumbnail_1673020408422.jpeg",
+          "path": null,
+          "size": 5.23,
+          "width": 156,
+          "height": 156
+        }
+      },
+      "hash": "1673020408422_207b6d5712",
+      "ext": ".jpeg",
+      "mime": "image/jpeg",
+      "size": 23.19,
+      "url": "https://edityourfilm.s3.fr-par.scw.cloud/1673020408422_207b6d5712.jpeg",
+      "previewUrl": null,
+      "provider": "aws-s3",
+      "provider_metadata": null,
+      "folderPath": "/",
+      "createdAt": "2023-09-15T11:23:56.741Z",
+      "updatedAt": "2023-10-25T09:54:34.737Z"
+    },
+    "editor_videos": [],
+    "skills": [],
+    "languages": [],
+    "createdBy": {
+      "id": 3,
+      "firstname": "Robin",
+      "lastname": "Navas",
+      "username": null,
+      "email": "robinnavas@gmail.com",
+      "password": "$2a$10$vBOmHaVxIi64GGM1wLFkke8RMJwEvTSQLQZ8xs9PiwdaHaU9ELhWW",
+      "resetPasswordToken": null,
+      "registrationToken": null,
+      "isActive": true,
+      "blocked": false,
+      "preferedLanguage": null,
+      "createdAt": "2023-08-07T09:06:30.849Z",
+      "updatedAt": "2023-08-08T13:05:59.038Z"
+    },
+    "updatedBy": {
+      "id": 3,
+      "firstname": "Robin",
+      "lastname": "Navas",
+      "username": null,
+      "email": "robinnavas@gmail.com",
+      "password": "$2a$10$vBOmHaVxIi64GGM1wLFkke8RMJwEvTSQLQZ8xs9PiwdaHaU9ELhWW",
+      "resetPasswordToken": null,
+      "registrationToken": null,
+      "isActive": true,
+      "blocked": false,
+      "preferedLanguage": null,
+      "createdAt": "2023-08-07T09:06:30.849Z",
+      "updatedAt": "2023-08-08T13:05:59.038Z"
+    }
+  },
+  "models": []
+}
