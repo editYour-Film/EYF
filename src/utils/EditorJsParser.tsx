@@ -15,7 +15,7 @@ export const EditorJsParser = ({ JSONContent }: EditorJsParserProps) => {
             switch (block.type) {
               case "paragraph":
                 return (
-                  <div className="editorjs">
+                  <div className="editorjs" key={i}>
                     <p
                       className="text-lg mb-4"
                       dangerouslySetInnerHTML={{ __html: block.data.text }}
@@ -25,7 +25,7 @@ export const EditorJsParser = ({ JSONContent }: EditorJsParserProps) => {
 
               case "quote":
                 return (
-                  <blockquote className="mb-4 editorjs">
+                  <blockquote className="mb-4 editorjs" key={i}>
                     &ldquo;
                     <p
                       className="text-lg"
@@ -40,7 +40,7 @@ export const EditorJsParser = ({ JSONContent }: EditorJsParserProps) => {
 
               case "warning":
                 return (
-                  <div className="flex gap-4 items-start mb-4 editorjs">
+                  <div className="flex gap-4 items-start mb-4 editorjs" key={i}>
                     <div className="pt-1">
                       <Image
                         width={20}
@@ -70,16 +70,16 @@ export const EditorJsParser = ({ JSONContent }: EditorJsParserProps) => {
 
               case "table":
                 return (
-                  <table className="w-full mb-4 editorjs">
-                    {block.data.content.map((row: any, i: number) => {
+                  <table className="w-full mb-4 editorjs" key={i}>
+                    {block.data.content.map((row: any, j: number) => {
                       return (
-                        <tr className="border-y " key={i}>
-                          {row.map((column: any, i: number) => {
+                        <tr className="border-y " key={j}>
+                          {row.map((column: any, k: number) => {
                             return (
                               <td
                                 className="text-gray opacity-80 border-x text-lg py-2 px-2"
                                 dangerouslySetInnerHTML={{ __html: column }}
-                                key={i}
+                                key={k}
                               />
                             );
                           })}
@@ -91,7 +91,7 @@ export const EditorJsParser = ({ JSONContent }: EditorJsParserProps) => {
 
               case "image":
                 return (
-                  <div className="mb-4 editorjs">
+                  <div className="mb-4 editorjs" key={i}>
                     <img
                       src={block.data.file.url}
                       width={block.data.file.width}
@@ -108,10 +108,10 @@ export const EditorJsParser = ({ JSONContent }: EditorJsParserProps) => {
 
               case "checklist":
                 return (
-                  <div className="mb-4 editorjs">
-                    {block.data.items.map((checklist: any, i: number) => {
+                  <div className="mb-4 editorjs" key={i}>
+                    {block.data.items.map((checklist: any, j: number) => {
                       return (
-                        <div className="flex gap-2 items-center py-2" key={i}>
+                        <div className="flex gap-2 items-center py-2" key={j}>
                           <Image
                             width={20}
                             height={20}
@@ -130,7 +130,7 @@ export const EditorJsParser = ({ JSONContent }: EditorJsParserProps) => {
 
               case "LinkTool":
                 return (
-                  <div className="mb-4 editorjs">
+                  <div className="mb-4 editorjs" key={i}>
                     {block.data.meta.title && (
                       <p
                         className="text-gray opacity-80 text-xl font-medium"
@@ -163,8 +163,8 @@ export const EditorJsParser = ({ JSONContent }: EditorJsParserProps) => {
 
               case "list":
                 return (
-                  <ul className="mb-4 editorjs">
-                    {block.data.items.map((item: any, i: number) => {
+                  <ul className="mb-4 editorjs" key={i}>
+                    {block.data.items.map((item: any, j: number) => {
                       return (
                         <li
                           className="text-gray opacity-80 text-lg ml-4"
@@ -172,7 +172,7 @@ export const EditorJsParser = ({ JSONContent }: EditorJsParserProps) => {
                           dangerouslySetInnerHTML={{
                             __html: item,
                           }}
-                          key={i}
+                          key={j}
                         />
                       );
                     })}
@@ -180,7 +180,7 @@ export const EditorJsParser = ({ JSONContent }: EditorJsParserProps) => {
                 );
 
               case "delimiter":
-                return <hr className="my-8" />;
+                return <hr className="my-8" key={i} />;
             }
           });
         return <></>;

@@ -24,3 +24,19 @@ export const SignOut = () => {
   removeStorage("user");
   router.push(routes.SIGNIN);
 };
+
+export const setGoogleAuthEmailCookie = (email: string) => {
+  if (typeof window === "undefined") return;
+
+  Cookies.set("googleAuthEmail", email);
+};
+
+export const unsetGoogleAuthEmailCookie = () => {
+  if (typeof window === "undefined") return;
+
+  Cookies.remove("googleAuthEmail");
+};
+
+export const getGoogleAuthEmailCookie = () => {
+  return Cookies.get("googleAuthEmail");
+};

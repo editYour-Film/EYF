@@ -8,12 +8,14 @@ import { SignUpContext } from "./_context/SignupContext";
 import { Button } from "../_shared/buttons/Button";
 import { ProgressDots } from "../_shared/UI/ProgressDots";
 import { LogoSignup } from "./LogoSignup";
+import { getGoogleAuthEmailCookie } from "@/auth/auth";
 
 export const EmailPan = () => {
   const context = useContext(SignUpContext);
   const container = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (getGoogleAuthEmailCookie()) context.goNextNoAnimation();
     context.entrance(container);
   }, []);
 

@@ -5,7 +5,6 @@ import { optionInterface } from "@/components/_shared/form/Dropdown";
 export interface spokenLanguageInterface extends optionInterface {}
 export interface skillsInterface extends optionInterface {}
 
-
 export const EditorProfilContext = createContext({
   avatar: "",
   setAvatar: (payload: string) => {},
@@ -28,7 +27,7 @@ export const EditorProfilContext = createContext({
   city: "",
   setCity: (payload: string) => {},
   addressMore: "",
-  setAddressMore:(payload: string) => {},
+  setAddressMore: (payload: string) => {},
 
   langOptions: [] as spokenLanguageInterface[],
   spokenLanguages: [] as spokenLanguageInterface[],
@@ -44,122 +43,131 @@ export const EditorProfilContext = createContext({
   handleRemoveSkill: (payload: skillsInterface) => {},
   handleAvatarChange: (payload: any) => {},
   handleUpdateProfil: () => {},
-  handleResetContext: () => {}
-})
+  handleResetContext: () => {},
+});
 
 export const EditorProfilContextProvider: React.FC<any> = (props) => {
-  const [avatar, setAvatar] = useState("/img/img.png")
-  const [username, setUsername] = useState("SEBASTIENSRN")
-  const [fName, setFName] = useState("Sébastien")
-  const [lName, setLName] = useState("Soriano")
-  const [email, setEmail] = useState("sebastien@edityour.film")
-  const [desc, setDesc] = useState("C’est une réelle envie d’aider les entreprises à communiquer grâce à la vidéo qui m’a permis de devenir freelance et de créer ma propre société à 23 ans. Ayant déjà collaboré avec des dizaines d’entreprises, j’ai eu l’immense privilège de raconter leurs histoires, leurs parcours et de partager mon enthousiasme avec eux. À travers des centaines de tournages, j’ai rencontré des femmes et des hommes exceptionnels venant d’horizons différents.")
-  const [phone, setPhone] = useState("0772307239")
-  const [street, setStreet] = useState("89 rue Mirabeau")
-  const [zipcode, setZipcode] = useState("94200")
-  const [city, setCity] = useState("Ivry-sur-Seine")
-  const [addressMore, setAddressMore] = useState("")
-
+  const [avatar, setAvatar] = useState("/img/img.png");
+  const [username, setUsername] = useState("SEBASTIENSRN");
+  const [fName, setFName] = useState("Sébastien");
+  const [lName, setLName] = useState("Soriano");
+  const [email, setEmail] = useState("sebastien@edityour.film");
+  const [desc, setDesc] = useState(
+    "C’est une réelle envie d’aider les entreprises à communiquer grâce à la vidéo qui m’a permis de devenir freelance et de créer ma propre société à 23 ans. Ayant déjà collaboré avec des dizaines d’entreprises, j’ai eu l’immense privilège de raconter leurs histoires, leurs parcours et de partager mon enthousiasme avec eux. À travers des centaines de tournages, j’ai rencontré des femmes et des hommes exceptionnels venant d’horizons différents."
+  );
+  const [phone, setPhone] = useState("0772307239");
+  const [street, setStreet] = useState("89 rue Mirabeau");
+  const [zipcode, setZipcode] = useState("94200");
+  const [city, setCity] = useState("Ivry-sur-Seine");
+  const [addressMore, setAddressMore] = useState("");
 
   const [langOptions] = useState([
     {
-      label: 'Français',
-      id: 'fr',
-      icon: '/icons/flags/fr.svg'
-    },{
-      label: 'Anglais',
-      id: 'en',
-      icon: '/icons/flags/uk.svg'
+      label: "Français",
+      id: "fr",
+      icon: "/icons/flags/fr.svg",
     },
     {
-      label: 'Italien',
-      id: 'it',
-      icon: '/icons/flags/it.svg'
+      label: "Anglais",
+      id: "en",
+      icon: "/icons/flags/uk.svg",
     },
     {
-      label: 'Allemand',
-      id: 'de',
-      icon: '/icons/flags/de.svg'
+      label: "Italien",
+      id: "it",
+      icon: "/icons/flags/it.svg",
     },
     {
-      label: 'Russe',
-      id: 'ru',
-      icon: '/icons/flags/ru.svg'
-    }
-  ])
-  const [spokenLanguages, setSpokenLanguages] = useState<spokenLanguageInterface[]>([])
-  
-  const [skillsOptions] = useState<skillsInterface[]>([{
-    label: 'After Effects',
-  }, {
-    label: 'Davinci Resolve'
-  },{
-    label: 'Motion Design'
-  }])
+      label: "Allemand",
+      id: "de",
+      icon: "/icons/flags/de.svg",
+    },
+    {
+      label: "Russe",
+      id: "ru",
+      icon: "/icons/flags/ru.svg",
+    },
+  ]);
+  const [spokenLanguages, setSpokenLanguages] = useState<
+    spokenLanguageInterface[]
+  >([]);
 
-  const [skills, setSkills] = useState<skillsInterface[]>([])
+  const [skillsOptions] = useState<skillsInterface[]>([
+    {
+      label: "After Effects",
+    },
+    {
+      label: "Davinci Resolve",
+    },
+    {
+      label: "Motion Design",
+    },
+  ]);
+
+  const [skills, setSkills] = useState<skillsInterface[]>([]);
 
   const handleModifyPassword = () => {
-    console.log('modify password')
-  }
+    console.log("modify password");
+  };
 
   const handleModifyEmail = () => {
-    console.log('modify email')
-  }
+    console.log("modify email");
+  };
 
   const handleModelChange = () => {
-    console.log('model change')
-  }
+    console.log("model change");
+  };
 
-  const handleAddLang = (lang:spokenLanguageInterface) => {
-    console.log('add lang')
+  const handleAddLang = (lang: spokenLanguageInterface) => {
+    console.log("add lang");
 
-    if(!spokenLanguages.includes(lang)) {
-      setSpokenLanguages([...spokenLanguages, lang])
+    if (!spokenLanguages.includes(lang)) {
+      setSpokenLanguages([...spokenLanguages, lang]);
     }
-  }
+  };
 
-  const handleRemoveLang = (lang:spokenLanguageInterface) => {
-    console.log('remove lang')
+  const handleRemoveLang = (lang: spokenLanguageInterface) => {
+    console.log("remove lang");
 
-    setSpokenLanguages(spokenLanguages.filter((el, id) => el !== lang))
-  }
+    setSpokenLanguages(spokenLanguages.filter((el, id) => el !== lang));
+  };
 
-  const handleAddSkill = (skill:skillsInterface) => {
-    console.log('add skill')
+  const handleAddSkill = (skill: skillsInterface) => {
+    //'add skill'
 
-    if(!skills.includes(skill)) {
-      setSkills([...skills, skill])
+    if (!skills.includes(skill)) {
+      setSkills([...skills, skill]);
     }
-  }
+  };
 
-  const handleRemoveSkill = (skill:skillsInterface) => {
-    console.log('remove skill')
+  const handleRemoveSkill = (skill: skillsInterface) => {
+    console.log("remove skill");
 
     console.log(skill);
-    
 
-    setSkills(skills.filter((el) => {
-      console.log(el);
-      
-      return el !== skill
-    }))
-  }
+    setSkills(
+      skills.filter((el) => {
+        console.log(el);
 
-  const handleAvatarChange = (e:ChangeEvent) => {
-    console.log('change Avatar')
-    console.log(e)
-  }
+        return el !== skill;
+      })
+    );
+  };
+
+  const handleAvatarChange = (e: ChangeEvent) => {
+    console.log("change Avatar");
+    console.log(e);
+  };
 
   const handleUpdateProfil = () => {
     // Update database to the new values from the forms
-    console.log('update Profil');
-  }
+    console.log("update Profil");
+  };
 
   const handleResetContext = () => {
     // Reset all values to the initial ones stocked in the database
-    console.log('reset Context');
-  }
+    console.log("reset Context");
+  };
 
   return (
     <EditorProfilContext.Provider
@@ -202,10 +210,10 @@ export const EditorProfilContextProvider: React.FC<any> = (props) => {
         handleRemoveSkill,
         handleAvatarChange,
         handleUpdateProfil,
-        handleResetContext
+        handleResetContext,
       }}
     >
       {props.children}
     </EditorProfilContext.Provider>
-  )
-}
+  );
+};

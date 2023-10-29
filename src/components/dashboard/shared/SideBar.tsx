@@ -3,15 +3,13 @@ import Image from "next/image";
 
 import useMediaQuery from "@/hooks/useMediaQuery";
 
-
 import { useUser } from "@/auth/authContext";
 
 import { SignOut } from "@/auth/auth";
-import { SignedInUser, SigninUser } from "@/components/model/signin";
+import { SignedInUser } from "@/components/model/signin";
 import { Menu } from "./Menu";
 import { DASHBOARD_EDITOR_MENU } from "../editor/data/menus";
 import { MentionInteraction } from "@/components/_shared/buttons/MentionInteraction";
-
 
 type SideBarProps = {
   type: "editor" | "client";
@@ -32,7 +30,7 @@ export const SideBar = ({ type, className }: SideBarProps) => {
       <SideBarDesktop className={className} menu={menu} userInfos={userInfos} />
     );
   } else {
-    return <></>
+    return <></>;
   }
 };
 
@@ -52,26 +50,25 @@ const SideBarDesktop = ({ className, menu, userInfos }: SidebarChildProps) => {
       <div className="sidebar__infos mt-auto mb-0">
         <div className="sidebar__profil flex flex-row gap-dashboard-mention-padding-right-left py-4">
           <div className="profil__img rounded-full overflow-hidden w-[40px] h-[40px] lg:w-[60px] lg:h-[60px] shrink-0">
-            {userInfos.details.picture && userInfos.details.picture.data ? (
+            {userInfos.details.picture &&
+            userInfos.details.picture.data &&
+            userInfos.details.picture.data.attributes ? (
               <Image
-                src={
-                  userInfos.details.picture.data.attributes.formats.thumbnail
-                    ? userInfos.details.picture.data.attributes.formats
-                        .thumbnail.url
-                    : userInfos.details.picture.data.attributes.url
-                }
-                alt={userInfos.details.f_name}
+                src={userInfos.details.picture.data.attributes.url}
+                alt={userInfos.user.username}
                 width={52}
                 height={52}
-                className="w-full h-full"
-              />
+              ></Image>
             ) : (
               <Image
-                src={userInfos.details.picture.formats.thumbnail.url}
-                alt={userInfos.details.f_name ? userInfos.details.f_name : ""}
+                src={
+                  userInfos.details.picture && userInfos.details.picture.url
+                    ? userInfos.details.picture.url
+                    : "/img/profile/avatar.png"
+                }
+                alt={userInfos.user.username}
                 width={52}
                 height={52}
-                className="w-full h-full"
               ></Image>
             )}
           </div>
@@ -82,12 +79,14 @@ const SideBarDesktop = ({ className, menu, userInfos }: SidebarChildProps) => {
               userInfos.details.l_name ? userInfos.details.l_name : ""
             }`}</div>
 
-            <MentionInteraction 
+            <MentionInteraction
               className="text-medium"
               onClick={() => {
-                // TODO Intégration fonction de déconnexion
+                SignOut();
               }}
-            >Se déconnecter</MentionInteraction>
+            >
+              Se déconnecter
+            </MentionInteraction>
           </div>
         </div>
       </div>

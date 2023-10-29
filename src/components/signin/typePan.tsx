@@ -6,6 +6,9 @@ import Logo from "@/icons/logo.svg";
 import Google from "@/icons/google.svg";
 import Arrow from "@/icons/right-arrow-white.svg";
 import { ElementsIn } from "@/Animations/elementsIn";
+import { InfoMessage } from "../_shared/UI/InfoMessage";
+
+import X from "@/icons/signin/x.svg";
 
 type TypePanProps = {
   disclaimer?: ReactElement;
@@ -35,15 +38,15 @@ export const TypePan = ({ disclaimer }: TypePanProps) => {
           Se connecter à editYour.film
         </div>
         <hr className="w-full border-05" />
-        <Button
-          type="secondary"
-          label="Se connecter avec Google"
-          Icon={Google}
-          onClick={() => {
-            context.handleGoogleConnection();
-          }}
-          className="w-full"
-        />
+        <a href={process.env.NEXT_PUBLIC_API_STRAPI + "connect/google"}>
+          <Button
+            type="secondary"
+            label="Se connecter avec Google"
+            Icon={Google}
+            onClick={() => {}}
+            className="w-full"
+          />
+        </a>
         <hr className="w-full border-05" />
         <Button
           type="primary"
@@ -54,6 +57,10 @@ export const TypePan = ({ disclaimer }: TypePanProps) => {
           }}
           className="w-full"
         />
+
+        {context.signUpInError && (
+          <InfoMessage message={context.signUpInError} Icon={X} small />
+        )}
 
         {disclaimer && (
           <div className="text-dashboard-text-disabled text-small font-mediun text-center">

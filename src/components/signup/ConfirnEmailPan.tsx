@@ -11,6 +11,7 @@ import { SignUpContext } from "./_context/SignupContext";
 import { codeStateType } from "../signin/_context/signinContext";
 import { SignInSignUpContainer } from "../_shared/UI/SignInSignUpContainer";
 import { ProgressDots } from "../_shared/UI/ProgressDots";
+import { getGoogleAuthEmailCookie } from "@/auth/auth";
 
 export const ConfirmEmailPan = () => {
   const container = useRef<HTMLDivElement>(null);
@@ -18,6 +19,7 @@ export const ConfirmEmailPan = () => {
   const messageContainer = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (getGoogleAuthEmailCookie()) context.goNextNoAnimation();
     context.entrance(container);
   }, []);
 

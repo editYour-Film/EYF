@@ -34,13 +34,7 @@ export default function Apis() {
       });
 
       formData.append("data", JSON.stringify(elementData));
-      const resData = await useStrapiPost(
-        "editor-videos",
-        formData,
-        true,
-        true
-      );
-      alert(resData.status);
+      await useStrapiPost("editor-videos", formData, true, true);
     }
   };
 
