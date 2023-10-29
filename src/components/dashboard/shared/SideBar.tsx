@@ -6,7 +6,7 @@ import useMediaQuery from "@/hooks/useMediaQuery";
 import { useUser } from "@/auth/authContext";
 
 import { SignOut } from "@/auth/auth";
-import { SignedInUser, SigninUser } from "@/components/model/signin";
+import { SignedInUser } from "@/components/model/signin";
 import { Menu } from "./Menu";
 import { DASHBOARD_EDITOR_MENU } from "../editor/data/menus";
 import { MentionInteraction } from "@/components/_shared/buttons/MentionInteraction";
