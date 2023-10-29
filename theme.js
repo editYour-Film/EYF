@@ -51,6 +51,10 @@ export const dashboard_text_description_base_low = 'rgba(239, 237, 253, 0.3)';
 export const dashboard_text_disabled = 'rgb(66, 67, 68)';
 export const dashboard_text_title_white_high = 'rgb(255, 255, 255)';
 
+// Icons
+export const dashboard_icon_color_default = 'rgba(168, 167, 178, 1)';
+
+
 // Texts Sizes
 export const text_small = '14px';
 export const text_base = '16px';
@@ -61,6 +65,7 @@ export const text_base_ligth = '16px';
 export const text_base_bold = '14px';
 
 export const title_small = '16px';
+export const title_m = '22px';
 export const title_medium = '28px';
 export const title_large = '40px';
 
@@ -85,6 +90,7 @@ export const dashboard_mention_padding_right_left = '8px';
 export const dashboard_mention_padding_top_bottom = '4px';
 export const dashboard_spacing_element_medium = '32px';
 export const padding_DashboardPaddingNul = '0px';
+export const padding_medium = '24px';
 
 //Border Width
 export const dashboard_border_width_button_default = '1px';

@@ -6,9 +6,11 @@ import { VisibilityPan } from "./addModelFlow/VisibilityPan";
 import { EndPan } from "./addModelFlow/EndPan";
 import { AddModelContext } from "./_context/AddModelContext";
 
-type AddModelProps = {};
+type AddModelProps = {
+  className?: string
+};
 
-export const AddModel = ({}: AddModelProps) => {
+export const AddModel = ({className}: AddModelProps) => {
   const context = useContext(AddModelContext);
 
   let panel;
@@ -28,7 +30,7 @@ export const AddModel = ({}: AddModelProps) => {
   }
 
   return (
-    <div>
+    <div className={`${className}`}>
       <Steps currentStep={context.currentStep} />
       <div className="addModel__content relative rounded-3xl mt-12 p-5 border overflow-hidden">
         <div
