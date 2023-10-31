@@ -9,6 +9,8 @@ import Warning from "@/icons/dashboard/alert-octagon.svg";
 import { TitleSvgCard } from "../../shared/TitleSvgCard";
 import { getDuration } from "@/utils/Video";
 import { AddModelContext } from "../_context/AddModelContext";
+import useStrapi from "@/hooks/useStrapi";
+import { useEffect } from "react";
 
 type FileInputProps = {};
 
@@ -119,6 +121,16 @@ export const FileInput = ({}: FileInputProps) => {
     }
   };
 
+  const { data: data, mutate: getStrapi } = useStrapi(
+    "dashboard-monteur?" +
+    "populate=*",
+    false
+  );
+
+  useEffect(() => {
+    getStrapi();
+  }, []);
+
   return (
     <>
       <div className="file-input flex flex-col gap-5 items-end">
@@ -210,8 +222,8 @@ export const FileInput = ({}: FileInputProps) => {
         <TitleSvgCard
           className="mt-5"
           img="/img/dashboard/charts.svg"
-          title="Augmentez votre visibilité"
-          text="En ajoutant des modèles vous augmentez vos chances d’être vu par les créateurs à la recherche d’un monteur pour leur prochain projet. Nous vous conseillons d’ajouter 3 modèles pour apparaître le plus largement possible."
+          title={ data?.attributes.add_model.title ? data?.attributes.add_model.title : "Augmentez votre visibilité" }
+          text={ data?.attributes.add_model.content ? data?.attributes.add_model.content : "En ajoutant des modèles vous augmentez vos chances d’être vu par les créateurs à la recherche d’un monteur pour leur prochain projet. Nous vous conseillons d’ajouter 3 modèles pour apparaître le plus largement possible." }
         />
       )}
     </>
