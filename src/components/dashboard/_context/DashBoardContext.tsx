@@ -1,6 +1,7 @@
 import { getNotifications } from "@/store/slices/NotificationsSlice"
 import { PropsWithChildren, createContext, useEffect, useState } from "react"
 import { useDispatch } from "react-redux"
+import { useStrapi } from "@/hooks/useStrapi"
 
 export interface dashBoardPanelType {
   title: string
@@ -55,39 +56,40 @@ export const DashBoardContextProvider = ({children}:PropsWithChildren) => {
   const [notificationCenterOpen, setNotificationCenterOpen] = useState(false)
   
   const dispatch = useDispatch()
+
+  const { data: data, mutate: getStrapi } = useStrapi(
+    "dashboard-monteur?" +
+    "populate[add_model]=*&" +
+    "populate[news_info][populate]=*",
+    false
+  );
   
   useEffect(() => {
     dispatch(getNotifications())
+    getStrapi();
   }, [])
 
-  // TODO: Integration Get the selection of posts from strapi
-  const posts:dashboardPostType[] = [
-    {
-      title: 'Plateforme de montage vidéo et producteurs s\'unissent',
-      excerpt: 'Découvrez le partenariat exceptionnel entre une plateforme de montage vidéo de pointe et des producteurs de renom. Une collaboration qui promet de révolutionner la production vidéo !',
-      category: 'Tournage',
-      author: 'Julia Dupont',
-      date: '21 Novembre, 2022',
-      length: '6min',
-      link: 'link1'
-    }, {
-      title: 'EDITYOUR.FILM, POURQUOI FAIRE ?',
-      excerpt: 'Parce que votre vidéo va se retrouver au milieu de millions d’autres postées chaque jour sur YouTube, Facebook, Instagram, Tik Tok ou Linkedin réunis !',
-      category: 'Montage',
-      author: 'Leonie OLMOS',
-      date: '21 Novembre, 2022',
-      length: '6min',
-      link: 'link2'
-    }, {
-      title: 'Lorem ipsum dolor sit amet consectet Congue tortor ipsum.',
-      excerpt: 'Lorem ipsum dolor sit amet consectet Congue tortor ipsum. Lorem ipsum dolor sit amet consectet Congue tortor ipsum.',
-      category: 'Partenariat',
-      author: 'Francois Herard',
-      date: '21 Novembre, 2022',
-      length: '6min',
-      link: 'link3'
-    },
-  ]
+  let posts:dashboardPostType[];
+
+  if (data && data.attributes && data.attributes.news_info && data.attributes.news_info.news_info_post) {
+    const news_info_post = data.attributes.news_info.news_info_post
+  
+    posts = news_info_post.map((posts) => {
+      return {
+        title: posts.title,
+        excerpt: posts.excerpt,
+        category: posts.category,
+        author: posts.author,
+        date: new Date(posts.date).toLocaleDateString('fr-FR', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        }),
+        length: posts.length,
+        link: posts.link
+      }
+    })
+  }
 
   // TODO: Integration get if info card is active
   const infoCardActive = true;
