@@ -2,6 +2,7 @@ import { getNotifications } from "@/store/slices/NotificationsSlice"
 import { PropsWithChildren, createContext, useEffect, useState } from "react"
 import { useDispatch } from "react-redux"
 import { useStrapi } from "@/hooks/useStrapi"
+import { info } from "console"
 
 export interface dashBoardPanelType {
   title: string
@@ -60,7 +61,8 @@ export const DashBoardContextProvider = ({children}:PropsWithChildren) => {
   const { data: data, mutate: getStrapi } = useStrapi(
     "dashboard-monteur?" +
     "populate[add_model]=*&" +
-    "populate[news_info][populate]=*",
+    "populate[news_info][populate][news_info_post][populate]=*&" +
+    "populate[news_info][populate][info_card][populate]=*",
     false
   );
   
@@ -71,33 +73,34 @@ export const DashBoardContextProvider = ({children}:PropsWithChildren) => {
 
   let posts:dashboardPostType[];
 
-  if (data && data.attributes && data.attributes.news_info && data.attributes.news_info.news_info_post) {
-    const news_info_post = data.attributes.news_info.news_info_post
-  
-    posts = news_info_post.map((posts) => {
-      return {
-        title: posts.title,
-        excerpt: posts.excerpt,
-        category: posts.category,
-        author: posts.author,
-        date: new Date(posts.date).toLocaleDateString('fr-FR', {
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric',
-        }),
-        length: posts.length,
-        link: posts.link
-      }
-    })
+  if (data && data.attributes && data.attributes.news_info) {
+    if (data.attributes.news_info.news_info_post) {
+      const news_info_post = data.attributes.news_info.news_info_post
+    
+      posts = news_info_post.map((post) => {
+        return {
+          title: post.title,
+          excerpt: post.excerpt,
+          category: post.category,
+          author: post.author,
+          date: new Date(post.date).toLocaleDateString('fr-FR', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+          }),
+          length: post.length,
+          link: post.link
+        }
+      })
+    }
   }
 
-  // TODO: Integration get if info card is active
-  const infoCardActive = true;
-  // TODO: Integration get infocard datas
+  const infoCardActive = data?.attributes.news_info.info_card.isActive ? true : false
+
   const infoCard:infoCardType = {
-    title: 'Ouverture des agendas',
-    text: <div><p>Le 13 décembre, nous ouvrons les agendas pour que vous puissiez ajouter vos disponibilités. Cette mise à jour vous permettra de rendre vos services accessibles aux clients créateurs.</p><p>Dès que vous aurez inscrit vos disponibilités, vos modèles de montage apparaîtront dans notre catalogue. Les clients pourront ainsi vous trouver plus facilement et vous inclure dans leurs devis. Préparez-vous à mettre en avant votre talent !</p></div>,
-    img: '/img/img.png',
+    title: `${ data?.attributes ? data.attributes.news_info.info_card.title : 'Error' }`,
+    text: <div><p>{ data?.attributes ? data.attributes.news_info.info_card.content : '' }</p></div>,
+    img: `${ data?.attributes ? data.attributes.news_info.info_card.picture.data.attributes.url : '/img/img.png' }`,
   }
 
   const addPannel = (panel:dashBoardPanelType) => {
