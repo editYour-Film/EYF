@@ -12,7 +12,7 @@ export const GeneratedAvatar = ({type, label, img, className, textSize}:Generate
   const textSizeClass = textSize === 'sm' ? 'text-base' : 'text-[40px]' 
 
   return (
-    <div className={`generated-avatar group relative flex justify-center items-center border-[1.5px] bg-dashboard-button-dark hover:border-dashboard-button-stroke-hover rounded-full overflow-hidden translate-z-0 transition-color ${className}`}>
+    <div className={`generated-avatar group w-full h-full relative flex justify-center items-center border-[1.5px] bg-dashboard-button-dark hover:border-dashboard-button-stroke-hover rounded-full overflow-hidden translate-z-0 transition-color ${className}`}>
       { img ? 
           <Image
             src={img}
