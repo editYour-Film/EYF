@@ -1,9 +1,10 @@
+import { MessageType } from '@/components/_shared/UI/InfoMessage'
 import { createSlice } from '@reduxjs/toolkit'
 
 // create a slice 
 export const toastSlice = createSlice({ 
   name: "toast", 
-  initialState: { toasts: [] }, 
+  initialState: { toasts: [] as MessageType[] }, 
   reducers: { 
     addToast: (state, action) => { 
       state.toasts = [...state.toasts, action.payload] 
@@ -17,10 +18,8 @@ export const toastSlice = createSlice({
       state.toasts = state.toasts.map((el, i) => {        
         if(el.id === action.payload) {
           el.toHide = true 
-          console.log(el);
         }
         return el
-      
       })  
     }
   }

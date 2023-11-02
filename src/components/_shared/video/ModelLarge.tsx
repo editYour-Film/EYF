@@ -1,4 +1,3 @@
-import { Video as VideoType } from "@/components/model/videos"
 import { Video } from "./Video"
 import Image from 'next/image'
 import { IslandButton } from "../buttons/IslandButton"
@@ -25,13 +24,14 @@ export const ModelLarge = ({
   handleDelete, 
   handleSetHighlighted
 }: ModelsProps) => {
+  
   return (
     <>{video 
         ?
           <div className="model-large bg-dashboard-button-dark rounded-dashboard-button-separation-spacing overflow-hidden border">
             <div className="model-large__videoW relative w-full h-0 pb-[56.25%] bg-blackBerry z-0">
               <Video
-                video={video.video}
+                video={video.video.data.attributes.url}
                 className='absolute object-cover'
               />
             </div>
@@ -40,8 +40,8 @@ export const ModelLarge = ({
                 {type === 'dashboard'
                   ?
                   <>
-                    <div className="text-dashboard-text-title-white-high text-base font-medium">{video.title}</div>
-                    <div className="text-dashboard-text-description-base">{video.length}</div>
+                    <div className="text-dashboard-text-title-white-high text-base font-medium">{video.video.data.attributes.title}</div>
+                    <div className="text-dashboard-text-description-base">{video.video.data.attributes.length}</div>
                   </>
                   : 
                     <div className="">
@@ -54,7 +54,7 @@ export const ModelLarge = ({
                       </div>
                       <div>
                         <div>{video.title}</div>
-                        <div>par {video.user_info.f_name} {video.user_info.l_name}</div>
+                        <div>par {(video.user_info as any).data.attributes.f_name} {(video.user_info as any).data.attributes.l_name}</div>
                       </div>
                     </div>
                 }

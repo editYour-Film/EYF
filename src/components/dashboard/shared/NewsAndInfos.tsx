@@ -53,11 +53,14 @@ export const NewsAndInfos = () => {
       )}
 
       <div className="news-infos__content flex flex-col gap-dashboard-spacing-element-medium">
-        {context.posts &&
-          context.posts.length > 0 &&
-          context.posts.map((post, i) => {
-            return <DashBoardPost key={i} post={post} />;
-          })}
+        {(context.posts && context.posts.length > 0) && context.posts.map((post, i) => {
+          return (
+            <DashBoardPost 
+              key={i}
+              post={post} 
+            />
+          )
+        })}
       </div>
     </div>
   );

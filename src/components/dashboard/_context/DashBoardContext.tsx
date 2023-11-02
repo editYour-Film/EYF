@@ -27,6 +27,7 @@ export const DashBoardContext = createContext({
   panels: [] as dashBoardPanelType[] | undefined,
   setPanels: (payload: dashBoardPanelType[]) => {},
   addPannel: (payload: dashBoardPanelType) => {},
+  closePanels: () => {},
   activePanel: 0,
   setActivePanel: (payload: number) => {},
 
@@ -42,10 +43,15 @@ export const DashBoardContext = createContext({
 
   posts: [] as dashboardPostType[],
   infoCardActive: false,
-  infoCard: undefined as infoCardType | undefined
+  infoCard: undefined as infoCardType | undefined,
+
+  buttons: undefined as any,
+  setButtons: (payload:any) => {},
 })
 
 export const DashBoardContextProvider = ({children}:PropsWithChildren) => {
+  const dispatch = useDispatch()
+
   const [panels, setPanels] = useState<dashBoardPanelType[] | undefined>(undefined)
   const [activePanel, setActivePanel] = useState(0)
 
@@ -53,8 +59,8 @@ export const DashBoardContextProvider = ({children}:PropsWithChildren) => {
 
   const [notificationCenterAnimated, setNotificationCenterAnimated] = useState(false)
   const [notificationCenterOpen, setNotificationCenterOpen] = useState(false)
-  
-  const dispatch = useDispatch()
+
+  const [buttons, setButtons] = useState<any | undefined>(undefined)
   
   useEffect(() => {
     dispatch(getNotifications())
@@ -105,6 +111,12 @@ export const DashBoardContextProvider = ({children}:PropsWithChildren) => {
     setActivePanel(panels ? panels?.length : 0)
   }
 
+  const closePanels = () => {
+    if(panels) setPanels([panels[0]])
+        
+    setActivePanel(0)
+  }
+
   const openNotificationCenter = () => {    
     setNotificationCenterOpen(true)
   }
@@ -123,6 +135,7 @@ export const DashBoardContextProvider = ({children}:PropsWithChildren) => {
         panels,
         setPanels,
         addPannel,
+        closePanels,
         activePanel,
         setActivePanel,
 
@@ -138,7 +151,10 @@ export const DashBoardContextProvider = ({children}:PropsWithChildren) => {
 
         posts,
         infoCardActive,
-        infoCard
+        infoCard,
+
+        buttons,
+        setButtons,
       }}
     >
       {children}

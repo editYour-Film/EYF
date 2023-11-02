@@ -1,17 +1,19 @@
 import { Video as VideoType} from "@/components/model/videos"
-import { useRef, useState } from "react"
+import { RefObject, forwardRef, useRef, useState } from "react"
 import { Player } from "./Player"
 
 type VideoProps = {
-  video: string,
+  video: any,
   defaultPlayer?: boolean,
-  className?: string
+  className?: string,
+  hFull?: boolean,
+  onLoadedMetadata? : () => void
 }
 
-export const Video = ({video, defaultPlayer = false, className}:VideoProps) => {
+export const Video = forwardRef<HTMLVideoElement, VideoProps>(function Video({video, defaultPlayer = false, className, hFull, onLoadedMetadata}, ref) {
   const [isPlaying, setIsPlaying] = useState(false)
-  
-  const videoEl = useRef<HTMLVideoElement>(null)
+  const createdRef = useRef<HTMLVideoElement>(null)
+  const videoEl= ref as RefObject<HTMLVideoElement>  ?? createdRef
   const [currentTime, setCurrentTime] = useState<number | undefined>(0)
 
   const handlePause = () => {
@@ -39,10 +41,10 @@ export const Video = ({video, defaultPlayer = false, className}:VideoProps) => {
   }
 
   return (
-    <div className={`video group w-full h-full ${className ?? ''}`}>
+    <div className={`video group relative w-full ${hFull ? 'h-full' : 'h-auto'} ${className ?? ''}`}>
       <video 
-        ref={videoEl}
-        className={`video relative w-full h-full object-cover z-0`} src={video}
+        ref={createdRef}
+        className={`video relative w-full h-full object-cover z-0`}
         controls={defaultPlayer}
 
         onClick={(e) => {
@@ -61,7 +63,13 @@ export const Video = ({video, defaultPlayer = false, className}:VideoProps) => {
         onTimeUpdate={(e) => {
           handleTimeUpdate()
         }}
+
+        onLoadedMetadata={() => {onLoadedMetadata && onLoadedMetadata()}}
       >
+        <source
+          src={video.url}
+          type={video.mime}
+        />
       </video>
 
       {
@@ -84,4 +92,4 @@ export const Video = ({video, defaultPlayer = false, className}:VideoProps) => {
     </div>
 
   )
-}
+})

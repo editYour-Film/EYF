@@ -87,8 +87,7 @@ export const Model = ({
             buttons
           }
         </div>
-
-        </div>
+      </div>
     </div>
   )
 }

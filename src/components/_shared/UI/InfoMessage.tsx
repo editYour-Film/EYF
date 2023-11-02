@@ -8,20 +8,14 @@ interface ComponentWithClassName  {
 export interface MessageType {
   Icon?: React.FC<ComponentWithClassName>,
   type?: 'regular' | 'danger',
-  isAnimated?: boolean,
-  toHide?: boolean,
-  message?: string,
+  message? : string | ReactElement,
   id?: number,
-}
-
-interface InfoMessageProps extends MessageType {
-  Icon?: React.FC<ComponentWithClassName>,
-  type?: 'regular' | 'danger',
-  message?: string,
   wFull?: boolean,
   small?: boolean,
   isAnimated?: boolean,
   toHide?: boolean,
+  delay?: number,
+  bg?: 'black' | undefined,
   onClick?: () => void,
   callbacks?: {
     in?: Function,
@@ -29,26 +23,28 @@ interface InfoMessageProps extends MessageType {
   },
 }
 
-export const InfoMessage = ({Icon, type, message, wFull, small, isAnimated, toHide, onClick, callbacks}:InfoMessageProps) => {
+export const InfoMessage = ({Icon, type, message, wFull, small, isAnimated, toHide, delay, bg, onClick, callbacks}:MessageType) => {
   const messageEl = useRef(null)
 
-  isAnimated && useEffect(() => {
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline()
-
-      tl.fromTo(messageEl.current, {
-        y: 30,
-        opacity: 0
-      }, {
-        y: 0,
-        opacity: 1
+  useEffect(() => {
+    if(isAnimated) {
+      const ctx = gsap.context(() => {
+        const tl = gsap.timeline()
+  
+        tl.fromTo(messageEl.current, {
+          y: 30,
+          opacity: 0
+        }, {
+          y: 0,
+          opacity: 1
+        })
       })
-    })
-
-    return () => {
-      ctx.revert()
+  
+      return () => {
+        ctx.revert()
+      }
     }
-  }, [])
+  }, [isAnimated])
 
   useEffect(() => {
     if(toHide === true) {
@@ -75,6 +71,24 @@ export const InfoMessage = ({Icon, type, message, wFull, small, isAnimated, toHi
 
   }, [toHide])
 
+  if(delay) {
+    setTimeout(() => {
+      const tl = gsap.timeline({
+        onComplete: () => {
+          callbacks?.out && callbacks?.out()
+        }
+      })
+
+      tl.fromTo(messageEl.current, {
+        y: 0,
+        opacity: 1
+      }, {
+        y: -0,
+        opacity: 0
+      })
+    }, delay)
+  }
+
   const sizeClass = small ? 'py-dashboard-mention-padding-top-bottom px-dashboard-button-separation-spacing' : 'py-dashboard-mention-padding-right-left px-dashboard-button-separation-spacing'
   return (
     <div 
@@ -82,9 +96,9 @@ export const InfoMessage = ({Icon, type, message, wFull, small, isAnimated, toHi
       onClick={() => {
         onClick && onClick()
       }}
-      className={`flex no-wrap gap-[10px] ${wFull ? 'w-full' : 'w-max'} max-w-[calc(100vw-32px)] bg-soyMilk-100 rounded-dashboard-button-square-radius ${sizeClass}`}>
+      className={`flex items-center no-wrap gap-[10px] ${wFull ? 'w-full' : 'w-max'} max-w-[calc(100vw-32px)] ${bg === 'black' ? 'bg-dashboard-button-dark' : 'bg-soyMilk-100'} rounded-dashboard-button-square-radius ${sizeClass}`}>
       <div className="w-[24px] h-[24px]">{Icon && <Icon className={`w-[24px] h-[24px] ${type === 'danger' ? 'svg-color-appleRed' : ''}`} />}</div>
-      <div>{message}</div>
+      <div className="text-dashboard-text-description-base">{message}</div>
     </div>
   );
 };

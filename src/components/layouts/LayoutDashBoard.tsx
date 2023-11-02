@@ -13,6 +13,7 @@ import { SideBar } from "../dashboard/shared/SideBar";
 import { useMediaQuery } from "@uidotdev/usehooks";
 import { DashboardMenuMobile } from "../dashboard/shared/DashboardMenuMobile";
 import { DASHBOARD_EDITOR_MENU } from "../dashboard/editor/data/menus";
+import { ButtonsWrapper } from "../dashboard/shared/ButtonsWrapper";
 
 type LayoutDashboardProps = {
   children: React.ReactNode;
@@ -54,7 +55,7 @@ const LayoutDashboard = ({ children }: LayoutDashboardProps) => {
         <Lenis root>
           <div className="bg-black min-h-screen flex flex-col justify-between gap-10">
             <main className="md:pt-7">
-              <div className="md:px-[30px] lg:px-[113px] md:mt-0 grid grid-dashboard relative z-20 ">
+              <div className="md:px-[30px] xl:px-[113px] md:mt-0 grid grid-dashboard relative z-20 ">
                 <DashBoardContextProvider>
                   { user.user.role.name === 'editor'
                     ? 
@@ -74,6 +75,8 @@ const LayoutDashboard = ({ children }: LayoutDashboardProps) => {
                     :
                       children
                   }
+
+                  <ButtonsWrapper />
                 </DashBoardContextProvider>
               </div>
             </main>
