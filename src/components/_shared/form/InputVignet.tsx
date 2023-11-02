@@ -64,7 +64,7 @@ export const InputVignet = ({
         }
       </div>
 
-      <div className="relative py-dashboard-spacing-element-medium  min-h-[200px] flex flex-col justify-center items-center rounded-dashboard-button-separation-spacing bg-dashboard-button-dark border-03 focus-within:border-blueBerry overflow-hidden">
+      <div className={`relative ${!img ? 'py-dashboard-spacing-element-medium' : ''} flex flex-col justify-center items-center rounded-dashboard-button-separation-spacing bg-dashboard-button-dark border-03 focus-within:border-blueBerry overflow-hidden`}>
         {!img && 
           <div className="grow-0 w-10/12 xl:w-6/12 basis-1/2 flex items-center text-center flex-col gap-dashboard-button-separation-spacing">
             {title && <div className="text-medium xl:w-8/12">{title}</div>}

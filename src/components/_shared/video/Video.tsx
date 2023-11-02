@@ -13,7 +13,7 @@ type VideoProps = {
 export const Video = forwardRef<HTMLVideoElement, VideoProps>(function Video({video, defaultPlayer = false, className, hFull, onLoadedMetadata}, ref) {
   const [isPlaying, setIsPlaying] = useState(false)
   const createdRef = useRef<HTMLVideoElement>(null)
-  const videoEl= ref as RefObject<HTMLVideoElement>  ?? createdRef
+  const videoEl = ref as RefObject<HTMLVideoElement>  ?? createdRef
   const [currentTime, setCurrentTime] = useState<number | undefined>(0)
 
   const handlePause = () => {
@@ -43,7 +43,7 @@ export const Video = forwardRef<HTMLVideoElement, VideoProps>(function Video({vi
   return (
     <div className={`video group relative w-full ${hFull ? 'h-full' : 'h-auto'} ${className ?? ''}`}>
       <video 
-        ref={createdRef}
+        ref={videoEl}
         className={`video relative w-full h-full object-cover z-0`}
         controls={defaultPlayer}
 

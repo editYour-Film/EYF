@@ -152,6 +152,7 @@ export const FileInput = ({}: FileInputProps) => {
           className={`w-full z-10`}
           disabled={!(videoUploaded && !loading)}
           onClick={() => {
+            context.abort();
             input.current?.click();
           }}
         />
@@ -190,8 +191,8 @@ export const FileInput = ({}: FileInputProps) => {
   const videoRef = useRef<HTMLVideoElement>(null)
 
   return (
-    <div className="py-[60px] md:py-0 flex flex-col gap-dashboard-spacing-element-medium">
-      <div className="file-input flex flex-col gap-dashboard-spacing-element-medium items-end ">
+    <div className="py-[100px] md:py-0 flex flex-col gap-dashboard-spacing-element-medium h-full md:h-auto">
+      <div className="file-input flex flex-col h-full md:h-auto gap-dashboard-spacing-element-medium items-end justify-between">
         {isMobile && <IslandButton 
           type="secondary"
           Icon={Close}
@@ -205,7 +206,7 @@ export const FileInput = ({}: FileInputProps) => {
         />}
 
         <div
-          className={`w-full relative bg-black rounded-3xl flex justify-center items-center border border-white border-opacity-0 ${isDragging && "border-opacity-30"}`}
+          className={`w-full relative bg-black rounded-3xl flex h-full justify-center items-center border border-white border-opacity-0 ${isDragging && "border-opacity-30"}`}
           onDragOver={() => {
             handleDragOver();
           }}
@@ -223,7 +224,7 @@ export const FileInput = ({}: FileInputProps) => {
             <Upload />
             <div className="text-center flex flex-col items-center gap-4">
               <div className="text-medium w-[340px]">
-                {isMobile ? 'Ajoutez un vidéo' : 'Glissez-déposez le fichier que vous souhaitez mettre en ligne'}
+                {isMobile ? 'Ajoutez une vidéo' : 'Glissez-déposez le fichier que vous souhaitez mettre en ligne'}
               </div>
               <div className="text-dashboard-text-description-base text-base-light w-8/12">
                 Vos vidéos resteront privées jusqu’à leur publication. Chaque
@@ -264,7 +265,7 @@ export const FileInput = ({}: FileInputProps) => {
             }</div>
 
             {loading && 
-              <div className="absolute bottom-0 w-full pb-[28px] pt-[13px] px-[12px]">
+              <div className="absolute bottom-0 w-full pb-[28px] pt-[13px] px-[24px]">
                 <Loader progress={progressUpload} />
               </div>
             }
@@ -272,11 +273,13 @@ export const FileInput = ({}: FileInputProps) => {
 
           {
           context.strapiObject &&
-            <div className="w-full relative px-dashboard-mention-padding-right-left z-10">
+            <div className="w-full self-center justify-self-center relative px-dashboard-mention-padding-right-left z-10">
               <Video
                 ref={videoRef}
                 video={context.strapiObject.attributes.video.data.attributes}
-                onLoadedMetadata={() => { videoRef.current && setVideoDuration(getDuration(videoRef.current).mmss) }}
+                onLoadedMetadata={() => {                   
+                  videoRef.current && setVideoDuration(getDuration(videoRef.current).mmss) 
+                }}
               />
               <div className="p-dashboard-button-separation-spacing flex flex-col gap-dashboard-button-separation-spacing">
                 <div className="text-base text-dashboard-text-title-white-high">{context.strapiObject.attributes.video.data.attributes.name}</div>

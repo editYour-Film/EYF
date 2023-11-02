@@ -57,8 +57,13 @@ export const DashboardEditorHome = ({className}:DashboardEditorHomeProps) => {
       
       <hr />
       <DashboardEditorModels models={editorCtx.models} />
-      <hr />
-      <NewsAndInfos />
+      {
+        (dashboardContext.infoCardActive || dashboardContext.posts && dashboardContext.posts.length > 0) &&
+        <>
+          <hr />
+          <NewsAndInfos />
+        </>
+      }
       <hr />
       <DashboardEditorKeyWords />
 

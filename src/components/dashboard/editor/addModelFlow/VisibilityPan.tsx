@@ -15,15 +15,20 @@ import { useDispatch } from "react-redux";
 import GreenCheck from '@/icons/check-green.svg'
 import { EditorContext } from "../_context/EditorContext";
 import { VisibilityType, WorkTimeLabelType, WorkTimeType } from "../data/metaValues";
+import { useMediaQuery } from "@uidotdev/usehooks";
+
+import Close from '@/icons/dashboard/x.svg'
 
 
 export const VisibilityPan = () => {
   const context = useContext(AddModelContext);
   const editorContext = useContext(EditorContext);
 
-  const dashBoardContext = useContext(DashBoardContext);
+  const dashboardContext = useContext(DashBoardContext);
 
   const form = useRef<HTMLFormElement>(null);
+
+  const isMobile = useMediaQuery('(max-width: 768px)');
 
   const visibilityOptions = [
     {
@@ -87,8 +92,8 @@ export const VisibilityPan = () => {
       updateRes.then((res: StrapiResponse) => {
         if (res.status === 200) {
           context.resetData();
-          dashBoardContext.setIsAddModelPannelOpen(false);
-          dashBoardContext.closePanels();
+          dashboardContext.setIsAddModelPannelOpen(false);
+          dashboardContext.closePanels();
           lenis.scrollTo(0);
 
           dispatch(removeToast(editorContext.noModelMessageId))
@@ -110,20 +115,19 @@ export const VisibilityPan = () => {
     context.setVisibility(visibilityValue)
     context.setCopywrite(copyWriteValue)
     context.setWorktime(durationValue)
-
   }, [visibilityValue, copyWriteValue, durationValue]);
 
-  // useEffect(() => {
-  //   if (context.strapiObject) {
-  //     setVisibilityValue(
-  //       context.strapiObject.attributes.visibility ?? visibilityOptions[0].value
-  //     );
-  //     setCopyWriteValue(context.strapiObject.attributes.copywrite ?? "");
-  //     setDurationValue(
-  //       context.strapiObject.attributes.duration ?? durationOptions[0].value
-  //     );
-  //   }
-  // }, [context.strapiObject]);
+  useEffect(() => {
+    if (context.strapiObject) {
+      setVisibilityValue(
+        context.strapiObject.attributes.visibility ?? visibilityOptions[0].value
+      );
+      setCopyWriteValue(context.strapiObject.attributes.copywrite ?? "");
+      setDurationValue(
+        context.strapiObject.attributes.duration ?? durationOptions[0].value
+      );
+    }
+  }, [context.strapiObject]);
 
   useEffect(() => {
     if (copywriteError) setError(true);
@@ -133,7 +137,7 @@ export const VisibilityPan = () => {
   useEffect(() => {
     setVideoDuration(context.videoDuration);
 
-    dashBoardContext.setButtons(
+    dashboardContext.setButtons(
       <Button
         type="primary"
         label="Confirmer"
@@ -147,13 +151,25 @@ export const VisibilityPan = () => {
     lenis.scrollTo(0)
 
     return () => {
-      dashBoardContext.setButtons(undefined)
+      dashboardContext.setButtons(undefined)
     }
   }, []);
 
   return (
-    <div className="infos-pan bg-dashboard-background-content-area flex flex-col gap-dashboard-spacing-element-medium">
-      <div className="info-pan__video-w relative h-0 pb-[57.6%] rounded-2xl overflow-hidden border">
+    <div className="visibility-pan bg-dashboard-background-content-area flex flex-col gap-dashboard-spacing-element-medium pt-[50px] pb-[150px]">
+      {isMobile && <IslandButton 
+        type="secondary"
+        Icon={Close}
+        iconColor="appleRed"
+        onClick={() => {
+          dashboardContext.setIsAddModelPannelOpen(false)
+          context.setCurrentStep(undefined)
+          context.abort()
+        }}
+        className="w-max self-end mr-dashboard-button-separation-spacing"
+      />}
+      
+      <div className="visibility-pan__video-w relative h-0 pb-[57.6%] rounded-2xl overflow-hidden border">
         <div className="absolute w-full h-full">
           <Video
             video={context.strapiObject?.attributes.video.data.attributes}
@@ -161,7 +177,7 @@ export const VisibilityPan = () => {
         </div>
       </div>
 
-      <div className="info-pan__video-info">
+      <div className="visibility-pan__video-info">
         <div className="flex justify-between items-baseline flex-wrap">
           <div className="display flex items-baseline gap-4 n27">
             <div className="text-dashboard-text-title-white-high text-title-medium font-medium uppercase tracking-widest">
@@ -171,22 +187,21 @@ export const VisibilityPan = () => {
         </div>
       </div>
 
-      <form ref={form} className="info-pan__format flex flex-col gap-8">
+      <form ref={form} className="visibility-pan__format flex flex-col gap-8 px-padding-medium md:px-0">
         <Input
           label="Visibilité"
           type="radioColumn"
           labelType="dashboard"
           helper="Choisissez de rendre votre vidéo publique, non répertoriée ou privée."
           options={visibilityOptions}
-          selectedOption={visibilityValue}
-          value={visibilityValue}
+          selectedOption={context.visibility}
+          value={context.visibility}
           helpIconText="Help"
           onChange={(e) => {
-            setVisibilityValue(e);
+            context.setVisibility(e)
           }}
           className="text-dashboard-text-description-base"
         />
-      </form>
       <hr />
       <div>
         <Input
@@ -194,11 +209,11 @@ export const VisibilityPan = () => {
           type="textarea"
           bg="light"
           labelType="dashboard"
-          value={copyWriteValue}
+          value={context.copywrite}
           maxlength={150}
           size="sm"
           helpIconText="Help"
-          onChange={(e) => { setCopyWriteValue(e.target.value); }}
+          onChange={(e) => { context.setCopywrite(e.target.value); }}
           className="h-[170px]"
         />
         {copywriteError && (
@@ -213,11 +228,13 @@ export const VisibilityPan = () => {
         labelType="dashboard"
         helper="Évaluez le niveau de recherche et de temps de travail nécessaire à ce type de montage."
         options={durationOptions}
-        selectedOption={durationValue}
-        value={durationValue}
+        selectedOption={context.worktime}
+        value={context.worktime}
         helpIconText="Help"
-        onChange={(e) => { setDurationValue(e); }}
+        onChange={(e) => { context.setWorktime(e); }}
       />
+      
+      </form>
       <hr />
       <div className="flex justify-center sm:justify-between items-center flex-wrap gap-8">
         <div>

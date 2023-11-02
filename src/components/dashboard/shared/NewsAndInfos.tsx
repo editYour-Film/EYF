@@ -11,7 +11,7 @@ import Image from "next/image";
 export const NewsAndInfos = () => {
   const context = useContext(DashBoardContext);
   const router = useRouter();
-
+  
   return (
     <div className="news-infos flex flex-col gap-dashboard-spacing-element-medium">
       <div className="news-infos__head flex flex-row justify-between px-dashboard-mention-padding-right-left md:px-0">

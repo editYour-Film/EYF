@@ -14,7 +14,7 @@ type AddModelProps = {
 export const AddModel = ({className, step}: AddModelProps) => {
   
   return (
-    <div className="addModel__content ">
+    <div className="addModel__content">
       <div 
         className="relative z-20">
         <Switcher step={step}/>

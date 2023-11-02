@@ -92,7 +92,7 @@ export const InfosPan = ({}: InfosPanProps) => {
   const [visibilityPanAdded, setVisibilityPanAdded] = useState(false)
   
 
-  useEffect(() => {
+  useEffect(() => {    
     if (context.strapiObject) {
       setEntry(context.strapiObject.attributes);
       
@@ -129,14 +129,8 @@ export const InfosPan = ({}: InfosPanProps) => {
   const handleSubmit = () => {
     setDescriptionError("");
     setTagsError("");
-
-    context.setModel(formatValue)
-    context.setTitle(titleValue)
-    context.setDescription(descriptionValue)
-    context.setThumbnail(vignet)
-    tags.length > 0 && context.setTags(tags)
+    
     context.setUser_info(user[0].details.id)
-    context.setIs_highlighed(isHighlightedValue)
     context.setLength(duration
       ? duration?.min !== 0
         ? duration?.min.toString() + " minutes"
@@ -159,7 +153,7 @@ export const InfosPan = ({}: InfosPanProps) => {
       name: e,
       slug: slugify(e, { lower: true }),
     };
-    context.setTags([...tags, _tag]);
+    context.setTags(context.tags ? [...context.tags, _tag] : [_tag]);
   };
 
   const handleRemoveTag = (e: any) => {
@@ -176,7 +170,7 @@ export const InfosPan = ({}: InfosPanProps) => {
 
   return (
     <div 
-      className="infos-pan flex flex-col gap-dashboard-spacing-element-medium bg-dashboard-background-content-area py-[150px] md:py-0"
+      className="infos-pan flex flex-col gap-dashboard-spacing-element-medium bg-dashboard-background-content-area pt-[50px] pb-[150px] md:py-0"
     >
       {isMobile && <IslandButton 
         type="secondary"
@@ -213,10 +207,10 @@ export const InfosPan = ({}: InfosPanProps) => {
             noLabel
             type="radio"
             options={formatOption}
-            selectedOption={formatValue}
-            value={formatValue}
+            selectedOption={context.model}
+            value={context.model}
             onChange={(e) => {
-              setFormatValue(e);
+              context.setModel(e);
             }}
             className="bg-transparent"
           />
@@ -229,10 +223,10 @@ export const InfosPan = ({}: InfosPanProps) => {
             type="text"
             helpIconText="Entrez le titre"
             bg="light"
-            value={titleValue}
+            value={context.title}
             placeholder="Choisir un titre..."
             onChange={(e) => {
-              setTitleValue(e.target.value);
+              context.setTitle(e.target.value);
             }}
             className="bg-transparent"
           />
@@ -248,10 +242,10 @@ export const InfosPan = ({}: InfosPanProps) => {
             labelType="dashboard"
             helpIconText="Entrez la description"
             bg="light"
-            value={descriptionValue}
+            value={context.description}
             placeholder="Présentez votre vidéo à vos spectateurs..."
             onChange={(e) => { 
-              setDescriptionValue(e.target.value);
+              context.setDescription(e.target.value);
             }}
             maxlength={100}
             className="bg-transparent"
@@ -294,7 +288,7 @@ export const InfosPan = ({}: InfosPanProps) => {
           desc="Importez une image qui donne un aperçu du contenu de votre vidéo. Une bonne image se remarque et attire l'attention des spectateurs."
           image={defaultImage}
           onChange={(file) => { 
-            setVignet(file);
+            context.setThumbnail(file);
           }}
         />
 

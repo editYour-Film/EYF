@@ -102,7 +102,7 @@ export const AddModelContextProvider: React.FC<any> = (props) => {
   const [worktime, setWorktime] = useState<WorkTimeType | undefined>(undefined)
   const [is_highlighed, setIs_highlighed] = useState<boolean | undefined>(undefined)
 
-  const modifiedData = {
+  const [modifiedData, setModifiedData] = useState<any>({
     video,
     thumbnail,
     title,
@@ -116,16 +116,34 @@ export const AddModelContextProvider: React.FC<any> = (props) => {
     copywrite,
     worktime,
     is_highlighed,
-  }
+  })
 
   const [isModify, setIsModify] = useState(false);
   const [videoDuration, setVideoDuration] = useState<VideoDuration | undefined>(undefined);
 
+  useEffect(() => {
+    setModifiedData({
+      video,
+      thumbnail,
+      title,
+      length,
+      model,
+      description,
+      tags,
+      ressources,
+      user_info,
+      visibility,
+      copywrite,
+      worktime,
+      is_highlighed,
+    })
+  }, [title])
+
   const handleUpdateEditorVideo = async (): Promise<unknown> => {
     if (currentEditorVideo) {
       const formData = new FormData();
-      const fieldsData: any = {};
-      
+      const fieldsData: any = {};      
+            
       for (const [key, value] of Object.entries(modifiedData)) {
         if (value) {
           if (["video", "thumbnail"].includes(key)) {
@@ -239,7 +257,7 @@ export const AddModelContextProvider: React.FC<any> = (props) => {
 
     //TODO: Integration delete the draft editor video if present
     if(currentEditorVideo) {
-      useStrapiDelete(`editor-video/${currentEditorVideo}`, true)
+      useStrapiDelete(`editor-videos/${currentEditorVideo}`, true)
     }
   }
 
