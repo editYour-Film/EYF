@@ -13,6 +13,8 @@ import { TopBar } from "@/components/dashboard/shared/TopBar";
 import { NotificationCenter } from "@/components/dashboard/shared/NotificationCenter";
 import { useUser } from "@/auth/authContext";
 import { useMediaQuery } from "@uidotdev/usehooks";
+import { AddModelContextProvider } from "@/components/dashboard/editor/_context/AddModelContext";
+import { MessageManager } from "@/components/_shared/UI/MessageManager";
 
 export default function DashBoardContentHome() {
   return (
@@ -31,7 +33,6 @@ export default function DashBoardContentHome() {
 
 const DashBoardPageHome = ({children}:PropsWithChildren) => {
   const context = useContext(DashBoardContext)
-  const [user] = useUser()
   const [hasAddModel, setHasAddModel] = useState(false)
 
   const isMobile = useMediaQuery('(max-width: 768px)')
@@ -39,26 +40,34 @@ const DashBoardPageHome = ({children}:PropsWithChildren) => {
   useEffect(() => {
     context.setPanels([{
       title: 'Accueil - Modèles',
-      panel: DashboardEditorHome
+      panel: <DashboardEditorHome />
     }])
   }, [])
 
   return (<>
     <TopBar
-      className="md:col-[2_/_3] row-[1_/_2] sticky md:relative top-0 left-0 w-full z-popup flex justify-center py-dashboard-button-separation-spacing md:py-0 h-max md:justify-end bg-dashboard-button-dark bg-opacity-80 mt-[50px] md:mt-0"
+      className="md:col-[2_/_3] row-[1_/_2] sticky md:relative top-0 left-0 w-full z-panel flex justify-center md:justify-end py-dashboard-button-separation-spacing md:py-0 h-max bg-dashboard-button-dark bg-opacity-80 mt-[50px] md:mt-0"
     >
+      {!isMobile &&
+        <MessageManager 
+          className='shrink ml-0 mr-auto'
+        />
+      }
+
       <IslandButton
         type="small-secondary"
         label="Ajouter un modèle"
-        disabled={hasAddModel}
-
+        disabled={context.isAddModelPannelOpen}
+        className="shrink-0"
         onClick={() => {
           if(!isMobile) {
             if(!context.panels?.find((p) => p.panel === AddModel)) {
               context.addPannel({
                 title: 'Ajouter un modèle',
-                panel: AddModel
+                panel: <AddModel />
               })
+
+              context.setIsAddModelPannelOpen(true)
             }
           } else {
             context.setIsAddModelPannelOpen(true)
@@ -69,27 +78,28 @@ const DashBoardPageHome = ({children}:PropsWithChildren) => {
       />
     </TopBar>
 
-    <div className="main_content mt-[50px] md:mt-0 md:col-[2_/_3] row-[2_/_4] overflow-hidden">
-      <div className="flex flex-col">
-        <NotificationCenter className='relative z-0' />
+    <AddModelContextProvider>
+      <div className="main_content mt-[50px] md:mt-0 md:col-[2_/_3] row-[2_/_4]">
+        <div className="flex flex-col">
+          <NotificationCenter className='relative z-0' />
 
-        <DashboardContainer className='relative z-10' />
-        
-        {
-          isMobile && 
-          <>
-            <div 
-              data-lenis-prevent
-              className={`fixed top-0 left-0 w-full bg-dashboard-button-dark z-popup overflow-hidden transition-transform duration-500  ${context.isAddModelPannelOpen ? 'ease-out translate-x-0' : 'translate-x-full pointer-events-none ease-in'}`}
-            >
-              <AddModel />
-            </div>
-          </>
-        }  
+          <DashboardContainer className='relative z-10' />
+          
+          {
+            isMobile && 
+            <>
+              <div 
+                data-lenis-prevent
+                className={`fixed top-0 left-0 w-full h-screen bg-dashboard-button-dark z-panels overflow-scroll transition-transform duration-500  ${context.isAddModelPannelOpen ? 'ease-out translate-x-0' : 'translate-x-full pointer-events-none ease-in'}`}
+              >
+                <AddModel />
+              </div>
+            </>
+          }  
+        </div>
+        <NewsletterSection />
+        <Footer />
       </div>
-
-      <NewsletterSection />
-      <Footer />
-    </div>
+    </AddModelContextProvider>
   </>)
 }

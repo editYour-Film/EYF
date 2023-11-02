@@ -1,3 +1,4 @@
+import useStrapi from "@/hooks/useStrapi"
 import { getNotifications } from "@/store/slices/NotificationsSlice"
 import { PropsWithChildren, createContext, useEffect, useState } from "react"
 import { useDispatch } from "react-redux"
@@ -27,6 +28,7 @@ export const DashBoardContext = createContext({
   panels: [] as dashBoardPanelType[] | undefined,
   setPanels: (payload: dashBoardPanelType[]) => {},
   addPannel: (payload: dashBoardPanelType) => {},
+  closePanels: () => {},
   activePanel: 0,
   setActivePanel: (payload: number) => {},
 
@@ -42,10 +44,23 @@ export const DashBoardContext = createContext({
 
   posts: [] as dashboardPostType[],
   infoCardActive: false,
-  infoCard: undefined as infoCardType | undefined
+  infoCard: undefined as infoCardType | undefined,
+
+  buttons: undefined as any,
+  setButtons: (payload:any) => {},
 })
 
 export const DashBoardContextProvider = ({children}:PropsWithChildren) => {
+  const dispatch = useDispatch()
+  
+  const { data: data, mutate: getStrapi } = useStrapi(
+    "dashboard-monteur?" +
+    "populate[add_model]=*&" +
+    "populate[news_info][populate][news_info_post][populate]=*&" +
+    "populate[news_info][populate][info_card][populate]=*",
+    false
+  );
+
   const [panels, setPanels] = useState<dashBoardPanelType[] | undefined>(undefined)
   const [activePanel, setActivePanel] = useState(0)
 
@@ -53,49 +68,43 @@ export const DashBoardContextProvider = ({children}:PropsWithChildren) => {
 
   const [notificationCenterAnimated, setNotificationCenterAnimated] = useState(false)
   const [notificationCenterOpen, setNotificationCenterOpen] = useState(false)
-  
-  const dispatch = useDispatch()
+
+  const [buttons, setButtons] = useState<any | undefined>(undefined)
   
   useEffect(() => {
     dispatch(getNotifications())
+    getStrapi();
   }, [])
 
-  // TODO: Integration Get the selection of posts from strapi
-  const posts:dashboardPostType[] = [
-    {
-      title: 'Plateforme de montage vidéo et producteurs s\'unissent',
-      excerpt: 'Découvrez le partenariat exceptionnel entre une plateforme de montage vidéo de pointe et des producteurs de renom. Une collaboration qui promet de révolutionner la production vidéo !',
-      category: 'Tournage',
-      author: 'Julia Dupont',
-      date: '21 Novembre, 2022',
-      length: '6min',
-      link: 'link1'
-    }, {
-      title: 'EDITYOUR.FILM, POURQUOI FAIRE ?',
-      excerpt: 'Parce que votre vidéo va se retrouver au milieu de millions d’autres postées chaque jour sur YouTube, Facebook, Instagram, Tik Tok ou Linkedin réunis !',
-      category: 'Montage',
-      author: 'Leonie OLMOS',
-      date: '21 Novembre, 2022',
-      length: '6min',
-      link: 'link2'
-    }, {
-      title: 'Lorem ipsum dolor sit amet consectet Congue tortor ipsum.',
-      excerpt: 'Lorem ipsum dolor sit amet consectet Congue tortor ipsum. Lorem ipsum dolor sit amet consectet Congue tortor ipsum.',
-      category: 'Partenariat',
-      author: 'Francois Herard',
-      date: '21 Novembre, 2022',
-      length: '6min',
-      link: 'link3'
-    },
-  ]
+  let posts:dashboardPostType[] = [];
 
-  // TODO: Integration get if info card is active
-  const infoCardActive = true;
-  // TODO: Integration get infocard datas
+  if (data && data.attributes && data.attributes.news_info) {
+    if (data.attributes.news_info.news_info_post) {
+      const news_info_post = data.attributes.news_info.news_info_post
+    
+      posts = news_info_post.map((post:any) => {
+        return {
+          title: post.title,
+          excerpt: post.excerpt,
+          category: post.category,
+          author: post.author,
+          date: new Date(post.date).toLocaleDateString('fr-FR', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+          }),
+          length: post.length,
+          link: post.link
+        }
+      })
+    }
+  }
+
+  const infoCardActive = data?.attributes.news_info.info_card.isActive ? true : false
   const infoCard:infoCardType = {
-    title: 'Ouverture des agendas',
-    text: <div><p>Le 13 décembre, nous ouvrons les agendas pour que vous puissiez ajouter vos disponibilités. Cette mise à jour vous permettra de rendre vos services accessibles aux clients créateurs.</p><p>Dès que vous aurez inscrit vos disponibilités, vos modèles de montage apparaîtront dans notre catalogue. Les clients pourront ainsi vous trouver plus facilement et vous inclure dans leurs devis. Préparez-vous à mettre en avant votre talent !</p></div>,
-    img: '/img/img.png',
+    title: `${ data?.attributes ? data.attributes.news_info.info_card.title : 'Error' }`,
+    text: <div><p>{ data?.attributes ? data.attributes.news_info.info_card.content : '' }</p></div>,
+    img: `${ data?.attributes ? data.attributes.news_info.info_card.picture.data.attributes.url : '/img/img.png' }`,
   }
 
   const addPannel = (panel:dashBoardPanelType) => {
@@ -103,6 +112,12 @@ export const DashBoardContextProvider = ({children}:PropsWithChildren) => {
     else setPanels([panel])
         
     setActivePanel(panels ? panels?.length : 0)
+  }
+
+  const closePanels = () => {
+    if(panels) setPanels([panels[0]])
+        
+    setActivePanel(0)
   }
 
   const openNotificationCenter = () => {    
@@ -123,6 +138,7 @@ export const DashBoardContextProvider = ({children}:PropsWithChildren) => {
         panels,
         setPanels,
         addPannel,
+        closePanels,
         activePanel,
         setActivePanel,
 
@@ -138,7 +154,10 @@ export const DashBoardContextProvider = ({children}:PropsWithChildren) => {
 
         posts,
         infoCardActive,
-        infoCard
+        infoCard,
+
+        buttons,
+        setButtons,
       }}
     >
       {children}

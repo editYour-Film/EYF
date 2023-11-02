@@ -119,10 +119,9 @@ export const TitleReveal = ({ data }: any) => {
               {titles.length &&
                 titles.map((title: any, i) => {
                   return (
-                    <div
+                    <div 
                       key={i}
-                      className="basis-[100%] shrink-0 text-center text-base-text text-xl"
-                    >
+                      className="basis-[100%] shrink-0 text-center text-base-text text-xl">
                       {title.content}
                     </div>
                   );

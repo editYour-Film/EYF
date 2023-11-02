@@ -1,18 +1,34 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Input from "@/components/_shared/form/Input";
-import Button from "@/components/_shared/form/Button";
 import { useUser } from "@/auth/authContext";
 import { useLenis } from "@studio-freight/react-lenis";
-import { checkAlphanumeric } from "../../../../utils/utils";
 import { StrapiResponse } from "@/hooks/useStrapi";
 import { VideoDuration } from "@/utils/Video";
 import { AddModelContext } from "../_context/AddModelContext";
+import { Video } from "@/components/_shared/video/Video";
+import { Button } from "@/components/_shared/buttons/Button";
+import { IslandButton } from "@/components/_shared/buttons/IslandButton";
+import { DashBoardContext } from "../../_context/DashBoardContext";
+import { addToast, removeToast } from "@/store/slices/toastSlice";
+import { useDispatch } from "react-redux";
+import GreenCheck from '@/icons/check-green.svg'
+import { EditorContext } from "../_context/EditorContext";
+import { VisibilityType, WorkTimeLabelType, WorkTimeType } from "../data/metaValues";
+import { useMediaQuery } from "@uidotdev/usehooks";
+
+import Close from '@/icons/dashboard/x.svg'
+
 
 export const VisibilityPan = () => {
   const context = useContext(AddModelContext);
-  const user = useUser();
+  const editorContext = useContext(EditorContext);
+
+  const dashboardContext = useContext(DashBoardContext);
+
   const form = useRef<HTMLFormElement>(null);
+
+  const isMobile = useMediaQuery('(max-width: 768px)');
 
   const visibilityOptions = [
     {
@@ -35,7 +51,11 @@ export const VisibilityPan = () => {
     },
   ];
 
-  const durationOptions = [
+  const durationOptions:{
+    value: WorkTimeType,
+    label: WorkTimeLabelType,
+    helper: string
+  }[] = [
     {
       value: "base",
       label: "Basique",
@@ -56,28 +76,34 @@ export const VisibilityPan = () => {
     },
   ];
 
-  const [visibilityValue, setVisibilityValue] = useState<string | undefined>(
-    undefined
-  );
-  const [copyWriteValue, setCopyWriteValue] = useState<string | undefined>(
-    undefined
-  );
-  const [durationValue, setDurationValue] = useState<string | undefined>(
-    undefined
-  );
+  const [visibilityValue, setVisibilityValue] = useState<VisibilityType | undefined>(undefined);
+  const [copyWriteValue, setCopyWriteValue] = useState<string | undefined>(undefined);
+  const [durationValue, setDurationValue] = useState<WorkTimeType | undefined>(undefined);
   const [videoDuration, setVideoDuration] = useState<VideoDuration>();
   const [error, setError] = useState<boolean>(false);
   const [copywriteError, setCopyWriteError] = useState("");
 
   const lenis = useLenis();
+  const dispatch = useDispatch();
 
   const handleSubmit = async () => {
     setTimeout(() => {
-      const updateRes = context.updateEditorVideo();
+      const updateRes = context.handleUpdateEditorVideo();
       updateRes.then((res: StrapiResponse) => {
         if (res.status === 200) {
-          context.setStep(3);
+          context.resetData();
+          dashboardContext.setIsAddModelPannelOpen(false);
+          dashboardContext.closePanels();
           lenis.scrollTo(0);
+
+          dispatch(removeToast(editorContext.noModelMessageId))
+
+          dispatch(addToast({
+            id: Date.now(),
+            message: 'Votre modèle a été ajouté avec succès.',
+            Icon: GreenCheck,
+            delay: 3000,
+          }))
         } else {
           console.log("error occured");
         }
@@ -86,14 +112,9 @@ export const VisibilityPan = () => {
   };
 
   useEffect(() => {
-    const data = {
-      ...context.modifiedData,
-      visibility: visibilityValue,
-      copywrite: copyWriteValue,
-      worktime: durationValue,
-    };
-
-    context.setModifiedData(data);
+    context.setVisibility(visibilityValue)
+    context.setCopywrite(copyWriteValue)
+    context.setWorktime(durationValue)
   }, [visibilityValue, copyWriteValue, durationValue]);
 
   useEffect(() => {
@@ -108,11 +129,6 @@ export const VisibilityPan = () => {
     }
   }, [context.strapiObject]);
 
-  const handleCopyWriteChange = (e: any) => {
-    //checkAlphanumeric(e.target.value, setCopyWriteError);
-    setCopyWriteValue(e.target.value);
-  };
-
   useEffect(() => {
     if (copywriteError) setError(true);
     else setError(false);
@@ -120,64 +136,72 @@ export const VisibilityPan = () => {
 
   useEffect(() => {
     setVideoDuration(context.videoDuration);
+
+    dashboardContext.setButtons(
+      <Button
+        type="primary"
+        label="Confirmer"
+        onClick={() => {
+          !error && handleSubmit();
+        }}
+        className="w-full"
+      />
+    )
+
+    lenis.scrollTo(0)
+
+    return () => {
+      dashboardContext.setButtons(undefined)
+    }
   }, []);
 
   return (
-    <div className="infos-pan bg-black p-5 flex flex-col gap-8">
-      <div className="info-pan__video-w relative h-0 pb-[57.6%] rounded-2xl overflow-hidden border">
-        <video controls className="object-cover absolute h-full w-full">
-          <source
-            src={context.strapiObject?.attributes.video.data.attributes.url}
-            type={context.strapiObject?.attributes.video.data.attributes.mime}
+    <div className="visibility-pan bg-dashboard-background-content-area flex flex-col gap-dashboard-spacing-element-medium pt-[50px] pb-[150px]">
+      {isMobile && <IslandButton 
+        type="secondary"
+        Icon={Close}
+        iconColor="appleRed"
+        onClick={() => {
+          dashboardContext.setIsAddModelPannelOpen(false)
+          context.setCurrentStep(undefined)
+          context.abort()
+        }}
+        className="w-max self-end mr-dashboard-button-separation-spacing"
+      />}
+      
+      <div className="visibility-pan__video-w relative h-0 pb-[57.6%] rounded-2xl overflow-hidden border">
+        <div className="absolute w-full h-full">
+          <Video
+            video={context.strapiObject?.attributes.video.data.attributes}
           />
-        </video>
+        </div>
       </div>
-      <div className="info-pan__video-info">
+
+      <div className="visibility-pan__video-info">
         <div className="flex justify-between items-baseline flex-wrap">
           <div className="display flex items-baseline gap-4 n27">
-            <div className="text-lg font-medium uppercase tracking-widest">
-              {context.modifiedData?.title}
+            <div className="text-dashboard-text-title-white-high text-title-medium font-medium uppercase tracking-widest">
+              {context.title}
             </div>
-            {videoDuration && (
-              <div className="text-sm">
-                &#40;
-                {videoDuration?.min !== 0 &&
-                  videoDuration?.min.toString() + " minutes"}
-                {videoDuration?.sec.toString()}
-                {videoDuration?.min === 0 && " secondes"}&#41;
-              </div>
-            )}
           </div>
-          <div className="text-base-text font-light text-[17px] uppercase n27">
-            {user[0].details.f_name}
-          </div>
-        </div>
-        <div className="mt-3 text-sm">
-          Lien de la video{" "}
-          <Link
-            className="text-primary-high text-opacity-80 hover:text-opacity-100"
-            href="https://edityour.film/"
-          >
-            https://edityour.film/lienDeLaVideo
-          </Link>
         </div>
       </div>
-      <hr />
-      <form ref={form} className="info-pan__format flex flex-col gap-8">
+
+      <form ref={form} className="visibility-pan__format flex flex-col gap-8 px-padding-medium md:px-0">
         <Input
           label="Visibilité"
           type="radioColumn"
           labelType="dashboard"
-          helper="Helper"
+          helper="Choisissez de rendre votre vidéo publique, non répertoriée ou privée."
           options={visibilityOptions}
-          selectedOption={visibilityValue}
-          value={visibilityValue}
+          selectedOption={context.visibility}
+          value={context.visibility}
           helpIconText="Help"
           onChange={(e) => {
-            setVisibilityValue(e);
+            context.setVisibility(e)
           }}
+          className="text-dashboard-text-description-base"
         />
-      </form>
       <hr />
       <div>
         <Input
@@ -185,18 +209,15 @@ export const VisibilityPan = () => {
           type="textarea"
           bg="light"
           labelType="dashboard"
-          helper="Nos équipes vérifieront, à partir de votre déclaration, les contenus protégés par des droits d'auteur afin de mentionner les ayants droit."
-          value={copyWriteValue}
+          value={context.copywrite}
           maxlength={150}
           size="sm"
           helpIconText="Help"
-          onChange={(e) => {
-            handleCopyWriteChange(e);
-          }}
+          onChange={(e) => { context.setCopywrite(e.target.value); }}
           className="h-[170px]"
         />
         {copywriteError && (
-          <div className="text-error text-sm mt-2">{copywriteError}</div>
+          <div className="text-appleRed text-sm mt-2">{copywriteError}</div>
         )}
       </div>
 
@@ -207,18 +228,18 @@ export const VisibilityPan = () => {
         labelType="dashboard"
         helper="Évaluez le niveau de recherche et de temps de travail nécessaire à ce type de montage."
         options={durationOptions}
-        selectedOption={durationValue}
-        value={durationValue}
+        selectedOption={context.worktime}
+        value={context.worktime}
         helpIconText="Help"
-        onChange={(e) => {
-          setDurationValue(e);
-        }}
+        onChange={(e) => { context.setWorktime(e); }}
       />
+      
+      </form>
       <hr />
       <div className="flex justify-center sm:justify-between items-center flex-wrap gap-8">
         <div>
           {error ? (
-            <span className="text-error text-sm ">
+            <span className="text-appleRed text-sm ">
               Le formulaire contient des erreurs
             </span>
           ) : (
@@ -227,14 +248,11 @@ export const VisibilityPan = () => {
             </span>
           )}
         </div>
-        <Button
-          variant="black"
-          text="Suivant"
-          icon="arrow-right"
-          iconRight
-          className={`w-max ${
-            error ? "pointer-events-none opacity-10" : "bg-black opacity-50"
-          }`}
+        <IslandButton
+          type="primary"
+          label="Suivant"
+          disabled={error}
+          className={`w-max`}
           onClick={() => {
             !error && handleSubmit();
           }}

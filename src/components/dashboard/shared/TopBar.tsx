@@ -23,6 +23,7 @@ export const TopBar = ({children, className}:PropsWithChildren<TopBarProps>) => 
         onClose={() => {
           (!context.notificationCenterAnimated) && context.toggleNotificationCenter()
         }}
+        className='shrink-0 basis-max'
       />
       <IslandButton 
         type='small-secondary'

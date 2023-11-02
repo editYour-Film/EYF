@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import store from "@/store/store";
 import { AppProps } from "next/app";
 import { useRouter } from "next/router";
@@ -10,6 +10,9 @@ import EYFLogo from "../../../public/icons/logo.svg";
 import { Session } from "next-auth";
 import { useDispatch } from "react-redux";
 import { enableTransition } from "@/store/slices/transitionSlice";
+import { MessageType } from "../_shared/UI/InfoMessage";
+
+import TestIcon from "@/icons/checkbox-check.svg"
 
 export const PageTransition = ({
   Component,
@@ -98,6 +101,12 @@ export const PageTransition = ({
     });
   };
 
+  const [messages, setMessages] = useState<MessageType[]>([{
+    message: 'Test Message',
+    Icon: TestIcon,
+    id: 1
+  }])
+
   return (
     <>
       <SwitchTransition>
@@ -113,6 +122,12 @@ export const PageTransition = ({
         </Transition>
       </SwitchTransition>
 
+      {/* Message Center */}
+      {/* <div className="message-center fixed top-0 left-0 w-full h-full flex justify-center items-start z-popup bg-black">
+        <MessageManager />
+      </div> */}
+
+      {/* Transition Mask Element */}
       <div className="fixed w-full h-full top-0 left-0 perspective z-transition pointer-events-none">
         <div
           ref={transitionEl}

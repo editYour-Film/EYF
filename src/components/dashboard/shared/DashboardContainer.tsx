@@ -22,35 +22,28 @@ export const DashboardContainer = ({
       }`}
     >
       <div className="dashboard_container__tabWrapper hidden md:flex border-x-03 flex-row w-full bg-dashboard-button-dark">
-        {context.panels &&
-          context.panels.map((pan, i) => {
-            return (
-              <TabWindow
-                key={i}
-                label={pan.title}
-                disabled={context.activePanel !== i}
-                onClick={() => {
-                  context.setActivePanel(i);
-                }}
-              />
-            );
-          })}
+        {context.panels && context.panels.map((pan, i) => {
+          return  (
+          <TabWindow
+            key={i}
+            label={pan.title}
+            disabled={context.activePanel !== i}
+            onClick={() => { context.setActivePanel(i) }}
+          />)
+        })}
       </div>
 
-      {context.panels &&
-        context.panels.map((pan, i) => {
-          return (
-            <pan.panel
-              key={i}
-              active={context.activePanel === i}
-              className={`${
-                context.activePanel === i
-                  ? "z-10 block h-auto opacity-1 pointer-events-auto"
-                  : "hidden z-0 h-0 opacity-0 pointer-events-none"
-              }`}
-            />
-          );
-        })}
+      {
+        context.panels && context.panels.map((pan, i) => { return (
+          <div
+            key={i}
+            className={`${context.activePanel === i ? 'z-10 block h-auto opacity-1 pointer-events-auto' : 'hidden z-0 h-0 opacity-0 pointer-events-none'}`}
+          >
+            {pan.panel}
+          </div>
+
+        )})
+      }
     </div>
   );
 };

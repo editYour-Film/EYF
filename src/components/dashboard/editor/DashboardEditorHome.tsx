@@ -19,7 +19,6 @@ type DashboardEditorHomeProps = {
 }
 
 export const DashboardEditorHome = ({className}:DashboardEditorHomeProps) => {
-  const AddModelContext = useContext(_AddModelContext);
   const dashboardContext = useContext(DashBoardContext)
   const editorCtx = useContext(EditorContext)
 
@@ -27,8 +26,6 @@ export const DashboardEditorHome = ({className}:DashboardEditorHomeProps) => {
   const [highlightedVideo, setHighLightedVideo] = useState<any>(null);
 
   useEffect(() => {
-    AddModelContext.getCurrentModels();
-
     setHighLightedVideo(
       user.models && user.models.filter((x: any) => x.is_highlighted).length > 0
         ? user.models.filter((x: any) => x.is_highlighted)[0]
@@ -53,14 +50,20 @@ export const DashboardEditorHome = ({className}:DashboardEditorHomeProps) => {
               onClick={() => {
                 dashboardContext.setIsAddModelPannelOpen(true)
               }}
+              className="md:hidden"
             />
           </>
       }
       
       <hr />
       <DashboardEditorModels models={editorCtx.models} />
-      <hr />
-      <NewsAndInfos />
+      {
+        (dashboardContext.infoCardActive || dashboardContext.posts && dashboardContext.posts.length > 0) &&
+        <>
+          <hr />
+          <NewsAndInfos />
+        </>
+      }
       <hr />
       <DashboardEditorKeyWords />
 

@@ -2,6 +2,7 @@
 import gsap from "gsap"
 
 import { useEffect, useRef, useState } from "react"
+import { EditButton } from "../UI/EditButton"
 
 type DropBoxProps = {
   Icon: any,
@@ -135,8 +136,6 @@ export const DropBox = ({
   }
 
   const handleClose = () => {
-    console.log('close');
-    
     setToggle && setToggle(false)
     ctx.current && ctx.current.close()
     onChange && (currentValue !== value) && onChange(value)
@@ -259,16 +258,5 @@ const DropBoxOption = ({item, selected, onClick, noBullet}:DropBoxOptionProps) =
       <div>{item}</div>
     </div>
   </button>
-  )
-}
-
-
-const EditButton = ({selected}:{selected:boolean}) => {
-  return (
-    <div className={`flex justify-center items-center w-[19px] h-[19px] rounded-full border-[2px] group-hover:border-soyMilk`}>
-      {selected && 
-        <div className="w-[11px] h-[11px] bg-blueBerry rounded-full"></div>
-      }
-    </div>
   )
 }

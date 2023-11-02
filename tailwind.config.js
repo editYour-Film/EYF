@@ -106,10 +106,12 @@ module.exports = {
         'error-bg': 'rgba(127, 29, 29, 0.4)'
       },
       zIndex: {
-        'header': '80',
-        'popup': '90',
-        'cursor': '100',
-        'transition': '200',
+        'header': 80,
+        'panels': 81,
+        'buttons': 85,
+        'popup': 90,
+        'cursor': 100,
+        'transition': 200,
       },
       transformOrigin: {
         'top-left-90-90' : '90% 90%',
@@ -295,6 +297,11 @@ module.exports = {
             gridTemplateColumns: '[main-start] 50px [inner-start sidebar-start] 190px [sidebar-end content-start] 1fr [content-end inner-end] 50px [main-end]',
             gridAutoRows: 'max-content',
             gap: 0
+          }
+        },
+        '.no-widget': {
+          '&::-webkit-calendar-picker-indicator': {
+            display: 'none!important',
           }
         },
 
