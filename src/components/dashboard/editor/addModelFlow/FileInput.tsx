@@ -1,7 +1,7 @@
 import { useRef, useContext, useState, FormEvent, ChangeEvent, useEffect } from "react";
 import Link from "next/link";
 import { useUser } from "@/auth/authContext";
-import { useStrapiPost } from "@/hooks/useStrapi";
+import useStrapi, { useStrapiPost } from "@/hooks/useStrapi";
 
 import Upload from "@/icons/dashboard/upload.svg";
 import Warning from "@/icons/dashboard/alert-octagon.svg";
@@ -132,6 +132,16 @@ export const FileInput = ({}: FileInputProps) => {
       }
     }
   };
+  
+  const { data: data, mutate: getStrapi } = useStrapi(
+    "dashboard-monteur?" +
+    "populate=*",
+    false
+  );
+
+  useEffect(() => {
+    getStrapi();
+  }, []);
 
   useEffect(() => {    
     const mobileButtons = 
@@ -304,8 +314,8 @@ export const FileInput = ({}: FileInputProps) => {
         <TitleSvgCard
           className="mt-5"
           img="/img/dashboard/cristal-ball.png"
-          title="Augmentez votre visibilité"
-          text="En ajoutant des modèles vous augmentez vos chances d’être vu par les créateurs à la recherche d’un monteur pour leur prochain projet. Nous vous conseillons d’ajouter 3 modèles pour apparaître le plus largement possible."
+          title={ data?.attributes.add_model.title ? data?.attributes.add_model.title : "Augmentez votre visibilité" }
+          text={ data?.attributes.add_model.content ? data?.attributes.add_model.content : "En ajoutant des modèles vous augmentez vos chances d’être vu par les créateurs à la recherche d’un monteur pour leur prochain projet. Nous vous conseillons d’ajouter 3 modèles pour apparaître le plus largement possible." }
         />
       )}
     </div>
