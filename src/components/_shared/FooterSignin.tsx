@@ -15,13 +15,28 @@ export const FooterSignin = ({ height }: FooterSigninProps) => {
 
   if (context.currentStep !== 2) {
     return (
+      <>
+        <span className="text-base-text"> Nouveau sur editYour.Film ? </span>
+        <Link
+          href={routes.SIGNUP}
+          className="text-violet ml-2.5 text-lg cursor-pointer"
+          scroll={false}
+        >
+          S’inscrire
+        </Link>
+      </>
+      /*
+    return (
       <div
         className={`FooterSignin absolute bottom-0 flex justify-center items-center w-screen mt-auto mb-0 h-[75px] border-t`}
       >
         {router.pathname === routes.SIGNIN ? (
           <>
             <span className="text-base-text"> Mot de passe oublié ?&nbsp;</span>
-            <SimpleLink href={routes.SIGNIN} className="text-white">
+            <SimpleLink
+              href={routes.SIGNIN}
+              className="text-white"
+            >
               Renouveler mon mot de passe
             </SimpleLink>
           </>
@@ -41,6 +56,7 @@ export const FooterSignin = ({ height }: FooterSigninProps) => {
           </>
         )}
       </div>
+      */
     );
   } else return <></>;
 };
