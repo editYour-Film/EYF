@@ -13,8 +13,12 @@ import { LogoSignup } from "./LogoSignup";
 export const ChoicePan = () => {
   const context = useContext(SignUpContext);
 
-  const [isCreator, setIsCreator] = useState(false);
-  const [isEditor, setIsEditor] = useState(false);
+  const [isCreator, setIsCreator] = useState(
+    context.accountType === "creator" || context.accountType === "both"
+  );
+  const [isEditor, setIsEditor] = useState(
+    context.accountType === "editor" || context.accountType === "both"
+  );
 
   const container = useRef<HTMLDivElement>(null);
 

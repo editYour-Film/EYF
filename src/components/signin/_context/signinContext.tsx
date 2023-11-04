@@ -177,11 +177,19 @@ export const SignInContextProvider: React.FC<any> = (props) => {
               unsetToken();
             }
           } else {
-            setSignUpInError(inputErrors.general);
+            if (
+              response.data &&
+              response.data.message &&
+              response.data.message.includes("already taken")
+            )
+              setSignUpInError(
+                "Compte n'est pas créé avec Google provider, veuillez cliquer sur le bouton 'Continuer avec un email' pour continuer."
+              );
+            else setSignUpInError(inputErrors.general);
             unsetToken();
           }
         })
-        .catch(() => {
+        .catch((error) => {
           setSignUpInError(inputErrors.general);
           unsetToken();
         });

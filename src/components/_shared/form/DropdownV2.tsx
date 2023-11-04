@@ -1,10 +1,6 @@
-import { ChangeEvent, createRef, useEffect, useRef, useState } from "react";
-import Button from "./Button";
+import { createRef, useEffect, useRef, useState } from "react";
 import gsap from "gsap";
-import Input from "./Input";
 import { Tag } from "../UI/Tag";
-import { spokenLanguageInterface } from "@/components/dashboard/editor/_context/EditorProfilContext";
-import ArrowDropdown from "@/icons/arrow-down-circle.svg";
 
 export type optionInterface = {
   label: string;

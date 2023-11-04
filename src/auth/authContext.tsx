@@ -15,7 +15,7 @@ export const UserProvider: React.FC<any> = ({ children }: any) => {
     initSignedInUser
   );
 
-  useEffect(() => {
+  /*useEffect(() => {
     if (!getTokenFromLocalCookie()) {
       removeStorage("user");
       router.push(routes.SIGNIN);
@@ -26,7 +26,7 @@ export const UserProvider: React.FC<any> = ({ children }: any) => {
         unsetToken();
       }
     }
-  }, [userInfo]);
+  }, [userInfo]);*/
 
   return (
     <UserContext.Provider

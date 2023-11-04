@@ -21,11 +21,8 @@ export const LangAndSkillsPan = () => {
   }, []);
 
   const handleGoToNext = () => {
-    if (isMobile && mobileStep === 0) {
-      setMobileStep(1);
-    } else {
-      context.goNext();
-    }
+    if (isMobile && mobileStep === 0) setMobileStep(1);
+    else context.goNext();
   };
 
   return (
@@ -44,61 +41,70 @@ export const LangAndSkillsPan = () => {
           />
         </div>
 
-        <hr className="form-separator" />
+        {!context.isLoadingLangSkills && (
+          <>
+            <hr className="form-separator" />
 
-        <div>
-          <div
-            className={`flex ${isMobile ? "justify-start" : "justify-center"} ${
-              isMobile && mobileStep === 1
-                ? "-translate-x-[calc(100%+32px)]"
-                : ""
-            } transition-transform items-stretch gap-dashboard-spacing-element-medium`}
-          >
-            <Dropdown
-              title="Je parle"
-              label="Sélectionnez les langues que vous parlez"
-              mandatory={
-                context.langOptions ? [context.langOptions[0]] : undefined
-              }
-              options={context.langOptions ? context.langOptions : undefined}
-              selected={context.spokenLanguages}
-              onChange={(option) => {
-                context.setSpokenLanguages(option);
+            <div>
+              <div
+                className={`flex ${
+                  isMobile ? "justify-start" : "justify-center"
+                } ${
+                  isMobile && mobileStep === 1
+                    ? "-translate-x-[calc(100%+32px)]"
+                    : ""
+                } transition-transform items-stretch gap-dashboard-spacing-element-medium`}
+              >
+                <Dropdown
+                  title="Je parle"
+                  label="Sélectionnez les langues que vous parlez"
+                  mandatory={
+                    context.langOptions ? [context.langOptions[0]] : undefined
+                  }
+                  options={
+                    context.langOptions ? context.langOptions : undefined
+                  }
+                  selected={context.spokenLanguages}
+                  onChange={(option) => {
+                    //if(context.langOptions && context.langOptions.filter(x=>x.id?.includes(option.concat(x.id))))
+                    context.setSpokenLanguages(option);
+                  }}
+                  open
+                  className={`${
+                    isMobile ? "basis-full shrink-0" : "basis-1/2 shrink-0"
+                  }`}
+                />
+
+                <Dropdown
+                  title="Je travaille avec"
+                  label="Selectionnez vos compétences"
+                  options={context.skillsOptions}
+                  selected={context.skills}
+                  onChange={(option) => {
+                    context.setSkills(option);
+                  }}
+                  open
+                  className={`${
+                    isMobile ? "basis-full shrink-0" : "basis-1/2 shrink-0"
+                  }`}
+                />
+              </div>
+            </div>
+
+            <hr className="form-separator" />
+
+            <Button
+              type="primary"
+              onClick={() => {
+                handleGoToNext();
               }}
-              open
-              className={`${
-                isMobile ? "basis-full shrink-0" : "basis-1/2 shrink-0"
-              }`}
+              label="Continuer"
+              className="w-full"
             />
 
-            <Dropdown
-              title="Je travaille avec"
-              label="Selectionnez vos compétences"
-              options={context.skillsOptions}
-              selected={context.skills}
-              onChange={(option) => {
-                context.setSkills(option);
-              }}
-              open
-              className={`${
-                isMobile ? "basis-full shrink-0" : "basis-1/2 shrink-0"
-              }`}
-            />
-          </div>
-        </div>
-
-        <hr className="form-separator" />
-
-        <Button
-          type="primary"
-          onClick={() => {
-            handleGoToNext();
-          }}
-          label="Continuer"
-          className="w-full"
-        />
-
-        {context.dots && <ProgressDots dots={context.dots} />}
+            {context.dots && <ProgressDots dots={context.dots} />}
+          </>
+        )}
       </SignInSignUpContainer>
     </div>
   );
