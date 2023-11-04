@@ -18,13 +18,10 @@ export const FooterSignin = ({ height }: FooterSigninProps) => {
       <div
         className={`FooterSignin absolute bottom-0 flex justify-center items-center w-screen mt-auto mb-0 h-[75px] border-t`}
       >
-        {router.pathname === routes.SIGNIN_PASSWORD ? (
+        {router.pathname === routes.SIGNIN ? (
           <>
             <span className="text-base-text"> Mot de passe oublié ?&nbsp;</span>
-            <SimpleLink
-              href={routes.SIGNIN_RESET_PWD_P1}
-              className="text-white"
-            >
+            <SimpleLink href={routes.SIGNIN} className="text-white">
               Renouveler mon mot de passe
             </SimpleLink>
           </>
