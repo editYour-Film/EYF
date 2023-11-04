@@ -22,6 +22,7 @@ export const getTokenFromLocalCookie = () => {
 export const SignOut = () => {
   unsetToken();
   removeStorage("user");
+  removeStorage("register_user");
   router.push(routes.SIGNIN);
 };
 

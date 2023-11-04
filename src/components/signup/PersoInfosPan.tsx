@@ -89,7 +89,14 @@ export const PersoInfosPan = () => {
               value={context.f_name}
               onChange={(e) => {
                 context.setF_name(e.target.value);
+                context.setUsername(
+                  (
+                    (e.target.value.length > 0 ? e.target.value : "") +
+                    (context.l_name ? "_" + context.l_name : "")
+                  ).replace(/ /g, "_")
+                );
               }}
+              onBlur={() => context.handleUserNameVerification()}
             />
 
             <Input
@@ -103,7 +110,14 @@ export const PersoInfosPan = () => {
               value={context.l_name}
               onChange={(e) => {
                 context.setL_name(e.target.value);
+                context.setUsername(
+                  (
+                    (context.f_name ? context.f_name : "") +
+                    (e.target.value.length > 0 ? "_" + e.target.value : "")
+                  ).replace(/ /g, "_")
+                );
               }}
+              onBlur={() => context.handleUserNameVerification()}
             />
 
             <Input
