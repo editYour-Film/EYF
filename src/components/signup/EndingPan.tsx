@@ -1,7 +1,7 @@
 import { useContext, useEffect, useRef } from "react";
 import { SignInSignUpContainer } from "../_shared/UI/SignInSignUpContainer";
 import { ElementsOut } from "@/Animations/elementsOut";
-import { SignUpContext } from "./_context/signupContext";
+import { SignUpContext } from "./_context/aaa";
 import { useRouter } from "next/router";
 import routes from "@/routes";
 

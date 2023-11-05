@@ -1,6 +1,6 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { SignInSignUpContainer } from "../_shared/UI/SignInSignUpContainer";
-import { SignUpContext } from "./_context/signupContext";
+import { SignUpContext } from "./_context/aaa";
 import { SimpleCard } from "../_shared/UI/CardSimple";
 import { Button } from "../_shared/buttons/Button";
 import Input from "../_shared/form/Input";

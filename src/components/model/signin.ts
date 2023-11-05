@@ -2,7 +2,7 @@ import {
   skillsInterface,
   spokenLanguageInterface,
 } from "../dashboard/editor/_context/EditorProfilContext";
-import { accountType } from "../signup/_context/signupContext";
+import { accountType } from "../signup/_context/aaa";
 
 export const initSigninUser = {
   email: "",

@@ -11,7 +11,7 @@ import {
   SignUpContext,
   SignUpContextProvider,
   accountType,
-} from "@/components/signup/_context/signupContext";
+} from "@/components/signup/_context/aaa";
 import Head from "next/head";
 import { useContext } from "react";
 
