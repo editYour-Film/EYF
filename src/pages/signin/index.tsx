@@ -11,24 +11,13 @@ import { EmailPan } from "@/components/signin/emailPan";
 import { CodePan } from "@/components/signin/codePan";
 import { TypePan } from "@/components/signin/typePan";
 import routes from "@/routes";
-import Link from "next/link";
 import { FooterSignin } from "@/components/_shared/FooterSignin";
-import { useUser } from "@/auth/authContext";
-import { getTokenFromLocalCookie } from "@/auth/auth";
 import { useRouter } from "next/router";
 import { MentionInteraction } from "@/components/_shared/buttons/MentionInteraction";
 
-import HeaderSignin from "@/components/_shared/HeaderSignin"
+import HeaderSignin from "@/components/_shared/HeaderSignin";
 
-const SignIn:React.FC<layoutProps> = ({previousPath}) => {
-  const { push } = useRouter();
-  const [userInfo, isLoggedIn] = useUser();
-
-  useEffect(() => {
-    const localToken = getTokenFromLocalCookie();
-    if (localToken && userInfo) push(routes.DASHBOARD_EDITOR);
-  }, []);
-
+const SignIn: React.FC<layoutProps> = ({ previousPath }) => {
   return (
     <>
       <Head>
@@ -45,17 +34,31 @@ const SignIn:React.FC<layoutProps> = ({previousPath}) => {
       </SignInContextProvider>
     </>
   );
-}
+};
 
 const SignInPanSwitcher = () => {
   const context = useContext(SignInContext);
-  const router = useRouter()
+  const router = useRouter();
 
   const disclaimer = (
     <span className="text-dashboard-text-description-base-low">
-      En continuant j’accepte les <MentionInteraction onClick={() => { router.push(routes.ML) }}>mentions légales</MentionInteraction>{" "}
-      et la <MentionInteraction  onClick={() => { router.push(routes.ML) }}>Politique de confidentialité</MentionInteraction> de
-      editYour.Film.
+      En continuant j’accepte les{" "}
+      <MentionInteraction
+        onClick={() => {
+          router.push(routes.ML);
+        }}
+      >
+        mentions légales
+      </MentionInteraction>{" "}
+      et la{" "}
+      <MentionInteraction
+        onClick={() => {
+          router.push(routes.ML);
+        }}
+      >
+        Politique de confidentialité
+      </MentionInteraction>{" "}
+      de editYour.Film.
     </span>
   );
 
@@ -71,11 +74,11 @@ const SignInPanSwitcher = () => {
         return <CodePan />;
         break;
       default:
-         return <></> 
+        return <></>;
     }
   };
 
   return renderPan(context.currentStep);
 };
 
-export default SignIn
+export default SignIn;

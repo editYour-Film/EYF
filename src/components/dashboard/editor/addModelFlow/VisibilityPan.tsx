@@ -1,7 +1,5 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import Link from "next/link";
 import Input from "@/components/_shared/form/Input";
-import { useUser } from "@/auth/authContext";
 import { useLenis } from "@studio-freight/react-lenis";
 import { StrapiResponse } from "@/hooks/useStrapi";
 import { VideoDuration } from "@/utils/Video";
@@ -12,13 +10,16 @@ import { IslandButton } from "@/components/_shared/buttons/IslandButton";
 import { DashBoardContext } from "../../_context/DashBoardContext";
 import { addToast, removeToast } from "@/store/slices/toastSlice";
 import { useDispatch } from "react-redux";
-import GreenCheck from '@/icons/check-green.svg'
+import GreenCheck from "@/icons/check-green.svg";
 import { EditorContext } from "../_context/EditorContext";
-import { VisibilityType, WorkTimeLabelType, WorkTimeType } from "../data/metaValues";
+import {
+  VisibilityType,
+  WorkTimeLabelType,
+  WorkTimeType,
+} from "../data/metaValues";
 import { useMediaQuery } from "@uidotdev/usehooks";
 
-import Close from '@/icons/dashboard/x.svg'
-
+import Close from "@/icons/dashboard/x.svg";
 
 export const VisibilityPan = () => {
   const context = useContext(AddModelContext);
@@ -28,7 +29,7 @@ export const VisibilityPan = () => {
 
   const form = useRef<HTMLFormElement>(null);
 
-  const isMobile = useMediaQuery('(max-width: 768px)');
+  const isMobile = useMediaQuery("(max-width: 768px)");
 
   const visibilityOptions = [
     {
@@ -51,10 +52,10 @@ export const VisibilityPan = () => {
     },
   ];
 
-  const durationOptions:{
-    value: WorkTimeType,
-    label: WorkTimeLabelType,
-    helper: string
+  const durationOptions: {
+    value: WorkTimeType;
+    label: WorkTimeLabelType;
+    helper: string;
   }[] = [
     {
       value: "base",
@@ -76,9 +77,15 @@ export const VisibilityPan = () => {
     },
   ];
 
-  const [visibilityValue, setVisibilityValue] = useState<VisibilityType | undefined>(undefined);
-  const [copyWriteValue, setCopyWriteValue] = useState<string | undefined>(undefined);
-  const [durationValue, setDurationValue] = useState<WorkTimeType | undefined>(undefined);
+  const [visibilityValue, setVisibilityValue] = useState<
+    VisibilityType | undefined
+  >(undefined);
+  const [copyWriteValue, setCopyWriteValue] = useState<string | undefined>(
+    undefined
+  );
+  const [durationValue, setDurationValue] = useState<WorkTimeType | undefined>(
+    undefined
+  );
   const [videoDuration, setVideoDuration] = useState<VideoDuration>();
   const [error, setError] = useState<boolean>(false);
   const [copywriteError, setCopyWriteError] = useState("");
@@ -96,14 +103,16 @@ export const VisibilityPan = () => {
           dashboardContext.closePanels();
           lenis.scrollTo(0);
 
-          dispatch(removeToast(editorContext.noModelMessageId))
+          dispatch(removeToast(editorContext.noModelMessageId));
 
-          dispatch(addToast({
-            id: Date.now(),
-            message: 'Votre modèle a été ajouté avec succès.',
-            Icon: GreenCheck,
-            delay: 3000,
-          }))
+          dispatch(
+            addToast({
+              id: Date.now(),
+              message: "Votre modèle a été ajouté avec succès.",
+              Icon: GreenCheck,
+              delay: 3000,
+            })
+          );
         } else {
           console.log("error occured");
         }
@@ -112,9 +121,9 @@ export const VisibilityPan = () => {
   };
 
   useEffect(() => {
-    context.setVisibility(visibilityValue)
-    context.setCopywrite(copyWriteValue)
-    context.setWorktime(durationValue)
+    context.setVisibility(visibilityValue);
+    context.setCopywrite(copyWriteValue);
+    context.setWorktime(durationValue);
   }, [visibilityValue, copyWriteValue, durationValue]);
 
   useEffect(() => {
@@ -146,29 +155,31 @@ export const VisibilityPan = () => {
         }}
         className="w-full"
       />
-    )
+    );
 
-    lenis.scrollTo(0)
+    lenis.scrollTo(0);
 
     return () => {
-      dashboardContext.setButtons(undefined)
-    }
+      dashboardContext.setButtons(undefined);
+    };
   }, []);
 
   return (
     <div className="visibility-pan bg-dashboard-background-content-area flex flex-col gap-dashboard-spacing-element-medium pt-[50px] pb-[150px]">
-      {isMobile && <IslandButton 
-        type="secondary"
-        Icon={Close}
-        iconColor="appleRed"
-        onClick={() => {
-          dashboardContext.setIsAddModelPannelOpen(false)
-          context.setCurrentStep(undefined)
-          context.abort()
-        }}
-        className="w-max self-end mr-dashboard-button-separation-spacing"
-      />}
-      
+      {isMobile && (
+        <IslandButton
+          type="secondary"
+          Icon={Close}
+          iconColor="appleRed"
+          onClick={() => {
+            dashboardContext.setIsAddModelPannelOpen(false);
+            context.setCurrentStep(undefined);
+            context.abort();
+          }}
+          className="w-max self-end mr-dashboard-button-separation-spacing"
+        />
+      )}
+
       <div className="visibility-pan__video-w relative h-0 pb-[57.6%] rounded-2xl overflow-hidden border">
         <div className="absolute w-full h-full">
           <Video
@@ -187,7 +198,10 @@ export const VisibilityPan = () => {
         </div>
       </div>
 
-      <form ref={form} className="visibility-pan__format flex flex-col gap-8 px-padding-medium md:px-0">
+      <form
+        ref={form}
+        className="visibility-pan__format flex flex-col gap-8 px-padding-medium md:px-0"
+      >
         <Input
           label="Visibilité"
           type="radioColumn"
@@ -198,42 +212,45 @@ export const VisibilityPan = () => {
           value={context.visibility}
           helpIconText="Help"
           onChange={(e) => {
-            context.setVisibility(e)
+            context.setVisibility(e);
           }}
           className="text-dashboard-text-description-base"
         />
-      <hr />
-      <div>
-        <Input
-          label="Droits d'auteur"
-          type="textarea"
-          bg="light"
-          labelType="dashboard"
-          value={context.copywrite}
-          maxlength={150}
-          size="sm"
-          helpIconText="Help"
-          onChange={(e) => { context.setCopywrite(e.target.value); }}
-          className="h-[170px]"
-        />
-        {copywriteError && (
-          <div className="text-appleRed text-sm mt-2">{copywriteError}</div>
-        )}
-      </div>
+        <hr />
+        <div>
+          <Input
+            label="Droits d'auteur"
+            type="textarea"
+            bg="light"
+            labelType="dashboard"
+            value={context.copywrite}
+            maxlength={150}
+            size="sm"
+            helpIconText="Help"
+            onChange={(e) => {
+              context.setCopywrite(e.target.value);
+            }}
+            className="h-[170px]"
+          />
+          {copywriteError && (
+            <div className="text-appleRed text-sm mt-2">{copywriteError}</div>
+          )}
+        </div>
 
-      <hr />
-      <Input
-        label="Temps de travail"
-        type="radioColumn"
-        labelType="dashboard"
-        helper="Évaluez le niveau de recherche et de temps de travail nécessaire à ce type de montage."
-        options={durationOptions}
-        selectedOption={context.worktime}
-        value={context.worktime}
-        helpIconText="Help"
-        onChange={(e) => { context.setWorktime(e); }}
-      />
-      
+        <hr />
+        <Input
+          label="Temps de travail"
+          type="radioColumn"
+          labelType="dashboard"
+          helper="Évaluez le niveau de recherche et de temps de travail nécessaire à ce type de montage."
+          options={durationOptions}
+          selectedOption={context.worktime}
+          value={context.worktime}
+          helpIconText="Help"
+          onChange={(e) => {
+            context.setWorktime(e);
+          }}
+        />
       </form>
       <hr />
       <div className="flex justify-center sm:justify-between items-center flex-wrap gap-8">

@@ -4,7 +4,7 @@ import { InfoMessage } from "../_shared/UI/InfoMessage";
 
 import InfoIcon from "@/icons/info.svg";
 import { Button } from "../_shared/buttons/Button";
-import { SignUpContext } from "./_context/SignupContext";
+import { SignUpContext } from "./_context/signupContext";
 import { Dropdown } from "../_shared/form/DropdownV2";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { ProgressDots } from "../_shared/UI/ProgressDots";

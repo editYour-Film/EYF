@@ -17,7 +17,7 @@ import { Cursor } from "@/components/_shared/UI/Cursor";
 import { PageTransition } from "@/components/transition/PageTransition";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { Loader } from "@/components/_shared/Loader";
-import { UserProvider, useUser } from "@/auth/authContext";
+import { AuthProvider } from "@/context/authContext";
 
 if (typeof window !== "undefined") {
   gsap.defaults({ ease: "none" });
@@ -36,8 +36,6 @@ export default function App(pageProps: AppProps) {
   const lenis = useLenis(ScrollTrigger.update);
   const [isLoading, setIsLoading] = useState(true);
 
-  const { user, loading } = useUser();
-
   useEffect(() => {
     ScrollTrigger.refresh;
   }, [lenis]);
@@ -50,7 +48,7 @@ export default function App(pageProps: AppProps) {
 
   return (
     <Provider store={store}>
-      <UserProvider user={user} loading={loading}>
+      <AuthProvider>
         <InstanciatedQueryClientProvider>
           <Loader isLoading={isLoading} />
           <Lenis root>
@@ -58,7 +56,7 @@ export default function App(pageProps: AppProps) {
           </Lenis>
           {hasHover && <Cursor />}
         </InstanciatedQueryClientProvider>
-      </UserProvider>
+      </AuthProvider>
     </Provider>
   );
 }
