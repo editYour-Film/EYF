@@ -1,4 +1,3 @@
-import { useUser } from "@/auth/authContext";
 import {
   useStrapiDelete,
   useStrapiGet,
@@ -38,7 +37,7 @@ export const AddModelContext = createContext({
   resetData: () => {},
   handleInitContext: () => {},
   abort: () => {},
-  
+
   handleUpdateEditorVideo: (): any => {},
 
   strapiObject: {} as any,
@@ -65,8 +64,8 @@ export const AddModelContext = createContext({
   setTags: (payload: { name: string; slug: string }[] | undefined) => {},
   ressources: undefined as any,
   setRessources: (payload: any) => {},
-  user_info: undefined as user_info| undefined,
-  setUser_info: (payload: user_info| undefined) => {},
+  user_info: undefined as user_info | undefined,
+  setUser_info: (payload: user_info | undefined) => {},
   visibility: undefined as VisibilityType | undefined,
   setVisibility: (payload: VisibilityType | undefined) => {},
   copywrite: undefined as string | undefined,
@@ -80,8 +79,7 @@ export const AddModelContext = createContext({
 });
 
 export const AddModelContextProvider: React.FC<any> = (props) => {
-  const user = useUser();
-  const dashboardContext = useContext(DashBoardContext)
+  const dashboardContext = useContext(DashBoardContext);
 
   const [currentStep, setCurrentStep] = useState<number | undefined>(undefined);
   const [currentEditorVideo, setCurrentEditorVideo] = useState<number | null>(
@@ -89,18 +87,24 @@ export const AddModelContextProvider: React.FC<any> = (props) => {
   );
 
   const [video, setVideo] = useState<number | undefined>(undefined);
-  const [thumbnail, setThumbnail] = useState<File | undefined>(undefined)
-  const [title, setTitle] = useState<string | undefined>(undefined)
-  const [length, setLength] = useState<string | undefined>(undefined)
-  const [model, setModel] = useState<modelType | undefined>(undefined)
-  const [description, setDescription] = useState<string | undefined>(undefined)
-  const [tags, setTags] = useState< { name: string; slug: string }[] | undefined>(undefined)
-  const [ressources, setRessources] = useState<any>(undefined)
-  const [user_info, setUser_info]= useState< user_info| undefined>(undefined)
-  const [visibility, setVisibility] = useState< VisibilityType | undefined>(undefined)
-  const [copywrite, setCopywrite] = useState<string | undefined>(undefined)
-  const [worktime, setWorktime] = useState<WorkTimeType | undefined>(undefined)
-  const [is_highlighed, setIs_highlighed] = useState<boolean | undefined>(undefined)
+  const [thumbnail, setThumbnail] = useState<File | undefined>(undefined);
+  const [title, setTitle] = useState<string | undefined>(undefined);
+  const [length, setLength] = useState<string | undefined>(undefined);
+  const [model, setModel] = useState<modelType | undefined>(undefined);
+  const [description, setDescription] = useState<string | undefined>(undefined);
+  const [tags, setTags] = useState<
+    { name: string; slug: string }[] | undefined
+  >(undefined);
+  const [ressources, setRessources] = useState<any>(undefined);
+  const [user_info, setUser_info] = useState<user_info | undefined>(undefined);
+  const [visibility, setVisibility] = useState<VisibilityType | undefined>(
+    undefined
+  );
+  const [copywrite, setCopywrite] = useState<string | undefined>(undefined);
+  const [worktime, setWorktime] = useState<WorkTimeType | undefined>(undefined);
+  const [is_highlighed, setIs_highlighed] = useState<boolean | undefined>(
+    undefined
+  );
 
   const [modifiedData, setModifiedData] = useState<any>({
     video,
@@ -116,10 +120,12 @@ export const AddModelContextProvider: React.FC<any> = (props) => {
     copywrite,
     worktime,
     is_highlighed,
-  })
+  });
 
   const [isModify, setIsModify] = useState(false);
-  const [videoDuration, setVideoDuration] = useState<VideoDuration | undefined>(undefined);
+  const [videoDuration, setVideoDuration] = useState<VideoDuration | undefined>(
+    undefined
+  );
 
   useEffect(() => {
     setModifiedData({
@@ -136,14 +142,14 @@ export const AddModelContextProvider: React.FC<any> = (props) => {
       copywrite,
       worktime,
       is_highlighed,
-    })
-  }, [title])
+    });
+  }, [title]);
 
   const handleUpdateEditorVideo = async (): Promise<unknown> => {
     if (currentEditorVideo) {
       const formData = new FormData();
-      const fieldsData: any = {};      
-            
+      const fieldsData: any = {};
+
       for (const [key, value] of Object.entries(modifiedData)) {
         if (value) {
           if (["video", "thumbnail"].includes(key)) {
@@ -162,7 +168,6 @@ export const AddModelContextProvider: React.FC<any> = (props) => {
           //       value.files[i].name
           //   );
           // }
-
           else if (key === "is_highlighted")
             fieldsData["is_highlighted"] = value;
           else if (key === "tags") {
@@ -230,36 +235,36 @@ export const AddModelContextProvider: React.FC<any> = (props) => {
   };
 
   const resetData = () => {
-    setVideo(undefined)
-    setThumbnail(undefined)
-    setTitle(undefined)
-    setLength(undefined)
-    setModel(undefined)
-    setDescription(undefined)
-    setTags(undefined)
-    setRessources(undefined)
-    setUser_info(undefined)
-    setVisibility(undefined)
-    setCopywrite(undefined)
-    setWorktime(undefined)
-    setIs_highlighed(undefined)
-  }
+    setVideo(undefined);
+    setThumbnail(undefined);
+    setTitle(undefined);
+    setLength(undefined);
+    setModel(undefined);
+    setDescription(undefined);
+    setTags(undefined);
+    setRessources(undefined);
+    setUser_info(undefined);
+    setVisibility(undefined);
+    setCopywrite(undefined);
+    setWorktime(undefined);
+    setIs_highlighed(undefined);
+  };
 
   const handleInitContext = () => {
     setCurrentStep(0);
     setCurrentEditorVideo(null);
     setIsModify(false);
-    resetData()
+    resetData();
   };
 
   const abort = () => {
-    resetData()
+    resetData();
 
     //TODO: Integration delete the draft editor video if present
-    if(currentEditorVideo) {
-      useStrapiDelete(`editor-videos/${currentEditorVideo}`, true)
+    if (currentEditorVideo) {
+      useStrapiDelete(`editor-videos/${currentEditorVideo}`, true);
     }
-  }
+  };
 
   const [strapiObject, setStrapiObject] = useState<any>();
   const getCurrentStrapiObject = () => {
@@ -267,17 +272,17 @@ export const AddModelContextProvider: React.FC<any> = (props) => {
       // eslint-disable-next-line react-hooks/rules-of-hooks
       const response = await useStrapiGet(
         `editor-videos/${currentEditorVideo}?populate=*`,
-        user[1]
+        false /*true*/
       );
       setStrapiObject(response.data.data);
-      
+
       res(response);
     });
   };
 
   useEffect(() => {
-    getCurrentStrapiObject()
-  }, [currentEditorVideo])
+    getCurrentStrapiObject();
+  }, [currentEditorVideo]);
 
   useEffect(() => {
     dashboardContext.isAddModelPannelOpen === true && handleInitContext();

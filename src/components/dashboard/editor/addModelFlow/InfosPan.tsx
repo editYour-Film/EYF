@@ -1,10 +1,4 @@
-import { useUser } from "@/auth/authContext";
-import {
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 
 import useStrapi from "@/hooks/useStrapi";
 import Input from "@/components/_shared/form/Input";
@@ -21,23 +15,23 @@ import { useMediaQuery } from "@uidotdev/usehooks";
 import { AddModel } from "../AddModel";
 import { FormatsType } from "../data/metaValues";
 
-import Close from '@/icons/dashboard/x.svg'
+import Close from "@/icons/dashboard/x.svg";
+import { AuthContext } from "@/context/authContext";
 
 type InfosPanProps = {};
 
 export const InfosPan = ({}: InfosPanProps) => {
   const context = useContext(AddModelContext);
-  const dashboardContext = useContext(DashBoardContext)
+  const dashboardContext = useContext(DashBoardContext);
+  const authContext = useContext(AuthContext);
 
-  const isMobile = useMediaQuery('(max-width: 768px)')
-  
-  const user = useUser();
+  const isMobile = useMediaQuery("(max-width: 768px)");
 
   const [entry, setEntry] = useState<any>(null);
   const [duration, setDuration] = useState<VideoDuration>();
 
   useEffect(() => {
-    dashboardContext.setButtons( 
+    dashboardContext.setButtons(
       <Button
         type="primary"
         label="Continuer"
@@ -47,11 +41,11 @@ export const InfosPan = ({}: InfosPanProps) => {
           !error && handleSubmit();
         }}
       />
-    )
+    );
 
     return () => {
-      dashboardContext.setButtons(undefined)
-    }
+      dashboardContext.setButtons(undefined);
+    };
   }, []);
 
   const form = useRef<HTMLFormElement>(null);
@@ -73,13 +67,19 @@ export const InfosPan = ({}: InfosPanProps) => {
     },
   ];
 
-  const [formatValue, setFormatValue] = useState<FormatsType>(formatOption[0].value);
-  const [isHighlightedValue, setIsHighlightedValue] = useState(highlightedOptions[0].value);
+  const [formatValue, setFormatValue] = useState<FormatsType>(
+    formatOption[0].value
+  );
+  const [isHighlightedValue, setIsHighlightedValue] = useState(
+    highlightedOptions[0].value
+  );
 
   const [titleValue, setTitleValue] = useState<string | undefined>(undefined);
   const [titleError, setTitleError] = useState("");
 
-  const [descriptionValue, setDescriptionValue] = useState<string | undefined>(undefined);
+  const [descriptionValue, setDescriptionValue] = useState<string | undefined>(
+    undefined
+  );
   const [descriptionError, setDescriptionError] = useState("");
 
   const [defaultImage, setDefaultImage] = useState<string>("");
@@ -89,17 +89,17 @@ export const InfosPan = ({}: InfosPanProps) => {
   const [tagsError, setTagsError] = useState("");
 
   const [error, setError] = useState(false);
-  const [visibilityPanAdded, setVisibilityPanAdded] = useState(false)
-  
+  const [visibilityPanAdded, setVisibilityPanAdded] = useState(false);
 
-  useEffect(() => {    
+  useEffect(() => {
     if (context.strapiObject) {
       setEntry(context.strapiObject.attributes);
-      
+
       setIsHighlightedValue(
-        user[0].details.highlighted_video &&
-          user[0].details.highlighted_video.data &&
-          user[0].details.highlighted_video.data.id === context.strapiObject.id
+        authContext.user.details.highlighted_video &&
+          authContext.user.details.highlighted_video.data &&
+          authContext.user.details.highlighted_video.data.id ===
+            context.strapiObject.id
           ? highlightedOptions[0].value
           : highlightedOptions[1].value
       );
@@ -123,28 +123,29 @@ export const InfosPan = ({}: InfosPanProps) => {
           : []
       );
     }
-    
   }, [context.strapiObject]);
 
   const handleSubmit = () => {
     setDescriptionError("");
     setTagsError("");
-    
-    context.setUser_info(user[0].details.id)
-    context.setLength(duration
-      ? duration?.min !== 0
-        ? duration?.min.toString() + " minutes"
-        : duration?.sec.toString() + " secondes"
-      : "")
 
-    if(isMobile) context.setCurrentStep(2);
+    context.setUser_info(authContext.user.details.id);
+    context.setLength(
+      duration
+        ? duration?.min !== 0
+          ? duration?.min.toString() + " minutes"
+          : duration?.sec.toString() + " secondes"
+        : ""
+    );
+
+    if (isMobile) context.setCurrentStep(2);
     else {
       setVisibilityPanAdded(true);
 
       dashboardContext.addPannel({
-        title: 'Details',
-        panel: <AddModel step={2}/>
-      })
+        title: "Details",
+        panel: <AddModel step={2} />,
+      });
     }
   };
 
@@ -169,24 +170,22 @@ export const InfosPan = ({}: InfosPanProps) => {
   }, [titleError, descriptionError, tagsError]);
 
   return (
-    <div 
-      className="infos-pan flex flex-col gap-dashboard-spacing-element-medium bg-dashboard-background-content-area pt-[50px] pb-[150px] md:py-0"
-    >
-      {isMobile && <IslandButton 
-        type="secondary"
-        Icon={Close}
-        iconColor="appleRed"
-        onClick={() => {
-          dashboardContext.setIsAddModelPannelOpen(false)
-          context.setCurrentStep(undefined)
-          context.abort()
-        }}
-        className="w-max self-end mr-dashboard-button-separation-spacing"
-      />}
+    <div className="infos-pan flex flex-col gap-dashboard-spacing-element-medium bg-dashboard-background-content-area pt-[50px] pb-[150px] md:py-0">
+      {isMobile && (
+        <IslandButton
+          type="secondary"
+          Icon={Close}
+          iconColor="appleRed"
+          onClick={() => {
+            dashboardContext.setIsAddModelPannelOpen(false);
+            context.setCurrentStep(undefined);
+            context.abort();
+          }}
+          className="w-max self-end mr-dashboard-button-separation-spacing"
+        />
+      )}
       <div className="info-pan__video-w relative rounded-t-2xl overflow-hidden border">
-        {entry && <Video
-          video={entry.video.data.attributes}
-        />}
+        {entry && <Video video={entry.video.data.attributes} />}
       </div>
 
       <div className="info-pan__title flex items-baseline gap-2">
@@ -195,10 +194,12 @@ export const InfosPan = ({}: InfosPanProps) => {
         </div>
       </div>
 
-      <form 
-        ref={form} 
+      <form
+        ref={form}
         className="info-pan__format flex flex-col gap-dashboard-spacing-element-medium px-padding-medium md:px-0"
-        onSubmit={(e) => { e.preventDefault(); }}
+        onSubmit={(e) => {
+          e.preventDefault();
+        }}
       >
         <div tabIndex={-1}>
           <Input
@@ -244,16 +245,14 @@ export const InfosPan = ({}: InfosPanProps) => {
             bg="light"
             value={context.description}
             placeholder="Présentez votre vidéo à vos spectateurs..."
-            onChange={(e) => { 
+            onChange={(e) => {
               context.setDescription(e.target.value);
             }}
             maxlength={100}
             className="bg-transparent"
           />
           {descriptionError && (
-            <div className="text-appleRed text-sm mt-2">
-              {descriptionError}
-            </div>
+            <div className="text-appleRed text-sm mt-2">{descriptionError}</div>
           )}
         </div>
 
@@ -270,7 +269,7 @@ export const InfosPan = ({}: InfosPanProps) => {
               return (
                 <Keyword
                   key={i}
-                  icon='cross'
+                  icon="cross"
                   text={tag.name}
                   onClose={() => {
                     handleRemoveTag(tag.slug);
@@ -280,32 +279,29 @@ export const InfosPan = ({}: InfosPanProps) => {
             })}
         </div>
 
-
         <InputVignet
           label="Ajoutez une miniature"
           buttonLabel="Ajouter un fichier"
           title="Glissez-déposez le fichier que vous souhaitez publier."
           desc="Importez une image qui donne un aperçu du contenu de votre vidéo. Une bonne image se remarque et attire l'attention des spectateurs."
           image={defaultImage}
-          onChange={(file) => { 
+          onChange={(file) => {
             context.setThumbnail(file);
           }}
         />
-
       </form>
 
-      {
-        !isMobile && 
-          <IslandButton
-            type="primary"
-            label="Confirmer"
-            className={`w-max self-end`}
-            disabled={error || visibilityPanAdded}
-            onClick={() => {
-              !error && handleSubmit();
-            }}
-          />
-      }
+      {!isMobile && (
+        <IslandButton
+          type="primary"
+          label="Confirmer"
+          className={`w-max self-end`}
+          disabled={error || visibilityPanAdded}
+          onClick={() => {
+            !error && handleSubmit();
+          }}
+        />
+      )}
     </div>
   );
 };

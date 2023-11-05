@@ -4,7 +4,7 @@ import Input from "../_shared/form/Input";
 import Google from "@/icons/google.svg";
 
 import { useContext, useEffect, useRef } from "react";
-import { SignUpContext } from "./_context/SignupContext";
+import { SignUpContext } from "./_context/signupContext";
 import { Button } from "../_shared/buttons/Button";
 import { ProgressDots } from "../_shared/UI/ProgressDots";
 import { LogoSignup } from "./LogoSignup";

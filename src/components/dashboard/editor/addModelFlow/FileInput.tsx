@@ -1,6 +1,12 @@
-import { useRef, useContext, useState, FormEvent, ChangeEvent, useEffect } from "react";
+import {
+  useRef,
+  useContext,
+  useState,
+  FormEvent,
+  ChangeEvent,
+  useEffect,
+} from "react";
 import Link from "next/link";
-import { useUser } from "@/auth/authContext";
 import useStrapi, { useStrapiPost } from "@/hooks/useStrapi";
 
 import Upload from "@/icons/dashboard/upload.svg";
@@ -14,17 +20,18 @@ import { useMediaQuery } from "@uidotdev/usehooks";
 import { DashBoardContext } from "../../_context/DashBoardContext";
 import gsap from "gsap";
 
-import Close from '@/icons/dashboard/x.svg'
+import Close from "@/icons/dashboard/x.svg";
 import { Video } from "@/components/_shared/video/Video";
 import { getDuration } from "@/utils/Video";
+import { AuthContext } from "@/context/authContext";
 
 type FileInputProps = {};
 
 export const FileInput = ({}: FileInputProps) => {
-  const user = useUser();
-  const isMobile = useMediaQuery('(max-width: 768px)')
+  const isMobile = useMediaQuery("(max-width: 768px)");
   const context = useContext(AddModelContext);
   const dashboardContext = useContext(DashBoardContext);
+  const authContext = useContext(AuthContext);
 
   const input = useRef<HTMLInputElement>(null);
   const form = useRef<HTMLFormElement>(null);
@@ -33,16 +40,25 @@ export const FileInput = ({}: FileInputProps) => {
   const [isDragging, setIsDragging] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const [progressUpload, setProgressUpload] = useState<number | undefined>(undefined);
+  const [progressUpload, setProgressUpload] = useState<number | undefined>(
+    undefined
+  );
 
-  const formatError =  <span> Format de fichier incorrect. <Link href="/">En savoir plus</Link></span> ;
-  const unknowError = <span>Quelque chose s&#39;est mal passé, veuillez réessayer</span>;
+  const formatError = (
+    <span>
+      {" "}
+      Format de fichier incorrect. <Link href="/">En savoir plus</Link>
+    </span>
+  );
+  const unknowError = (
+    <span>Quelque chose s&#39;est mal passé, veuillez réessayer</span>
+  );
 
   const [error, setError] = useState(false);
   const [errorMsg, setErrorMsg] = useState<JSX.Element>(formatError);
 
   const [videoUploaded, setVideoUploaded] = useState(false);
-  const [videoDuration, setVideoDuration] = useState('0');
+  const [videoDuration, setVideoDuration] = useState("0");
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -52,7 +68,7 @@ export const FileInput = ({}: FileInputProps) => {
     const elementData: any = {};
 
     elementData["publishedAt"] = null;
-    elementData["user_info"] = user[0].details.id;
+    elementData["user_info"] = authContext.user.details.id;
 
     let _error = false;
     Array.from(form.current!.elements).map((input: any) => {
@@ -94,18 +110,19 @@ export const FileInput = ({}: FileInputProps) => {
         formData,
         false /*true*/,
         true,
-        (progressEvent) => { setProgressUpload(progressEvent.progress); }
+        (progressEvent) => {
+          setProgressUpload(progressEvent.progress);
+        }
       );
 
-      if (resEditorVideo.status === 200) {  
+      if (resEditorVideo.status === 200) {
         setLoading(false);
 
         !isMobile && context.setCurrentStep(1);
-        isMobile && setVideoUploaded(true)    
+        isMobile && setVideoUploaded(true);
 
         context.setCurrentEditorVideo(resEditorVideo.data.data.id);
-
-      } else {        
+      } else {
         setError(true);
         setErrorMsg(unknowError);
       }
@@ -127,15 +144,14 @@ export const FileInput = ({}: FileInputProps) => {
         setErrorMsg(formatError);
       } else {
         setSelectedFile(e.target.files![0]);
-        context.setCurrentEditorVideo(null)
+        context.setCurrentEditorVideo(null);
         form.current?.requestSubmit();
       }
     }
   };
-  
+
   const { data: data, mutate: getStrapi } = useStrapi(
-    "dashboard-monteur?" +
-    "populate=*",
+    "dashboard-monteur?" + "populate=*",
     false
   );
 
@@ -143,8 +159,8 @@ export const FileInput = ({}: FileInputProps) => {
     getStrapi();
   }, []);
 
-  useEffect(() => {    
-    const mobileButtons = 
+  useEffect(() => {
+    const mobileButtons = (
       <>
         <Button
           type="primary"
@@ -157,56 +173,60 @@ export const FileInput = ({}: FileInputProps) => {
           }}
         />
 
-        { videoUploaded 
-        ?
+        {videoUploaded ? (
           <Button
             type="secondary"
             label="Continuer"
             className={`w-full z-10`}
             disabled={loading}
             onClick={() => {
-              context.setCurrentStep(1)
+              context.setCurrentStep(1);
             }}
           />
-        :
+        ) : (
           <Button
-          type="secondary"
-          label="Sélectionner un fichiers"
-          className={`w-full z-10`}
-          disabled={loading}
-          onClick={() => {
-            input.current?.click();
-          }}
-      />
-        }
+            type="secondary"
+            label="Sélectionner un fichiers"
+            className={`w-full z-10`}
+            disabled={loading}
+            onClick={() => {
+              input.current?.click();
+            }}
+          />
+        )}
       </>
-    
-    isMobile && dashboardContext.setButtons(mobileButtons) 
+    );
+
+    isMobile && dashboardContext.setButtons(mobileButtons);
 
     return () => {
-      dashboardContext.setButtons(undefined) 
-    }
-  }, [videoUploaded, loading])
+      dashboardContext.setButtons(undefined);
+    };
+  }, [videoUploaded, loading]);
 
-  const videoRef = useRef<HTMLVideoElement>(null)
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   return (
     <div className="py-[100px] md:py-0 flex flex-col gap-dashboard-spacing-element-medium h-full md:h-auto">
       <div className="file-input flex flex-col h-full md:h-auto gap-dashboard-spacing-element-medium items-end justify-between">
-        {isMobile && <IslandButton 
-          type="secondary"
-          Icon={Close}
-          iconColor="appleRed"
-          onClick={() => {
-            dashboardContext.setIsAddModelPannelOpen(false)
-            context.setCurrentStep(undefined)
-            context.abort()
-          }}
-          className="w-max self-end mr-dashboard-button-separation-spacing"
-        />}
+        {isMobile && (
+          <IslandButton
+            type="secondary"
+            Icon={Close}
+            iconColor="appleRed"
+            onClick={() => {
+              dashboardContext.setIsAddModelPannelOpen(false);
+              context.setCurrentStep(undefined);
+              context.abort();
+            }}
+            className="w-max self-end mr-dashboard-button-separation-spacing"
+          />
+        )}
 
         <div
-          className={`w-full relative bg-black rounded-3xl flex h-full justify-center items-center border border-white border-opacity-0 ${isDragging && "border-opacity-30"}`}
+          className={`w-full relative bg-black rounded-3xl flex h-full justify-center items-center border border-white border-opacity-0 ${
+            isDragging && "border-opacity-30"
+          }`}
           onDragOver={() => {
             handleDragOver();
           }}
@@ -220,11 +240,17 @@ export const FileInput = ({}: FileInputProps) => {
             handleDrop();
           }}
         >
-          <div className={`flex flex-col gap-8 px-14 py-16 items-center ${context.strapiObject ? 'hidden' : 'block'} `}>
+          <div
+            className={`flex flex-col gap-8 px-14 py-16 items-center ${
+              context.strapiObject ? "hidden" : "block"
+            } `}
+          >
             <Upload />
             <div className="text-center flex flex-col items-center gap-4">
               <div className="text-medium w-[340px]">
-                {isMobile ? 'Ajoutez une vidéo' : 'Glissez-déposez le fichier que vous souhaitez mettre en ligne'}
+                {isMobile
+                  ? "Ajoutez une vidéo"
+                  : "Glissez-déposez le fichier que vous souhaitez mettre en ligne"}
               </div>
               <div className="text-dashboard-text-description-base text-base-light w-8/12">
                 Vos vidéos resteront privées jusqu’à leur publication. Chaque
@@ -239,54 +265,59 @@ export const FileInput = ({}: FileInputProps) => {
               )}
             </div>
 
-            <div className="fixed md:relative bottom-0 flex flex-col items-stretch md:flex-row gap-dashboard-mention-padding-right-left z-popup">{
-              !isMobile && 
-              <>
-                <IslandButton
-                  type="small"
-                  label="Modifier"
-                  className={`w-max z-10`}
-                  disabled={!loading}
-                  onClick={() => {
-                    // context.handleModifyInputVideo()
-                  }}
-                />
+            <div className="fixed md:relative bottom-0 flex flex-col items-stretch md:flex-row gap-dashboard-mention-padding-right-left z-popup">
+              {!isMobile && (
+                <>
+                  <IslandButton
+                    type="small"
+                    label="Modifier"
+                    className={`w-max z-10`}
+                    disabled={!loading}
+                    onClick={() => {
+                      // context.handleModifyInputVideo()
+                    }}
+                  />
 
-                <IslandButton
-                  type="small"
-                  label="Sélectionner un fichiers"
-                  className={`w-max z-10`}
-                  disabled={loading}
-                  onClick={() => {
-                    input.current?.click();
-                  }}
-                />
-              </>
-            }</div>
+                  <IslandButton
+                    type="small"
+                    label="Sélectionner un fichiers"
+                    className={`w-max z-10`}
+                    disabled={loading}
+                    onClick={() => {
+                      input.current?.click();
+                    }}
+                  />
+                </>
+              )}
+            </div>
 
-            {loading && 
+            {loading && (
               <div className="absolute bottom-0 w-full pb-[28px] pt-[13px] px-[24px]">
                 <Loader progress={progressUpload} />
               </div>
-            }
+            )}
           </div>
 
-          {
-          context.strapiObject &&
+          {context.strapiObject && (
             <div className="w-full self-center justify-self-center relative px-dashboard-mention-padding-right-left z-10">
               <Video
                 ref={videoRef}
                 video={context.strapiObject.attributes.video.data.attributes}
-                onLoadedMetadata={() => {                   
-                  videoRef.current && setVideoDuration(getDuration(videoRef.current).mmss) 
+                onLoadedMetadata={() => {
+                  videoRef.current &&
+                    setVideoDuration(getDuration(videoRef.current).mmss);
                 }}
               />
               <div className="p-dashboard-button-separation-spacing flex flex-col gap-dashboard-button-separation-spacing">
-                <div className="text-base text-dashboard-text-title-white-high">{context.strapiObject.attributes.video.data.attributes.name}</div>
-                <div className="text-dashboard-text-description-base">{videoDuration}</div>
+                <div className="text-base text-dashboard-text-title-white-high">
+                  {context.strapiObject.attributes.video.data.attributes.name}
+                </div>
+                <div className="text-dashboard-text-description-base">
+                  {videoDuration}
+                </div>
               </div>
-            </div>  
-          }
+            </div>
+          )}
 
           <form
             ref={form}
@@ -311,14 +342,21 @@ export const FileInput = ({}: FileInputProps) => {
             />
           </form>
         </div>
-
       </div>
-      {(user[0].models?.length < 3 || !user[0].models) && (
+      {authContext.user.models && authContext.user.models.length < 3 && (
         <TitleSvgCard
           className="mt-5"
           img="/img/dashboard/cristal-ball.png"
-          title={ data?.attributes.add_model.title ? data?.attributes.add_model.title : "Augmentez votre visibilité" }
-          text={ data?.attributes.add_model.content ? data?.attributes.add_model.content : "En ajoutant des modèles vous augmentez vos chances d’être vu par les créateurs à la recherche d’un monteur pour leur prochain projet. Nous vous conseillons d’ajouter 3 modèles pour apparaître le plus largement possible." }
+          title={
+            data?.attributes.add_model.title
+              ? data?.attributes.add_model.title
+              : "Augmentez votre visibilité"
+          }
+          text={
+            data?.attributes.add_model.content
+              ? data?.attributes.add_model.content
+              : "En ajoutant des modèles vous augmentez vos chances d’être vu par les créateurs à la recherche d’un monteur pour leur prochain projet. Nous vous conseillons d’ajouter 3 modèles pour apparaître le plus largement possible."
+          }
         />
       )}
     </div>
@@ -326,43 +364,52 @@ export const FileInput = ({}: FileInputProps) => {
 };
 
 type LoaderProps = {
-  progress: number | undefined
-}
+  progress: number | undefined;
+};
 
-const Loader = ({progress}:LoaderProps) => {
-  const container = useRef<HTMLDivElement>(null)
-  const progressTrack = useRef<HTMLDivElement>(null)
-  const trackButton = useRef<HTMLDivElement>(null)
+const Loader = ({ progress }: LoaderProps) => {
+  const container = useRef<HTMLDivElement>(null);
+  const progressTrack = useRef<HTMLDivElement>(null);
+  const trackButton = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if(container.current) {
+    if (container.current) {
       gsap.set(progressTrack.current, {
-        x: progress ? -container.current.offsetWidth + container.current.offsetWidth * progress : -container.current.offsetWidth
-      })
+        x: progress
+          ? -container.current.offsetWidth +
+            container.current.offsetWidth * progress
+          : -container.current.offsetWidth,
+      });
       gsap.set(trackButton.current, {
-        x: progress ? container.current.offsetWidth * progress : -container.current.offsetWidth
-      })
+        x: progress
+          ? container.current.offsetWidth * progress
+          : -container.current.offsetWidth,
+      });
     }
-  }, [progress])
+  }, [progress]);
 
   return (
-    <div 
-      ref={container}
-      className="loader relative h-[4px] w-full"
-    >
-      <div ref={trackButton} className="loader__progress-dot absolute h-full z-10">
+    <div ref={container} className="loader relative h-[4px] w-full">
+      <div
+        ref={trackButton}
+        className="loader__progress-dot absolute h-full z-10"
+      >
         <div className="relative top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[13px] h-[13px] rounded-full bg-dashboard-text-title-white-high">
-          {progress && <div className="absolute top-0 -translate-y-full left-1/2 -translate-x-1/2">{Math.ceil(progress * 100)}%</div>}
+          {progress && (
+            <div className="absolute top-0 -translate-y-full left-1/2 -translate-x-1/2">
+              {Math.ceil(progress * 100)}%
+            </div>
+          )}
         </div>
       </div>
 
       <div className="overflow-hidden relative w-full h-full rounded-full">
         <div className="track absolute top-0 left-0 w-full h-full bg-neutral-02"></div>
-        <div 
+        <div
           ref={progressTrack}
-          className="progressTrack absolute top-0 left-0 w-full h-full bg-blueBerry"></div>
+          className="progressTrack absolute top-0 left-0 w-full h-full bg-blueBerry"
+        ></div>
       </div>
-
     </div>
-  )
-}
+  );
+};

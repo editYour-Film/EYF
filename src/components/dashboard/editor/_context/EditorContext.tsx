@@ -1,5 +1,10 @@
-import { useUser } from "@/auth/authContext";
-import { PropsWithChildren, createContext, useEffect, useState } from "react";
+import {
+  PropsWithChildren,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { Softwares } from "../data/metaValues";
 import slugify from "slugify";
 import { addToast, removeToast } from "@/store/slices/toastSlice";
@@ -7,7 +12,7 @@ import { MessageType } from "@/components/_shared/UI/InfoMessage";
 import { useDispatch } from "react-redux";
 
 import Info from "@/icons/info-gradient.svg";
-import { useStrapiGet } from "@/hooks/useStrapi";
+import { AuthContext } from "@/context/authContext";
 
 export type modelType =
   | "model 16/9 ème"
@@ -101,7 +106,7 @@ export const EditorContext = createContext({
 
 export const EditorContextProvider = ({ children }: PropsWithChildren) => {
   const dispatch = useDispatch();
-  const [user] = useUser();
+  const authContext = useContext(AuthContext);
 
   const [noModelMessageId] = useState(Date.now());
 
@@ -201,7 +206,7 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
 
   const fetchCurrentModels = () => {
     // TODO: Integration Get the models of the user
-    setModels(user.models);
+    setModels(authContext.user.user.models ? authContext.user.user.models : []);
   };
 
   const addTag = (tagName: string) => {
@@ -243,7 +248,7 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
       dispatch(
         addToast({
           id: noModelMessageId,
-          message: `Bienvenue ${user.details.f_name}, devenez visible. Ajoutez votre premier modèle de montage.`,
+          message: `Bienvenue ${authContext.user.details.f_name}, devenez visible. Ajoutez votre premier modèle de montage.`,
           bg: "black",
           Icon: Info,
         } as MessageType)

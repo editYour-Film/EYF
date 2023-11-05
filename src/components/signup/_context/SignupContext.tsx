@@ -4,7 +4,14 @@ import {
 } from "@/components/dashboard/editor/_context/EditorProfilContext";
 import { codeStateType } from "@/components/signin/_context/signinContext";
 import routes from "@/routes";
-import { RefObject, createContext, useEffect, useMemo, useState } from "react";
+import {
+  RefObject,
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { ReactElement } from "react-markdown/lib/react-markdown";
 
 import InfoIcon from "@/icons/info.svg";
@@ -18,26 +25,38 @@ import { ElementsOut } from "@/Animations/elementsOut";
 import { useStrapiGet, useStrapiPost } from "@/hooks/useStrapi";
 import { inputErrors } from "@/const";
 import validator from "validator";
-import {
-  getGoogleAuthEmailCookie,
-  getTokenFromLocalCookie,
-  setToken,
-} from "@/auth/auth";
-import useLocalStorage, {
-  getStoredValue,
-  removeStorage,
-} from "@/hooks/useLocalStorage";
-import {
-  RegisterUser,
-  SignedInUser,
-  initSignedInUser,
-} from "@/components/model/signin";
-import { useUser } from "@/auth/authContext";
+import { getGoogleAuthEmailCookie } from "@/auth/auth";
+import useLocalStorage from "@/hooks/useLocalStorage";
+import { RegisterUser } from "@/components/model/signin";
 import { MentionInteraction } from "@/components/_shared/buttons/MentionInteraction";
 import { useRouter } from "next/router";
+import { AuthContext } from "@/context/authContext";
 
 export type accountType = "editor" | "creator" | "both" | undefined;
 export type maxStepType = 5 | 6 | 7 | undefined;
+
+export const userNameMessages = {
+  default: {
+    message: "Votre nom d'utilisateur est unique.",
+    Icon: InfoIcon,
+    type: "regular",
+  } as MessageType,
+  error: {
+    message: "Ce nom d'utilisateur existe déjà",
+    Icon: X,
+    type: "danger",
+  } as MessageType,
+  success: {
+    message: "Nom d'utilisateur disponible.",
+    Icon: Check,
+    type: "regular",
+  } as MessageType,
+  generalError: {
+    message: inputErrors.general,
+    Icon: X,
+    type: "danger",
+  } as MessageType,
+};
 
 export const SignUpContext = createContext({
   langOptions: [] as spokenLanguageInterface[] | undefined,
@@ -79,7 +98,9 @@ export const SignUpContext = createContext({
   setUsername: (payload: string) => {},
   handleUserNameVerification: () => {},
   userNameAvailable: undefined as boolean | undefined,
+  setUserNameAvailable: (payload: boolean) => {},
   userNameMessage: undefined as MessageType | undefined,
+  setUserNameMessage: (payload: MessageType) => {},
 
   initials: undefined as string | undefined,
 
@@ -139,42 +160,12 @@ const initRegisterUser = {
 export const SignUpContextProvider: React.FC<any> = (props) => {
   const router = useRouter();
 
-  const [userInfo, setUserInfo] = useLocalStorage<SignedInUser>(
-    "user",
-    initSignedInUser
-  );
+  const authContext = useContext(AuthContext);
 
   const [registerUser, setRegisterUser] = useLocalStorage<RegisterUser>(
     "register_user",
     initRegisterUser
   );
-
-  console.log(registerUser);
-
-  const [, isLoggedIn] = useUser();
-
-  const userNameMessages = {
-    default: {
-      message: "Votre nom d'utilisateur est unique.",
-      Icon: InfoIcon,
-      type: "regular",
-    } as MessageType,
-    error: {
-      message: "Ce nom d'utilisateur existe déjà",
-      Icon: X,
-      type: "danger",
-    } as MessageType,
-    success: {
-      message: "Nom d'utilisateur disponible.",
-      Icon: Check,
-      type: "regular",
-    } as MessageType,
-    generalError: {
-      message: inputErrors.general,
-      Icon: X,
-      type: "danger",
-    } as MessageType,
-  };
 
   const [langOptions, setLangOptions] = useState<spokenLanguageInterface[]>();
 
@@ -267,19 +258,6 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
   );
 
   const [lastStepError, setLastStepError] = useState<string | undefined>();
-
-  useEffect(() => {
-    const token = getTokenFromLocalCookie();
-    if (token && isLoggedIn) {
-      removeStorage("register_user");
-      if (
-        userInfo &&
-        userInfo.user.role &&
-        userInfo.user.role.name === "editor"
-      )
-        router.push(routes.DASHBOARD_EDITOR_HOME);
-    }
-  }, [userInfo]);
 
   useMemo(async () => {
     setIsLoadingLangSkills(true);
@@ -592,8 +570,6 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
     if (container) {
       setLastStepError(undefined);
 
-      const elements = Array.from(container.current!.children);
-
       let _spokenLanguages: any[] = [];
       spokenLanguages?.map((x) => {
         _spokenLanguages.push(x.id);
@@ -667,32 +643,7 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
                 "Votre compte est créé avec succés mais il y a eu une erreur lors de l'upload de votre photo de profil."
               );
           }
-          setToken(register.data);
-          setUserInfo({
-            user: register.data.user,
-            details: register.data.details,
-          });
-          setTimeout(() => {
-            const cb = () => {
-              switch (accountType) {
-                case "editor":
-                  location.reload();
-                  //router.push(routes.DASHBOARD_EDITOR_HOME);
-                  break;
-                case "creator":
-                  setLastStepError(
-                    "Votre compte est créé avec succés mais le dashboard client n'est pas encore prêt."
-                  );
-                  break;
-                case "both":
-                  location.reload();
-                  //router.push(routes.DASHBOARD_EDITOR_HOME)
-                  break;
-              }
-            };
-
-            ElementsOut(elements, { onComplete: cb });
-          }, 2000);
+          authContext.setUserCode(register.data.user.code);
         }
       } else setLastStepError(inputErrors.general);
     }
@@ -784,7 +735,9 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
         setUsername,
         handleUserNameVerification,
         userNameAvailable,
+        setUserNameAvailable,
         userNameMessage,
+        setUserNameMessage,
 
         initials,
 
