@@ -7,7 +7,7 @@ import { InfoMessage } from "../_shared/UI/InfoMessage";
 import Send from "@/icons/signin/send.svg";
 import X from "@/icons/signin/x.svg";
 import Check from "@/icons/signin/check.svg";
-import { SignUpContext } from "./_context/aaa";
+import { SignUpContext } from "./_context/signupContext";
 import { codeStateType } from "../signin/_context/signinContext";
 import { SignInSignUpContainer } from "../_shared/UI/SignInSignUpContainer";
 import { ProgressDots } from "../_shared/UI/ProgressDots";

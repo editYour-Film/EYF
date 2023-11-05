@@ -3,7 +3,7 @@ import { SimpleCard } from "../_shared/UI/CardSimple";
 import { Button } from "../_shared/buttons/Button";
 
 import TailRight from "@/icons/right-arrow-white.svg";
-import { SignUpContext } from "./_context/aaa";
+import { SignUpContext } from "./_context/signupContext";
 import { useContext, useState, useEffect, useRef } from "react";
 import { Toggle } from "../_shared/buttons/Toggle";
 
