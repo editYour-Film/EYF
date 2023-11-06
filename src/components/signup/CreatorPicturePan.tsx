@@ -1,6 +1,6 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { SignInSignUpContainer } from "../_shared/UI/SignInSignUpContainer";
-import { SignUpContext } from "./_context/SignupContext";
+import { SignUpContext } from "./_context/signupContext";
 import { SimpleCard } from "../_shared/UI/CardSimple";
 import { Button } from "../_shared/buttons/Button";
 import { InfoMessage } from "../_shared/UI/InfoMessage";
@@ -100,7 +100,7 @@ export const CreatorPicturePan = () => {
                   img={imageToDisplay}
                 />
               </div>
- 
+
               <MentionInteraction className="pointer-events-auto">
                 Ajoutez votre photo de profil
               </MentionInteraction>

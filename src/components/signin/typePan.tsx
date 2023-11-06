@@ -38,7 +38,7 @@ export const TypePan = ({ disclaimer }: TypePanProps) => {
           Se connecter à editYour.film
         </div>
         <hr className="w-full border-05" />
-        <a href={process.env.NEXT_PUBLIC_API_STRAPI + "connect/google"}>
+        <a className='w-full' href={process.env.NEXT_PUBLIC_API_STRAPI + "connect/google"}>
           <Button
             type="secondary"
             label="Se connecter avec Google"

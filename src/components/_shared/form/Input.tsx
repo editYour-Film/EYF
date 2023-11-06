@@ -1,6 +1,7 @@
 import { ReactNode, useRef, useState } from "react";
 import Image from "next/image";
 import { Help } from "./Help";
+import { EditButton } from "../UI/EditButton";
 
 type inputProps = {
   type:
@@ -30,7 +31,8 @@ type inputProps = {
   helper?: string;
   helpIconText?: string;
   error?: string | ReactNode;
-  bg?: "white" | "black" | "light" | "card" | "underlined";
+  bg?: "white" | "black" | "light" | "card" | "underlined" | 'none';
+  noBg?: boolean,
   textSunset?: boolean;
   roundedFull?: boolean;
   iconRight?: boolean;
@@ -50,6 +52,7 @@ type inputProps = {
 
   /** search */
   datalist?: string;
+  searchIcon?: boolean;
 };
 const Input = ({
   type,
@@ -69,6 +72,7 @@ const Input = ({
   helpIconText,
   error,
   bg = "white",
+  noBg = false,
   textSunset = false,
   roundedFull = false,
   iconRight,
@@ -84,12 +88,15 @@ const Input = ({
   setDate = () => {},
   /** search */
   datalist,
+  searchIcon
 }: inputProps) => {
   const [isPassword, setIsPassword] = useState(true);
 
   const dayRef = useRef<HTMLInputElement>(null);
   const monthRef = useRef<HTMLInputElement>(null);
   const yearRef = useRef<HTMLInputElement>(null);
+
+  let bgOpacity = (bg === 'none' || noBg) ? 'bg-opacity-0 ' : 'bg-opacity-100 '
 
   const inputClass =
     "input-text w-full " +
@@ -122,6 +129,7 @@ const Input = ({
       ? " py-2 min-h-[40px] "
       : " p-dashboard-button-separation-spacing min-h-[52px] ") +
     (disabled === true ? "opacity-50 " : "") +
+    bgOpacity +
     className;
 
   let labelClass;
@@ -130,11 +138,11 @@ const Input = ({
   } else {
     labelClass =
       labelType === "dashboard"
-        ? "flex items-center justify-between mb-3 font-bold text-dashboard-text-description-base"
+        ? "flex items-center justify-between mb-3 text-small text-dashboard-text-description-base"
         : " flex flex-wrap justify-between items-center gap-3 mb-2 text-sm text-dashboard-text-description-base";
   }
 
-  const helperClass = "text-sm text-base-text mt-3 mb-8";
+  const helperClass = "text-sm text-dashboard-text-description-base-low mt-3 mb-8";
 
   switch (type) {
     case "text":
@@ -143,11 +151,11 @@ const Input = ({
           {label && (
             <label className={labelClass}>
               {label}
-
+ 
               {helpIconText && <Help text={helpIconText} label={label} />}
             </label>
           )}
-          <div className={`relative flex flex-col items-end ${inputClass}`}>
+          <div className={`relative flex flex-col items-end ${inputClass} focus-within:outline-blueBerry focus-within:outline`}>
             <input
               type="text"
               onChange={onChange}
@@ -189,12 +197,12 @@ const Input = ({
           )}
           {helper && <p className={helperClass}>{helper}</p>}
           <div
-            className={`relative flex flex-col grow items-end ${inputClass}`}
+            className={`relative flex flex-col grow items-end ${inputClass} focus-within:outline-blueBerry focus-within:outline`}
           >
             <textarea
               onChange={onChange}
               onBlur={onBlur}
-              className="bg-transparent w-full h-full resize-none"
+              className="bg-transparent w-full h-full resize-none px-[8px]"
               value={value as string}
               name={name}
               placeholder={placeholder}
@@ -226,7 +234,7 @@ const Input = ({
               {helpIconText && <Help text={helpIconText} label={label} />}
             </label>
           )}
-          <div className="relative">
+          <div className="relative focus-within:outline-blueBerry focus-within:outline">
             <input
               type="text"
               onChange={onChange}
@@ -300,7 +308,7 @@ const Input = ({
           <div
             className={`relative flex justify-end items-center ${inputClass}`}
           >
-            {!iconRight && (
+            {(!iconRight && searchIcon) && (
               <Image
                 width={17}
                 height={18}
@@ -321,11 +329,11 @@ const Input = ({
               value={value as string}
               name={name}
               placeholder={placeholder}
-              className="bg-transparent top-0 left-0 w-full h-full"
+              className="bg-transparent top-0 left-0 w-full h-full px-dashboard-button-separation-spacing no-widget"
               list={datalist}
               disabled={disabled}
             />
-            {iconRight && (
+            {(iconRight && searchIcon) && (
               <div className="flex h-full flex-row gap-4">
                 <div className="relative align-self-stretch justify-sefl-stretch border-l"></div>
                 <Image
@@ -348,7 +356,9 @@ const Input = ({
       );
     case "radio":
       return (
-        <div>
+        <div
+          tabIndex={-1}
+        >
           {label && (
             <label className={labelClass}>
               {label}
@@ -361,9 +371,12 @@ const Input = ({
               return (
                 <div
                   key={i}
-                  className="flex justify-start items-center gap-2.5"
+                  className="flex group justify-start items-center gap-2.5 "
                 >
-                  <label className="flex items-center gap-2">
+                  <label 
+                    className="flex items-center gap-2 cursor-pointer"
+                    tabIndex={1}
+                  >
                     <div className="relative">
                       <input
                         type="radio"
@@ -374,14 +387,9 @@ const Input = ({
                         }}
                         disabled={disabled}
                       />
-                      <div
-                        className={
-                          "w-5 h-5 border flex justify-center items-center rounded-full " +
-                          (selectedOption === x.value
-                            ? "bg-violet bg-opacity-50"
-                            : "bg-transparent")
-                        }
-                      ></div>
+                      <EditButton
+                        selected={selectedOption === x.value}
+                      />
                     </div>
                     {x.label}
                   </label>
@@ -408,9 +416,9 @@ const Input = ({
               return (
                 <div
                   key={i}
-                  className="flex justify-start items-center gap-2.5"
+                  className="flex group justify-start items-center gap-2.5 cursor-pointer"
                 >
-                  <label className="flex items-start gap-4">
+                  <label className="flex items-start gap-4 cursor-pointer">
                     <div className="relative">
                       <input
                         type="radio"
@@ -421,19 +429,14 @@ const Input = ({
                         }}
                         disabled={disabled}
                       />
-                      <div
-                        className={
-                          "w-5 h-5 border flex justify-center items-center rounded-full " +
-                          (selectedOption === x.value
-                            ? "bg-violet bg-opacity-50"
-                            : "bg-transparent")
-                        }
-                      ></div>
+                      <EditButton
+                        selected={selectedOption === x.value}
+                      />
                     </div>
-                    <div className="flex flex-col">
+                    <div className="flex flex-col text-dashboard-text-description-base">
                       {x.label}
                       {x.helper && (
-                        <span className="text-sm text-base-text mt-2">
+                        <span className="text-sm text-dashboard-text-description-base-low mt-2">
                           {x.helper}
                         </span>
                       )}
@@ -447,7 +450,7 @@ const Input = ({
       );
     case "radio-btn":
       return (
-        <div>
+        <div className="group">
           {label && (
             <label className="block opacity-70 font-bold text-lg mb-3">
               {label}

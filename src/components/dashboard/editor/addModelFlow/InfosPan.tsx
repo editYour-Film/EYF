@@ -1,44 +1,59 @@
-import { useUser } from "@/auth/authContext";
-import {
-  ChangeEvent,
-  SyntheticEvent,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 
 import useStrapi from "@/hooks/useStrapi";
 import Input from "@/components/_shared/form/Input";
-import { Tag } from "@/components/_shared/UI/Tag";
-import Button from "@/components/_shared/form/Button";
-import { Help } from "@/components/_shared/form/Help";
-import Image from "next/image";
 import { VideoDuration, getDuration } from "@/utils/Video";
 import slugify from "slugify";
-import { checkAlphanumeric } from "../../../../utils/utils";
 import { AddModelContext } from "../_context/AddModelContext";
 import { InputVignet } from "@/components/_shared/form/InputVignet";
+import { Keyword } from "@/components/_shared/UI/Keyword";
+import { IslandButton } from "@/components/_shared/buttons/IslandButton";
+import { Video } from "@/components/_shared/video/Video";
+import { DashBoardContext } from "../../_context/DashBoardContext";
+import { Button } from "@/components/_shared/buttons/Button";
+import { useMediaQuery } from "@uidotdev/usehooks";
+import { AddModel } from "../AddModel";
+import { FormatsType } from "../data/metaValues";
+
+import Close from "@/icons/dashboard/x.svg";
+import { AuthContext } from "@/context/authContext";
 
 type InfosPanProps = {};
 
 export const InfosPan = ({}: InfosPanProps) => {
   const context = useContext(AddModelContext);
-  const user = useUser();
+  const dashboardContext = useContext(DashBoardContext);
+  const authContext = useContext(AuthContext);
+
+  const isMobile = useMediaQuery("(max-width: 768px)");
 
   const [entry, setEntry] = useState<any>(null);
   const [duration, setDuration] = useState<VideoDuration>();
 
   useEffect(() => {
-    context.getCurrentStrapiObject();
+    dashboardContext.setButtons(
+      <Button
+        type="primary"
+        label="Continuer"
+        className={`w-full`}
+        disabled={error}
+        onClick={() => {
+          !error && handleSubmit();
+        }}
+      />
+    );
+
+    return () => {
+      dashboardContext.setButtons(undefined);
+    };
   }, []);
 
   const form = useRef<HTMLFormElement>(null);
   const formatOption = [
-    { value: "model 16/9 ème", label: "16/9ème" },
-    { value: "model 9/16 ème", label: "9/16ème" },
-    { value: "Mobile", label: "Mobile" },
-    { value: "Carré", label: "Carré" },
+    { value: "model 16/9 ème" as FormatsType, label: "16/9ème" },
+    { value: "model 9/16 ème" as FormatsType, label: "9/16ème" },
+    { value: "Mobile" as FormatsType, label: "Mobile" },
+    { value: "Carré" as FormatsType, label: "Carré" },
   ];
 
   const highlightedOptions = [
@@ -52,7 +67,9 @@ export const InfosPan = ({}: InfosPanProps) => {
     },
   ];
 
-  const [formatValue, setFormatValue] = useState(formatOption[0].value);
+  const [formatValue, setFormatValue] = useState<FormatsType>(
+    formatOption[0].value
+  );
   const [isHighlightedValue, setIsHighlightedValue] = useState(
     highlightedOptions[0].value
   );
@@ -72,14 +89,17 @@ export const InfosPan = ({}: InfosPanProps) => {
   const [tagsError, setTagsError] = useState("");
 
   const [error, setError] = useState(false);
+  const [visibilityPanAdded, setVisibilityPanAdded] = useState(false);
 
   useEffect(() => {
     if (context.strapiObject) {
       setEntry(context.strapiObject.attributes);
+
       setIsHighlightedValue(
-        user[0].details.highlighted_video &&
-          user[0].details.highlighted_video.data &&
-          user[0].details.highlighted_video.data.id === context.strapiObject.id
+        authContext.user.details.highlighted_video &&
+          authContext.user.details.highlighted_video.data &&
+          authContext.user.details.highlighted_video.data.id ===
+            context.strapiObject.id
           ? highlightedOptions[0].value
           : highlightedOptions[1].value
       );
@@ -93,7 +113,7 @@ export const InfosPan = ({}: InfosPanProps) => {
       setDefaultImage(
         context.strapiObject.attributes.thumbnail.data
           ? context.strapiObject.attributes.thumbnail.data.attributes.url
-          : context.defaultImage
+          : undefined
       );
       setTags(
         context.strapiObject.attributes.video_tags?.data
@@ -109,30 +129,24 @@ export const InfosPan = ({}: InfosPanProps) => {
     setDescriptionError("");
     setTagsError("");
 
-    const data = {
-      ...context.modifiedData,
-      model: formatValue,
-      title: titleValue,
-      description: descriptionValue,
-      thumbnail: vignet,
-      tags: tags.length ? tags : undefined,
-      user_info: user[0].details.id,
-      is_highlighted: isHighlightedValue,
-      length: duration
+    context.setUser_info(authContext.user.details.id);
+    context.setLength(
+      duration
         ? duration?.min !== 0
           ? duration?.min.toString() + " minutes"
           : duration?.sec.toString() + " secondes"
-        : "",
-    };
+        : ""
+    );
 
-    context.setModifiedData(data);
-    context.setStep(2);
-  };
+    if (isMobile) context.setCurrentStep(2);
+    else {
+      setVisibilityPanAdded(true);
 
-  const handleLoadedMetadata = (e: SyntheticEvent<HTMLVideoElement>) => {
-    const dur = getDuration(e.currentTarget);
-    context.setVideoDuration(dur);
-    setDuration(dur);
+      dashboardContext.addPannel({
+        title: "Details",
+        panel: <AddModel step={2} />,
+      });
+    }
   };
 
   const handleAddTag = (e: any) => {
@@ -140,24 +154,14 @@ export const InfosPan = ({}: InfosPanProps) => {
       name: e,
       slug: slugify(e, { lower: true }),
     };
-    setTags([...tags, _tag]);
+    context.setTags(context.tags ? [...context.tags, _tag] : [_tag]);
   };
 
   const handleRemoveTag = (e: any) => {
     const _tags = tags.filter((tag) => {
       return tag.slug !== slugify(e);
     });
-    setTags(_tags);
-  };
-
-  const handleTitleChange = (e: any) => {
-    //checkAlphanumeric(e.target.value, setTitleError);
-    setTitleValue(e.target.value);
-  };
-
-  const handleDescriptionChange = (e: any) => {
-    //checkAlphanumeric(e.target.value, setDescriptionError);
-    setDescriptionValue(e.target.value);
+    context.setTags(_tags);
   };
 
   useEffect(() => {
@@ -166,116 +170,90 @@ export const InfosPan = ({}: InfosPanProps) => {
   }, [titleError, descriptionError, tagsError]);
 
   return (
-    <div className="infos-pan bg-black p-5 flex flex-col gap-8">
-      <div className="info-pan__video-w relative h-0 pb-[32%] rounded-2xl overflow-hidden border">
-        <video
-          controls
-          className="object-cover absolute h-full w-full"
-          onLoadedMetadata={(e) => {
-            handleLoadedMetadata(e);
+    <div className="infos-pan flex flex-col gap-dashboard-spacing-element-medium bg-dashboard-background-content-area pt-[50px] pb-[150px] md:py-0">
+      {isMobile && (
+        <IslandButton
+          type="secondary"
+          Icon={Close}
+          iconColor="appleRed"
+          onClick={() => {
+            dashboardContext.setIsAddModelPannelOpen(false);
+            context.setCurrentStep(undefined);
+            context.abort();
           }}
-        >
-          {entry && (
-            <source
-              src={entry.video.data.attributes.url}
-              type={entry.video.data.attributes.mime}
-            />
-          )}
-        </video>
+          className="w-max self-end mr-dashboard-button-separation-spacing"
+        />
+      )}
+      <div className="info-pan__video-w relative rounded-t-2xl overflow-hidden border">
+        {entry && <Video video={entry.video.data.attributes} />}
       </div>
 
       <div className="info-pan__title flex items-baseline gap-2">
-        <div className="n27 text-lg font-medium">{entry?.title}</div>
-        {duration && (
-          <div className="n27 text-sm font-light">
-            &#40;{duration?.min !== 0 && duration?.min.toString() + " minutes"}
-            {duration?.sec.toString()}
-            {duration?.min === 0 && " secondes"}&#41;
-          </div>
-        )}
+        <div className="n27 text-title-medium text-dashboard-text-title-white-high uppercase font-medium">
+          {entry?.video.data.attributes.title}
+        </div>
       </div>
 
-      <hr />
+      <form
+        ref={form}
+        className="info-pan__format flex flex-col gap-dashboard-spacing-element-medium px-padding-medium md:px-0"
+        onSubmit={(e) => {
+          e.preventDefault();
+        }}
+      >
+        <div tabIndex={-1}>
+          <Input
+            label="Format du modèle importé"
+            labelType="dashboard"
+            noLabel
+            type="radio"
+            options={formatOption}
+            selectedOption={context.model}
+            value={context.model}
+            onChange={(e) => {
+              context.setModel(e);
+            }}
+            className="bg-transparent"
+          />
+        </div>
 
-      <form ref={form} className="info-pan__format flex flex-col gap-8">
-        <Input
-          label="Mettre en avant"
-          labelType="dashboard"
-          type="switch"
-          options={highlightedOptions}
-          value={isHighlightedValue}
-          selectedOption={isHighlightedValue}
-          onChange={(e) => {
-            setIsHighlightedValue(e);
-          }}
-        />
+        <div tabIndex={-1}>
+          <Input
+            label="Titre du modèle"
+            labelType="dashboard"
+            type="text"
+            helpIconText="Entrez le titre"
+            bg="light"
+            value={context.title}
+            placeholder="Choisir un titre..."
+            onChange={(e) => {
+              context.setTitle(e.target.value);
+            }}
+            className="bg-transparent"
+          />
+          {titleError && (
+            <div className="text-appleRed text-sm mt-2">{titleError}</div>
+          )}
+        </div>
 
-        <Input
-          label="Format du modèle importé"
-          labelType="dashboard"
-          type="radio"
-          options={formatOption}
-          selectedOption={formatValue}
-          value={formatValue}
-          onChange={(e) => {
-            setFormatValue(e);
-          }}
-        />
-
-        <div className="flex flex-col md:flex-row gap-8">
-          <div className="md:basis-7/12 flex flex-col justify-stretch gap-8">
-            <div>
-              <Input
-                label="Titre"
-                labelType="dashboard"
-                type="text"
-                helpIconText="Entrez le titre"
-                bg="light"
-                value={titleValue}
-                placeholder="Nom par défaut"
-                onChange={(e) => {
-                  handleTitleChange(e);
-                }}
-                maxlength={100}
-              />
-              {titleError && (
-                <div className="text-error text-sm mt-2">{titleError}</div>
-              )}
-            </div>
-
-            <div>
-              <Input
-                label="Description"
-                type="textarea"
-                labelType="dashboard"
-                helpIconText="Entrez la description"
-                bg="light"
-                value={descriptionValue}
-                placeholder="Présentez votre vidéo à vos spectateurs"
-                onChange={(e) => {
-                  handleDescriptionChange(e);
-                }}
-                maxlength={100}
-              />
-              {descriptionError && (
-                <div className="text-error text-sm mt-2">
-                  {descriptionError}
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div className="md:basis-5/12">
-            <InputVignet
-              label="Miniature"
-              buttonLabel="Modifier la miniature"
-              desc="Importez une image qui donne un aperçu du contenu de votre vidéo. Une bonne image se remarque et attire l'attention des spectateurs."
-              image={defaultImage}
-              onChange={(file) => {
-                setVignet(file);
-              }}
-            />
-          </div>
+        <div>
+          <Input
+            label="Présentez-vous à vos futurs clients..."
+            type="textarea"
+            labelType="dashboard"
+            helpIconText="Entrez la description"
+            bg="light"
+            value={context.description}
+            placeholder="Présentez votre vidéo à vos spectateurs..."
+            onChange={(e) => {
+              context.setDescription(e.target.value);
+            }}
+            maxlength={100}
+            className="bg-transparent"
+          />
+          {descriptionError && (
+            <div className="text-appleRed text-sm mt-2">{descriptionError}</div>
+          )}
         </div>
 
         <KeyWords
@@ -283,53 +261,47 @@ export const InfosPan = ({}: InfosPanProps) => {
             handleAddTag(e);
           }}
         />
-      </form>
 
-      <div className="infos-pan__tag-container flex flex-wrap gap-2">
-        {tags &&
-          tags.length > 0 &&
-          tags.map((tag: any, i: number) => {
-            return (
-              <Tag
-                key={i}
-                icon='cross'
-                text={tag.name}
-                onClose={() => {
-                  handleRemoveTag(tag.slug);
-                }}
-              />
-            );
-          })}
-      </div>
-
-      <hr />
-
-      <div className="flex justify-between items-center">
-        <div>
-          {error ? (
-            <span className="text-error text-sm ">
-              Le formulaire contient des erreurs
-            </span>
-          ) : (
-            <span className="text-base-text text-sm ">
-              Vérifications terminées. Aucun problème détecté.
-            </span>
-          )}
+        <div className="infos-pan__tag-container flex flex-wrap gap-2">
+          {context.tags &&
+            context.tags.length > 0 &&
+            context.tags.map((tag: any, i: number) => {
+              return (
+                <Keyword
+                  key={i}
+                  icon="cross"
+                  text={tag.name}
+                  onClose={() => {
+                    handleRemoveTag(tag.slug);
+                  }}
+                />
+              );
+            })}
         </div>
 
-        <Button
-          variant="black"
-          text="Suivant"
-          icon="arrow-right"
-          iconRight
-          className={`w-max ${
-            error ? "pointer-events-none opacity-10" : "bg-black opacity-50"
-          }`}
+        <InputVignet
+          label="Ajoutez une miniature"
+          buttonLabel="Ajouter un fichier"
+          title="Glissez-déposez le fichier que vous souhaitez publier."
+          desc="Importez une image qui donne un aperçu du contenu de votre vidéo. Une bonne image se remarque et attire l'attention des spectateurs."
+          image={defaultImage}
+          onChange={(file) => {
+            context.setThumbnail(file);
+          }}
+        />
+      </form>
+
+      {!isMobile && (
+        <IslandButton
+          type="primary"
+          label="Confirmer"
+          className={`w-max self-end`}
+          disabled={error || visibilityPanAdded}
           onClick={() => {
             !error && handleSubmit();
           }}
         />
-      </div>
+      )}
     </div>
   );
 };
@@ -352,6 +324,7 @@ const KeyWords = ({ onChange }: keyWordsProps) => {
 
   const handleKeyDown = (e: any) => {
     if (e.code === "Enter") {
+      e.preventDefault();
       onChange(e.target.value);
       setSearchValue("");
     }
@@ -369,15 +342,14 @@ const KeyWords = ({ onChange }: keyWordsProps) => {
     <>
       <Input
         type="search"
-        bg="card"
+        bg="light"
         label="Référencement par mot clès"
         labelType="dashboard"
         helpIconText="help"
-        roundedFull
         size="sm"
         iconRight
-        className="rounded-full bg-background-card"
-        placeholder="Rechercher"
+        className="rounded-full bg-background-card bg-transparent"
+        placeholder="Ajoutez un mot-clé..."
         onChange={(e) => {
           handleChange(e);
         }}

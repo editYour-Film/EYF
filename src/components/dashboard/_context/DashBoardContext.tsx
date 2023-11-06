@@ -1,7 +1,7 @@
+import useStrapi from "@/hooks/useStrapi"
 import { getNotifications } from "@/store/slices/NotificationsSlice"
 import { PropsWithChildren, createContext, useEffect, useState } from "react"
 import { useDispatch } from "react-redux"
-import { useStrapi } from "@/hooks/useStrapi"
 import { info } from "console"
 
 export interface dashBoardPanelType {
@@ -29,6 +29,7 @@ export const DashBoardContext = createContext({
   panels: [] as dashBoardPanelType[] | undefined,
   setPanels: (payload: dashBoardPanelType[]) => {},
   addPannel: (payload: dashBoardPanelType) => {},
+  closePanels: () => {},
   activePanel: 0,
   setActivePanel: (payload: number) => {},
 
@@ -44,20 +45,15 @@ export const DashBoardContext = createContext({
 
   posts: [] as dashboardPostType[],
   infoCardActive: false,
-  infoCard: undefined as infoCardType | undefined
+  infoCard: undefined as infoCardType | undefined,
+
+  buttons: undefined as any,
+  setButtons: (payload:any) => {},
 })
 
 export const DashBoardContextProvider = ({children}:PropsWithChildren) => {
-  const [panels, setPanels] = useState<dashBoardPanelType[] | undefined>(undefined)
-  const [activePanel, setActivePanel] = useState(0)
-
-  const [isAddModelPannelOpen, setIsAddModelPannelOpen] = useState(false)
-
-  const [notificationCenterAnimated, setNotificationCenterAnimated] = useState(false)
-  const [notificationCenterOpen, setNotificationCenterOpen] = useState(false)
-  
   const dispatch = useDispatch()
-
+  
   const { data: data, mutate: getStrapi } = useStrapi(
     "dashboard-monteur?" +
     "populate[add_model]=*&" +
@@ -65,19 +61,29 @@ export const DashBoardContextProvider = ({children}:PropsWithChildren) => {
     "populate[news_info][populate][info_card][populate]=*",
     false
   );
+
+  const [panels, setPanels] = useState<dashBoardPanelType[] | undefined>(undefined)
+  const [activePanel, setActivePanel] = useState(0)
+
+  const [isAddModelPannelOpen, setIsAddModelPannelOpen] = useState(false)
+
+  const [notificationCenterAnimated, setNotificationCenterAnimated] = useState(false)
+  const [notificationCenterOpen, setNotificationCenterOpen] = useState(false)
+
+  const [buttons, setButtons] = useState<any | undefined>(undefined)
   
   useEffect(() => {
     dispatch(getNotifications())
-    getStrapi()
+    getStrapi();
   }, [])
 
-  let posts:dashboardPostType[];
+  let posts:dashboardPostType[] = [];
 
   if (data && data.attributes && data.attributes.news_info) {
     if (data.attributes.news_info.news_info_post) {
       const news_info_post = data.attributes.news_info.news_info_post
     
-      posts = news_info_post.map((post) => {
+      posts = news_info_post.map((post:any) => {
         return {
           title: post.title,
           excerpt: post.excerpt,
@@ -96,7 +102,6 @@ export const DashBoardContextProvider = ({children}:PropsWithChildren) => {
   }
 
   const infoCardActive = data?.attributes.news_info.info_card.isActive ? true : false
-
   const infoCard:infoCardType = {
     title: `${ data?.attributes ? data.attributes.news_info.info_card.title : 'Error' }`,
     text: <div><p>{ data?.attributes ? data.attributes.news_info.info_card.content : '' }</p></div>,
@@ -108,6 +113,12 @@ export const DashBoardContextProvider = ({children}:PropsWithChildren) => {
     else setPanels([panel])
         
     setActivePanel(panels ? panels?.length : 0)
+  }
+
+  const closePanels = () => {
+    if(panels) setPanels([panels[0]])
+        
+    setActivePanel(0)
   }
 
   const openNotificationCenter = () => {    
@@ -128,6 +139,7 @@ export const DashBoardContextProvider = ({children}:PropsWithChildren) => {
         panels,
         setPanels,
         addPannel,
+        closePanels,
         activePanel,
         setActivePanel,
 
@@ -143,7 +155,10 @@ export const DashBoardContextProvider = ({children}:PropsWithChildren) => {
 
         posts,
         infoCardActive,
-        infoCard
+        infoCard,
+
+        buttons,
+        setButtons,
       }}
     >
       {children}

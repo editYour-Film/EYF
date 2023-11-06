@@ -32,8 +32,6 @@ export const IslandButton: React.FC<IslandButtonProps> = ({
     wmax && "w-max"
   } h-max font-medium rounded-full transition-colors duration-200`;
 
-  const focusedStyle = `focus:border-2 focus:border-dashboard-button-focus-stroke focus:-translate-x-[0.5px] focus:-translate-y-[0.5px]`;
-
   const size = `${
     type === "small" ? "px-dashboard-specific-radius py-dashboard-mention-padding-right-left " : "px-[20px] py-[10px]"
   }`;
@@ -86,7 +84,7 @@ export const IslandButton: React.FC<IslandButtonProps> = ({
   return (
     <button
       ref={buttonEl}
-      className={`button ${baseStyle} ${typeStyle} ${focusedStyle} ${
+      className={`button ${baseStyle} ${typeStyle} ${
         disabled ? "pointer-events-none " + disabledStyle : ""
       } ${className ?? ""}`}
       onClick={() => {

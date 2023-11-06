@@ -32,12 +32,6 @@ let routes = {
   SEARCH_KEYWORD: "/catalogue/mot-cle",
 
   SIGNIN: "/signin",
-  SIGNIN_TYPE: "/signin/type",
-  SIGNIN_EMAIL: "/signin/email",
-  SIGNIN_PASSWORD: "/signin/password",
-  SIGNIN_RESET_PWD_P1: "/signin/reset/current",
-  SIGNIN_RESET_PWD_P2: "/signin/reset/update",
-  SIGNIN_RESET_PWD_P3: "/signin/reset/link",
 
   SIGNUP: "/signup",
 
@@ -66,20 +60,11 @@ const landings = [routes.HOME, routes.WHOWEARE, routes.BLOG];
 
 export { landings };
 
-const signin = [
-  routes.SIGNIN_TYPE,
-  routes.SIGNIN_EMAIL,
-  routes.SIGNIN_PASSWORD,
-  routes.SIGNIN_RESET_PWD_P1,
-  routes.SIGNIN_RESET_PWD_P2,
-  routes.SIGNIN_RESET_PWD_P3,
-];
-
 const quote = [routes.QUOTE_STEP1, routes.QUOTE_STEP2, routes.QUOTE_STEP3];
 
 const navWithoutTransition = [
   [routes.BLOG_DETAIL, routes.BLOG_DETAIL],
-  ...getRoutesConnexion(signin),
+  ...getRoutesConnexion([routes.SIGNIN]),
   ...getRoutesConnexion([routes.SIGNUP]),
   ...getRoutesConnexion(quote),
 ];

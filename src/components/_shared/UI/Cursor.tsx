@@ -12,6 +12,7 @@ import Mute from "@/icons/mute.svg";
 import Unmute from "@/icons/unmute.svg";
 
 export const Cursor = () => {
+  const isCursorEnabled = useSelector((store: RootState) => store.cursor.enabled)
   const router = useRouter();
   const state = useSelector((state: RootState) => state.cursor.value);
   const enabled = useSelector((state: RootState) => state.cursor.enabled);
@@ -27,7 +28,6 @@ export const Cursor = () => {
   const posX = useRef(0);
   const posY = useRef(0);
   const ctx = useRef<gsap.Context>();
-  const raf = useRef(0);
 
   const regularScale = 0.4;
   const textScale = 1.4;
@@ -246,7 +246,9 @@ export const Cursor = () => {
     y: 0,
   });
 
-  const handleMouseMove = (event: MouseEvent) => {
+  const handleMouseMove = (event: MouseEvent) => {    
+    if (!isCursorEnabled) return
+
     posX.current = event.clientX;
     posY.current = event.clientY;
 
@@ -276,9 +278,7 @@ export const Cursor = () => {
   }, [cursor2Pos]);
 
   useEffect(() => {
-    window.addEventListener("mousemove", (e) => {
-      handleMouseMove(e);
-    });
+    window.addEventListener("mousemove", handleMouseMove);
 
     ctx.current = gsap.context(() => {
       gsap.set(cursor.current, {
@@ -287,27 +287,29 @@ export const Cursor = () => {
       });
     });
 
-    router.events.on("routeChangeStart", () => {
+    const onChangeStart = () => {
       setLockAnim(true);
       dispatch(toRegular());
-    });
+    }
 
-    router.events.on("routeChangeComplete", () => {
+    const onChangeComplete = () => {
       setTimeout(() => {
         setLockAnim(false);
       }, 1000);
-    });
+    }
+
+    router.events.on("routeChangeStart", onChangeStart);
+    router.events.on("routeChangeComplete", onChangeComplete);
 
     return () => {
-      window.removeEventListener("mousemove", (e) => {
-        handleMouseMove(e);
-      });
+      window.removeEventListener("mousemove", handleMouseMove);
 
       ctx.current?.revert();
 
-      // cancelAnimationFrame(raf.current);
+      router.events.off("routeChangeStart", onChangeStart);
+      router.events.off("routeChangeComplete", onChangeComplete);
     };
-  }, []);
+  }, [isCursorEnabled]);
 
   if (enabled) {
     return (

@@ -1,5 +1,5 @@
 import { useMutation } from "react-query";
-import axios from "axios";
+import axios, { AxiosProgressEvent } from "axios";
 import { getTokenFromLocalCookie } from "@/auth/auth";
 
 export const useStrapi = (path: string, populate = true) => {
@@ -68,7 +68,8 @@ export const useStrapiPost = async (
   path: string,
   body: any,
   auth: boolean = false,
-  isMedia: boolean = false
+  isMedia: boolean = false,
+  progressFunction: undefined | ((event: AxiosProgressEvent) => void) = undefined
 ) => {
   const token = getTokenFromLocalCookie();
   if (auth && !token)
@@ -92,6 +93,7 @@ export const useStrapiPost = async (
                 ? "multipart/form-data"
                 : "application/json",
             },
+      onUploadProgress: progressEvent => progressFunction && progressFunction(progressEvent)
     })
     .then((response) => {
       return {

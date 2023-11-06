@@ -101,6 +101,7 @@ export const VideoSlider = ({videos}: VideoSliderPros) => {
 
     return () => {
       window.removeEventListener('resize', cb)
+      ctx && ctx.revert()
     };
   }, [])
 
@@ -123,9 +124,10 @@ export const VideoSlider = ({videos}: VideoSliderPros) => {
   
     ctx && 
     ctx.add(() => {
-      setisTweening(true)
-
       const tl = gsap.timeline({
+        onStart: () => {
+          setisTweening(true)
+        },
         onComplete: () => {
           setisTweening(false)
         }
@@ -135,51 +137,54 @@ export const VideoSlider = ({videos}: VideoSliderPros) => {
         const filter = ref.el.querySelector(`.filter`)
         
         if (ref.i === currentIndex) {
-          tl.to(filter, {
+          filter && tl.to(filter, {
             opacity: 0.5
           }, 0.2)
         } else {
-          tl.to(filter, {
+          filter && tl.to(filter, {
             opacity: 1
           }, 0)
         }
 
-        if(ref.position === -2 && direction.current === 1) {
-          tl.set(ref.el, {
-            x: offset.current * ref.position,
-          }, 0)
-        } else if (ref.position === slides.current.length - 3 && direction.current === -1) {
-          tl.set(ref.el, {
-            x: offset.current * ref.position,
-          }, 0)
-        } else {
-          tl.to(ref.el, {
-            x: offset.current * ref.position,
-            duration: 0.8,
-            ease: "power2.inOut"
-          }, 0)
+        if (ref.el) {
+          if(ref.position === -2 && direction.current === 1) {
+            tl.set(ref.el, {
+              x: offset.current * ref.position,
+            }, 0)
+          } else if (ref.position === slides.current.length - 3 && direction.current === -1) {
+            tl.set(ref.el, {
+              x: offset.current * ref.position,
+            }, 0)
+          } else {
+            tl.to(ref.el, {
+              x: offset.current * ref.position,
+              duration: 0.8,
+              ease: "power2.inOut"
+            }, 0)
+          }
+  
+          if(i === currentIndex) {
+            tl.to(ref.el, {
+              scale: 1.0,
+              ease: "power3.out"
+            }, 0.5)
+            tl.to(ref.spanEl, {
+              opacity: 1
+            }, 0)
+          } else {
+            tl.to(ref.el, {
+              scale: 0.90
+            }, 0)
+            tl.to(ref.spanEl, {
+              opacity: 0.4
+            }, 0)
+          }
         }
 
-        if(i === currentIndex) {
-          tl.to(ref.el, {
-            scale: 1.0,
-            ease: "power3.out"
-          }, 0.5)
-          tl.to(ref.spanEl, {
-            opacity: 1
-          }, 0)
-        } else {
-          tl.to(ref.el, {
-            scale: 0.90
-          }, 0)
-          tl.to(ref.spanEl, {
-            opacity: 0.4
-          }, 0)
-        }
 
         const titleDuration = 0.5;
         if(i === currentIndex) {
-          tl.fromTo([ref.titleEl.querySelectorAll('.char-content'), ref.editorEl.querySelectorAll('.char-content')], {
+          (ref.titleEl.querySelectorAll('.char-content') && ref.editorEl.querySelectorAll('.char-content')) && tl.fromTo([ref.titleEl.querySelectorAll('.char-content'), ref.editorEl.querySelectorAll('.char-content')], {
             yPercent: 120,
           },{
             yPercent: 0,
@@ -188,7 +193,7 @@ export const VideoSlider = ({videos}: VideoSliderPros) => {
             duration: titleDuration
           }, titleDuration)
         } else {
-          tl.to([ref.titleEl.querySelectorAll('.char-content'), ref.editorEl.querySelectorAll('.char-content')], {
+          (ref.titleEl.querySelectorAll('.char-content') && ref.editorEl.querySelectorAll('.char-content')) && tl.to([ref.titleEl.querySelectorAll('.char-content'), ref.editorEl.querySelectorAll('.char-content')], {
             yPercent: -100,
             stagger: 0.01,
             ease:'power.in',
@@ -203,7 +208,7 @@ export const VideoSlider = ({videos}: VideoSliderPros) => {
   const initContext = () => {
     ctx && ctx.add(() => { 
       slides.current.forEach((ref:any, i:number) => {        
-        gsap.set(ref.el, {
+        ref.el && gsap.set(ref.el, {
           left: '50%',
           xPercent: -50,
           x: offset.current * ref.position + moveOffset.current
@@ -211,7 +216,7 @@ export const VideoSlider = ({videos}: VideoSliderPros) => {
 
         setTimeout(() => {
           if(i !== currentIndex) {                    
-            gsap.set([ref.titleEl.querySelectorAll('.char-content'), ref.editorEl.querySelectorAll('.char-content')], {
+            (ref.titleEl.querySelectorAll('.char-content') && ref.editorEl.querySelectorAll('.char-content')) && gsap.set([ref.titleEl.querySelectorAll('.char-content'), ref.editorEl.querySelectorAll('.char-content')], {
               yPercent: -100
             })
           }

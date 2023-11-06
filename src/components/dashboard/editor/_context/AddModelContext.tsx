@@ -1,4 +1,3 @@
-import { useUser } from "@/auth/authContext";
 import {
   useStrapiDelete,
   useStrapiGet,
@@ -6,8 +5,11 @@ import {
   useStrapiPut,
 } from "@/hooks/useStrapi";
 import { VideoDuration } from "@/utils/Video";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import slugify from "slugify";
+import { DashBoardContext } from "../../_context/DashBoardContext";
+import { modelType, user_info } from "./EditorContext";
+import { VisibilityType, WorkTimeType } from "../data/metaValues";
 
 type editorVideo = {
   video?: File | undefined;
@@ -26,72 +28,122 @@ type editorVideo = {
 };
 
 export const AddModelContext = createContext({
-  showAddModelInterface: false,
-  showAddModel: () => {},
-  hideAddModel: () => {},
-  currentStep: 0,
-  setStep: (nb: number) => {},
+  currentStep: undefined as number | undefined,
+  setCurrentStep: (nb: number | undefined) => {},
+
   currentEditorVideo: null as number | null,
   setCurrentEditorVideo: (id: number | null) => {},
-  modifiedData: {} as editorVideo,
-  initAddModel: () => {},
-  initData: () => {},
-  setModifiedData: (obj: editorVideo) => {},
-  updateEditorVideo: (): any => {},
-  deleteEditorVideo: (id: number) => {},
+
+  resetData: () => {},
+  handleInitContext: () => {},
+  abort: () => {},
+
+  handleUpdateEditorVideo: (): any => {},
+
   strapiObject: {} as any,
   getCurrentStrapiObject: () => {},
-  currentModels: [],
-  getCurrentModels: () => {},
+
   defaultImage: "/img/defaults/video-thumbnail.svg",
+
   isModify: false,
   setIsModify: (val: boolean) => {},
+
+  video: undefined as number | undefined,
+  setVideo: (payload: number | undefined) => {},
+  thumbnail: undefined as File | undefined,
+  setThumbnail: (payload: File | undefined) => {},
+  title: undefined as string | undefined,
+  setTitle: (payload: string | undefined) => {},
+  length: undefined as string | undefined,
+  setLength: (payload: string | undefined) => {},
+  model: undefined as modelType | undefined,
+  setModel: (payload: modelType | undefined) => {},
+  description: undefined as string | undefined,
+  setDescription: (payload: string | undefined) => {},
+  tags: undefined as { name: string; slug: string }[] | undefined,
+  setTags: (payload: { name: string; slug: string }[] | undefined) => {},
+  ressources: undefined as any,
+  setRessources: (payload: any) => {},
+  user_info: undefined as user_info | undefined,
+  setUser_info: (payload: user_info | undefined) => {},
+  visibility: undefined as VisibilityType | undefined,
+  setVisibility: (payload: VisibilityType | undefined) => {},
+  copywrite: undefined as string | undefined,
+  setCopywrite: (payload: string | undefined) => {},
+  worktime: undefined as WorkTimeType | undefined,
+  setWorktime: (payload: WorkTimeType | undefined) => {},
+  is_highlighed: undefined as boolean | undefined,
+  setIs_highlighed: (payload: boolean | undefined) => {},
   videoDuration: undefined as VideoDuration | undefined,
   setVideoDuration: (dur: VideoDuration | undefined) => {},
 });
 
 export const AddModelContextProvider: React.FC<any> = (props) => {
-  const user = useUser();
-  const [showAddModelInterface, setShowAddModelInterface] = useState(false);
-  const [currentStep, setCurrentStep] = useState(3);
+  const dashboardContext = useContext(DashBoardContext);
+
+  const [currentStep, setCurrentStep] = useState<number | undefined>(undefined);
   const [currentEditorVideo, setCurrentEditorVideo] = useState<number | null>(
     null
   );
 
-  const initData = {
-    video: undefined,
-    thumbnail: undefined,
-    title: undefined,
-    length: undefined,
-    model: undefined,
-    description: undefined,
-    tags: undefined,
-    ressources: undefined,
-    user_info: undefined,
-    visibility: undefined,
-    copywrite: undefined,
-    worktime: undefined,
-    is_highlighed: undefined,
-  };
+  const [video, setVideo] = useState<number | undefined>(undefined);
+  const [thumbnail, setThumbnail] = useState<File | undefined>(undefined);
+  const [title, setTitle] = useState<string | undefined>(undefined);
+  const [length, setLength] = useState<string | undefined>(undefined);
+  const [model, setModel] = useState<modelType | undefined>(undefined);
+  const [description, setDescription] = useState<string | undefined>(undefined);
+  const [tags, setTags] = useState<
+    { name: string; slug: string }[] | undefined
+  >(undefined);
+  const [ressources, setRessources] = useState<any>(undefined);
+  const [user_info, setUser_info] = useState<user_info | undefined>(undefined);
+  const [visibility, setVisibility] = useState<VisibilityType | undefined>(
+    undefined
+  );
+  const [copywrite, setCopywrite] = useState<string | undefined>(undefined);
+  const [worktime, setWorktime] = useState<WorkTimeType | undefined>(undefined);
+  const [is_highlighed, setIs_highlighed] = useState<boolean | undefined>(
+    undefined
+  );
+
+  const [modifiedData, setModifiedData] = useState<any>({
+    video,
+    thumbnail,
+    title,
+    length,
+    model,
+    description,
+    tags,
+    ressources,
+    user_info,
+    visibility,
+    copywrite,
+    worktime,
+    is_highlighed,
+  });
+
   const [isModify, setIsModify] = useState(false);
-
-  const [modifiedData, setModifiedData] = useState<editorVideo | {}>(initData);
-
   const [videoDuration, setVideoDuration] = useState<VideoDuration | undefined>(
     undefined
   );
 
-  const setStep = (nb: number) => {
-    setCurrentStep(nb);
-  };
-
-  const showAddModel = () => {
-    setShowAddModelInterface(true);
-  };
-
-  const hideAddModel = () => {
-    setShowAddModelInterface(false);
-  };
+  useEffect(() => {
+    setModifiedData({
+      video,
+      thumbnail,
+      title,
+      length,
+      model,
+      description,
+      tags,
+      ressources,
+      user_info,
+      visibility,
+      copywrite,
+      worktime,
+      is_highlighed,
+    });
+  }, [title]);
 
   const handleUpdateEditorVideo = async (): Promise<unknown> => {
     if (currentEditorVideo) {
@@ -182,22 +234,36 @@ export const AddModelContextProvider: React.FC<any> = (props) => {
     }
   };
 
-  const handleDeleteEditorVideo = async (id: number) => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const res = await useStrapiDelete(`editor-videos/${id}`, user[1]);
-    getCurrentModels();
+  const resetData = () => {
+    setVideo(undefined);
+    setThumbnail(undefined);
+    setTitle(undefined);
+    setLength(undefined);
+    setModel(undefined);
+    setDescription(undefined);
+    setTags(undefined);
+    setRessources(undefined);
+    setUser_info(undefined);
+    setVisibility(undefined);
+    setCopywrite(undefined);
+    setWorktime(undefined);
+    setIs_highlighed(undefined);
   };
 
-  const initAddModel = () => {
-    handleInitData();
-    showAddModel();
-  };
-
-  const handleInitData = () => {
-    setStep(0);
+  const handleInitContext = () => {
+    setCurrentStep(0);
     setCurrentEditorVideo(null);
-    setModifiedData(initData);
     setIsModify(false);
+    resetData();
+  };
+
+  const abort = () => {
+    resetData();
+
+    //TODO: Integration delete the draft editor video if present
+    if (currentEditorVideo) {
+      useStrapiDelete(`editor-videos/${currentEditorVideo}`, true);
+    }
   };
 
   const [strapiObject, setStrapiObject] = useState<any>();
@@ -206,64 +272,69 @@ export const AddModelContextProvider: React.FC<any> = (props) => {
       // eslint-disable-next-line react-hooks/rules-of-hooks
       const response = await useStrapiGet(
         `editor-videos/${currentEditorVideo}?populate=*`,
-        user[1]
+        false /*true*/
       );
       setStrapiObject(response.data.data);
+
       res(response);
     });
   };
 
-  const [currentModels, setCurrentModels] = useState<any>();
-  const getCurrentModels = async () => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const models = await useStrapiGet(
-      "editor-videos?filters[user_info][id][$eq]=" +
-        user[0].details.id +
-        "&populate=*",
-      // should be updated to true (set to false for test purposes)
-      false
-    );
-
-    setCurrentModels(models.data.data);
-  };
+  useEffect(() => {
+    getCurrentStrapiObject();
+  }, [currentEditorVideo]);
 
   useEffect(() => {
-    handleInitData();
-  }, []);
+    dashboardContext.isAddModelPannelOpen === true && handleInitContext();
+  }, [dashboardContext.isAddModelPannelOpen]);
 
   return (
     <AddModelContext.Provider
       value={{
-        showAddModelInterface,
-        showAddModel,
-        hideAddModel,
         currentStep,
-        setStep,
+        setCurrentStep,
         currentEditorVideo,
         setCurrentEditorVideo,
-        currentModels,
-        getCurrentModels,
-        modifiedData,
-        setModifiedData,
-        initData: () => {
-          handleInitData();
-        },
-        initAddModel: () => {
-          initAddModel();
-        },
+
+        resetData,
+        handleInitContext,
+        abort,
+
         strapiObject,
-        getCurrentStrapiObject: () => {
-          return getCurrentStrapiObject();
-        },
-        updateEditorVideo: (): Promise<unknown> => {
-          return handleUpdateEditorVideo();
-        },
-        deleteEditorVideo: (id) => {
-          handleDeleteEditorVideo(id);
-        },
+        getCurrentStrapiObject,
+
+        handleUpdateEditorVideo,
         defaultImage: "/img/defaults/video-thumbnail.svg",
+
         isModify,
         setIsModify,
+
+        video,
+        setVideo,
+        thumbnail,
+        setThumbnail,
+        title,
+        setTitle,
+        length,
+        setLength,
+        model,
+        setModel,
+        description,
+        setDescription,
+        tags,
+        setTags,
+        ressources,
+        setRessources,
+        user_info,
+        setUser_info,
+        visibility,
+        setVisibility,
+        copywrite,
+        setCopywrite,
+        worktime,
+        setWorktime,
+        is_highlighed,
+        setIs_highlighed,
         videoDuration,
         setVideoDuration,
       }}

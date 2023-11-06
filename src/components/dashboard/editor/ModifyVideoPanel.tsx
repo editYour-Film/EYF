@@ -436,26 +436,21 @@ export const ModifyVideoPanel = () => {
                       />
                     )}
 
-                    {editorContext.tags &&
-                      editorContext.tags.map((tag, i) => {
-                        return (
-                          <Keyword
-                            key={i}
-                            text={tag.name}
-                            icon="cross"
-                            className="relative w-ful shrink-0"
-                            onClose={() => {
-                              editorContext.setTags(
-                                editorContext.tags?.filter((t) => t !== tag)
-                              );
-                              editorContext.setCurrentModelHasBeenModified(
-                                true
-                              );
-                            }}
-                          />
-                        );
-                      })}
-                  </div>
+                    {editorContext.tags && editorContext.tags.map((tag, i) => {                      
+                      return (
+                        <Keyword
+                          key={i}
+                          text={tag.name}
+                          icon="cross"
+                          className="relative w-ful shrink-0"
+                          onClose={() => {
+                            editorContext.setTags(editorContext.tags?.filter((t) => t !== tag))
+                            editorContext.setCurrentModelHasBeenModified(true)
+                          }}
+                         />
+                      )
+                    })}
+                  </div>                  
                 </div>
               </div>
 

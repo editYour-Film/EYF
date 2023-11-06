@@ -19,8 +19,10 @@ html {
   color: #fcfcfc;
 }
 
-*:focus {
-  outline: none;
+@layer components {
+  *:focus-visible {
+    @apply outline-none;
+  }
 }
 
 .no-cursor {

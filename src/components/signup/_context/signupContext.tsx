@@ -4,7 +4,14 @@ import {
 } from "@/components/dashboard/editor/_context/EditorProfilContext";
 import { codeStateType } from "@/components/signin/_context/signinContext";
 import routes from "@/routes";
-import { RefObject, createContext, useEffect, useState } from "react";
+import {
+  RefObject,
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { ReactElement } from "react-markdown/lib/react-markdown";
 
 import InfoIcon from "@/icons/info.svg";
@@ -18,23 +25,43 @@ import { ElementsOut } from "@/Animations/elementsOut";
 import { useStrapiGet, useStrapiPost } from "@/hooks/useStrapi";
 import { inputErrors } from "@/const";
 import validator from "validator";
-import {
-  getGoogleAuthEmailCookie,
-  getTokenFromLocalCookie,
-  setToken,
-} from "@/auth/auth";
+import { getGoogleAuthEmailCookie } from "@/auth/auth";
 import useLocalStorage from "@/hooks/useLocalStorage";
-import { SignedInUser, initSignedInUser } from "@/components/model/signin";
-import { useUser } from "@/auth/authContext";
+import { RegisterUser } from "@/components/model/signin";
 import { MentionInteraction } from "@/components/_shared/buttons/MentionInteraction";
 import { useRouter } from "next/router";
+import { AuthContext } from "@/context/authContext";
 
 export type accountType = "editor" | "creator" | "both" | undefined;
 export type maxStepType = 5 | 6 | 7 | undefined;
 
+export const userNameMessages = {
+  default: {
+    message: "Votre nom d'utilisateur est unique.",
+    Icon: InfoIcon,
+    type: "regular",
+  } as MessageType,
+  error: {
+    message: "Ce nom d'utilisateur existe déjà",
+    Icon: X,
+    type: "danger",
+  } as MessageType,
+  success: {
+    message: "Nom d'utilisateur disponible.",
+    Icon: Check,
+    type: "regular",
+  } as MessageType,
+  generalError: {
+    message: inputErrors.general,
+    Icon: X,
+    type: "danger",
+  } as MessageType,
+};
+
 export const SignUpContext = createContext({
   langOptions: [] as spokenLanguageInterface[] | undefined,
   skillsOptions: [] as skillsInterface[] | undefined,
+  isLoadingLangSkills: true,
 
   accountType: undefined as accountType,
   setAccountType: (accountType: accountType) => {},
@@ -71,7 +98,9 @@ export const SignUpContext = createContext({
   setUsername: (payload: string) => {},
   handleUserNameVerification: () => {},
   userNameAvailable: undefined as boolean | undefined,
+  setUserNameAvailable: (payload: boolean) => {},
   userNameMessage: undefined as MessageType | undefined,
+  setUserNameMessage: (payload: MessageType) => {},
 
   initials: undefined as string | undefined,
 
@@ -111,56 +140,131 @@ export const SignUpContext = createContext({
   goNextNoAnimation: () => {},
 });
 
-export const SignUpContextProvider: React.FC<any> = (props) => {
-  const [userInfo, setUserInfo] = useLocalStorage<SignedInUser>(
-    "user",
-    initSignedInUser
-  );
-  const [, isLoggedIn] = useUser();
+const initRegisterUser = {
+  currentStep: 0,
+  accountType: "editor" as any,
+  email: undefined as string | undefined,
+  fname: undefined,
+  lname: undefined,
+  username: undefined,
+  editorPicture: undefined,
+  editorPictureName: undefined,
+  editorDescription: undefined,
+  creatorPicture: undefined,
+  creatorPictureName: undefined,
+  languages: undefined,
+  skills: undefined,
+  joinNewsletter: true,
+};
 
-  const userNameMessages = {
-    default: {
-      message: "Votre nom d'utilisateur est unique.",
-      Icon: InfoIcon,
-      type: "regular",
-    } as MessageType,
-    error: {
-      message: "Ce nom d'utilisateur existe déjà",
-      Icon: X,
-      type: "danger",
-    } as MessageType,
-    success: {
-      message: "Nom d'utilisateur disponible.",
-      Icon: Check,
-      type: "regular",
-    } as MessageType,
-    generalError: {
-      message: inputErrors.general,
-      Icon: X,
-      type: "danger",
-    } as MessageType,
-  };
+export const SignUpContextProvider: React.FC<any> = (props) => {
+  const router = useRouter();
+
+  const authContext = useContext(AuthContext);
+
+  const [registerUser, setRegisterUser] = useLocalStorage<RegisterUser>(
+    "register_user",
+    initRegisterUser
+  );
 
   const [langOptions, setLangOptions] = useState<spokenLanguageInterface[]>();
 
   const [skillsOptions, setSkillsOptions] = useState<skillsInterface[]>();
 
-  useEffect(() => {
-    const token = getTokenFromLocalCookie();
-    if (token && isLoggedIn) {
-      if (
-        userInfo &&
-        userInfo.user.role &&
-        userInfo.user.role.name === "editor"
-      )        
-        router.push(routes.DASHBOARD_EDITOR_HOME);
-    }
-  }, [userInfo]);
+  const [isLoadingLangSkills, setIsLoadingLangSkills] = useState(true);
 
-  useEffect(() => {
+  const [email, setEmail] = useState<string | undefined>(
+    registerUser.email && registerUser.email?.length > 0
+      ? registerUser.email
+      : getGoogleAuthEmailCookie()
+  );
+  const [emailErrorMessage, setEmailErrorMessage] = useState<
+    ReactElement | undefined | undefined | string
+  >(undefined);
+
+  const [accountType, setAccountType] = useState<accountType>(
+    registerUser.accountType
+  );
+  const [maxSteps, setMaxSteps] = useState<maxStepType>(undefined);
+  const [currentStep, setCurrentStep] = useState<number>(0);
+  const [dots, setDots] = useState<StepBubbleProps[] | undefined>(undefined);
+
+  const [code, setCode] = useState<string | undefined>(undefined);
+  const [codeState, setCodeState] = useState<codeStateType>("regular");
+
+  const [f_name, setF_name] = useState<string | undefined>(registerUser.fname);
+  const [f_nameError, setF_nameError] = useState<string | undefined>(undefined);
+
+  const [l_name, setL_name] = useState<string | undefined>(registerUser.lname);
+  const [l_nameError, setL_nameError] = useState<string | undefined>(undefined);
+
+  const [username, setUsername] = useState<string | undefined>(
+    registerUser.username
+  );
+  const [userNameAvailable, setUserNameAvailable] = useState<
+    boolean | undefined
+  >(undefined);
+  const [userNameMessage, setUserNameMessage] = useState<MessageType>(
+    userNameMessages.default
+  );
+
+  const [initials, setInitials] = useState<string | undefined>(
+    f_name && l_name ? f_name[0] + l_name[0] : undefined
+  );
+
+  const [editorPicture, setEditorPicture] = useState<FileList[0] | undefined>(
+    undefined // registerUser.editorPicture
+  );
+  const [editorPictureName, setEditorPictureName] = useState<
+    string | undefined
+  >(undefined /*registerUser.editorPictureName*/);
+  const [editorPictureOk, setEditorPictureOk] = useState<boolean | undefined>(
+    undefined
+  );
+
+  const [editorDescription, setEditorDescription] = useState<
+    string | undefined
+  >(registerUser.editorDescription);
+  const [editorDescriptionOk, setEditorDescriptionOk] = useState<
+    boolean | undefined
+  >(undefined);
+
+  const [creatorPicture, setCreatorPicture] = useState<FileList[0] | undefined>(
+    undefined //registerUser.creatorPicture
+  );
+  const [creatorPictureName, setCreatorPictureName] = useState<
+    string | undefined
+  >(undefined /*registerUser.creatorPictureName*/);
+  const [creatorPictureOk, setCreatorPictureOk] = useState<boolean | undefined>(
+    undefined
+  );
+
+  const [spokenLanguages, setSpokenLanguages] = useState<
+    spokenLanguageInterface[] | undefined
+  >(
+    registerUser.languages
+      ? registerUser.languages
+      : langOptions
+      ? [langOptions[0]]
+      : undefined
+  );
+
+  const [skills, setSkills] = useState<skillsInterface[] | undefined>(
+    registerUser.skills
+  );
+
+  const [joinNewsletter, setJoinNewsletter] = useState<boolean | undefined>(
+    registerUser.joinNewsletter
+  );
+
+  const [lastStepError, setLastStepError] = useState<string | undefined>();
+
+  useMemo(async () => {
+    setIsLoadingLangSkills(true);
     // get languages
     let _langOptions: any = [];
-    useStrapiGet("languages").then((res) => {
+
+    await useStrapiGet("languages").then((res) => {
       if (res.status === 200) {
         res.data.data.map((x: any) => {
           _langOptions.push({
@@ -170,13 +274,12 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
           });
         });
         setLangOptions(_langOptions);
-      } else {
       }
     });
 
     // get skills
     let _skills: any = [];
-    useStrapiGet("skills").then((res) => {
+    await useStrapiGet("skills").then((res) => {
       if (res.status === 200) {
         res.data.data.map((x: any) => {
           _skills.push({
@@ -185,17 +288,15 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
           });
         });
         setSkillsOptions(_skills);
-      } else {
       }
     });
+
+    setIsLoadingLangSkills(false);
   }, []);
 
-  const [accountType, setAccountType] = useState<accountType>("both");
-  const [maxSteps, setMaxSteps] = useState<maxStepType>(undefined);
-  const [currentStep, setCurrentStep] = useState<number>(0);
-  const [dots, setDots] = useState<StepBubbleProps[] | undefined>(undefined);
-
-  const router = useRouter();
+  useEffect(() => {
+    if (registerUser.currentStep > 0) setCurrentStep(registerUser.currentStep);
+  }, []);
 
   const disclaimer = (
     <span className="text-dashboard-text-description-base-low">
@@ -218,74 +319,6 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
       de editYour.Film.
     </span>
   );
-
-  const [email, setEmail] = useState<string | undefined>(
-    getGoogleAuthEmailCookie()
-  );
-  const [emailErrorMessage, setEmailErrorMessage] = useState<
-    ReactElement | undefined | undefined | string
-  >(undefined);
-
-  const [code, setCode] = useState<string | undefined>(undefined);
-  const [codeState, setCodeState] = useState<codeStateType>("regular");
-
-  const [f_name, setF_name] = useState<string | undefined>(undefined);
-  const [f_nameError, setF_nameError] = useState<string | undefined>(undefined);
-
-  const [l_name, setL_name] = useState<string | undefined>(undefined);
-  const [l_nameError, setL_nameError] = useState<string | undefined>(undefined);
-
-  const [username, setUsername] = useState<string | undefined>(undefined);
-  const [userNameAvailable, setUserNameAvailable] = useState<
-    boolean | undefined
-  >(undefined);
-  const [userNameMessage, setUserNameMessage] = useState<MessageType>(
-    userNameMessages.default
-  );
-
-  const [initials, setInitials] = useState<string | undefined>(
-    f_name && l_name ? f_name[0] + l_name[0] : undefined
-  );
-
-  const [editorPicture, setEditorPicture] = useState<FileList[0] | undefined>(
-    undefined
-  );
-  const [editorPictureName, setEditorPictureName] = useState<
-    string | undefined
-  >(undefined);
-  const [editorPictureOk, setEditorPictureOk] = useState<boolean | undefined>(
-    undefined
-  );
-
-  const [editorDescription, setEditorDescription] = useState<
-    string | undefined
-  >(undefined);
-  const [editorDescriptionOk, setEditorDescriptionOk] = useState<
-    boolean | undefined
-  >(undefined);
-
-  const [creatorPicture, setCreatorPicture] = useState<FileList[0] | undefined>(
-    undefined
-  );
-  const [creatorPictureName, setCreatorPictureName] = useState<
-    string | undefined
-  >(undefined);
-  const [creatorPictureOk, setCreatorPictureOk] = useState<boolean | undefined>(
-    undefined
-  );
-
-  const [spokenLanguages, setSpokenLanguages] = useState<
-    spokenLanguageInterface[] | undefined
-  >(langOptions ? [langOptions[0]] : undefined);
-  const [skills, setSkills] = useState<skillsInterface[] | undefined>(
-    undefined
-  );
-
-  const [joinNewsletter, setJoinNewsletter] = useState<boolean | undefined>(
-    true
-  );
-
-  const [lastStepError, setLastStepError] = useState<string | undefined>();
 
   const defineMaxSteps = () => {
     switch (accountType) {
@@ -311,6 +344,45 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
       }
       setDots(_dots);
     }
+
+    const langUniqueIds: any = [];
+    const skillsUniqueIds: any = [];
+    setRegisterUser({
+      currentStep: currentStep,
+      accountType: accountType,
+      email: email,
+      fname: f_name,
+      lname: l_name,
+      username: username,
+      //editorPicture: editorPicture ? JSON.stringify(editorPicture) : undefined,
+      //editorPictureName: editorPictureName,
+      editorDescription: editorDescription,
+      /*creatorPicture: creatorPicture
+        ? JSON.stringify(creatorPicture)
+        : undefined,*/
+      //creatorPictureName: creatorPictureName,
+      languages: spokenLanguages
+        ? spokenLanguages.filter((element: any) => {
+            const isDuplicate = langUniqueIds.includes(element.id);
+            if (!isDuplicate) {
+              langUniqueIds.push(element.id);
+              return true;
+            }
+            return false;
+          })
+        : undefined,
+      skills: skills
+        ? skills.filter((element: any) => {
+            const isDuplicate = skillsUniqueIds.includes(element.id);
+            if (!isDuplicate) {
+              skillsUniqueIds.push(element.id);
+              return true;
+            }
+            return false;
+          })
+        : undefined,
+      joinNewsletter: joinNewsletter,
+    });
   }, [currentStep]);
 
   const handleStart = () => {
@@ -498,8 +570,6 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
     if (container) {
       setLastStepError(undefined);
 
-      const elements = Array.from(container.current!.children);
-
       let _spokenLanguages: any[] = [];
       spokenLanguages?.map((x) => {
         _spokenLanguages.push(x.id);
@@ -573,32 +643,7 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
                 "Votre compte est créé avec succés mais il y a eu une erreur lors de l'upload de votre photo de profil."
               );
           }
-          setToken(register.data);
-          setUserInfo({
-            user: register.data.user,
-            details: register.data.details,
-          });
-          setTimeout(() => {
-            const cb = () => {
-              switch (accountType) {
-                case "editor":
-                  location.reload();
-                  //router.push(routes.DASHBOARD_EDITOR_HOME);
-                  break;
-                case "creator":
-                  setLastStepError(
-                    "Votre compte est créé avec succés mais le dashboard client n'est pas encore prêt."
-                  );
-                  break;
-                case "both":
-                  location.reload();
-                  //router.push(routes.DASHBOARD_EDITOR_HOME)
-                  break;
-              }
-            };
-
-            ElementsOut(elements, { onComplete: cb });
-          }, 2000);
+          authContext.setUserCode(register.data.user.code);
         }
       } else setLastStepError(inputErrors.general);
     }
@@ -652,6 +697,7 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
       value={{
         langOptions,
         skillsOptions,
+        isLoadingLangSkills,
 
         accountType,
         setAccountType,
@@ -689,7 +735,9 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
         setUsername,
         handleUserNameVerification,
         userNameAvailable,
+        setUserNameAvailable,
         userNameMessage,
+        setUserNameMessage,
 
         initials,
 

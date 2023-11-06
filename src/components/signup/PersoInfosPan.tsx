@@ -4,7 +4,7 @@ import { SimpleCard } from "../_shared/UI/CardSimple";
 import Input from "../_shared/form/Input";
 import { InfoMessage } from "../_shared/UI/InfoMessage";
 
-import { SignUpContext } from "./_context/SignupContext";
+import { SignUpContext, userNameMessages } from "./_context/signupContext";
 import { Button } from "../_shared/buttons/Button";
 import { ProgressDots } from "../_shared/UI/ProgressDots";
 
@@ -89,7 +89,16 @@ export const PersoInfosPan = () => {
               value={context.f_name}
               onChange={(e) => {
                 context.setF_name(e.target.value);
+                context.setUsername(
+                  (
+                    (e.target.value.length > 0 ? e.target.value : "") +
+                    (context.l_name ? "_" + context.l_name : "")
+                  ).replace(/ /g, "_")
+                );
+                context.setUserNameAvailable(false);
+                context.setUserNameMessage(userNameMessages.default);
               }}
+              onBlur={() => context.handleUserNameVerification()}
             />
 
             <Input
@@ -103,7 +112,16 @@ export const PersoInfosPan = () => {
               value={context.l_name}
               onChange={(e) => {
                 context.setL_name(e.target.value);
+                context.setUsername(
+                  (
+                    (context.f_name ? context.f_name : "") +
+                    (e.target.value.length > 0 ? "_" + e.target.value : "")
+                  ).replace(/ /g, "_")
+                );
+                context.setUserNameAvailable(false);
+                context.setUserNameMessage(userNameMessages.default);
               }}
+              onBlur={() => context.handleUserNameVerification()}
             />
 
             <Input
@@ -120,6 +138,8 @@ export const PersoInfosPan = () => {
               value={context.username}
               onChange={(e) => {
                 context.setUsername(e.target.value);
+                context.setUserNameAvailable(false);
+                context.setUserNameMessage(userNameMessages.default);
               }}
               onBlur={() => context.handleUserNameVerification()}
             />

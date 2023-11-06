@@ -3,7 +3,7 @@ import { SimpleCard } from "../_shared/UI/CardSimple";
 import { Button } from "../_shared/buttons/Button";
 
 import TailRight from "@/icons/right-arrow-white.svg";
-import { SignUpContext } from "./_context/SignupContext";
+import { SignUpContext } from "./_context/signupContext";
 import { useContext, useState, useEffect, useRef } from "react";
 import { Toggle } from "../_shared/buttons/Toggle";
 
@@ -13,8 +13,12 @@ import { LogoSignup } from "./LogoSignup";
 export const ChoicePan = () => {
   const context = useContext(SignUpContext);
 
-  const [isCreator, setIsCreator] = useState(false);
-  const [isEditor, setIsEditor] = useState(false);
+  const [isCreator, setIsCreator] = useState(
+    context.accountType === "creator" || context.accountType === "both"
+  );
+  const [isEditor, setIsEditor] = useState(
+    context.accountType === "editor" || context.accountType === "both"
+  );
 
   const container = useRef<HTMLDivElement>(null);
 

@@ -28,8 +28,6 @@ export const EndPan = () => {
             variant="primary"
             className="w-max"
             onClick={() => {
-              context.initData();
-              context.hideAddModel();
             }}
           />
         </div>

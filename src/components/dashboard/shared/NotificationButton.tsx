@@ -12,10 +12,11 @@ import { setNotificationRead } from "@/store/slices/NotificationsSlice"
 
 type NotificationButtonProps = {
   onClick: () => void,
-  onClose: () => void
+  onClose: () => void,
+  className?: string
 }
 
-export const NotificationButton = ({onClick, onClose}:NotificationButtonProps) => {
+export const NotificationButton = ({onClick, onClose, className}:NotificationButtonProps) => {
   const dispatch = useDispatch()
   const context = useContext(DashBoardContext)
   
@@ -67,7 +68,7 @@ export const NotificationButton = ({onClick, onClose}:NotificationButtonProps) =
     onClick && onClick()
   }
   return (
-    <div className="notification-button relative overflow-hidden">
+    <div className={`notification-button relative overflow-hidden ${className ?? ''}`}>
       <div className="relative">
         <div ref={iconsWrapper}>
           <div className="relative">
@@ -83,9 +84,7 @@ export const NotificationButton = ({onClick, onClose}:NotificationButtonProps) =
             <IslandButton
               type="small-secondary"
               Icon={X}
-              onClick={() => { 
-                console.log('click');
-                
+              onClick={() => {                 
                 onClose && onClose() 
               }}
               iconColor="appleRed"
