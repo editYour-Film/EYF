@@ -3,7 +3,7 @@ import { DashboardEditorHome } from "@/components/dashboard/editor/DashboardEdit
 import { DashboardEditorSchedule } from "@/components/dashboard/editor/DashboardEditorSchedule";
 import { DashboardEditorMissions } from "@/components/dashboard/editor/DashboardEditorMissions";
 import { DashboardEditorHistory } from "@/components/dashboard/editor/DashboardEditorHistory";
-import { DashboardEditorProfil } from "@/components/dashboard/editor/DashboardEditorProfil";
+import { DashboardEditorProfil } from "@/components/dashboard/shared/DashboardProfil";
 import { NewsletterSection } from "@/components/home/NewsletterSection";
 import { SideBar } from "@/components/dashboard/shared/SideBar";
 import Footer from "@/components/_shared/Footer";

@@ -11,7 +11,6 @@ import { SimpleCard } from "@/components/_shared/UI/CardSimple";
 import { OverlayModel } from "@/components/_shared/UI/OverlayModel";
 import { Video } from "@/components/_shared/video/Video";
 import { IslandButton } from "@/components/_shared/buttons/IslandButton";
-import Link from "next/link";
 import Trash from "@/icons/trash.svg";
 import Resize from "@/icons/resize.svg";
 import { useMediaQuery } from "@uidotdev/usehooks";

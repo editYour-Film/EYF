@@ -6,7 +6,6 @@ import LayoutDashBoard from "@/components/layouts/LayoutDashBoard";
 import Head from "next/head";
 import { PropsWithChildren, useContext, useEffect, useState } from "react";
 import { DashBoardContext } from "@/components/dashboard/_context/DashBoardContext";
-import { AddModel } from "@/components/dashboard/editor/AddModel";
 import { IslandButton } from "@/components/_shared/buttons/IslandButton";
 import { TopBar } from "@/components/dashboard/shared/TopBar";
 import { NotificationCenter } from "@/components/dashboard/shared/NotificationCenter";
@@ -56,24 +55,11 @@ const DashBoardPageHome = ({ children }: PropsWithChildren) => {
 
         <IslandButton
           type="small-secondary"
-          label="Ajouter un modèle"
+          label="Obtenir un devis"
           disabled={context.isAddModelPannelOpen}
           className="shrink-0"
           onClick={() => {
-            if (!isMobile) {
-              if (!context.panels?.find((p) => p.panel === AddModel)) {
-                context.addPannel({
-                  title: "Ajouter un modèle",
-                  panel: <AddModel />,
-                });
-
-                context.setIsAddModelPannelOpen(true);
-              }
-            } else {
-              context.setIsAddModelPannelOpen(true);
-            }
-
-            setHasAddModel(true);
+            // push to quote
           }}
         />
       </TopBar>
@@ -85,24 +71,11 @@ const DashBoardPageHome = ({ children }: PropsWithChildren) => {
 
             <DashboardContainer className="relative z-10" />
 
-            {isMobile && (
-              <>
-                <div
-                  data-lenis-prevent
-                  className={`fixed top-0 left-0 w-full h-screen bg-dashboard-button-dark z-panels overflow-scroll transition-transform duration-500  ${
-                    context.isAddModelPannelOpen
-                      ? "ease-out translate-x-0"
-                      : "translate-x-full pointer-events-none ease-in"
-                  }`}
-                >
-                  <AddModel />
-                </div>
-              </>
-            )}
           </div>
           <NewsletterSection />
           <Footer />
         </div>
+
       </AddModelContextProvider>
     </>
   );

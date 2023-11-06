@@ -52,6 +52,15 @@ let routes = {
   DASHBOARD_EDITOR_MISSIONS: "/dashboard/monteur/missions",
   DASHBOARD_EDITOR_HISTORY: "/dashboard/monteur/historique",
   DASHBOARD_EDITOR_PROFIL: "/dashboard/monteur/profil",
+
+  DASHBOARD_CLIENT: '/dashboard/client/accueil',
+  DASHBOARD_CLIENT_HOME: '/dashboard/client/accueil',
+  DASHBOARD_CLIENT_PROFIL: '/dashboard/client/profil',
+  DASHBOARD_CLIENT_ORDERS: '/dashboard/client/orders',
+  DASHBOARD_CLIENT_STUDIO: '/dashboard/client/studio',
+  DASHBOARD_CLIENT_FILES: '/dashboard/client/files',
+  DASHBOARD_CLIENT_SETTINGS: '/dashboard/client/settings',
+
 };
 
 export default routes;

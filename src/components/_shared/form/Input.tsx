@@ -2,6 +2,7 @@ import { ReactNode, useRef, useState } from "react";
 import Image from "next/image";
 import { Help } from "./Help";
 import { EditButton } from "../UI/EditButton";
+import { ReactElement } from "react-markdown/lib/react-markdown";
 
 type inputProps = {
   type:
@@ -14,6 +15,7 @@ type inputProps = {
     | "radio"
     | "radioColumn"
     | "date"
+    | "select"
     | "radio-btn"
     | "switch";
   value?: string | boolean;
@@ -98,6 +100,8 @@ const Input = ({
 
   let bgOpacity = (bg === 'none' || noBg) ? 'bg-opacity-0 ' : 'bg-opacity-100 '
 
+  const textClass = 'text-dashboard-text-description-base hover:text-dashboard-text-title-white-high group-hover:text-dashboard-text-title-white-high focus-within:text-dashboard-text-title-white-high '
+
   const inputClass =
     "input-text w-full " +
     (bg !== "underlined"
@@ -114,7 +118,7 @@ const Input = ({
       : "") +
     (error ? "border-appleRed " : "") +
     (bg === "white" ? "border bg-white text-alpha-black-600 " : "") +
-    (bg === "light" ? "border bg-soyMilk-40 text-white text-opacity-70 " : "") +
+    (bg === "light" ? "border bg-soyMilk-40 " : "") +
     (bg === "black"
       ? "bg-darkgrey bg-opacity-50 text-white border border-0.5 "
       : "") +
@@ -129,6 +133,7 @@ const Input = ({
       ? " py-2 min-h-[40px] "
       : " p-dashboard-button-separation-spacing min-h-[52px] ") +
     (disabled === true ? "opacity-50 " : "") +
+    textClass +
     bgOpacity +
     className;
 
@@ -138,8 +143,8 @@ const Input = ({
   } else {
     labelClass =
       labelType === "dashboard"
-        ? "flex items-center justify-between mb-3 text-small text-dashboard-text-description-base"
-        : " flex flex-wrap justify-between items-center gap-3 mb-2 text-sm text-dashboard-text-description-base";
+        ? "flex items-center justify-between text-small text-dashboard-text-description-base"
+        : " flex flex-wrap justify-between items-center gap-3 text-sm text-dashboard-text-description-base";
   }
 
   const helperClass = "text-sm text-dashboard-text-description-base-low mt-3 mb-8";
@@ -226,7 +231,7 @@ const Input = ({
       );
     case "email":
       return (
-        <div className="w-full">
+        <div className="flex flex-col justify-stretch h-full gap-dashboard-button-separation-spacing">
           {label && (
             <label className={labelClass}>
               {label}
@@ -252,7 +257,7 @@ const Input = ({
       );
     case "password":
       return (
-        <div>
+        <div className="flex flex-col justify-stretch h-full gap-dashboard-button-separation-spacing">
           {label && (
             <label className={labelClass}>
               {label}
@@ -295,9 +300,52 @@ const Input = ({
           {error && <p className="text-appleRed mt-1.5 ">{error}</p>}
         </div>
       );
+    case "select":
+      return (
+        <div className="flex flex-col justify-stretch h-full gap-dashboard-button-separation-spacing">
+          {label && (
+            <label className={labelClass}>
+              {label}
+  
+              {helpIconText && <Help text={helpIconText} label={label} />}
+            </label>
+          )}
+          <div className={`relative flex flex-col items-end`}>
+            <select
+              title={label}
+              onChange={onChange}
+              onBlur={onBlur}
+              className={`bg-transparent w-full h-full ${inputClass} focus-within:outline-blueBerry focus-within:outline pr-3 ${
+                textSunset ? "text-linear-sunset" : ""
+              }`}
+              value={value as string}
+              name={name}
+              disabled={disabled}
+            >
+              <option value="" disabled selected>{placeholder}</option>
+              {options.map((opt: ReactElement) => {
+                return opt
+              })}
+            </select>
+          </div>
+
+          {maxlength && (
+            <div className="input__maxlength ml-auto mr-0 text-xs text-dashboard-text-description-base">{`${
+              (value as string).length
+            } / ${maxlength}`}</div>
+          )}
+          {minlength && (
+            <div className="input__minlength ml-auto mr-0 text-xs text-dashboard-text-description-base">{`${
+              (value as string).length
+            } / ${minlength}`}</div>
+          )}
+          {helper && <p className={helperClass}>{helper}</p>}
+          {error && <p className="text-appleRed mt-1.5 ">{error}</p>}
+        </div>
+      );
     case "search":
       return (
-        <div>
+        <div className="flex flex-col justify-stretch h-full gap-dashboard-button-separation-spacing">
           {label && (
             <label className={labelClass}>
               {label}
@@ -356,9 +404,7 @@ const Input = ({
       );
     case "radio":
       return (
-        <div
-          tabIndex={-1}
-        >
+        <div className="flex flex-col justify-stretch h-full gap-dashboard-button-separation-spacing">
           {label && (
             <label className={labelClass}>
               {label}
@@ -402,7 +448,7 @@ const Input = ({
       );
     case "radioColumn":
       return (
-        <div>
+        <div className="flex flex-col justify-stretch h-full gap-dashboard-button-separation-spacing">
           {label && (
             <label className={labelClass}>
               {label}
@@ -450,7 +496,7 @@ const Input = ({
       );
     case "radio-btn":
       return (
-        <div className="group">
+        <div className="group flex flex-col justify-stretch h-full gap-dashboard-button-separation-spacing">
           {label && (
             <label className="block opacity-70 font-bold text-lg mb-3">
               {label}
@@ -480,7 +526,7 @@ const Input = ({
       );
     case "date":
       return (
-        <div>
+        <div className="flex flex-col justify-stretch h-full gap-dashboard-button-separation-spacing">
           <div className="flex gap-0.5">
             <input
               type="number"
@@ -540,7 +586,7 @@ const Input = ({
       );
     case "switch":
       return (
-        <div>
+        <div className="flex flex-col justify-stretch h-full gap-dashboard-button-separation-spacing">
           {label && (
             <label className={labelClass}>
               {label}

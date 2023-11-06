@@ -7,9 +7,10 @@ type AvatarInputProps = {
   onChange: Function,
   className?: string,
   showOverlay? : boolean,
+  imgSize?: string,
 }
 
-export const AvatarInput = ({img, className, onChange, showOverlay}:AvatarInputProps) => {
+export const AvatarInput = ({img, className, onChange, showOverlay, imgSize}:AvatarInputProps) => {
   const input = useRef<HTMLInputElement>(null)
 
   const handleChange = (e:ChangeEvent<HTMLInputElement>) => {
@@ -21,8 +22,8 @@ export const AvatarInput = ({img, className, onChange, showOverlay}:AvatarInputP
   }
 
   return (
-    <div className={`avatar-input group ${className ? className : ''}`}>
-      <div className="db-profil__img relative w-28 h-28 rounded-full border border-alphaWhite border-opacity-70 overflow-hidden">
+    <div className={`avatar-input flex flex-col items-center group cursor-pointer ${className ? className : ''}`}>
+      <div className={`db-profil__img relative rounded-full border border-alphaWhite border-opacity-70 overflow-hidden ${imgSize}`}>
         <Image
           src={img}
           alt='profile image'
@@ -53,6 +54,8 @@ export const AvatarInput = ({img, className, onChange, showOverlay}:AvatarInputP
         />
 
       </div>
+
+      <div className="text-dashboard-text-description-base text-base mt-dashboard-spacing-element-medium w-max">Modifier la photo de profil</div>
     </div>
   )
 }

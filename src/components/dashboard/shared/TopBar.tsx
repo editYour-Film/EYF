@@ -14,7 +14,7 @@ export const TopBar = ({children, className}:PropsWithChildren<TopBarProps>) => 
   const context = useContext(DashBoardContext)
   const dispatch = useDispatch()
   return (
-    <div className={`topBar flex flex-row justify-end gap-padding-medium ${className}`}>
+    <div className={`topBar md:col-[2_/_3] row-[1_/_2] sticky md:relative top-0 left-0 w-full z-panel flex justify-center md:justify-end flex-row gap-padding-medium py-dashboard-button-separation-spacing md:py-0 h-max bg-dashboard-button-dark bg-opacity-80 mt-[50px] md:mt-0 ${className}`}>
       {children}
       <NotificationButton
         onClick={() => {

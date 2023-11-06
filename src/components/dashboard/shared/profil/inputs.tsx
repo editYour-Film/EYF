@@ -1,6 +1,6 @@
 import Input from "@/components/_shared/form/Input"
 import { useContext } from "react"
-import { EditorProfilContext } from "../_context/EditorProfilContext"
+import { EditorProfilContext } from "../../_context/ProfilContext"
 
 export const DescInput = () => {
   const {desc, setDesc} = useContext(EditorProfilContext)
@@ -8,13 +8,14 @@ export const DescInput = () => {
   return (
     <Input 
       type="textarea"
-      bg="light"
+      bg='light'
       value={desc}
       maxlength={100}
       label="Description"
       labelType="dashboard"
-      className="h-40"
+      className="h-40 bg-transparent"
       onChange={(e) => { setDesc(e.target.value) }}
+      placeholder="Entrez votre description"
     />
   )
 }
@@ -25,12 +26,13 @@ export const UserNameInput = () => {
   return (
     <Input
       type="text"
-      bg="light"
+      bg='light'
       value={username}
       label="Nom d'utilisateur"
       labelType="dashboard"
-      size="sm"
+      className="bg-transparent"
       onChange={(e) => { setUsername(e.target.value)}}
+      placeholder="Entrez votre nom d'utilisateur"
     />
   )
 }
@@ -41,13 +43,14 @@ export const FNameInput = () => {
   return (
     <Input
       type="text"
-      bg="light"
+      bg='light'
       value={fName}
       label="Prénom"
       labelType="dashboard"
-      size="sm"
+      className="bg-transparent"
       onChange={(e) => { setFName(e.target.value) }}
       disabled
+      placeholder="Entrez votre prénom"
     />
   )
 }
@@ -58,13 +61,14 @@ export const LNameInput = () => {
   return (
     <Input
       type="text"
-      bg="light"
+      bg='light'
       value={lName}
       label="Nom"
       labelType="dashboard"
-      size="sm"
+      className="bg-transparent"
       onChange={(e) => { setLName(e.target.value) }}
       disabled
+      placeholder="Entrez votre nom de famille"
     />
   )
 }
@@ -75,13 +79,14 @@ export const EmailInput = () => {
   return (
     <Input
       type="email"
-      bg="light"
+      bg='light'
       value={email}
       label="Mail"
       labelType="dashboard"
-      size="sm"
+      className="bg-transparent"
       onChange={(e) => { setEmail(e.target.value) }}
       disabled
+      placeholder="Entrez votre email"
     />
   )
 }
@@ -92,12 +97,13 @@ export const PhoneInput = () => {
   return (
     <Input
       type="text"
-      bg="light"
+      bg='light'
       value={phone}
       label="Téléphone"
       labelType="dashboard"
-      size="sm"
+      className="bg-transparent"
       onChange={(e) => { setPhone(e.target.value)}}
+      placeholder="Entrez votre numéro de téléphone"
     />
   )
 }
@@ -108,12 +114,13 @@ export const StreetInput = () => {
   return (
     <Input
       type="text"
-      bg="light"
+      bg='light'
       value={street}
-      label="Rue"
+      label="Adresse"
       labelType="dashboard"
-      size="sm"
+      className="bg-transparent"
       onChange={(e) => { setStreet(e.target.value)}}
+      placeholder="Entrez votre adresse"
     />
   )
 }
@@ -124,12 +131,13 @@ export const ZipCodeInput = () => {
   return (   
     <Input
       type="text"
-      bg="light"
+      bg='light'
       value={zipcode}
       label="Code Postal"
       labelType="dashboard"
-      size="sm"
+      className="bg-transparent"
       onChange={(e) => {setZipcode(e.target.value)}}
+      placeholder="Entrez votre code postal"
     />
   )
 }
@@ -140,28 +148,13 @@ export const CityInput = () => {
   return (   
     <Input
       type="text"
-      bg="light"
+      bg='light'
       value={city}
       label="Ville"
       labelType="dashboard"
-      size="sm"
+      className="bg-transparent"
       onChange={(e) => {setCity(e.target.value)}}
-    />
-  )
-}
-
-export const AddressMore = () => {
-  const {addressMore, setAddressMore} = useContext(EditorProfilContext)
-
-  return (   
-    <Input
-      type="text"
-      bg="light"
-      value={addressMore}
-      label="Ville"
-      labelType="dashboard"
-      size="sm"
-      onChange={(e) => {setAddressMore(e)}}
+      placeholder="Entrez votre ville"
     />
   )
 }

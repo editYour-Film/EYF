@@ -1,7 +1,7 @@
 import {
   skillsInterface,
   spokenLanguageInterface,
-} from "../dashboard/editor/_context/EditorProfilContext";
+} from "../dashboard/_context/ProfilContext";
 import { accountType } from "../signup/_context/signupContext";
 
 export const initSigninUser = {

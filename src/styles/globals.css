@@ -362,7 +362,7 @@ input[type="range"]::-moz-range-thumb {
 
 .bg-top-section {
   background: radial-gradient(
-    closest-side,
+    closest-side at 0 0,
     rgba(126, 94, 255, 0.5) 0%,
     rgba(205, 3, 255, 0.5) 30%,
     rgba(205, 3, 255, 0) 100%
@@ -372,7 +372,7 @@ input[type="range"]::-moz-range-thumb {
 
 .bg-top-section-2 {
   background: radial-gradient(
-    closest-side,
+    closest-side at 0 0,
     rgba(75, 126, 255, 0.5) 0%,
     rgba(208, 75, 255, 0) 100%
   );
@@ -382,7 +382,7 @@ input[type="range"]::-moz-range-thumb {
 .bg-editor-section {
   background: 
   radial-gradient(
-    closest-side,
+    closest-side at 0 0,
     rgba(47, 35, 80, 0.66) 0%,
     rgba(47, 35, 80, 0.66) 30%,
     rgba(205, 3, 255, 0) 100%

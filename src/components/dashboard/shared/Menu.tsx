@@ -35,6 +35,7 @@ export const Menu = ({ items }: MenuProps) => {
                   router.push(item.link, undefined, { scroll: false });
                 }}
                 isMenu
+                disabled={item.disabled}
               />
               {i === items.length - 1 && <hr />}
             </React.Fragment>

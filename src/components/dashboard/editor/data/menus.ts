@@ -5,6 +5,12 @@ import camera from "@/icons/camera.svg";
 import chartArrow from "@/icons/chart-arrow.svg";
 import person from "@/icons/person.svg";
 
+import clock from "@/icons/Clock.svg";
+import mouse from "@/icons/mouse.svg";
+import folder from "@/icons/folder.svg";
+import settings from '@/icons/settings.svg'
+
+
 export const DASHBOARD_EDITOR_MENU = [
   {
     icon: house,
@@ -30,5 +36,39 @@ export const DASHBOARD_EDITOR_MENU = [
     icon: person,
     label: "Profil",
     link: routes.DASHBOARD_EDITOR_PROFIL,
+  },
+]
+
+export const DASHBOARD_CLIENT_MENU = [
+  {
+    icon: house,
+    label: "Accueil",
+    link: routes.DASHBOARD_CLIENT_HOME,
+  },
+  {
+    icon: clock,
+    label: "Commandes",
+    link: routes.DASHBOARD_CLIENT_ORDERS,
+  },
+  {
+    icon: mouse,
+    label: "studio",
+    link: routes.DASHBOARD_CLIENT_STUDIO,
+    disabled: true
+  },
+  {
+    icon: folder,
+    label: "Documents",
+    link: routes.DASHBOARD_CLIENT_FILES,
+  },
+  {
+    icon: person,
+    label: "Profil",
+    link: routes.DASHBOARD_CLIENT_PROFIL,
+  },
+  {
+    icon: settings,
+    label: "Paramètres",
+    link: routes.DASHBOARD_CLIENT_SETTINGS,
   },
 ]

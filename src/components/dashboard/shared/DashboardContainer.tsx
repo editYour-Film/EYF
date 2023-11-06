@@ -14,10 +14,10 @@ export const DashboardContainer = ({
   className,
 }: PropsWithChildren<DashboardContainerProps>) => {
   const context = useContext(DashBoardContext);
-
+  
   return (
     <div
-      className={`dashboard_container flex flex-col gap-dashboard-spacing-element-medium md:px-padding-medium pb-padding-medium bg-dashboard-background-content-area md:border-03 rounded-dashboard-button-square-radius shadow-large ${
+      className={`dashboard_container flex flex-col gap-dashboard-spacing-element-medium md:px-padding-medium pb-[68px] bg-dashboard-background-content-area md:border-03 rounded-dashboard-button-square-radius shadow-large ${
         className ?? ""
       }`}
     >

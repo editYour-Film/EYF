@@ -1,3 +1,4 @@
+import { lockDocumentScroll, unLockDocumentScroll } from "@/utils/utils"
 import { useLenis } from "@studio-freight/react-lenis"
 import { useMediaQuery, useWindowSize } from "@uidotdev/usehooks"
 import gsap from "gsap"
@@ -127,9 +128,7 @@ export const OverlayModel = ({className, toggle, onClose, onClosed, children}: P
 
     onClose && onClose()
 
-    document.body.style.position = '';
-    document.body.style.top = '';
-    window.scrollTo(0, tempScroll.current);
+    unLockDocumentScroll(tempScroll.current)
 
     setIsTweening(true)
     ctx.current && ctx.current.close().then(() => {
@@ -143,8 +142,7 @@ export const OverlayModel = ({className, toggle, onClose, onClosed, children}: P
     if(isTweening) return
 
     tempScroll.current = lenis.scroll
-    document.body.style.position = 'fixed';
-    document.body.style.top = `-${tempScroll.current}px`;
+    lockDocumentScroll(tempScroll.current)
 
     setIsTweening(true)
     ctx.current && ctx.current.open().then(() => {
