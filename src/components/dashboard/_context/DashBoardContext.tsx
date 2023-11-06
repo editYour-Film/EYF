@@ -68,7 +68,7 @@ export const DashBoardContextProvider = ({children}:PropsWithChildren) => {
   
   useEffect(() => {
     dispatch(getNotifications())
-    getStrapi();
+    getStrapi()
   }, [])
 
   let posts:dashboardPostType[];

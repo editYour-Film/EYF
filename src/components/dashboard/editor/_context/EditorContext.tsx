@@ -3,6 +3,7 @@ import { PropsWithChildren, createContext, useEffect, useState } from "react";
 import { Models } from "../../../../../mockData/models";
 import { Softwares } from "../data/metaValues";
 import slugify from "slugify";
+import { useStrapi } from "@/hooks/useStrapi"
 
 export type modelType =  "model 16/9 ème" | "model 9/16 ème" | "Carré" | "Mobile"
 
@@ -90,6 +91,11 @@ export const EditorContext = createContext({
 
 export const EditorContextProvider = ({children}:PropsWithChildren) => {  
   const [user] = useUser()
+  const { data: videoData, mutate: getVideo } = useStrapi(
+    "user-infos/" + user.details.id + "?" +
+    "populate[editor_videos][populate]=*",
+    false
+  );
 
   const [highlightedVideo, setHighlightedVideo] = useState<EditorVideo | undefined>(undefined);
   const [showModifyPanel, setShowModifyPanel] = useState<boolean>(false)
@@ -185,6 +191,9 @@ export const EditorContextProvider = ({children}:PropsWithChildren) => {
   }
 
   useEffect(() => {
+    getVideo()
+    console.log("user's video\n", videoData)
+
     // TODO: Integration Get the highlighted video from the database
     setHighlightedVideo(undefined);
 
