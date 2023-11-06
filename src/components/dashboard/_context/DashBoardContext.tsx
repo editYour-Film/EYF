@@ -1,7 +1,8 @@
 import useStrapi from "@/hooks/useStrapi"
-import { getNotifications } from "@/store/slices/NotificationsSlice"
-import { PropsWithChildren, createContext, useEffect, useState } from "react"
+import { getNotificationsAsync } from "@/store/slices/NotificationsSlice"
+import { PropsWithChildren, createContext, useContext, useEffect, useState } from "react"
 import { useDispatch } from "react-redux"
+import { AuthContext } from "@/context/authContext";
 
 export interface dashBoardPanelType {
   title: string
@@ -52,7 +53,8 @@ export const DashBoardContext = createContext({
 
 export const DashBoardContextProvider = ({children}:PropsWithChildren) => {
   const dispatch = useDispatch()
-  
+  const authContext = useContext(AuthContext);
+
   const { data: data, mutate: getStrapi } = useStrapi(
     "dashboard-monteur?" +
     "populate[add_model]=*&" +
@@ -72,7 +74,7 @@ export const DashBoardContextProvider = ({children}:PropsWithChildren) => {
   const [buttons, setButtons] = useState<any | undefined>(undefined)
   
   useEffect(() => {
-    dispatch(getNotifications())
+    dispatch(getNotificationsAsync(authContext.user))
     getStrapi();
   }, [])
 
