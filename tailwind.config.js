@@ -323,7 +323,7 @@ module.exports = {
         },
         '.gradient-menu-mobile': {
           background: `
-            radial-gradient(100% 30%, rgba(55, 11, 78, 0.8) 0%, rgba(205, 3, 255, 0.0) 100%),
+            radial-gradient(100% 30% at 0 0, rgba(55, 11, 78, 0.8) 0%, rgba(205, 3, 255, 0.0) 100%),
             radial-gradient(50% 40% at 20%, rgba(75, 93, 255, .2) 0%, rgba(75, 93, 255, .1) 60%, rgba(75, 93, 255, 0.00) 100%)
           `,
           opacity: '1'
@@ -344,10 +344,10 @@ module.exports = {
           background: `linear-gradient(270deg, #c985fe 6.21%, #999dff 103.42%);`
         },
         '.gradient-about-1': {
-          background: `radial-gradient(closest-side, #4B68FF 0%, rgba(75, 93, 255, 0.00) 100%)`,
+          background: `radial-gradient(closest-side at 0 0, #4B68FF 0%, rgba(75, 93, 255, 0.00) 100%)`,
         },
         '.gradient-about-2': {
-          background: `radial-gradient(closest-side, #4B68FF 0%, rgba(255, 183, 75, 0.00) 100%)`,
+          background: `radial-gradient(closest-side at 0 0, #4B68FF 0%, rgba(255, 183, 75, 0.00) 100%)`,
         },
         '.gradient-chart': {
           background: `linear-gradient(183deg, #C985FE 1.57%, #999DFF 76.22%)`,
