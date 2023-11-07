@@ -10,3 +10,14 @@ export const checkAlphanumeric = (string: string, cb: Function) => {
     cb(errorTxt);
   else cb("");
 };
+
+export const lockDocumentScroll = (offset:number) => {
+  document.body.style.position = 'fixed';
+  document.body.style.top = `-${offset}px`;
+}
+
+export const unLockDocumentScroll = (offset:number) => {
+  document.body.style.position = '';
+  document.body.style.top = '';
+  window.scrollTo(0, offset);
+}

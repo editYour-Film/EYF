@@ -74,7 +74,7 @@ export const AuthProvider: React.FC<any> = ({ children }: any) => {
             });
             if (res.data.user.role.name === "editor")
               router.push(routes.DASHBOARD_EDITOR_HOME);
-            else alert("dashboard client encore en developpment.");
+            else router.push(routes.DASHBOARD_CLIENT_HOME);;
           } else SignOut();
 
           setIsLoading(false);

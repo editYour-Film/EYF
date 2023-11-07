@@ -2,7 +2,6 @@ import { DashboardContainer } from "@/components/dashboard/shared/DashboardConta
 import Footer from "@/components/_shared/Footer";
 import LayoutDashBoard from "@/components/layouts/LayoutDashBoard";
 import { DashboardEditorProfil } from "@/components/dashboard/shared/DashboardProfil";
-import { DashboardEditorProfilExperiences } from "@/components/dashboard/shared/DashboardProfilExperiences";
 import Head from "next/head";
 import { AuthContext } from "@/context/authContext";
 import { TopBar } from "@/components/dashboard/shared/TopBar";
@@ -38,10 +37,6 @@ const DashBoardPageProfil = () => {
     dashboardContext.setPanels([{
       title: 'Informations - personnelles',
       panel: <DashboardEditorProfil />
-    },
-    {
-      title: 'Expériences',
-      panel: <DashboardEditorProfilExperiences />
     }])
   }, [])
 

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Image from "next/image";
 
 import useMediaQuery from "@/hooks/useMediaQuery";
@@ -6,6 +6,8 @@ import useMediaQuery from "@/hooks/useMediaQuery";
 import { SignedInUser } from "@/components/model/signin";
 import { Menu } from "./Menu";
 import { DASHBOARD_EDITOR_MENU } from "../editor/data/menus";
+import { DASHBOARD_CLIENT_MENU } from "../editor/data/menus";
+
 import { MentionInteraction } from "@/components/_shared/buttons/MentionInteraction";
 import { AuthContext } from "@/context/authContext";
 
@@ -21,7 +23,11 @@ export const SideBar = ({ type, className }: SideBarProps) => {
   const isMobile = useMediaQuery("(max-width: 768px)");
 
   useEffect(() => {
-    setMenu(DASHBOARD_EDITOR_MENU);
+    if (authContext.user.user.role.type === "editor") {
+      setMenu(DASHBOARD_EDITOR_MENU);
+    } else {
+      setMenu(DASHBOARD_CLIENT_MENU);
+    }
   }, []);
 
   if (!isMobile) {
@@ -54,15 +60,14 @@ const SideBarDesktop = ({ className, menu, user }: SidebarChildProps) => {
 
       <div className="sidebar__infos mt-auto mb-0">
         <div className="sidebar__profil flex flex-row gap-dashboard-mention-padding-right-left py-4">
-          <div className="profil__img rounded-full overflow-hidden w-[40px] h-[40px] lg:w-[60px] lg:h-[60px] shrink-0">
+          <div className="profil__img relative rounded-full overflow-hidden w-[40px] h-[40px] lg:w-[60px] lg:h-[60px] shrink-0">
             {user.details.picture &&
             user.details.picture.data &&
             user.details.picture.data.attributes ? (
               <Image
                 src={user.details.picture.data.attributes.url}
                 alt={user.user.username}
-                width={52}
-                height={52}
+                fill
               ></Image>
             ) : (
               <Image
@@ -72,8 +77,7 @@ const SideBarDesktop = ({ className, menu, user }: SidebarChildProps) => {
                     : "/img/profile/avatar.png"
                 }
                 alt={user.user.username}
-                width={52}
-                height={52}
+                fill
               ></Image>
             )}
           </div>

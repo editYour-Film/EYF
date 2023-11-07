@@ -1,7 +1,7 @@
 import {
   skillsInterface,
   spokenLanguageInterface,
-} from "@/components/dashboard/editor/_context/EditorProfilContext";
+} from "@/components/dashboard/_context/ProfilContext";
 import { codeStateType } from "@/components/signin/_context/signinContext";
 import routes from "@/routes";
 import {

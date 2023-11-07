@@ -73,8 +73,19 @@ export const DashboardMenuMobile = ({ className, menu }: DashboardMenuMobileProp
 
     return context
   }
+
+  const closeMenuKeyboard = (e:KeyboardEvent) => {
+    if(e.key === 'Escape') {
+      if (isOpen) dispatch(closeDashboardMenu())
+    }
+  }
+
   useEffect(() => {
     ctx.current = setGsapContext()
+
+    return () => {
+      ctx.current && ctx.current.revert()
+    }
   }, [])
 
   const handleOpen = () => {
@@ -93,6 +104,12 @@ export const DashboardMenuMobile = ({ className, menu }: DashboardMenuMobileProp
     else {
       handleClose()
     }
+
+    window.addEventListener('keydown', closeMenuKeyboard)
+    return () => {
+      window.removeEventListener('keydown', closeMenuKeyboard)
+    }
+
   }, [isOpen])
 
   useEffect(() => {
