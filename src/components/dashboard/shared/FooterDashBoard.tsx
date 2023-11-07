@@ -50,7 +50,7 @@ export const FooterDashboard = () => {
       <div className="footer-dashboard__sub flex flex-col md:flex-row gap-padding-medium">
         {sublinks && sublinks.length > 0 && sublinks.map((link, i) => {
           return (
-            <div className='text-dashboard-text-disabled'>
+            <div key={i} className='text-dashboard-text-disabled'>
               {link.url && <Link href={link.url} className='hover:text-blueBerry transition-colors'>{link.label}</Link>}
               {!link.url && <div>{link.label}</div> }
             </div>

@@ -15,6 +15,7 @@ import { AddModelContextProvider } from "@/components/dashboard/editor/_context/
 import { MessageManager } from "@/components/_shared/UI/MessageManager";
 import { GradientCard } from "@/components/dashboard/shared/GradientCard";
 import { FooterDashboard } from "@/components/dashboard/shared/FooterDashBoard";
+import { EditorContext } from "@/components/dashboard/editor/_context/EditorContext";
 
 export default function DashBoardContentHome() {
   return (
@@ -33,7 +34,7 @@ export default function DashBoardContentHome() {
 
 const DashBoardPageHome = ({ children }: PropsWithChildren) => {
   const context = useContext(DashBoardContext);
-  const [hasAddModel, setHasAddModel] = useState(false);
+  const editorContext = useContext(EditorContext);
 
   const isMobile = useMediaQuery("(max-width: 768px)");
 
@@ -62,20 +63,7 @@ const DashBoardPageHome = ({ children }: PropsWithChildren) => {
           disabled={context.isAddModelPannelOpen}
           className="shrink-0"
           onClick={() => {
-            if (!isMobile) {
-              if (!context.panels?.find((p) => p.panel === AddModel)) {
-                context.addPannel({
-                  title: "Ajouter un modèle",
-                  panel: <AddModel />,
-                });
-
-                context.setIsAddModelPannelOpen(true);
-              }
-            } else {
-              context.setIsAddModelPannelOpen(true);
-            }
-
-            setHasAddModel(true);
+            editorContext.startAddModel()
           }}
         />
       </TopBar>
