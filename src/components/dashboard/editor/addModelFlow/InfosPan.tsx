@@ -162,7 +162,7 @@ export const InfosPan = ({}: InfosPanProps) => {
   };
 
   const handleRemoveTag = (e: any) => {
-    const _tags = tags.filter((tag) => {
+    const _tags = context.tags.filter((tag) => {
       return tag.slug !== slugify(e);
     });
     context.setTags(_tags);
