@@ -87,8 +87,8 @@ export const Player = ({isPlaying, onPlay, onPause, onTrackClick, duration = 0, 
         </div>
 
         <div className="video__timings w-full flex justify-between mt-[6px]">
-          {timingFromStart && <div className="text-neutral-01">{timingFromStart.mmss}</div>}
-          {timingFromEnd && <div className="text-neutral-01 ">-{timingFromEnd.mmss}</div>}
+          {timingFromStart && <div className="text-neutral-01 text-small">{timingFromStart.mmss}</div>}
+          {timingFromEnd && <div className="text-neutral-01 text-small">-{timingFromEnd.mmss}</div>}
         </div>
       </div>
       

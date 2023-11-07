@@ -25,6 +25,7 @@ module.exports = {
         },
 
         'neutral': {
+          '01': '#B2B2B2',
           '02': '#777777'
         },
 
