@@ -48,6 +48,8 @@ export const DashBoardContext = createContext({
 
   buttons: undefined as any,
   setButtons: (payload:any) => {},
+
+  sendSponsorLink: (email: string) => {}
 })
 
 export const DashBoardContextProvider = ({children}:PropsWithChildren) => {
@@ -132,6 +134,10 @@ export const DashBoardContextProvider = ({children}:PropsWithChildren) => {
     setNotificationCenterOpen(!notificationCenterOpen)
   }
 
+  const sendSponsorLink = (email: string) => {
+    // TODO: Integration do the logic of the sponsor friend feature
+  }
+
   return (
     <DashBoardContext.Provider
       value={{
@@ -158,6 +164,8 @@ export const DashBoardContextProvider = ({children}:PropsWithChildren) => {
 
         buttons,
         setButtons,
+
+        sendSponsorLink
       }}
     >
       {children}

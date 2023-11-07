@@ -22,7 +22,8 @@ const getRoutesConnexion = (array: string[]) => {
 let routes = {
   HOME: "/",
   WHOWEARE: "/qui-sommes-nous",
-  CGUMENOTRS: "/cgu-monteurs",
+  CGU: "/cgu",
+  CGUEDITOR: "/cgu-monteurs",
   CGUCLIENTS: "/cgu-clients",
   ML: "/mentions-legales",
   PC: "/politique-de-cookies",

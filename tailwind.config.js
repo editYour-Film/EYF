@@ -191,10 +191,10 @@ module.exports = {
         '.perspective': {
           'perspective': '1000px',
         },
-        'bg-rose-sunset': {
+        '.bg-rose-sunset': {
           background: `linear-gradient(var(--linear-direction, 180deg), ${tokens.base_rose_sunset_blue} 38.45%, ${tokens.base_rose_sunset_violet} 93.75%);`
         },
-        'bg-border-component': {
+        '.bg-border-component': {
           background: `linear-gradient(var(--linear-direction, 180deg), ${tokens.base_Edy_soyMilk} 38.45%, ${tokens.base_Edy_soyMilk_250} 93.75%);`
         },
         '.shadow-large' : {

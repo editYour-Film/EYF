@@ -7,6 +7,8 @@ import LayoutDashBoard from "@/components/layouts/LayoutDashBoard";
 import Head from "next/head";
 import { useContext } from "react";
 import { AuthContext } from "@/context/authContext";
+import { FooterDashboard } from "@/components/dashboard/shared/FooterDashBoard";
+import { GradientCard } from "@/components/dashboard/shared/GradientCard";
 
 export default function DashBoardContentSchedule() {
   const authContext = useContext(AuthContext);
@@ -29,8 +31,12 @@ export default function DashBoardContentSchedule() {
               <DashboardContainer>
                 <DashboardEditorSchedule />
               </DashboardContainer>
-              <NewsletterSection />
-              <Footer />
+              <GradientCard
+                title="Merci à tous"
+                content={<><p>C'est grâce à votre engagement sur la plateforme que nous pouvons travailler tous ensemble à créer l'outil le plus adapté à nos besoins. Nous travaillons constamment sur des nouveautés passionnantes, et nous vous tiendrons vite au courant des évolutions à venir.</p><br/><p>Merci à vous, 
+                L'équipe d'editYour.film 📹</p></>}
+              />
+              <FooterDashboard />
             </div>
           </div>
         )}
