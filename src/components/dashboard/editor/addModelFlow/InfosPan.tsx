@@ -169,6 +169,19 @@ export const InfosPan = ({}: InfosPanProps) => {
     else setError(false);
   }, [titleError, descriptionError, tagsError]);
 
+  const areRequiredFieldsFilled = () => {
+    if (context.tags?.length) {
+      return (
+        context.model &&
+        context.title &&
+        context.description &&
+        context.thumbnail &&
+        context.tags.length > 0
+      );
+    }
+    return false;
+  };
+
   return (
     <div className="infos-pan flex flex-col gap-dashboard-spacing-element-medium bg-dashboard-background-content-area pt-[50px] pb-[150px] md:py-0">
       {isMobile && (
@@ -296,7 +309,7 @@ export const InfosPan = ({}: InfosPanProps) => {
           type="primary"
           label="Confirmer"
           className={`w-max self-end`}
-          disabled={error || visibilityPanAdded}
+          disabled={!areRequiredFieldsFilled() || error}
           onClick={() => {
             !error && handleSubmit();
           }}
