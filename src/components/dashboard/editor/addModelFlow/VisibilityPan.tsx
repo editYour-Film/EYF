@@ -180,7 +180,7 @@ export const VisibilityPan = () => {
         />
       )}
 
-      <div className="visibility-pan__video-w relative h-0 pb-[57.6%] rounded-2xl overflow-hidden border">
+      <div className="visibility-pan__video-w relative h-0 pb-[57.6%] rounded-t-2xl overflow-hidden border">
         <div className="absolute w-full h-full">
           <Video
             video={context.strapiObject?.attributes.video.data.attributes}
