@@ -239,12 +239,12 @@ const Input = ({
               {helpIconText && <Help text={helpIconText} label={label} />}
             </label>
           )}
-          <div className="relative focus-within:outline-blueBerry focus-within:outline">
+          <div className="relative">
             <input
               type="text"
               onChange={onChange}
               onBlur={onBlur}
-              className={inputClass}
+              className={`${inputClass} focus-within:outline-blueBerry focus-within:outline"`}
               value={value as string}
               name={name}
               placeholder={placeholder}
@@ -354,7 +354,7 @@ const Input = ({
             </label>
           )}
           <div
-            className={`relative flex justify-end items-center ${inputClass}`}
+            className={`relative flex justify-end items-center ${inputClass} focus-within:outline-blueBerry focus-within:outline`}
           >
             {(!iconRight && searchIcon) && (
               <Image

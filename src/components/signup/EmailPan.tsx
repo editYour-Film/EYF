@@ -41,19 +41,22 @@ export const EmailPan = () => {
         <div className="text-large text-center">Ajouter votre mail</div>
         <hr className="w-full border-05" />
 
-        <Input
-          type="email"
-          label="email"
-          placeholder="Entrez votre adresse mail"
-          bg="light"
-          className="w-full"
-          error={context.emailErrorMessage}
-          noLabel
-          value={context.email}
-          onChange={(e) => {
-            context.setEmail(e.target.value);
-          }}
-        />
+        <div className="w-full">
+          <Input
+            type="email"
+            label="email"
+            placeholder="Entrez votre adresse mail"
+            bg="light"
+            className="w-full"
+            error={context.emailErrorMessage}
+            noLabel
+            value={context.email}
+            onChange={(e) => {
+              context.setEmail(e.target.value);
+            }}
+          />
+        </div>
+
 
         <Button
           type="primary"
