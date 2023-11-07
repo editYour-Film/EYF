@@ -265,7 +265,7 @@ export const InfosPan = ({}: InfosPanProps) => {
             onChange={(e) => {
               context.setDescription(e.target.value);
             }}
-            maxlength={100}
+            minlength={100}
             className="bg-transparent"
           />
           {descriptionError && (
