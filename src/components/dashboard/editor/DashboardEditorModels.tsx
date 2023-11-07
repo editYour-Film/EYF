@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { Model } from "@/components/_shared/video/Model";
 import { EditorContext } from "./_context/EditorContext";
 
-import { Formats as possibleModelFormat} from "./data/metaValues";
+import { Formats as possibleModelFormat } from "./data/metaValues";
 
 type DashboardEditorModelsProps = {
   models: any;
@@ -11,67 +11,71 @@ type DashboardEditorModelsProps = {
 export const DashboardEditorModels = ({
   models,
 }: DashboardEditorModelsProps) => {
-  const editorContext = useContext(EditorContext);  
+  const editorContext = useContext(EditorContext);
   const Grids = possibleModelFormat.map((type) => {
-    
-    let items = []
+    let items = [];
 
-    models && models.map((model: any, i: number) => {
-      if(model.model === type) {    
-        items.push(
-          <Model
-            key={i}
-            video={model}
-            thumbnail={ model.thumbnail }
-            active= { model.visibility === 'public' }
-            handleModify={() => {
-              editorContext.handleModifyVideo(model.id);
-            }}
-            handleDisable={() => {
-              editorContext.handleDisableVideo(model.id);
-            }}
-          />
-        )
-      }
-    })    
+    models &&
+      models.map((model: any, i: number) => {
+        if (model.model === type) {
+          items.push(
+            <Model
+              key={i}
+              video={model}
+              thumbnail={model.thumbnail}
+              active={model.visibility === "public"}
+              handleModify={() => {
+                editorContext.handleModifyVideo(model.id);
+              }}
+              handleDisable={() => {
+                editorContext.handleDisableVideo(model.id);
+              }}
+            />
+          );
+        }
+      });
 
-    if(items.length >= 0 && items.length < 3) {
+    if (items.length >= 0 && items.length < 3) {
       for (let i = 0; i <= 3 - items.length; i++) {
-        items.push(<div className="w-full h-full bg-dashboard-button-dark rounded-dashboard-button-square-radius"></div>)
+        items.push(
+          <div className="w-full h-full bg-dashboard-button-dark rounded-dashboard-button-square-radius"></div>
+        );
       }
     }
 
-    if(items.length > 0) {
+    if (items.length > 0) {
       return (
         <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-dashboard-mention-padding-right-left">
           {items}
         </div>
-      )
+      );
     }
-  })
-  
+  });
 
   return (
     <div className="dashboard-editor-models">
       <div className="dashboard-editor-models__head flex flex-col sm:flex-row flex-wrap sm:justify-between sm:items-center">
-        <h2 className="dashboard-title pl-dashboard-mention-padding-right-left md:pl-0 m-0">Modeles Importés</h2>
+        <h2 className="dashboard-title pl-dashboard-mention-padding-right-left md:pl-0 m-0">
+          Modeles Importés
+        </h2>
       </div>
-      <div className={`dashboard-editor-models__models mt-dashboard-spacing-element-medium flex flex-col gap-dashboard-spacing-element-medium`} >
-        {(models && models.length > 0)
-        ?
+      <div
+        className={`dashboard-editor-models__models mt-dashboard-spacing-element-medium flex flex-col gap-dashboard-spacing-element-medium`}
+      >
+        {models && models.length > 0 ? (
           Grids
-        :
+        ) : (
           <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-dashboard-mention-padding-right-left">
-            {[1,2,3].map((el, i) => {
-              return(
-              <div 
-                key={i}
-                className="w-full h-0 pb-[100%] bg-dashboard-button-dark rounded-dashboard-button-square-radius"
-              >
-              </div>)
+            {[1, 2, 3].map((el, i) => {
+              return (
+                <div
+                  key={i}
+                  className="w-full h-0 pb-[100%] bg-dashboard-button-dark rounded-dashboard-button-square-radius"
+                ></div>
+              );
             })}
           </div>
-        }
+        )}
       </div>
     </div>
   );

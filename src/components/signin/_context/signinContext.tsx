@@ -179,6 +179,10 @@ export const SignInContextProvider: React.FC<any> = (props) => {
           unsetToken();
         });
     }
+
+    if (authContext.user.user && authContext.user.user.role)
+      if (authContext.user.user.role.name === "editor")
+        push(routes.DASHBOARD_EDITOR);
   }, []);
 
   useEffect(() => {

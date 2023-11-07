@@ -22,16 +22,15 @@ export const DashboardEditorHome = ({
   const dashboardContext = useContext(DashBoardContext);
   const authContext = useContext(AuthContext);
 
-  const editorCtx = useContext(EditorContext);
+  const editorContext = useContext(EditorContext);
 
   const [highlightedVideo, setHighLightedVideo] = useState<any>(null);
 
   useEffect(() => {
     setHighLightedVideo(
-      authContext.user.user.models &&
-        authContext.user.user.models.filter((x: any) => x.is_highlighted)
-          .length > 0
-        ? authContext.user.user.models.filter((x: any) => x.is_highlighted)[0]
+      authContext.user.models &&
+        authContext.user.models.filter((x: any) => x.is_highlighted).length > 0
+        ? authContext.user.models.filter((x: any) => x.is_highlighted)[0]
         : false
     );
   }, []);
@@ -42,7 +41,7 @@ export const DashboardEditorHome = ({
         className ?? ""
       }`}
     >
-      {editorCtx.highlightedVideo ? (
+      {editorContext.highlightedVideo ? (
         <HightlightedVideo />
       ) : (
         <>
@@ -64,7 +63,7 @@ export const DashboardEditorHome = ({
       )}
 
       <hr />
-      <DashboardEditorModels models={editorCtx.models} />
+      <DashboardEditorModels models={editorContext.models} />
       {(dashboardContext.infoCardActive ||
         (dashboardContext.posts && dashboardContext.posts.length > 0)) && (
         <>

@@ -205,8 +205,7 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
   };
 
   const fetchCurrentModels = () => {
-    // TODO: Integration Get the models of the user
-    setModels(authContext.user.user.models ? authContext.user.user.models : []);
+    setModels(authContext.user.models ? authContext.user.models : []);
   };
 
   const addTag = (tagName: string) => {
