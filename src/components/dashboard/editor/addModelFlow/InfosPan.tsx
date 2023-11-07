@@ -150,6 +150,10 @@ export const InfosPan = ({}: InfosPanProps) => {
   };
 
   const handleAddTag = (e: any) => {
+    if (e.includes(" ")) {
+      setTagsError("Les mots clés ne doivent pas contenir d'espaces.");
+      return;
+    }
     const _tag = {
       name: e,
       slug: slugify(e, { lower: true }),
