@@ -179,7 +179,7 @@ export const InfosPan = ({}: InfosPanProps) => {
         context.model &&
         context.title &&
         context.description &&
-        context.description.length > 100 &&
+        context.description.split(" ").length >= 100 &&
         context.thumbnail &&
         context.tags.length > 0
       );
