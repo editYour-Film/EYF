@@ -165,7 +165,7 @@ export const VisibilityPan = () => {
   }, []);
 
   return (
-    <div className="visibility-pan bg-dashboard-background-content-area flex flex-col gap-dashboard-spacing-element-medium pt-[50px] pb-[150px]">
+    <div className="visibility-pan bg-dashboard-background-content-area flex flex-col gap-dashboard-spacing-element-medium pt-[50px] md:pt-0 pb-[150px]">
       {isMobile && (
         <IslandButton
           type="secondary"
@@ -183,7 +183,9 @@ export const VisibilityPan = () => {
       <div className="visibility-pan__video-w relative h-0 pb-[57.6%] rounded-t-2xl overflow-hidden border">
         <div className="absolute w-full h-full">
           <Video
+            playerFullWidth
             video={context.strapiObject?.attributes.video.data.attributes}
+            className="h-full"
           />
         </div>
       </div>

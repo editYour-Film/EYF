@@ -5,12 +5,13 @@ import { Player } from "./Player"
 type VideoProps = {
   video: any,
   defaultPlayer?: boolean,
+  playerFullWidth?: boolean,
   className?: string,
   hFull?: boolean,
   onLoadedMetadata? : () => void
 }
 
-export const Video = forwardRef<HTMLVideoElement, VideoProps>(function Video({video, defaultPlayer = false, className, hFull, onLoadedMetadata}, ref) {
+export const Video = forwardRef<HTMLVideoElement, VideoProps>(function Video({video, defaultPlayer = false, playerFullWidth = false, className, hFull, onLoadedMetadata}, ref) {
   const [isPlaying, setIsPlaying] = useState(false)
   const createdRef = useRef<HTMLVideoElement>(null)
   const videoEl = ref as RefObject<HTMLVideoElement>  ?? createdRef
@@ -82,7 +83,7 @@ export const Video = forwardRef<HTMLVideoElement, VideoProps>(function Video({vi
             onPause={() => { handlePause() }}
             onPlay={() => { handlePlay() }}
             onTrackClick={(e) => { handleTrackClick(e) }}
-            className='absolute z-10 w-1/2 bottom-0 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-80 transition-opacity duration-500'
+            className={`absolute z-10 ${playerFullWidth ? 'w-full px-dashboard-button-separation-spacing' : 'w-1/2'} bottom-dashboard-button-separation-spacing left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-80 transition-opacity duration-500`}
           />
           <div className="player-bg player-bg-gradient pointer-events-none absolute w-full h-full top-0 left-0 opacity-0 group-hover:opacity-80 transition-opacity duration-500">
 
