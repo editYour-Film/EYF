@@ -45,23 +45,36 @@ export const EditorProfilContext = createContext({
   handleResetContext: () => {},
 
   saveProfil: () => {},
-  abort: () => {}
+  abort: () => {},
 });
 
 export const EditorProfilContextProvider: React.FC<any> = (props) => {
-  const {user} = useContext(AuthContext)  
-  console.log(user);
-  
-  const [avatar, setAvatar] = useState(user.details.picture && user.details.picture.formats.thumbnail.url);
-  const [username, setUsername] = useState(user.user.username && user.user.username);
-  const [fName, setFName] = useState(user.details.f_name && user.details.f_name);
-  const [lName, setLName] = useState(user.details.l_name &&  user.details.l_name);
-  const [email, setEmail] = useState(user.details.email_contact);
-  const [desc, setDesc] = useState(user.details.bio);
-  const [phone, setPhone] = useState(user.details.phone);
-  const [street, setStreet] = useState(user.details.address);
-  const [zipcode, setZipcode] = useState(user.details.post_code);
-  const [city, setCity] = useState(user.details.city);
+  const { user } = useContext(AuthContext);
+
+  const [avatar, setAvatar] = useState(
+    user.details.picture ? user.details.picture.url : "/img/profile/avatar.png"
+  );
+  const [username, setUsername] = useState(user.user.username);
+  const [fName, setFName] = useState(
+    user.details.f_name ? user.details.f_name : ""
+  );
+  const [lName, setLName] = useState(
+    user.details.l_name ? user.details.l_name : ""
+  );
+  const [email, setEmail] = useState(
+    user.details.email_contact ? user.details.email_contact : ""
+  );
+  const [desc, setDesc] = useState(user.details.bio ? user.details.bio : "");
+  const [phone, setPhone] = useState(
+    user.details.phone ? user.details.phone : ""
+  );
+  const [street, setStreet] = useState(
+    user.details.address ? user.details.address : ""
+  );
+  const [zipcode, setZipcode] = useState(
+    user.details.post_code ? user.details.post_code : ""
+  );
+  const [city, setCity] = useState(user.details.city ? user.details.city : "");
 
   const [langOptions] = useState([
     {
@@ -97,15 +110,15 @@ export const EditorProfilContextProvider: React.FC<any> = (props) => {
   const [skillsOptions] = useState<skillsInterface[]>([
     {
       label: "After Effects",
-      id: 'afterEffects',
+      id: "afterEffects",
     },
     {
       label: "Davinci Resolve",
-      id: 'davinciResolve'
+      id: "davinciResolve",
     },
     {
       label: "Motion Design",
-      id: 'motionDesign'
+      id: "motionDesign",
     },
   ]);
 
@@ -167,11 +180,11 @@ export const EditorProfilContextProvider: React.FC<any> = (props) => {
 
   const abort = () => {
     // TODO: Integration reset all values to the initial ones
-  }
+  };
 
   const saveProfil = () => {
     // TODO: Integration save the modified values to the database
-  }
+  };
 
   return (
     <EditorProfilContext.Provider
