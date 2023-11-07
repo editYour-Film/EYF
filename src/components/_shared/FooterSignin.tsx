@@ -3,6 +3,7 @@ import routes from "@/routes";
 import { useContext } from "react";
 import { SignInContext } from "../signin/_context/signinContext";
 import { IslandButton } from "./buttons/IslandButton";
+import router from "next/router";
 
 export const FooterSignin = () => {
   const context = useContext(SignInContext);
@@ -17,7 +18,7 @@ export const FooterSignin = () => {
           label="S’inscrire"
           type="secondary"
           onClick={() => {
-            router.push(routes.SIGNUP)
+            router.push(routes.SIGNUP);
           }}
           className="ml-dashboard-button-separation-spacing"
         />
