@@ -147,7 +147,7 @@ const Input = ({
         : " flex flex-wrap justify-between items-center gap-3 text-sm text-dashboard-text-description-base";
   }
 
-  const helperClass = "text-sm text-dashboard-text-description-base-low mt-3 mb-8";
+  const helperClass = "text-base text-dashboard-text-description-base-low mt-dashboard-mention-padding-top-bottom mb-8";
 
   switch (type) {
     case "text":
@@ -449,14 +449,16 @@ const Input = ({
     case "radioColumn":
       return (
         <div className="flex flex-col justify-stretch h-full gap-dashboard-button-separation-spacing">
-          {label && (
-            <label className={labelClass}>
-              {label}
+          <div>
+            {label && (
+              <label className={labelClass}>
+                {label}
 
-              {helpIconText && <Help text={helpIconText} label={label} />}
-            </label>
-          )}
-          {helper && <p className={helperClass}>{helper}</p>}
+                {helpIconText && <Help text={helpIconText} label={label} />}
+              </label>
+            )}
+            {helper && <p className={helperClass}>{helper}</p>}
+          </div>
           <div className="flex flex-col flex-wrap gap-5 md:gap-10">
             {options?.map((x: any, i: number) => {
               return (
