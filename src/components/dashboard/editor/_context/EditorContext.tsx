@@ -224,20 +224,8 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
     setHighlightedVideo(undefined);
 
     // TODO: Integration get all the keywords related to an account
-    setKeywords([
-      {
-        name: "Keyword 1",
-        slug: "keyword-1",
-      },
-      {
-        name: "Keyword 2",
-        slug: "keyword-2",
-      },
-      {
-        name: "Keyword 3",
-        slug: "keyword-3",
-      },
-    ]);
+    // keyword : { name: string; slug: string }
+    setKeywords([]);
 
     fetchCurrentModels();
   }, []);
