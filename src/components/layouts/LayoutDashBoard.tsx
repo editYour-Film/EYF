@@ -55,7 +55,7 @@ const LayoutDashboard = ({ children }: LayoutDashboardProps) => {
     <>
       {authContext.isLoggedIn && authContext.user && !authContext.isLoading && (
         <Lenis root>
-          <div className="relative overflow-hidden md:overflow-auto bg-black min-h-screen flex flex-col justify-between gap-10">
+          <div className="relative overflow-hidden md:overflow-visible bg-black min-h-screen flex flex-col justify-between gap-10">
             <main className="md:pt-7">
               <div className="md:px-[30px] xl:px-[113px] md:mt-0 grid grid-dashboard relative z-20 ">
                 <DashBoardContextProvider>
