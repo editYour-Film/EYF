@@ -238,7 +238,7 @@ export const InfosPan = ({}: InfosPanProps) => {
 
         <div>
           <Input
-            label="Présentez-vous à vos futurs clients..."
+            label="Présentez votre modèle à vos futurs clients..."
             type="textarea"
             labelType="dashboard"
             helpIconText="Entrez la description"
