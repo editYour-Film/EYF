@@ -261,7 +261,7 @@ export const VisibilityPan = () => {
             </span>
           ) : (
             <span className="text-base-text text-sm ">
-              Vérifications terminées. Aucun problème détecté.
+              {/* Vérifications terminées. Aucun problème détecté. */}
             </span>
           )}
         </div>
