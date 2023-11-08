@@ -396,7 +396,7 @@ const Loader = ({ progress }: LoaderProps) => {
       >
         <div className="relative top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[13px] h-[13px] rounded-full bg-dashboard-text-title-white-high">
           {progress && (
-            <div className="absolute top-0 -translate-y-full left-1/2 -translate-x-1/2">
+            <div className="absolute top-0 -translate-y-full left-1/2 -translate-x-1/2 text-small">
               {Math.ceil(progress * 100)}%
             </div>
           )}

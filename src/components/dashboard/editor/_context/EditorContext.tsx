@@ -13,6 +13,8 @@ import { useDispatch } from "react-redux";
 
 import Info from "@/icons/info-gradient.svg";
 import { AuthContext } from "@/context/authContext";
+import { AddModel } from "../AddModel";
+import { DashBoardContext } from "../../_context/DashBoardContext";
 
 export type modelType =
   | "model 16/9 ème"
@@ -102,11 +104,13 @@ export const EditorContext = createContext({
   addTag: (payload: string) => {},
 
   keywords: undefined as { name: string; slug: string }[] | undefined,
+  startAddModel: () => {}
 });
 
 export const EditorContextProvider = ({ children }: PropsWithChildren) => {
   const dispatch = useDispatch();
   const authContext = useContext(AuthContext);
+  const dashboardContext = useContext(DashBoardContext);
 
   const [noModelMessageId] = useState(Date.now());
 
@@ -205,6 +209,8 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
   };
 
   const fetchCurrentModels = () => {
+    // TODO: Integration get the models, with all fields populated of the current editor
+    
     setModels(authContext.user.models ? authContext.user.models : []);
   };
 
@@ -218,6 +224,20 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
       tags ? setTags([...tags, t]) : setTags([t]);
     }
   };
+
+  const startAddModel = () => {
+    if (!dashboardContext.isAddModelPannelOpen && !dashboardContext.panels?.find((p) => p.panel === <AddModel />)) {
+        dashboardContext.addPannel({
+          title: "Ajouter un modèle",
+          panel: <AddModel />,
+        });
+
+        dashboardContext.setIsAddModelPannelOpen(true);
+    } else {
+      dashboardContext.setIsAddModelPannelOpen(true);
+      dashboardContext.panels && dashboardContext.setActivePanel(dashboardContext.panels?.length - 1)
+    }
+  }
 
   useEffect(() => {
     // TODO: Integration Get the highlighted video from the database
@@ -294,6 +314,8 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
         addTag,
 
         keywords,
+
+        startAddModel
       }}
     >
       {children}

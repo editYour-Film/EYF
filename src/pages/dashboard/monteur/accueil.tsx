@@ -13,6 +13,9 @@ import { NotificationCenter } from "@/components/dashboard/shared/NotificationCe
 import { useMediaQuery } from "@uidotdev/usehooks";
 import { AddModelContextProvider } from "@/components/dashboard/editor/_context/AddModelContext";
 import { MessageManager } from "@/components/_shared/UI/MessageManager";
+import { GradientCard } from "@/components/dashboard/shared/GradientCard";
+import { FooterDashboard } from "@/components/dashboard/shared/FooterDashBoard";
+import { EditorContext } from "@/components/dashboard/editor/_context/EditorContext";
 
 export default function DashBoardContentHome() {
   return (
@@ -31,7 +34,7 @@ export default function DashBoardContentHome() {
 
 const DashBoardPageHome = ({ children }: PropsWithChildren) => {
   const context = useContext(DashBoardContext);
-  const [hasAddModel, setHasAddModel] = useState(false);
+  const editorContext = useContext(EditorContext);
 
   const isMobile = useMediaQuery("(max-width: 768px)");
 
@@ -60,20 +63,7 @@ const DashBoardPageHome = ({ children }: PropsWithChildren) => {
           disabled={context.isAddModelPannelOpen}
           className="shrink-0"
           onClick={() => {
-            if (!isMobile) {
-              if (!context.panels?.find((p) => p.panel === AddModel)) {
-                context.addPannel({
-                  title: "Ajouter un modèle",
-                  panel: <AddModel />,
-                });
-
-                context.setIsAddModelPannelOpen(true);
-              }
-            } else {
-              context.setIsAddModelPannelOpen(true);
-            }
-
-            setHasAddModel(true);
+            editorContext.startAddModel()
           }}
         />
       </TopBar>
@@ -100,8 +90,20 @@ const DashBoardPageHome = ({ children }: PropsWithChildren) => {
               </>
             )}
           </div>
-          <NewsletterSection />
-          <Footer />
+
+          <div className="flex flex-col mt-[60px] gap-dashboard-spacing-element-medium">
+            <GradientCard 
+              title='PARRAINER UN AMI'
+              content='Bénéficiez d’avantages exclusifs en rejoignant la communauté des parrains editYour.Film dès aujourd’hui.'
+              hasCta 
+              type="email"
+              placeholder="Email" 
+              ctaLabel="Envoyer le lien de parrainage"
+              onClick={(email: string) => { context.sendSponsorLink(email)}}
+            />
+            <FooterDashboard />
+          </div>
+
         </div>
       </AddModelContextProvider>
     </>

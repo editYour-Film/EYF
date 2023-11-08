@@ -12,6 +12,8 @@ import { NotificationCenter } from "@/components/dashboard/shared/NotificationCe
 import { useMediaQuery } from "@uidotdev/usehooks";
 import { AddModelContextProvider } from "@/components/dashboard/editor/_context/AddModelContext";
 import { MessageManager } from "@/components/_shared/UI/MessageManager";
+import { FooterDashboard } from "@/components/dashboard/shared/FooterDashBoard";
+import { GradientCard } from "@/components/dashboard/shared/GradientCard";
 
 export default function DashBoardContentHome() {
   return (
@@ -72,8 +74,16 @@ const DashBoardPageHome = ({ children }: PropsWithChildren) => {
             <DashboardContainer className="relative z-10" />
 
           </div>
-          <NewsletterSection />
-          <Footer />
+          <GradientCard 
+            title='PARRAINER UN AMI'
+            content='Bénéficiez d’avantages exclusifs en rejoignant la communauté des parrains editYour.Film dès aujourd’hui.'
+            hasCta 
+            type="email"
+            placeholder="Email" 
+            ctaLabel="Envoyer le lien de parrainage"
+            onClick={(email: string) => { context.sendSponsorLink(email)}}
+          />
+          <FooterDashboard />
         </div>
 
       </AddModelContextProvider>

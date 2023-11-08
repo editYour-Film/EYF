@@ -185,7 +185,12 @@ export const InfosPan = ({}: InfosPanProps) => {
         />
       )}
       <div className="info-pan__video-w relative rounded-t-2xl overflow-hidden border">
-        {entry && <Video video={entry.video.data.attributes} />}
+        {entry && 
+          <Video 
+            playerFullWidth
+            video={entry.video.data.attributes} 
+          />
+        }
       </div>
 
       <div className="info-pan__title flex items-baseline gap-2">
@@ -238,7 +243,7 @@ export const InfosPan = ({}: InfosPanProps) => {
 
         <div>
           <Input
-            label="Présentez-vous à vos futurs clients..."
+            label="Présentez votre modèle à vos futurs clients..."
             type="textarea"
             labelType="dashboard"
             helpIconText="Entrez la description"
