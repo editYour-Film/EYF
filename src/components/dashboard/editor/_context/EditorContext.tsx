@@ -7,14 +7,13 @@ import {
 } from "react";
 import { Softwares } from "../data/metaValues";
 import slugify from "slugify";
-import { addToast, removeToast } from "@/store/slices/toastSlice";
-import { MessageType } from "@/components/_shared/UI/InfoMessage";
 import { useDispatch } from "react-redux";
 
 import Info from "@/icons/info-gradient.svg";
 import { AuthContext } from "@/context/authContext";
 import { AddModel } from "../AddModel";
 import { DashBoardContext } from "../../_context/DashBoardContext";
+import { toast } from 'react-hot-toast'
 
 export type modelType =
   | "model 16/9 ème"
@@ -252,19 +251,12 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
 
   useEffect(() => {
     if (models === undefined || models.length === 0) {
-      dispatch(
-        addToast({
-          id: noModelMessageId,
-          message: `Bienvenue ${authContext.user.details.f_name}, devenez visible. Ajoutez votre premier modèle de montage.`,
-          bg: "black",
-          Icon: Info,
-        } as MessageType)
-      );
+      toast( `Bienvenue ${authContext.user.details.f_name}, devenez visible. Ajoutez votre premier modèle de montage.`, {
+        icon: Info,
+        duration: 5000,
+        className: 'bg-blackBerry'
+      }) 
     }
-
-    return () => {
-      dispatch(removeToast(noModelMessageId));
-    };
   }, [models]);
 
   return (

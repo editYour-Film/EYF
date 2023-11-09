@@ -5,12 +5,12 @@ import {
   useEffect,
   useState,
 } from "react";
-import { addToast, removeToast } from "@/store/slices/toastSlice";
-import { MessageType } from "@/components/_shared/UI/InfoMessage";
+
 import { useDispatch } from "react-redux";
 
 import Info from "@/icons/info-gradient.svg";
 import { AuthContext } from "@/context/authContext";
+import { toast } from 'react-hot-toast'
 
 export type modelType =
   | "model 16/9 ème"
@@ -112,19 +112,12 @@ export const ClientContextProvider = ({ children }: PropsWithChildren) => {
 
   useEffect(() => {
     if (models === undefined || models.length === 0) {
-      dispatch(
-        addToast({
-          id: noQuoteMessageId,
-          message: `Bienvenue ${authContext.user.details.f_name}, réalisez votre premier devis pour découvrir tous les services de votre espace.`,
-          bg: "black",
-          Icon: Info,
-        } as MessageType)
-      );
+      toast( `Bienvenue ${authContext.user.details.f_name}, réalisez votre premier devis pour découvrir tous les services de votre espace.`, {
+        icon: Info,
+        duration: 5000,
+        className: 'bg-blackBerry'
+      }) 
     }
-
-    return () => {
-      dispatch(removeToast(noQuoteMessageId));
-    };
   }, [models]);
 
   return (

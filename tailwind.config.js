@@ -173,6 +173,16 @@ module.exports = {
         'text': tokens.font_text,
         'title': tokens.font_title
       },
+      keyframes: {
+        'toast-in': {
+          '0%': { transform: 'translateY(-20px)', opacity: 0 },
+          '100%': { transform: 'translateY(0px)', opacity: 1 },
+        },
+        'toast-out': {
+          '0%': { transform: 'translateY(0px)', opacity: 1 },
+          '100%': { transform: 'translateY(-20px)', opacity: 0 },
+        }
+      },
       borderColor: ({theme}) => ({
         DEFAULT: theme('colors.borderWhite'),
 
@@ -305,7 +315,11 @@ module.exports = {
             display: 'none!important',
           }
         },
-
+        '.toaster' : {
+          '> div' : {
+            justifyContent: 'start !important',
+          }
+        },
 
         //v0
         '.dashboard-title': {
