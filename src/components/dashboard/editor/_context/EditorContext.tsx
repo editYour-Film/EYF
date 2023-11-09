@@ -239,6 +239,14 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
   }
 
   useEffect(() => {
+    if (models === undefined || models.length === 0) {
+      toast( `Bienvenue ${authContext.user.details.f_name}, devenez visible. Ajoutez votre premier modèle de montage.`, {
+        icon: Info,
+        duration: 5000,
+        className: 'bg-blackBerry'
+      }) 
+    }
+    
     // TODO: Integration Get the highlighted video from the database
     setHighlightedVideo(undefined);
 
@@ -248,16 +256,6 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
 
     fetchCurrentModels();
   }, []);
-
-  useEffect(() => {
-    if (models === undefined || models.length === 0) {
-      toast( `Bienvenue ${authContext.user.details.f_name}, devenez visible. Ajoutez votre premier modèle de montage.`, {
-        icon: Info,
-        duration: 5000,
-        className: 'bg-blackBerry'
-      }) 
-    }
-  }, [models]);
 
   return (
     <EditorContext.Provider
