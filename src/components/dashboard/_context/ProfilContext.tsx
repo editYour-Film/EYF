@@ -52,7 +52,7 @@ export const EditorProfilContextProvider: React.FC<any> = (props) => {
   const { user } = useContext(AuthContext);
 
   const [avatar, setAvatar] = useState(
-    user.details.picture ? user.details.picture.url : "/img/profile/avatar.png"
+    user.details.picture ? user.details.picture.url : undefined
   );
   const [username, setUsername] = useState(user.user.username);
   const [fName, setFName] = useState(
