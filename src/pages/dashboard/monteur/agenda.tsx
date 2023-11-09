@@ -1,46 +1,70 @@
 import { DashboardContainer } from "@/components/dashboard/shared/DashboardContainer";
-import { DashboardEditorSchedule } from "@/components/dashboard/editor/DashboardEditorSchedule";
-import { NewsletterSection } from "@/components/home/NewsletterSection";
-import { SideBar } from "@/components/dashboard/shared/SideBar";
-import Footer from "@/components/_shared/Footer";
 import LayoutDashBoard from "@/components/layouts/LayoutDashBoard";
 import Head from "next/head";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { AuthContext } from "@/context/authContext";
 import { FooterDashboard } from "@/components/dashboard/shared/FooterDashBoard";
 import { GradientCard } from "@/components/dashboard/shared/GradientCard";
+import { TopBar } from "@/components/dashboard/shared/TopBar";
+import { useMediaQuery } from "@uidotdev/usehooks";
+import { DashBoardContext } from "@/components/dashboard/_context/DashBoardContext";
+import { NotificationCenter } from "@/components/dashboard/shared/NotificationCenter";
+import { Month } from "@/components/dashboard/editor/agenda/Month";
+import { AgendaContextProvider } from "@/components/dashboard/editor/_context/AgendaContext";
 
 export default function DashBoardContentSchedule() {
-  const authContext = useContext(AuthContext);
   return (
     <>
       <Head>
-        <title>EditYour.Film</title>
+        <title>EditYour.Film Agenda</title>
         <meta name="description" content="" />
       </Head>
 
       <LayoutDashBoard>
-        {authContext.user.user.role && (
-          <div className="dashboard-content flex flex-col lg:flex-row justify-between gap-14">
-            <SideBar
-              className="lg:basis-2/12 lg:w-2/12"
-              type={authContext.user.user.role.name}
-            />
-
-            <div className="lg:basis-9/12 main_content">
-              <DashboardContainer>
-                <DashboardEditorSchedule />
-              </DashboardContainer>
-              <GradientCard
-                title="Merci à tous"
-                content={<><p>C'est grâce à votre engagement sur la plateforme que nous pouvons travailler tous ensemble à créer l'outil le plus adapté à nos besoins. Nous travaillons constamment sur des nouveautés passionnantes, et nous vous tiendrons vite au courant des évolutions à venir.</p><br/><p>Merci à vous, 
-                L'équipe d'editYour.film 📹</p></>}
-              />
-              <FooterDashboard />
-            </div>
-          </div>
-        )}
+          <Agenda />
       </LayoutDashBoard>
     </>
-  );
+  )
+}
+
+const Agenda = () => {
+  const dashboardContext = useContext(DashBoardContext)
+  const isMobile = useMediaQuery('(max-width: 768px)');
+
+  const monthNames = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Décembre']
+
+  useEffect(() => {
+    const panels = []
+
+    for (let i = 0; i < 5; i++) {
+      panels.push({
+        title: monthNames[i],
+        panel: <Month id={i} year={2024}/>
+      })
+    }
+
+    dashboardContext.setPanels(panels)
+  }, [])
+
+  return (<>
+    <TopBar></TopBar>
+
+    <AgendaContextProvider>
+      <div className="flex flex-col gap-dashboard-spacing-element-medium main_content mt-[50px] md:mt-0 md:col-[2_/_3] row-[2_/_4]">
+        <div className="flex flex-col">
+          <NotificationCenter className='relative z-0' />
+          {/* {isMobile && <AgendaMobile />} */}
+          {!isMobile && <DashboardContainer className='relative z-10' />}
+
+          <GradientCard
+            title="Merci à tous"
+            content={<><p>C'est grâce à votre engagement sur la plateforme que nous pouvons travailler tous ensemble à créer l'outil le plus adapté à nos besoins. Nous travaillons constamment sur des nouveautés passionnantes, et nous vous tiendrons vite au courant des évolutions à venir.</p><br/><p>Merci à vous, 
+            L'équipe d'editYour.film 📹</p></>}
+          />
+          
+          <FooterDashboard />
+        </div>
+      </div>
+    </AgendaContextProvider>
+  </>)
 }
