@@ -12,10 +12,11 @@ import { TopBar } from "@/components/dashboard/shared/TopBar";
 import { NotificationCenter } from "@/components/dashboard/shared/NotificationCenter";
 import { useMediaQuery } from "@uidotdev/usehooks";
 import { AddModelContextProvider } from "@/components/dashboard/editor/_context/AddModelContext";
-import { MessageManager } from "@/components/_shared/UI/MessageManager";
 import { GradientCard } from "@/components/dashboard/shared/GradientCard";
 import { FooterDashboard } from "@/components/dashboard/shared/FooterDashBoard";
 import { EditorContext } from "@/components/dashboard/editor/_context/EditorContext";
+import {toast} from 'react-hot-toast'
+import Clock from '@/icons/Clock.svg'
 
 export default function DashBoardContentHome() {
   return (
@@ -51,12 +52,6 @@ const DashBoardPageHome = ({ children }: PropsWithChildren) => {
     <TopBar
       className=""
     >
-      {!isMobile &&
-        <MessageManager 
-          className='shrink ml-0 mr-auto'
-        />
-      }
-
         <IslandButton
           type="small-secondary"
           label="Ajouter un modèle"
@@ -69,7 +64,9 @@ const DashBoardPageHome = ({ children }: PropsWithChildren) => {
       </TopBar>
 
       <AddModelContextProvider>
-        <div className="main_content mt-[50px] md:mt-0 md:col-[2_/_3] row-[2_/_4]">
+        <div 
+          className="main_content mt-[50px] md:mt-0 md:col-[2_/_3] row-[2_/_4]"
+        >
           <div className="flex flex-col">
             <NotificationCenter className="relative z-0" />
 
