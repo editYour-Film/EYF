@@ -26,7 +26,7 @@ export const DashboardEditorHome = ({
 
   const [highlightedVideo, setHighLightedVideo] = useState<any>(null);
 
-  useEffect(() => {
+  useEffect(() => {    
     setHighLightedVideo(
       authContext.user.models &&
         authContext.user.models.filter((x: any) => x.is_highlighted).length > 0
@@ -47,6 +47,7 @@ export const DashboardEditorHome = ({
         <>
           <TitleSvgCard
             className=""
+            type="imgBottomRight"
             img="/img/dashboard/computer-coffee.png"
             title="Ajoutez un modèle de montage, et rejoignez notre catalogue."
             text="Ajoutez jusqu'à 6 modèles de montage à afficher dans le catalogue. Vos modèles augmentent votre visibilité auprès des créateur.rice.s en quête d'un monteur.se. Le premier modèle que vous ajoutez sera mis en avant sur votre profil public."
