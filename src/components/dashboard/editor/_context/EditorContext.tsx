@@ -14,6 +14,7 @@ import { AuthContext } from "@/context/authContext";
 import { AddModel } from "../AddModel";
 import { DashBoardContext } from "../../_context/DashBoardContext";
 import { toast } from 'react-hot-toast'
+import { useStrapiGet } from "@/hooks/useStrapi";
 
 export type modelType =
   | "model 16/9 ème"
@@ -150,10 +151,13 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
     { name: string; slug: string }[] | undefined
   >(undefined);
 
-  const handleModifyVideo = (videoId?: number) => {
+  const handleModifyVideo = async (videoId?: number) => {
     //TODO: Integration Open the modify panel and set the current video as the one modified
     setShowModifyPanel(true);
-    setCurrentModelToModify(undefined);
+
+    const video = await useStrapiGet('editor-videos/' + videoId + '?populate=*', true, true)
+    
+    setCurrentModelToModify(video && video.data.data.attributes);
   };
 
   const hideModifyPanel = () => {
@@ -170,7 +174,7 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
       setModelWorkTime(currentModelToModify?.worktime);
       setModelSoftware([Softwares[0], Softwares[1]]);
       setOutLink("http://www.link.com");
-      setTags(currentModelToModify?.video_tags);
+      setTags(currentModelToModify?.video_tags.data);
     } else {
       setCurrentModelHasBeenModified(false);
       setModelDescription(undefined);

@@ -30,6 +30,7 @@ import Plus from "@/icons/plus.svg";
 
 import { Keyword } from "@/components/_shared/UI/Keyword";
 
+
 export const ModifyVideoPanel = () => {
   const editorContext = useContext(EditorContext);
 
