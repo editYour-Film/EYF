@@ -1,6 +1,7 @@
 import Image from "next/image"
 import { ChangeEvent, useRef } from "react"
 import Pen from "@/icons/pen.svg"
+import { GeneratedAvatar } from "../badges/GeneratedAvatar"
 
 type AvatarInputProps = {
   img: string,
@@ -8,9 +9,10 @@ type AvatarInputProps = {
   className?: string,
   showOverlay? : boolean,
   imgSize?: string,
+  label?: string,
 }
 
-export const AvatarInput = ({img, className, onChange, showOverlay, imgSize}:AvatarInputProps) => {
+export const AvatarInput = ({img, className, onChange, showOverlay, imgSize, label}:AvatarInputProps) => {
   const input = useRef<HTMLInputElement>(null)
 
   const handleChange = (e:ChangeEvent<HTMLInputElement>) => {
@@ -24,10 +26,10 @@ export const AvatarInput = ({img, className, onChange, showOverlay, imgSize}:Ava
   return (
     <div className={`avatar-input flex flex-col items-center group cursor-pointer ${className ? className : ''}`}>
       <div className={`db-profil__img relative rounded-full border border-alphaWhite border-opacity-70 overflow-hidden ${imgSize}`}>
-        <Image
-          src={img}
-          alt='profile image'
-          fill
+        <GeneratedAvatar
+          img={img}
+          label={label}
+          noHover
         />
 
         <div 

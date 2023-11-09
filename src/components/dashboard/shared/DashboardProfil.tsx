@@ -7,9 +7,11 @@ import { UserNameInput, FNameInput, LNameInput, DescInput, PhoneInput, EmailInpu
 import { ReactElement } from "react-markdown/lib/react-markdown"
 import { MentionInteraction } from "@/components/_shared/buttons/MentionInteraction"
 import { IslandButton } from "@/components/_shared/buttons/IslandButton"
+import { DashBoardContext } from "../_context/DashBoardContext"
 
 export const DashboardEditorProfil = () => {
   const context = useContext(EditorProfilContext)
+  const dashboardContext = useContext(DashBoardContext)
 
   return (
     <div className="db-profil flex flex-col gap-dashboard-spacing-element-medium">
@@ -20,6 +22,7 @@ export const DashboardEditorProfil = () => {
               img={context.avatar}
               onChange={(e:ChangeEvent) => { context.handleAvatarChange(e) }}
               imgSize="w-[145px] h-[145px]"
+              label={dashboardContext.initials}
             />
           </div>
 
