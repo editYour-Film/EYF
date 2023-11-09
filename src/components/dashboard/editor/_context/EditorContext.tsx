@@ -13,7 +13,7 @@ import Info from "@/icons/info-gradient.svg";
 import { AuthContext } from "@/context/authContext";
 import { AddModel } from "../AddModel";
 import { DashBoardContext } from "../../_context/DashBoardContext";
-import { toast } from 'react-hot-toast'
+import { toast } from "react-hot-toast";
 import { useStrapiGet } from "@/hooks/useStrapi";
 
 export type modelType =
@@ -36,7 +36,7 @@ export interface EditorVideo {
   worktime: "base" | "medium" | "high";
   is_highlighted: boolean;
   description: string;
-  video_tags: video_tag[];
+  video_tags: any /*video_tag[]*/;
 }
 
 export interface video_tag {
@@ -104,7 +104,7 @@ export const EditorContext = createContext({
   addTag: (payload: string) => {},
 
   keywords: undefined as { name: string; slug: string }[] | undefined,
-  startAddModel: () => {}
+  startAddModel: () => {},
 });
 
 export const EditorContextProvider = ({ children }: PropsWithChildren) => {
@@ -155,8 +155,12 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
     //TODO: Integration Open the modify panel and set the current video as the one modified
     setShowModifyPanel(true);
 
-    const video = await useStrapiGet('editor-videos/' + videoId + '?populate=*', true, true)
-    
+    const video = await useStrapiGet(
+      "editor-videos/" + videoId + "?populate=*",
+      true,
+      true
+    );
+
     setCurrentModelToModify(video && video.data.data.attributes);
   };
 
@@ -213,7 +217,7 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
 
   const fetchCurrentModels = () => {
     // TODO: Integration get the models, with all fields populated of the current editor
-    
+
     setModels(authContext.user.models ? authContext.user.models : []);
   };
 
@@ -229,28 +233,35 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
   };
 
   const startAddModel = () => {
-    if (!dashboardContext.isAddModelPannelOpen && !dashboardContext.panels?.find((p) => p.panel === <AddModel />)) {
-        dashboardContext.addPannel({
-          title: "Ajouter un modèle",
-          panel: <AddModel />,
-        });
+    if (
+      !dashboardContext.isAddModelPannelOpen &&
+      !dashboardContext.panels?.find((p) => p.panel === <AddModel />)
+    ) {
+      dashboardContext.addPannel({
+        title: "Ajouter un modèle",
+        panel: <AddModel />,
+      });
 
-        dashboardContext.setIsAddModelPannelOpen(true);
+      dashboardContext.setIsAddModelPannelOpen(true);
     } else {
       dashboardContext.setIsAddModelPannelOpen(true);
-      dashboardContext.panels && dashboardContext.setActivePanel(dashboardContext.panels?.length - 1)
+      dashboardContext.panels &&
+        dashboardContext.setActivePanel(dashboardContext.panels?.length - 1);
     }
-  }
+  };
 
   useEffect(() => {
     if (models === undefined || models.length === 0) {
-      toast( `Bienvenue ${authContext.user.details.f_name}, devenez visible. Ajoutez votre premier modèle de montage.`, {
-        icon: Info,
-        duration: 5000,
-        className: 'bg-blackBerry'
-      }) 
+      toast(
+        `Bienvenue ${authContext.user.details.f_name}, devenez visible. Ajoutez votre premier modèle de montage.`,
+        {
+          icon: Info,
+          duration: 5000,
+          className: "bg-blackBerry",
+        }
+      );
     }
-    
+
     // TODO: Integration Get the highlighted video from the database
     setHighlightedVideo(undefined);
 
@@ -309,7 +320,7 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
 
         keywords,
 
-        startAddModel
+        startAddModel,
       }}
     >
       {children}
