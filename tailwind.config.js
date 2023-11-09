@@ -29,6 +29,8 @@ module.exports = {
           '02': '#777777'
         },
 
+        'dashboard-success-dark': tokens.dashboard_success_dark,
+
         // Backgrounds
         'dashboard-button-island-BlueBerry-default' : tokens.dashboard_button_island_BlueBerry_default,
         'dashboard-button-island-disabled' : tokens.dashboard_button_island_disabled,
@@ -309,6 +311,11 @@ module.exports = {
             gridAutoRows: 'max-content',
             gap: 0
           }
+        },
+        '.grid-month': {
+          gridTemplateColumns: 'repeat(7, max-content)',
+          rowGap: '12px',
+          columnGap: '0',
         },
         '.no-widget': {
           '&::-webkit-calendar-picker-indicator': {

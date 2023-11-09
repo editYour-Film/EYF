@@ -49,18 +49,16 @@ const DashBoardPageHome = ({ children }: PropsWithChildren) => {
   }, []);
 
   return (<>
-    <TopBar
-      className=""
-    >
-        <IslandButton
-          type="small-secondary"
-          label="Ajouter un modèle"
-          disabled={context.isAddModelPannelOpen}
-          className="shrink-0"
-          onClick={() => {
-            editorContext.startAddModel()
-          }}
-        />
+      <TopBar>
+          <IslandButton
+            type="small-secondary"
+            label="Ajouter un modèle"
+            disabled={context.isAddModelPannelOpen}
+            className="shrink-0"
+            onClick={() => {
+              editorContext.startAddModel()
+            }}
+          />
       </TopBar>
 
       <AddModelContextProvider>
