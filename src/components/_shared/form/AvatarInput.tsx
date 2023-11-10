@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { ChangeEvent, useRef } from "react";
 import Pen from "@/icons/pen.svg";
 import { GeneratedAvatar } from "../badges/GeneratedAvatar";

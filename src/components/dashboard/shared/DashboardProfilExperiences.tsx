@@ -82,9 +82,9 @@ export const InputsExperience = () => {
           onChange={(e) => {
             if (context.langOptions) {
               const lang = context.langOptions.find(
-                (el) => el.id === e.target.value
+                (el) => el.id?.toString() === e.target.value?.toString()
               );
-              lang && context.handleAddLang(lang);
+              if (lang) context.handleAddLang(lang);
             }
           }}
           className="relative z-20 bg-transparent"
@@ -113,14 +113,14 @@ export const InputsExperience = () => {
       <div>
         <Input
           type="select"
-          label={"Ajouter une compétence"}
+          label="Ajouter une compétence"
           bg="light"
           onChange={(e) => {
             if (context.skillsOptions) {
               const skill = context.skillsOptions.find(
-                (el) => el.id === e.target.value
+                (el) => el.id?.toString() === e.target.value.toString()
               );
-              skill && context.handleAddSkill(skill);
+              if (skill) context.handleAddSkill(skill);
             }
           }}
           className="relative z-10 bg-transparent"

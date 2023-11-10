@@ -176,16 +176,16 @@ export const EditorProfilContextProvider: React.FC<any> = (props) => {
   const handleModelChange = () => {};
 
   const handleAddLang = (lang: spokenLanguageInterface) => {
-    if (!spokenLanguages.includes(lang))
+    if (!spokenLanguages.find((x) => x.id === lang.id))
       setSpokenLanguages([...spokenLanguages, lang]);
   };
 
   const handleRemoveLang = (lang: spokenLanguageInterface) => {
-    setSpokenLanguages(spokenLanguages.filter((el, id) => el !== lang));
+    setSpokenLanguages(spokenLanguages.filter((el) => el !== lang));
   };
 
   const handleAddSkill = (skill: skillsInterface) => {
-    if (!skills.includes(skill)) setSkills([...skills, skill]);
+    if (!skills.find((x) => x.id === skill.id)) setSkills([...skills, skill]);
   };
 
   const handleRemoveSkill = (skill: skillsInterface) => {
