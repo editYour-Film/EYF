@@ -1,13 +1,11 @@
-import { ChangeEvent, createRef, useEffect, useRef, useState } from "react";
+import { createRef, useEffect, useRef, useState } from "react";
 import Button from "./Button";
 import gsap from "gsap";
-import Input from "./Input";
 import { Tag } from "../UI/Tag";
-import { spokenLanguageInterface } from "@/components/dashboard/_context/ProfilContext";
 import ArrowDropdown from "@/icons/arrow-down-circle.svg";
 
 export type optionInterface = {
-  label: string;
+  name: string;
   id?: string;
   icon?: string;
 };
@@ -125,7 +123,7 @@ export const Dropdown = ({
 
   const handleSearch = (q: string) => {
     const find = options.filter((option, i) => {
-      return option?.label.toLowerCase().startsWith(q.toLowerCase());
+      return option?.name.toLowerCase().startsWith(q.toLowerCase());
     });
 
     if (find.length) {
@@ -232,7 +230,7 @@ export const Dropdown = ({
                       onChange(option);
                     }}
                     icon={option.icon}
-                    text={option?.label}
+                    text={option?.name}
                     bg="light"
                     className={`dropdown_tag hover:bg-alphaWhite-300 ${
                       selectedOption === i ? "bg-alphaWhite-300" : ""

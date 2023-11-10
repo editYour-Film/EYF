@@ -9,11 +9,7 @@ import {
   unsetToken,
 } from "../auth/auth";
 import useLocalStorage, { removeStorage } from "@/hooks/useLocalStorage";
-import {
-  SignedInUser,
-  SigninUser,
-  initSignedInUser,
-} from "@/components/model/signin";
+import { SignedInUser, initSignedInUser } from "@/components/model/signin";
 import router from "next/router";
 import routes from "@/routes";
 import { useStrapiPost } from "@/hooks/useStrapi";
@@ -74,7 +70,7 @@ export const AuthProvider: React.FC<any> = ({ children }: any) => {
             });
             if (res.data.user.role.name === "editor")
               router.push(routes.DASHBOARD_EDITOR_HOME);
-            else router.push(routes.DASHBOARD_CLIENT_HOME);;
+            else router.push(routes.DASHBOARD_CLIENT_HOME);
           } else SignOut();
 
           setIsLoading(false);
