@@ -1,13 +1,5 @@
-import {
-  RefObject,
-  SyntheticEvent,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { RefObject, useContext, useEffect, useRef, useState } from "react";
 import { EditorContext } from "./_context/EditorContext";
-import { SimpleCard } from "@/components/_shared/UI/CardSimple";
 import { OverlayModel } from "@/components/_shared/UI/OverlayModel";
 import { Video } from "@/components/_shared/video/Video";
 import { IslandButton } from "@/components/_shared/buttons/IslandButton";
@@ -29,10 +21,11 @@ import Close from "@/icons/dashboard/x.svg";
 import Plus from "@/icons/plus.svg";
 
 import { Keyword } from "@/components/_shared/UI/Keyword";
-
+import { AuthContext } from "@/context/authContext";
 
 export const ModifyVideoPanel = () => {
   const editorContext = useContext(EditorContext);
+  const authContext = useContext(AuthContext);
 
   const isMobile = useMediaQuery("(max-width: 768px)");
 
@@ -436,37 +429,41 @@ export const ModifyVideoPanel = () => {
                       />
                     )}
 
-                    {editorContext.tags && editorContext.tags.map((tag, i) => {                      
-                      return (
-                        <Keyword
-                          key={i}
-                          text={tag.name}
-                          icon="cross"
-                          className="relative w-ful shrink-0"
-                          onClose={() => {
-                            editorContext.setTags(editorContext.tags?.filter((t) => t !== tag))
-                            editorContext.setCurrentModelHasBeenModified(true)
-                          }}
-                         />
-                      )
-                    })}
-                  </div>                  
+                    {editorContext.tags &&
+                      editorContext.tags.map((tag, i) => {
+                        return (
+                          <Keyword
+                            key={i}
+                            text={tag.name}
+                            icon="cross"
+                            className="relative w-ful shrink-0"
+                            onClose={() => {
+                              editorContext.setTags(
+                                editorContext.tags?.filter((t) => t !== tag)
+                              );
+                              editorContext.setCurrentModelHasBeenModified(
+                                true
+                              );
+                            }}
+                          />
+                        );
+                      })}
+                  </div>
                 </div>
               </div>
 
               <div className="modify-video__headline md:col-[content-start_/_content-end] row-[2_/_3] md:row-[3_/_4] align-self-auto md:py-dashboard-spacing-element-medium  md:pl-dashboard-spacing-element-medium flex flex-col gap-dashboard-spacing-element-medium">
                 <div className="flex gap-dashboard-button-separation-spacing">
                   <div className="shrink-0">
-                    <ProfilPicture />
+                    <ProfilPicture user={authContext.user.details} />
                   </div>
                   <div className="flex flex-col">
                     <div className="w-full text-title-medium n27 uppercase leading-none">
-                      {" "}
-                      {titleContent}{" "}
+                      {titleContent}
                     </div>
                     <div className="text-dashboard-text-description-base-low text-base">
-                      Par {editorContext.currentModelToModify.user_info.f_name}
-                      {editorContext.currentModelToModify.user_info.l_name}{" "}
+                      Par {editorContext.currentModelToModify.user_info.f_name}{" "}
+                      {editorContext.currentModelToModify.user_info.l_name}
                     </div>
                   </div>
                 </div>

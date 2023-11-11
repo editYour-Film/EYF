@@ -18,12 +18,12 @@ export const DashboardEditorModels = ({
 
     models &&
       models.map((model: any, i: number) => {
-        if (model.model === type) {                    
+        if (model.model === type) {
           items.push(
             <Model
               key={g * 10 + i}
               video={model}
-              thumbnail={model.thumbnail}
+              thumbnail={model.thumbnail ? model.thumbnail.url : undefined}
               active={model.visibility === "public"}
               handleModify={() => {
                 editorContext.handleModifyVideo(model.id);
@@ -39,9 +39,10 @@ export const DashboardEditorModels = ({
     if (items.length >= 0 && items.length < 3) {
       for (let i = 0; i <= 3 - items.length; i++) {
         items.push(
-          <div 
+          <div
             key={g * 10 + i}
-            className="w-full h-full bg-dashboard-button-dark rounded-dashboard-button-square-radius"></div>
+            className="w-full h-full bg-dashboard-button-dark rounded-dashboard-button-square-radius"
+          ></div>
         );
       }
     }
@@ -81,11 +82,11 @@ export const DashboardEditorModels = ({
         )}
       </div>
 
-      <IslandButton 
+      <IslandButton
         type="secondary"
         label="Ajouter un modèle"
         onClick={() => {
-          editorContext.startAddModel()
+          editorContext.startAddModel();
         }}
         className="self-center md:self-end"
       />

@@ -14,7 +14,8 @@ import { AuthContext } from "@/context/authContext";
 import { AddModel } from "../AddModel";
 import { DashBoardContext } from "../../_context/DashBoardContext";
 import { toast } from "react-hot-toast";
-import { useStrapiGet } from "@/hooks/useStrapi";
+import { useStrapiDelete, useStrapiGet, useStrapiPut } from "@/hooks/useStrapi";
+import GreenCheck from "@/icons/check-green.svg";
 
 export type modelType =
   | "model 16/9 ème"
@@ -55,7 +56,6 @@ export interface user_info {
   bio: string;
   languages: any;
   picture: any;
-  editor_videos: EditorVideo[];
   skills: any;
 }
 
@@ -152,16 +152,12 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
   >(undefined);
 
   const handleModifyVideo = async (videoId?: number) => {
-    //TODO: Integration Open the modify panel and set the current video as the one modified
     setShowModifyPanel(true);
 
-    const video = await useStrapiGet(
-      "editor-videos/" + videoId + "?populate=*",
-      true,
-      true
-    );
-
-    setCurrentModelToModify(video && video.data.data.attributes);
+    setCurrentModelToModify({
+      user_info: authContext.user.details,
+      ...authContext.user.models.find((x: any) => x.id === videoId),
+    });
   };
 
   const hideModifyPanel = () => {
@@ -177,7 +173,11 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
       setModelAudio("Anglais");
       setModelWorkTime(currentModelToModify?.worktime);
       setModelSoftware([Softwares[0], Softwares[1]]);
-      setOutLink("http://www.link.com");
+      setOutLink(
+        currentModelToModify.video.data
+          ? currentModelToModify.video.data.attributes.url
+          : ""
+      );
       setTags(currentModelToModify?.video_tags.data);
     } else {
       setCurrentModelHasBeenModified(false);
@@ -199,25 +199,85 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
     hideModifyPanel();
   };
 
-  const storeHighlightedVideo = (videoId?: number) => {
-    // TODO: Integration Set currentVideo as higlighted model
+  const storeHighlightedVideo = async (videoId?: number) => {
+    const res = await useStrapiPut(
+      `editor-videos/${videoId}`,
+      {
+        data: {
+          is_highlighted: true,
+        },
+      },
+      false
+    );
+
+    if (res.status === 200) {
+      authContext.RefreshUserData();
+      toast("Modèle mis en avant", {
+        icon: GreenCheck,
+        duration: 5000,
+        className: "bg-blackBerry",
+      });
+    }
   };
 
-  const handleDisableVideo = (videoId?: number) => {
-    // TODO: Integration set visibility to private
+  const handleDisableVideo = async (videoId?: number) => {
+    const res = await useStrapiPut(
+      `editor-videos/${videoId}`,
+      {
+        data: {
+          visibility: "private",
+        },
+      },
+      false
+    );
+
+    if (res.status === 200) {
+      authContext.RefreshUserData();
+      toast("Modèle retiré avec succés.", {
+        icon: GreenCheck,
+        duration: 5000,
+        className: "bg-blackBerry",
+      });
+    }
   };
 
-  const handleEnableVideo = (videoId?: number) => {
-    // TODO: Integration set visibility to public
+  const handleEnableVideo = async (videoId?: number) => {
+    const res = await useStrapiPut(
+      `editor-videos/${videoId}`,
+      {
+        data: {
+          visibility: "public",
+        },
+      },
+      false
+    );
+
+    if (res.status === 200) {
+      authContext.RefreshUserData();
+      toast("Modèle publié avec succés.", {
+        icon: GreenCheck,
+        duration: 5000,
+        className: "bg-blackBerry",
+      });
+    }
   };
 
-  const handleDeleteVideo = (videoId?: number) => {
-    // TODO: Integration Remove from edito videos
+  const handleDeleteVideo = async (videoId?: number) => {
+    const deleteVideo = await useStrapiDelete(
+      `editor-videos/${videoId}`,
+      false /*true*/
+    );
+    if (deleteVideo.status === 200) {
+      toast("Modèle supprimé avec succés.", {
+        icon: GreenCheck,
+        duration: 5000,
+        className: "bg-blackBerry",
+      });
+      authContext.RefreshUserData();
+    }
   };
 
   const fetchCurrentModels = () => {
-    // TODO: Integration get the models, with all fields populated of the current editor
-
     setModels(authContext.user.models ? authContext.user.models : []);
   };
 
@@ -268,9 +328,11 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
     // TODO: Integration get all the keywords related to an account
     // keyword : { name: string; slug: string }
     setKeywords([]);
+  }, [authContext.user.models]);
 
+  useEffect(() => {
     fetchCurrentModels();
-  }, []);
+  }, [authContext.user.models]);
 
   return (
     <EditorContext.Provider

@@ -8,7 +8,6 @@ import { Video } from "@/components/_shared/video/Video";
 import { Button } from "@/components/_shared/buttons/Button";
 import { IslandButton } from "@/components/_shared/buttons/IslandButton";
 import { DashBoardContext } from "../../_context/DashBoardContext";
-import { useDispatch } from "react-redux";
 import GreenCheck from "@/icons/check-green.svg";
 import { EditorContext } from "../_context/EditorContext";
 import {
@@ -17,11 +16,13 @@ import {
   WorkTimeType,
 } from "../data/metaValues";
 import { useMediaQuery } from "@uidotdev/usehooks";
-import {toast} from 'react-hot-toast'
+import { toast } from "react-hot-toast";
 
 import Close from "@/icons/dashboard/x.svg";
 import { InfoMessage } from "@/components/_shared/UI/InfoMessage";
 import { MentionInteraction } from "@/components/_shared/buttons/MentionInteraction";
+import { inputErrors } from "@/const";
+import Error from "@/icons/x-circle.svg";
 
 export const VisibilityPan = () => {
   const context = useContext(AddModelContext);
@@ -93,7 +94,6 @@ export const VisibilityPan = () => {
   const [copywriteError, setCopyWriteError] = useState("");
 
   const lenis = useLenis();
-  const dispatch = useDispatch();
 
   const handleSubmit = async () => {
     setTimeout(() => {
@@ -104,16 +104,19 @@ export const VisibilityPan = () => {
           dashboardContext.setIsAddModelPannelOpen(false);
           dashboardContext.closePanels();
           lenis.scrollTo(0);
-          
+
           toast.custom(
             <InfoMessage
-              message='Votre modèle a été ajouté avec succès.'
+              message="Votre modèle a été ajouté avec succès."
               Icon={GreenCheck}
-            />) 
-
-        } else {
-          console.log("error occured");
-        }
+            />
+          );
+        } else
+          toast(inputErrors.general, {
+            icon: Error,
+            duration: 5000,
+            className: "bg-blackBerry",
+          });
       });
     }, 500);
   };
@@ -254,10 +257,9 @@ export const VisibilityPan = () => {
       </form>
       <div className="flex justify-center w-full sm:justify-end items-center flex-wrap gap-8">
         <div className="flex items-center gap-dashboard-button-separation-spacing">
-          <MentionInteraction
-            onClick={() => context.abort()}
-            className="h-max"
-          >Annuler</MentionInteraction>
+          <MentionInteraction onClick={() => context.abort()} className="h-max">
+            Annuler
+          </MentionInteraction>
 
           <IslandButton
             type="primary"

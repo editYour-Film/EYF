@@ -268,7 +268,7 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
       if (res.status === 200) {
         res.data.data.map((x: any) => {
           _langOptions.push({
-            label: x.attributes.name,
+            label: x.attributes.label,
             id: x.id,
             icon: "",
           });
@@ -283,7 +283,7 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
       if (res.status === 200) {
         res.data.data.map((x: any) => {
           _skills.push({
-            label: x.attributes.name,
+            label: x.attributes.label,
             id: x.id,
           });
         });

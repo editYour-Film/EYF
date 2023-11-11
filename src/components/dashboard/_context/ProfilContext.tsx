@@ -6,7 +6,7 @@ import { useStrapiGet, useStrapiPost, useStrapiPut } from "@/hooks/useStrapi";
 import { inputErrors, months } from "@/const";
 import toast from "react-hot-toast";
 import validator from "validator";
-import Info from "@/icons/info-gradient.svg";
+import GreenCheck from "@/icons/check-green.svg";
 import Error from "@/icons/x-circle.svg";
 import { extractDataFromDate } from "@/utils/utils";
 
@@ -72,7 +72,9 @@ export const EditorProfilContext = createContext({
 });
 
 export const EditorProfilContextProvider: React.FC<any> = (props) => {
-  const { user } = useContext(AuthContext);
+  const authContext = useContext(AuthContext);
+
+  const user = authContext.user;
 
   const [avatar, setAvatar] = useState(
     user.details.picture ? user.details.picture.url : undefined
@@ -145,7 +147,7 @@ export const EditorProfilContextProvider: React.FC<any> = (props) => {
       if (res.status === 200) {
         res.data.data.map((x: any) => {
           _langOptions.push({
-            name: x.attributes.name,
+            label: x.attributes.label,
             id: x.id,
             icon: "",
           });
@@ -160,7 +162,7 @@ export const EditorProfilContextProvider: React.FC<any> = (props) => {
       if (res.status === 200) {
         res.data.data.map((x: any) => {
           _skills.push({
-            name: x.attributes.name,
+            label: x.attributes.label,
             id: x.id,
           });
         });
@@ -228,7 +230,7 @@ export const EditorProfilContextProvider: React.FC<any> = (props) => {
 
           //update account details
           const updateDetails = await useStrapiPut(
-            "user-infos/" + user.details.id,
+            "user-infos/" + user.details.id + "?populate=*",
             {
               data: {
                 picture: imageId,
@@ -240,10 +242,14 @@ export const EditorProfilContextProvider: React.FC<any> = (props) => {
             typeof updateDetails.data === "object"
           ) {
             toast("Votre photo de profil est modifiée avec succés.", {
-              icon: Info,
+              icon: GreenCheck,
               duration: 5000,
               className: "bg-blackBerry",
             });
+            setAvatar(
+              updateDetails.data.data.attributes.picture.data.attributes.url
+            );
+            authContext.RefreshUserData();
           } else
             toast(inputErrors.general, {
               icon: Error,
@@ -344,10 +350,11 @@ export const EditorProfilContextProvider: React.FC<any> = (props) => {
           typeof updateDetails.data === "object"
         ) {
           toast("Vos information sont modifiées avec succés.", {
-            icon: Info,
+            icon: GreenCheck,
             duration: 5000,
             className: "bg-blackBerry",
           });
+          authContext.RefreshUserData();
         } else
           toast(inputErrors.general, {
             icon: Error,

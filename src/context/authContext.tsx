@@ -21,6 +21,7 @@ export const AuthContext = createContext({
   isLoggedIn: false,
   isLoading: true,
   SignOut: () => {},
+  RefreshUserData: () => {},
 });
 
 export const AuthProvider: React.FC<any> = ({ children }: any) => {
@@ -33,21 +34,9 @@ export const AuthProvider: React.FC<any> = ({ children }: any) => {
     getTempCodeFromLocalCookie() ? (getTempCodeFromLocalCookie() as string) : ""
   );
 
-  const SignOut = (redirect = true) => {
-    unsetToken();
-    unsetTempCode();
-    removeStorage("user");
-    removeStorage("register_user");
-    if (redirect) router.push(routes.SIGNIN);
-  };
+  const RefreshUserData = (isRefresh: boolean = true) => {
+    if (!isRefresh) setIsLoading(true);
 
-  useEffect(() => {
-    if (!getTokenFromLocalCookie()) SignOut(false);
-  }, []);
-
-  // validate user
-  useEffect(() => {
-    setIsLoading(true);
     if (userCode && userCode.length > 0) {
       const checkUserByCode = async () => {
         return useStrapiPost(
@@ -68,17 +57,35 @@ export const AuthProvider: React.FC<any> = ({ children }: any) => {
               details: res.data.details,
               models: res.data.models,
             });
-            if (res.data.user.role.name === "editor")
-              router.push(routes.DASHBOARD_EDITOR_HOME);
-            else router.push(routes.DASHBOARD_CLIENT_HOME);
+            if (!isRefresh) {
+              if (res.data.user.role.name === "editor")
+                router.push(routes.DASHBOARD_EDITOR_HOME);
+              else router.push(routes.DASHBOARD_CLIENT_HOME);
+            }
           } else SignOut();
-
-          setIsLoading(false);
+          if (!isRefresh) setIsLoading(false);
         })
-        .catch((error) => {
+        .catch(() => {
           SignOut();
         });
     }
+  };
+
+  const SignOut = (redirect = true) => {
+    unsetToken();
+    unsetTempCode();
+    removeStorage("user");
+    removeStorage("register_user");
+    if (redirect) router.push(routes.SIGNIN);
+  };
+
+  useEffect(() => {
+    if (!getTokenFromLocalCookie()) SignOut(false);
+  }, []);
+
+  // validate user
+  useEffect(() => {
+    RefreshUserData(false);
   }, [userCode]);
 
   return (
@@ -90,6 +97,7 @@ export const AuthProvider: React.FC<any> = ({ children }: any) => {
         isLoggedIn: Object.keys(userInfo.user).length > 0,
         isLoading,
         SignOut,
+        RefreshUserData,
       }}
     >
       {children}

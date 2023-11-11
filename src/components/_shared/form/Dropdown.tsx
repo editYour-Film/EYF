@@ -5,7 +5,7 @@ import { Tag } from "../UI/Tag";
 import ArrowDropdown from "@/icons/arrow-down-circle.svg";
 
 export type optionInterface = {
-  name: string;
+  label: string;
   id?: string;
   icon?: string;
 };
@@ -22,7 +22,6 @@ export const Dropdown = ({
   label,
   onChange,
   options,
-  selected,
   className = "",
 }: DropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -123,7 +122,7 @@ export const Dropdown = ({
 
   const handleSearch = (q: string) => {
     const find = options.filter((option, i) => {
-      return option?.name.toLowerCase().startsWith(q.toLowerCase());
+      return option?.label.toLowerCase().startsWith(q.toLowerCase());
     });
 
     if (find.length) {
@@ -230,7 +229,7 @@ export const Dropdown = ({
                       onChange(option);
                     }}
                     icon={option.icon}
-                    text={option?.name}
+                    text={option?.label}
                     bg="light"
                     className={`dropdown_tag hover:bg-alphaWhite-300 ${
                       selectedOption === i ? "bg-alphaWhite-300" : ""

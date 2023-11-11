@@ -4,8 +4,7 @@ import {
   EditorProfilContext,
   EditorProfilContextProvider,
 } from "../_context/ProfilContext";
-import { ReactElement } from "react-markdown/lib/react-markdown";
-import { useContext, useEffect, useState } from "react";
+import { ReactElement, useContext, useEffect, useState } from "react";
 import { IslandButton } from "@/components/_shared/buttons/IslandButton";
 import { MentionInteraction } from "@/components/_shared/buttons/MentionInteraction";
 
@@ -41,7 +40,7 @@ export const InputsExperience = () => {
         const element = context.langOptions[i];
         options.push(
           <option value={element.id} className="text-black">
-            {element.name}
+            {element.label}
           </option>
         );
       }
@@ -57,11 +56,10 @@ export const InputsExperience = () => {
         const element = context.skillsOptions[i];
         options.push(
           <option value={element.id} className="text-black">
-            {element.name}
+            {element.label}
           </option>
         );
       }
-      console.log(context.skillsOptions);
     }
 
     return options;
@@ -97,15 +95,17 @@ export const InputsExperience = () => {
         {context.spokenLanguages &&
           context.spokenLanguages.map((lang, i) => {
             return (
-              <Tag
-                bg="light"
-                key={i}
-                text={lang.name}
-                onClose={() => {
-                  context.handleRemoveLang(lang);
-                }}
-                icon="cross"
-              />
+              <>
+                <Tag
+                  bg="light"
+                  key={i}
+                  text={lang.label}
+                  onClose={() => {
+                    context.handleRemoveLang(lang);
+                  }}
+                  icon="cross"
+                />
+              </>
             );
           })}
       </div>
@@ -131,12 +131,12 @@ export const InputsExperience = () => {
 
       <div className="flex gap-2 flex-wrap">
         {context.skills &&
-          context.skills.map((skill, i) => {
+          context.skills.map((skill, i: number) => {
             return (
               <Tag
                 bg="light"
                 key={i}
-                text={skill.name}
+                text={skill.label}
                 onClose={() => {
                   context.handleRemoveSkill(skill);
                 }}
