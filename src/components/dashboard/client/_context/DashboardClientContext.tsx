@@ -6,54 +6,13 @@ import {
   useState,
 } from "react";
 
-import { useDispatch } from "react-redux";
-
 import Info from "@/icons/info-gradient.svg";
 import { AuthContext } from "@/context/authContext";
-import { toast } from 'react-hot-toast'
-
-export type modelType =
-  | "model 16/9 ème"
-  | "model 9/16 ème"
-  | "Carré"
-  | "Mobile";
-
-export interface EditorVideo {
-  id: number;
-  video: any;
-  thumbnail: any;
-  title: string;
-  length: string;
-  model: modelType;
-  resources: any;
-  user_info: user_info;
-  visibility: "public" | "private" | "unrepertoried";
-  copywrite: string;
-  worktime: "base" | "medium" | "high";
-  is_highlighted: boolean;
-  description: string;
-  video_tags: video_tag[];
-}
-
-export interface video_tag {
-  name: string;
-  slug: string;
-  editor_videos: EditorVideo[];
-}
-
-export interface user_info {
-  f_name: string;
-  l_name: string;
-  address: string;
-  post_code: string;
-  city: string;
-  phone: string;
-  bio: string;
-  languages: any;
-  picture: any;
-  editor_videos: EditorVideo[];
-  skills: any;
-}
+import { toast } from "react-hot-toast";
+import {
+  EditorVideo,
+  video_softwares,
+} from "../../editor/_context/EditorContext";
 
 export const ClientContext = createContext({
   noQuoteMessageId: Date.now() as number,
@@ -70,13 +29,12 @@ export const ClientContext = createContext({
   modelFormat: undefined as string | undefined,
   modelAudio: undefined as string | undefined,
   modelWorkTime: undefined as string | undefined,
-  modelSoftware: undefined as string[] | undefined,
+  modelSoftware: undefined as video_softwares[] | undefined,
   outLink: undefined as string | undefined,
   tags: [] as { name: string; slug: string }[] | undefined,
 });
 
 export const ClientContextProvider = ({ children }: PropsWithChildren) => {
-  const dispatch = useDispatch();
   const authContext = useContext(AuthContext);
 
   const [noQuoteMessageId] = useState(Date.now());
@@ -88,18 +46,16 @@ export const ClientContextProvider = ({ children }: PropsWithChildren) => {
   >(undefined);
 
   // Used to modify a model
-  const [modelDescription] = useState<string | undefined>(
-    undefined
-  );
+  const [modelDescription] = useState<string | undefined>(undefined);
   const [modelTitle] = useState<string | undefined>(undefined);
   const [modelFormat] = useState<string | undefined>(undefined);
   const [modelAudio] = useState<string | undefined>(undefined);
   const [modelWorkTime] = useState<string | undefined>(undefined);
-  const [modelSoftware] = useState<string[] | undefined>(undefined);
+  const [modelSoftware] = useState<video_softwares[] | undefined>(undefined);
   const [outLink] = useState<string | undefined>(undefined);
-  const [tags] = useState<
-    { name: string; slug: string }[] | undefined
-  >(undefined);
+  const [tags] = useState<{ name: string; slug: string }[] | undefined>(
+    undefined
+  );
 
   const fetchCurrentModels = () => {
     // TODO: Integration Get the models of the user
@@ -112,11 +68,14 @@ export const ClientContextProvider = ({ children }: PropsWithChildren) => {
 
   useEffect(() => {
     if (models === undefined || models.length === 0) {
-      toast( `Bienvenue ${authContext.user.details.f_name}, réalisez votre premier devis pour découvrir tous les services de votre espace.`, {
-        icon: Info,
-        duration: 5000,
-        className: 'bg-blackBerry'
-      }) 
+      toast(
+        `Bienvenue ${authContext.user.details.f_name}, réalisez votre premier devis pour découvrir tous les services de votre espace.`,
+        {
+          icon: Info,
+          duration: 5000,
+          className: "bg-blackBerry",
+        }
+      );
     }
   }, [models]);
 

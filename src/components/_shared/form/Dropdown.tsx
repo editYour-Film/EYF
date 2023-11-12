@@ -1,9 +1,7 @@
-import { ChangeEvent, createRef, useEffect, useRef, useState } from "react";
+import { createRef, useEffect, useRef, useState } from "react";
 import Button from "./Button";
 import gsap from "gsap";
-import Input from "./Input";
 import { Tag } from "../UI/Tag";
-import { spokenLanguageInterface } from "@/components/dashboard/_context/ProfilContext";
 import ArrowDropdown from "@/icons/arrow-down-circle.svg";
 
 export type optionInterface = {
@@ -24,7 +22,6 @@ export const Dropdown = ({
   label,
   onChange,
   options,
-  selected,
   className = "",
 }: DropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);

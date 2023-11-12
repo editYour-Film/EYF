@@ -66,7 +66,6 @@ export const LangAndSkillsPan = () => {
                   }
                   selected={context.spokenLanguages}
                   onChange={(option) => {
-                    //if(context.langOptions && context.langOptions.filter(x=>x.id?.includes(option.concat(x.id))))
                     context.setSpokenLanguages(option);
                   }}
                   open

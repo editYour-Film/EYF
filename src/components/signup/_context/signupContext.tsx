@@ -268,7 +268,7 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
       if (res.status === 200) {
         res.data.data.map((x: any) => {
           _langOptions.push({
-            label: x.attributes.name,
+            label: x.attributes.label,
             id: x.id,
             icon: "",
           });
@@ -283,7 +283,7 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
       if (res.status === 200) {
         res.data.data.map((x: any) => {
           _skills.push({
-            label: x.attributes.name,
+            label: x.attributes.label,
             id: x.id,
           });
         });
@@ -617,8 +617,7 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
               false,
               true
             );
-            if (uploadRes.status === 200) imageId = uploadRes.data[0].id;
-            else
+            if (uploadRes.status !== 200)
               setLastStepError(
                 "Votre compte est créé avec succés mais il y a eu une erreur lors de l'upload de votre photo de profil."
               );
@@ -637,8 +636,7 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
               false,
               true
             );
-            if (uploadRes.status === 200) imageId = uploadRes.data[0].id;
-            else
+            if (uploadRes.status !== 200)
               setLastStepError(
                 "Votre compte est créé avec succés mais il y a eu une erreur lors de l'upload de votre photo de profil."
               );

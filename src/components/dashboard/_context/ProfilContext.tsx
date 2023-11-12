@@ -1,7 +1,14 @@
-import { ChangeEvent, createContext, useContext, useState } from "react";
+import { createContext, useContext, useMemo, useState } from "react";
 
 import { optionInterface } from "@/components/_shared/form/Dropdown";
 import { AuthContext } from "@/context/authContext";
+import { useStrapiGet, useStrapiPost, useStrapiPut } from "@/hooks/useStrapi";
+import { inputErrors, months } from "@/const";
+import toast from "react-hot-toast";
+import validator from "validator";
+import GreenCheck from "@/icons/check-green.svg";
+import Error from "@/icons/x-circle.svg";
+import { extractDataFromDate } from "@/utils/utils";
 
 export interface spokenLanguageInterface extends optionInterface {}
 export interface skillsInterface extends optionInterface {}
@@ -9,151 +16,178 @@ export interface skillsInterface extends optionInterface {}
 export const EditorProfilContext = createContext({
   avatar: "",
   setAvatar: (payload: string) => {},
+
   username: "",
   setUsername: (payload: string) => {},
+  usernameError: "",
+
   fName: "",
   setFName: (payload: string) => {},
+
   lName: "",
   setLName: (payload: string) => {},
+
   desc: "",
   setDesc: (payload: string) => {},
+
   email: "",
   setEmail: (payload: string) => {},
+
   phone: "",
   setPhone: (payload: string) => {},
+  phoneError: "",
+
   street: "",
   setStreet: (payload: string) => {},
+
   zipcode: "",
   setZipcode: (payload: string) => {},
+  zipcodeError: "",
+
   city: "",
   setCity: (payload: string) => {},
+  cityError: "",
 
-  langOptions: [] as spokenLanguageInterface[],
+  day: undefined as string | undefined,
+  setDay: (payload: string) => {},
+  month: undefined as string | undefined,
+  setMonth: (payload: string) => {},
+  year: undefined as string | undefined,
+  setYear: (payload: string) => {},
+
+  langOptions: [] as spokenLanguageInterface[] | undefined,
   spokenLanguages: [] as spokenLanguageInterface[],
-  skillsOptions: [] as skillsInterface[],
+  skillsOptions: [] as skillsInterface[] | undefined,
   skills: [] as skillsInterface[],
 
-  handleModifyPassword: () => {},
-  handleModifyEmail: () => {},
   handleModelChange: (payload: any) => {},
   handleAddLang: (payload: spokenLanguageInterface) => {},
   handleRemoveLang: (payload: spokenLanguageInterface) => {},
   handleAddSkill: (payload: skillsInterface) => {},
   handleRemoveSkill: (payload: skillsInterface) => {},
   handleAvatarChange: (payload: any) => {},
-  handleUpdateProfil: () => {},
-  handleResetContext: () => {},
 
   saveProfil: () => {},
   abort: () => {},
 });
 
 export const EditorProfilContextProvider: React.FC<any> = (props) => {
-  const { user } = useContext(AuthContext);
+  const authContext = useContext(AuthContext);
+
+  const user = authContext.user;
 
   const [avatar, setAvatar] = useState(
     user.details.picture ? user.details.picture.url : undefined
   );
   const [username, setUsername] = useState(user.user.username);
+  const [usernameError, setUsernameError] = useState<string>("");
+
   const [fName, setFName] = useState(
     user.details.f_name ? user.details.f_name : ""
   );
+
   const [lName, setLName] = useState(
     user.details.l_name ? user.details.l_name : ""
   );
-  const [email, setEmail] = useState(
-    user.details.email_contact ? user.details.email_contact : ""
-  );
+
+  const [email, setEmail] = useState(user.user.email ? user.user.email : "");
+
   const [desc, setDesc] = useState(user.details.bio ? user.details.bio : "");
+
   const [phone, setPhone] = useState(
     user.details.phone ? user.details.phone : ""
   );
+  const [phoneError, setPhoneError] = useState<string>("");
+
   const [street, setStreet] = useState(
     user.details.address ? user.details.address : ""
   );
+
   const [zipcode, setZipcode] = useState(
     user.details.post_code ? user.details.post_code : ""
   );
-  const [city, setCity] = useState(user.details.city ? user.details.city : "");
+  const [zipcodeError, setZipcodeError] = useState<string>("");
 
-  const [langOptions] = useState([
-    {
-      label: "Français",
-      id: "fr",
-      icon: "/icons/flags/fr.svg",
-    },
-    {
-      label: "Anglais",
-      id: "en",
-      icon: "/icons/flags/uk.svg",
-    },
-    {
-      label: "Italien",
-      id: "it",
-      icon: "/icons/flags/it.svg",
-    },
-    {
-      label: "Allemand",
-      id: "de",
-      icon: "/icons/flags/de.svg",
-    },
-    {
-      label: "Russe",
-      id: "ru",
-      icon: "/icons/flags/ru.svg",
-    },
-  ]);
+  const [city, setCity] = useState(user.details.city ? user.details.city : "");
+  const [cityError, setCityError] = useState<string>("");
+
+  const [day, setDay] = useState<string | undefined>(
+    user.details.birthday
+      ? extractDataFromDate(user.details.birthday, "day")
+      : undefined
+  );
+
+  const [month, setMonth] = useState<string | undefined>(
+    user.details.birthday
+      ? months[
+          parseInt(
+            extractDataFromDate(user.details.birthday, "month") as string
+          ) - 1
+        ]
+      : undefined
+  );
+  const [year, setYear] = useState<string | undefined>(
+    user.details.birthday
+      ? extractDataFromDate(user.details.birthday, "year")
+      : undefined
+  );
+
+  const [langOptions, setLangOptions] = useState<spokenLanguageInterface[]>();
   const [spokenLanguages, setSpokenLanguages] = useState<
     spokenLanguageInterface[]
-  >([]);
+  >(user.details.languages ? user.details.languages : []);
 
-  const [skillsOptions] = useState<skillsInterface[]>([
-    {
-      label: "After Effects",
-      id: "afterEffects",
-    },
-    {
-      label: "Davinci Resolve",
-      id: "davinciResolve",
-    },
-    {
-      label: "Motion Design",
-      id: "motionDesign",
-    },
-  ]);
+  const [skillsOptions, setSkillsOptions] = useState<skillsInterface[]>();
 
-  const [skills, setSkills] = useState<skillsInterface[]>([]);
+  useMemo(async () => {
+    // get languages
+    let _langOptions: any = [];
 
-  const handleModifyPassword = () => {
-    console.log("modify password");
-  };
+    await useStrapiGet("languages").then((res) => {
+      if (res.status === 200) {
+        res.data.data.map((x: any) => {
+          _langOptions.push({
+            label: x.attributes.label,
+            id: x.id,
+            icon: "",
+          });
+        });
+        setLangOptions(_langOptions);
+      }
+    });
 
-  const handleModifyEmail = () => {
-    console.log("modify email");
-  };
+    // get skills
+    let _skills: any = [];
+    await useStrapiGet("skills").then((res) => {
+      if (res.status === 200) {
+        res.data.data.map((x: any) => {
+          _skills.push({
+            label: x.attributes.label,
+            id: x.id,
+          });
+        });
+        setSkillsOptions(_skills);
+      }
+    });
+  }, []);
 
-  const handleModelChange = () => {
-    console.log("model change");
-  };
+  const [skills, setSkills] = useState<skillsInterface[]>(
+    user.details.skills ? user.details.skills : []
+  );
+
+  const handleModelChange = () => {};
 
   const handleAddLang = (lang: spokenLanguageInterface) => {
-    console.log("add lang");
-
-    if (!spokenLanguages.includes(lang)) {
+    if (!spokenLanguages.find((x) => x.id === lang.id))
       setSpokenLanguages([...spokenLanguages, lang]);
-    }
   };
 
   const handleRemoveLang = (lang: spokenLanguageInterface) => {
-    console.log("remove lang");
-
-    setSpokenLanguages(spokenLanguages.filter((el, id) => el !== lang));
+    setSpokenLanguages(spokenLanguages.filter((el) => el !== lang));
   };
 
   const handleAddSkill = (skill: skillsInterface) => {
-    if (!skills.includes(skill)) {
-      setSkills([...skills, skill]);
-    }
+    if (!skills.find((x) => x.id === skill.id)) setSkills([...skills, skill]);
   };
 
   const handleRemoveSkill = (skill: skillsInterface) => {
@@ -164,26 +198,180 @@ export const EditorProfilContextProvider: React.FC<any> = (props) => {
     );
   };
 
-  const handleAvatarChange = (e: ChangeEvent) => {
-    console.log("change Avatar");
-  };
+  const handleAvatarChange = async (e: any) => {
+    if (e.target.files) {
+      const fileSize = (e.target.files[0]?.size / 1024 / 1024).toFixed(2);
+      // Verify if the file size < 20 mb
+      if (
+        parseInt(fileSize) >
+        parseInt(process.env.NEXT_PUBLIC_MAX_FILE_SIZE_PROFILE as string)
+      )
+        toast(
+          "Photo très large, la photo ne dois pas dépasser " +
+            process.env.NEXT_PUBLIC_MAX_FILE_SIZE_PROFILE +
+            "mb.",
+          {
+            icon: Error,
+            duration: 5000,
+            className: "bg-blackBerry",
+          }
+        );
+      else {
+        const formData = new FormData();
+        formData.append("files", e.target.files[0], e.target.value);
+        formData.append("ref", "api::user-info.user-info");
+        formData.append("refId", user.details.id);
+        formData.append("field", "picture");
 
-  const handleUpdateProfil = () => {
-    // Update database to the new values from the forms
-    console.log("update Profil");
-  };
+        const uploadRes = await useStrapiPost("upload", formData, false, true);
+        //upload success
+        if (uploadRes.status === 200) {
+          const imageId = uploadRes.data[0].id;
 
-  const handleResetContext = () => {
-    // Reset all values to the initial ones stocked in the database
-    console.log("reset Context");
+          //update account details
+          const updateDetails = await useStrapiPut(
+            "user-infos/" + user.details.id + "?populate=*",
+            {
+              data: {
+                picture: imageId,
+              },
+            }
+          );
+          if (
+            updateDetails.status === 200 &&
+            typeof updateDetails.data === "object"
+          ) {
+            toast("Votre photo de profil est modifiée avec succés.", {
+              icon: GreenCheck,
+              duration: 5000,
+              className: "bg-blackBerry",
+            });
+            setAvatar(
+              updateDetails.data.data.attributes.picture.data.attributes.url
+            );
+            authContext.RefreshUserData();
+          } else
+            toast(inputErrors.general, {
+              icon: Error,
+              duration: 5000,
+              className: "bg-blackBerry",
+            });
+        } else
+          toast(inputErrors.general, {
+            icon: Error,
+            duration: 5000,
+            className: "bg-blackBerry",
+          });
+      }
+    }
   };
 
   const abort = () => {
-    // TODO: Integration reset all values to the initial ones
+    // reset fields
+    setUsername(user.user.username);
+    setFName(user.details.f_name ? user.details.f_name : "");
+    setLName(user.details.l_name ? user.details.l_name : "");
+    setDesc(user.details.bio ? user.details.bio : "");
+    setPhone(user.details.phone ? user.details.phone : "");
+    setStreet(user.details.address ? user.details.address : "");
+    setZipcode(user.details.post_code ? user.details.post_code : "");
+    setCity(user.details.city ? user.details.city : "");
+    setSpokenLanguages(user.details.languages ? user.details.languages : []);
+    setSkills(user.details.skills ? user.details.skills : []);
+
+    // reset errors
+    resetErrors();
   };
 
-  const saveProfil = () => {
-    // TODO: Integration save the modified values to the database
+  const resetErrors = () => {
+    setUsernameError("");
+    setPhoneError("");
+    setZipcodeError("");
+    setCityError("");
+  };
+
+  const validateProfileForm = (): boolean => {
+    let isValid = true;
+    resetErrors();
+    if (!validator.isAlphanumeric(username, "fr-FR", { ignore: "_.@" })) {
+      setUsernameError(inputErrors.invalid);
+      isValid = false;
+    }
+    if (!validator.isPostalCode(zipcode, "FR")) {
+      setZipcodeError(inputErrors.invalid);
+      isValid = false;
+    }
+    if (!validator.isAlpha(city)) {
+      setCityError(inputErrors.invalid);
+      isValid = false;
+    }
+    if (!validator.isMobilePhone(phone /*, "fr-FR"*/)) {
+      setPhoneError(inputErrors.invalid);
+      isValid = false;
+    }
+    return isValid;
+  };
+
+  const saveProfil = async () => {
+    if (validateProfileForm()) {
+      const updateAccount = await useStrapiPut("users/" + user.user.id, {
+        username: validator.trim(username),
+      });
+      if (
+        updateAccount.status === 200 &&
+        typeof updateAccount.data === "object"
+      ) {
+        const updateDetails = await useStrapiPut(
+          "user-infos/" + user.details.id,
+          {
+            data: {
+              address: validator.trim(street),
+              post_code: validator.trim(zipcode),
+              city: validator.trim(city),
+              phone: validator.trim(phone),
+              bio: validator.trim(desc),
+              languages: spokenLanguages,
+              skills: skills,
+              birthday:
+                day && month && year
+                  ? year +
+                    "-" +
+                    (String(months.indexOf(month) + 1).length === 1
+                      ? "0" + String(months.indexOf(month) + 1)
+                      : String(months.indexOf(month) + 1)) +
+                    "-" +
+                    (day.length === 1 ? "0" + day : day)
+                  : undefined,
+            },
+          }
+        );
+        if (
+          updateDetails.status === 200 &&
+          typeof updateDetails.data === "object"
+        ) {
+          toast("Vos information sont modifiées avec succés.", {
+            icon: GreenCheck,
+            duration: 5000,
+            className: "bg-blackBerry",
+          });
+          authContext.RefreshUserData();
+        } else
+          toast(inputErrors.general, {
+            icon: Error,
+            duration: 5000,
+            className: "bg-blackBerry",
+          });
+      } else {
+        if (updateAccount.data.message.includes("already taken"))
+          setUsernameError(inputErrors.usernameExist);
+        else
+          toast(inputErrors.general, {
+            icon: Error,
+            duration: 5000,
+            className: "bg-blackBerry",
+          });
+      }
+    }
   };
 
   return (
@@ -193,22 +381,41 @@ export const EditorProfilContextProvider: React.FC<any> = (props) => {
         setAvatar,
         username,
         setUsername,
+        usernameError,
+
         fName,
         setFName,
+
         lName,
         setLName,
+
         desc,
         setDesc,
+
         email,
         setEmail,
+
         phone,
         setPhone,
+        phoneError,
+
         street,
         setStreet,
+
         zipcode,
         setZipcode,
+        zipcodeError,
+
         city,
         setCity,
+        cityError,
+
+        day,
+        setDay,
+        month,
+        setMonth,
+        year,
+        setYear,
 
         langOptions,
         spokenLanguages,
@@ -216,16 +423,12 @@ export const EditorProfilContextProvider: React.FC<any> = (props) => {
         skillsOptions,
         skills,
 
-        handleModifyPassword,
-        handleModifyEmail,
         handleModelChange,
         handleAddLang,
         handleRemoveLang,
         handleAddSkill,
         handleRemoveSkill,
         handleAvatarChange,
-        handleUpdateProfil,
-        handleResetContext,
 
         abort,
         saveProfil,

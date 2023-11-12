@@ -34,9 +34,13 @@ export const InputVignet = ({
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (
       e.target.files &&
-      ["image/jpg", "image/jpeg", "image/png", "image/svg+xml"].includes(
-        e.target.files[0].type
-      )
+      [
+        "image/jpg",
+        "image/jpeg",
+        "image/png",
+        "image/webp",
+        "image/svg+xml",
+      ].includes(e.target.files[0].type)
     ) {
       setImg(URL.createObjectURL(e.target.files[0]));
       onChange(e.target.files[0]);
@@ -99,6 +103,7 @@ export const InputVignet = ({
         <input
           ref={input}
           type="file"
+          accept="image/*"
           name="vignet"
           id="vignet"
           onChange={(e) => {

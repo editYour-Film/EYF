@@ -98,7 +98,7 @@ export const Model = ({
       >
         <div>{video.title}</div>
         <div>{video.length}</div>
-        <div className="flex  gap-dashboard-button-separation-spacing">
+        <div className="flex gap-dashboard-button-separation-spacing">
           {buttons}
         </div>
       </div>
