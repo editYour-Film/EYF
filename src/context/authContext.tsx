@@ -35,39 +35,46 @@ export const AuthProvider: React.FC<any> = ({ children }: any) => {
   );
 
   const RefreshUserData = (isRefresh: boolean = true) => {
-    if (!isRefresh) setIsLoading(true);
+    //temporary code
+    if (isRefresh) {
+      setTimeout(() => {
+        location.reload();
+      }, 1000);
+    } else {
+      if (!isRefresh) setIsLoading(true);
 
-    if (userCode && userCode.length > 0) {
-      const checkUserByCode = async () => {
-        return useStrapiPost(
-          "validate-user-by-code",
-          {
-            code: userCode,
-          },
-          false
-        );
-      };
-      checkUserByCode()
-        .then((res) => {
-          if (res.status === 200 && typeof res.data !== "string") {
-            setTempCode(userCode);
-            setToken(res.data.jwt);
-            setUserInfo({
-              user: res.data.user,
-              details: res.data.details,
-              models: res.data.models,
-            });
-            if (!isRefresh) {
-              if (res.data.user.role.name === "editor")
-                router.push(routes.DASHBOARD_EDITOR_HOME);
-              else router.push(routes.DASHBOARD_CLIENT_HOME);
-            }
-          } else SignOut();
-          if (!isRefresh) setIsLoading(false);
-        })
-        .catch(() => {
-          SignOut();
-        });
+      if (userCode && userCode.length > 0) {
+        const checkUserByCode = async () => {
+          return useStrapiPost(
+            "validate-user-by-code",
+            {
+              code: userCode,
+            },
+            false
+          );
+        };
+        checkUserByCode()
+          .then((res) => {
+            if (res.status === 200 && typeof res.data !== "string") {
+              setTempCode(userCode);
+              setToken(res.data.jwt);
+              setUserInfo({
+                user: res.data.user,
+                details: res.data.details,
+                models: res.data.models,
+              });
+              if (!isRefresh) {
+                if (res.data.user.role.name === "editor")
+                  router.push(routes.DASHBOARD_EDITOR_HOME);
+                else router.push(routes.DASHBOARD_CLIENT_HOME);
+              }
+            } else SignOut();
+            if (!isRefresh) setIsLoading(false);
+          })
+          .catch(() => {
+            SignOut();
+          });
+      }
     }
   };
 

@@ -3,11 +3,9 @@ import {
   createContext,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from "react";
-import { Softwares } from "../data/metaValues";
-import slugify from "slugify";
-import { useDispatch } from "react-redux";
 
 import Info from "@/icons/info-gradient.svg";
 import { AuthContext } from "@/context/authContext";
@@ -29,6 +27,7 @@ export interface EditorVideo {
   thumbnail: any;
   title: string;
   length: string;
+  audio: string;
   model: modelType;
   resources: any;
   user_info: user_info;
@@ -37,13 +36,18 @@ export interface EditorVideo {
   worktime: "base" | "medium" | "high";
   is_highlighted: boolean;
   description: string;
-  video_tags: any /*video_tag[]*/;
+  video_tags: video_tag[];
+  video_softwares: video_softwares[];
 }
 
 export interface video_tag {
+  id: number;
   name: string;
-  slug: string;
-  editor_videos: EditorVideo[];
+}
+
+export interface video_softwares {
+  label: string;
+  id: number;
 }
 
 export interface user_info {
@@ -75,7 +79,7 @@ export const EditorContext = createContext({
   setShowModifyPanel: (payload: boolean) => {},
   hideModifyPanel: () => {},
   currentModelToModify: undefined as EditorVideo | undefined,
-  setCurrentModelToModify: (payload: EditorVideo | undefined) => {},
+  setCurrentModelToModify: (payload: EditorVideo | undefined | any) => {},
 
   models: [] as EditorVideo[],
   updateCurrentModel: () => {},
@@ -92,23 +96,32 @@ export const EditorContext = createContext({
   setModelAudio: (payload: string) => {},
   modelWorkTime: undefined as string | undefined,
   setModelWorkTime: (payload: string) => {},
-  modelSoftware: undefined as string[] | undefined,
-  setModelSoftware: (payload: string[]) => {},
+
+  modelSoftwareOptions: undefined as video_softwares[] | undefined,
+  modelSoftwareOptionsArrayString: undefined as string[] | undefined,
+  modelSoftware: undefined as video_softwares[] | undefined,
+  setModelSoftware: (payload: video_softwares[]) => {},
+  modelSoftwareArrayString: undefined as string[] | undefined,
+  setModelSoftwareArrayString: (payload: string[]) => {},
+
   outLink: undefined as string | undefined,
   setOutLink: (payload: string) => {},
-  tags: [] as { name: string; slug: string }[] | undefined,
-  setTags: (payload: { name: string; slug: string }[] | undefined) => {},
+
+  tagsOptionsArrayString: undefined as string[] | undefined,
+  tagsOptions: undefined as video_tag[] | undefined,
+  tags: [] as video_tag[] | undefined,
+  setTags: (payload: video_tag[] | undefined) => {},
+  tagsArrayString: [] as string[] | undefined,
+  setTagsArrayString: (payload: string[] | undefined) => {},
 
   newTag: undefined as string | undefined,
   setNewTag: (payload: string) => {},
   addTag: (payload: string) => {},
 
-  keywords: undefined as { name: string; slug: string }[] | undefined,
   startAddModel: () => {},
 });
 
 export const EditorContextProvider = ({ children }: PropsWithChildren) => {
-  const dispatch = useDispatch();
   const authContext = useContext(AuthContext);
   const dashboardContext = useContext(DashBoardContext);
 
@@ -133,35 +146,49 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
   const [modelWorkTime, setModelWorkTime] = useState<string | undefined>(
     undefined
   );
-  const [modelSoftware, setModelSoftware] = useState<string[] | undefined>(
+
+  const [modelSoftwareOptions, setModelSoftwareOptions] = useState<
+    video_softwares[] | undefined
+  >(undefined);
+  const [modelSoftwareOptionsArrayString, setModelSoftwareOptionsArrayString] =
+    useState<string[] | undefined>(undefined);
+  const [modelSoftware, setModelSoftware] = useState<
+    video_softwares[] | undefined
+  >(undefined);
+  const [modelSoftwareArrayString, setModelSoftwareArrayString] = useState<
+    string[] | undefined
+  >(undefined);
+
+  const [outLink, setOutLink] = useState<string | undefined>(undefined);
+
+  const [tagsOptions, setTagsOptions] = useState<video_tag[] | undefined>(
     undefined
   );
-  const [outLink, setOutLink] = useState<string | undefined>(undefined);
-  const [tags, setTags] = useState<
-    { name: string; slug: string }[] | undefined
+  const [tagsOptionsArrayString, setTagsOptionsArrayString] = useState<
+    string[] | undefined
   >(undefined);
+  const [tags, setTags] = useState<video_tag[] | undefined>(undefined);
+  const [tagsArrayString, setTagsArrayString] = useState<string[] | undefined>(
+    undefined
+  );
 
   const [newTag, setNewTag] = useState<string | undefined>(undefined);
 
   const [currentModelHasBeenModified, setCurrentModelHasBeenModified] =
     useState(false);
 
-  // Keywords
-  const [keywords, setKeywords] = useState<
-    { name: string; slug: string }[] | undefined
-  >(undefined);
+  // tags Options
 
   const handleModifyVideo = async (videoId?: number) => {
     setShowModifyPanel(true);
+    const currentModel: EditorVideo = authContext.user.models.find(
+      (x: any) => x.id === videoId
+    );
 
-    setCurrentModelToModify({
-      user_info: authContext.user.details,
-      ...authContext.user.models.find((x: any) => x.id === videoId),
-    });
+    if (currentModel) setCurrentModelToModify(currentModel);
   };
 
   const hideModifyPanel = () => {
-    // close the modify panel and set the current video as null
     setShowModifyPanel(false);
   };
 
@@ -170,33 +197,64 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
       setModelDescription(currentModelToModify?.description);
       setModelTitle(currentModelToModify?.title);
       setModelFormat(currentModelToModify?.model);
-      setModelAudio("Anglais");
+      setModelAudio(currentModelToModify?.audio);
       setModelWorkTime(currentModelToModify?.worktime);
-      setModelSoftware([Softwares[0], Softwares[1]]);
       setOutLink(
-        currentModelToModify.video.data
-          ? currentModelToModify.video.data.attributes.url
-          : ""
+        currentModelToModify.video.url ? currentModelToModify.video.url : ""
       );
-      setTags(currentModelToModify?.video_tags.data);
-    } else {
-      setCurrentModelHasBeenModified(false);
-      setModelDescription(undefined);
-      setModelTitle(undefined);
-      setModelFormat(undefined);
-      setModelAudio(undefined);
-      setModelWorkTime(undefined);
-      setModelSoftware(undefined);
-      setOutLink(undefined);
-      setTags(undefined);
+
+      setModelSoftware(currentModelToModify.video_softwares);
+      let _arrayStringSoftware: string[] = [];
+      currentModelToModify.video_softwares.map((x) => {
+        _arrayStringSoftware.push(x.label);
+      });
+      setModelSoftwareArrayString(_arrayStringSoftware);
+
+      setTags(currentModelToModify?.video_tags);
+      let _arrayStringTags: string[] = [];
+      currentModelToModify.video_tags.map((x) => {
+        _arrayStringTags.push(x.name);
+      });
+      setTagsArrayString(_arrayStringTags);
+
+      console.log("currentModelToModify", currentModelToModify);
     }
   }, [currentModelToModify]);
 
-  const updateCurrentModel = () => {
-    // TODO: Integration Update the video with new values (modelDescription, modelTitle, modelFormat, modelAudio, modelWorkTime, modelSoftware, outLink, tags)
+  const updateCurrentModel = async () => {
     const id = currentModelToModify?.id;
 
-    hideModifyPanel();
+    const res = await useStrapiPut(
+      `editor-videos/${id}`,
+      {
+        data: {
+          title: currentModelToModify?.title,
+          description: currentModelToModify?.description,
+          model: currentModelToModify?.model,
+          audio: currentModelToModify?.audio,
+          worktime:
+            (currentModelToModify?.worktime as string) === "Basique"
+              ? "base"
+              : (currentModelToModify?.worktime as string) === "Moyen"
+              ? "medium"
+              : (currentModelToModify?.worktime as string) === "Très compliqué"
+              ? "high"
+              : currentModelToModify?.worktime,
+          video_softwares: currentModelToModify?.video_softwares,
+          video_tags: currentModelToModify?.video_tags,
+        },
+      },
+      false
+    );
+    if (res.status === 200) {
+      hideModifyPanel();
+      authContext.RefreshUserData();
+      toast("Modèle modifié avec succés", {
+        icon: GreenCheck,
+        duration: 5000,
+        className: "bg-blackBerry",
+      });
+    }
   };
 
   const storeHighlightedVideo = async (videoId?: number) => {
@@ -282,14 +340,14 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
   };
 
   const addTag = (tagName: string) => {
-    if (tagName) {
+    /*if (tagName) {
       const t: { name: string; slug: string } = {
         name: tagName,
         slug: slugify(tagName),
       };
 
       tags ? setTags([...tags, t]) : setTags([t]);
-    }
+    }*/
   };
 
   const startAddModel = () => {
@@ -310,6 +368,42 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
     }
   };
 
+  useMemo(async () => {
+    // get softwares
+    let _softwaresArrayString: string[] = [];
+    let _softwares: video_softwares[] = [];
+    await useStrapiGet("video-softwares").then((res) => {
+      if (res.status === 200) {
+        res.data.data.map((x: any) => {
+          _softwaresArrayString.push(x.attributes.label);
+          _softwares.push({
+            id: x.id,
+            label: x.attributes.label,
+          });
+        });
+        setModelSoftwareOptionsArrayString(_softwaresArrayString);
+        setModelSoftwareOptions(_softwares);
+      }
+    });
+
+    // get tags
+    let _tagsArraysString: any = [];
+    let _tags: video_tag[] = [];
+    await useStrapiGet("video-tags").then((res) => {
+      if (res.status === 200) {
+        res.data.data.map((x: any) => {
+          _tagsArraysString.push(x.attributes.name);
+          _tags.push({
+            name: x.attributes.name,
+            id: x.id,
+          });
+        });
+        setTagsOptionsArrayString(_tagsArraysString);
+        setTagsOptions(_tags);
+      }
+    });
+  }, []);
+
   useEffect(() => {
     if (models === undefined || models.length === 0) {
       toast(
@@ -322,15 +416,6 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
       );
     }
 
-    // TODO: Integration Get the highlighted video from the database
-    setHighlightedVideo(undefined);
-
-    // TODO: Integration get all the keywords related to an account
-    // keyword : { name: string; slug: string }
-    setKeywords([]);
-  }, [authContext.user.models]);
-
-  useEffect(() => {
     fetchCurrentModels();
   }, [authContext.user.models]);
 
@@ -361,26 +446,39 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
 
         modelDescription,
         setModelDescription,
+
         modelTitle,
         setModelTitle,
+
         modelFormat,
         setModelFormat,
+
         modelAudio,
         setModelAudio,
+
         modelWorkTime,
         setModelWorkTime,
+
+        modelSoftwareOptionsArrayString,
+        modelSoftwareOptions,
         modelSoftware,
         setModelSoftware,
+        modelSoftwareArrayString,
+        setModelSoftwareArrayString,
+
         outLink,
         setOutLink,
+
+        tagsOptionsArrayString,
+        tagsOptions,
         tags,
         setTags,
+        tagsArrayString,
+        setTagsArrayString,
 
         newTag,
         setNewTag,
         addTag,
-
-        keywords,
 
         startAddModel,
       }}
