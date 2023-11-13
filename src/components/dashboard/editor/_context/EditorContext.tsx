@@ -14,6 +14,7 @@ import { DashBoardContext } from "../../_context/DashBoardContext";
 import { toast } from "react-hot-toast";
 import { useStrapiDelete, useStrapiGet, useStrapiPut } from "@/hooks/useStrapi";
 import GreenCheck from "@/icons/check-green.svg";
+import { VisibilityType, WorkTimeType } from "../data/metaValues";
 
 export type modelType =
   | "model 16/9 ème"
@@ -27,17 +28,17 @@ export interface EditorVideo {
   thumbnail: any;
   title: string;
   length: string;
-  audio: string;
+  audio?: string;
   model: modelType;
   resources: any;
   user_info: user_info;
-  visibility: "public" | "private" | "unrepertoried";
+  visibility: VisibilityType;
   copywrite: string;
-  worktime: "base" | "medium" | "high";
+  worktime: WorkTimeType;
   is_highlighted: boolean;
   description: string;
-  video_tags: video_tag[];
-  video_softwares: video_softwares[];
+  video_tags?: video_tag[];
+  video_softwares?: video_softwares[];
 }
 
 export interface video_tag {
@@ -81,7 +82,6 @@ export const EditorContext = createContext({
   currentModelToModify: undefined as EditorVideo | undefined,
   setCurrentModelToModify: (payload: EditorVideo | undefined | any) => {},
 
-  models: [] as EditorVideo[],
   updateCurrentModel: () => {},
   currentModelHasBeenModified: false,
   setCurrentModelHasBeenModified: (payload: boolean) => {},
@@ -131,7 +131,6 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
     EditorVideo | undefined
   >(undefined);
   const [showModifyPanel, setShowModifyPanel] = useState<boolean>(false);
-  const [models, setModels] = useState<EditorVideo[]>([]);
   const [currentModelToModify, setCurrentModelToModify] = useState<
     EditorVideo | undefined
   >(undefined);
@@ -205,14 +204,14 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
 
       setModelSoftware(currentModelToModify.video_softwares);
       let _arrayStringSoftware: string[] = [];
-      currentModelToModify.video_softwares.map((x) => {
+      currentModelToModify.video_softwares?.map((x) => {
         _arrayStringSoftware.push(x.label);
       });
       setModelSoftwareArrayString(_arrayStringSoftware);
 
       setTags(currentModelToModify?.video_tags);
       let _arrayStringTags: string[] = [];
-      currentModelToModify.video_tags.map((x) => {
+      currentModelToModify.video_tags?.map((x) => {
         _arrayStringTags.push(x.name);
       });
       setTagsArrayString(_arrayStringTags);
@@ -335,10 +334,6 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
     }
   };
 
-  const fetchCurrentModels = () => {
-    setModels(authContext.user.models ? authContext.user.models : []);
-  };
-
   const addTag = (tagName: string) => {
     /*if (tagName) {
       const t: { name: string; slug: string } = {
@@ -405,7 +400,10 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
   }, []);
 
   useEffect(() => {
-    if (models === undefined || models.length === 0) {
+    if (
+      authContext.user.models === undefined ||
+      authContext.user.models.length === 0
+    ) {
       toast(
         `Bienvenue ${authContext.user.details.f_name}, devenez visible. Ajoutez votre premier modèle de montage.`,
         {
@@ -415,9 +413,7 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
         }
       );
     }
-
-    fetchCurrentModels();
-  }, [authContext.user.models]);
+  }, []);
 
   return (
     <EditorContext.Provider
@@ -439,7 +435,6 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
         currentModelToModify,
         setCurrentModelToModify,
 
-        models,
         updateCurrentModel,
         currentModelHasBeenModified,
         setCurrentModelHasBeenModified,

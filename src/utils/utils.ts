@@ -37,3 +37,9 @@ export const extractDataFromDate = (
     }
   }
 };
+
+export const formatVideoDuration = (duration: number) => {
+  var mzminutes = Math.floor(duration / 60);
+  var mzseconds = Math.floor(duration - mzminutes * 60);
+  return mzminutes + ":" + (mzseconds < 10 ? "0" + mzseconds : mzseconds);
+};

@@ -67,7 +67,6 @@ export const FileInput = ({}: FileInputProps) => {
     const formData = new FormData();
     const elementData: any = {};
 
-    //elementData["publishedAt"] = null;
     elementData["user_info"] = authContext.user.details.id;
 
     let _error = false;

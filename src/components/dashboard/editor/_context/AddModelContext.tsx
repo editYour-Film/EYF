@@ -7,27 +7,12 @@ import {
 import { VideoDuration } from "@/utils/Video";
 import { createContext, useContext, useEffect, useState } from "react";
 import { DashBoardContext } from "../../_context/DashBoardContext";
-import { modelType, user_info } from "./EditorContext";
+import { modelType } from "./EditorContext";
 import { VisibilityType, WorkTimeType } from "../data/metaValues";
 import toast from "react-hot-toast";
 import Error from "@/icons/x-circle.svg";
 import { AuthContext } from "@/context/authContext";
-
-type editorVideo = {
-  video?: File | undefined;
-  thumbnail?: File | undefined;
-  title?: string | undefined;
-  length?: string | undefined;
-  model?: string | undefined;
-  description?: string | undefined;
-  tags?: { name: string; slug: string }[] | undefined;
-  ressources?: File[] | undefined;
-  user_info?: number | undefined;
-  visibility?: string | undefined;
-  copywrite?: string | undefined;
-  workTime?: string | undefined;
-  is_highlighted?: boolean | undefined;
-};
+import { formatVideoDuration } from "@/utils/utils";
 
 export const AddModelContext = createContext({
   currentStep: undefined as number | undefined,
@@ -56,6 +41,8 @@ export const AddModelContext = createContext({
   setThumbnail: (payload: File | undefined) => {},
   title: undefined as string | undefined,
   setTitle: (payload: string | undefined) => {},
+  titleError: undefined as string | undefined,
+  setTitleError: (payload: string | undefined) => {},
   length: undefined as string | undefined,
   setLength: (payload: string | undefined) => {},
   model: undefined as modelType | undefined,
@@ -66,8 +53,6 @@ export const AddModelContext = createContext({
   setTags: (payload: { name: string; slug: string }[] | undefined) => {},
   ressources: undefined as any,
   setRessources: (payload: any) => {},
-  user_info: undefined as user_info | undefined,
-  setUser_info: (payload: user_info | undefined) => {},
   visibility: undefined as VisibilityType | undefined,
   setVisibility: (payload: VisibilityType | undefined) => {},
   copywrite: undefined as string | undefined,
@@ -91,20 +76,22 @@ export const AddModelContextProvider: React.FC<any> = (props) => {
 
   const [video, setVideo] = useState<number | undefined>(undefined);
   const [thumbnail, setThumbnail] = useState<File | undefined>(undefined);
+
   const [title, setTitle] = useState<string | undefined>(undefined);
+  const [titleError, setTitleError] = useState<string | undefined>(undefined);
+
   const [length, setLength] = useState<string | undefined>(undefined);
-  const [model, setModel] = useState<modelType | undefined>(undefined);
+  const [model, setModel] = useState<modelType | undefined>("model 16/9 ème");
   const [description, setDescription] = useState<string | undefined>(undefined);
   const [tags, setTags] = useState<
     { name: string; slug: string }[] | undefined
   >(undefined);
   const [ressources, setRessources] = useState<any>(undefined);
-  const [user_info, setUser_info] = useState<user_info | undefined>(undefined);
   const [visibility, setVisibility] = useState<VisibilityType | undefined>(
     undefined
   );
   const [copywrite, setCopywrite] = useState<string | undefined>(undefined);
-  const [worktime, setWorktime] = useState<WorkTimeType | undefined>(undefined);
+  const [worktime, setWorktime] = useState<WorkTimeType | undefined>("base");
   const [is_highlighed, setIs_highlighed] = useState<boolean | undefined>(
     undefined
   );
@@ -118,7 +105,6 @@ export const AddModelContextProvider: React.FC<any> = (props) => {
     description,
     tags,
     ressources,
-    user_info,
     visibility,
     copywrite,
     worktime,
@@ -140,7 +126,6 @@ export const AddModelContextProvider: React.FC<any> = (props) => {
       description,
       tags,
       ressources,
-      user_info,
       visibility,
       copywrite,
       worktime,
@@ -193,6 +178,8 @@ export const AddModelContextProvider: React.FC<any> = (props) => {
       }
 
       const prom = new Promise(async (resolve, reject) => {
+        var video = document.querySelector("video") as HTMLVideoElement;
+
         const res = await useStrapiPut(
           `editor-videos/${currentEditorVideo}`,
           {
@@ -204,6 +191,7 @@ export const AddModelContextProvider: React.FC<any> = (props) => {
               model: model,
               visibility: visibility,
               worktime: worktime,
+              length: formatVideoDuration(video.duration),
             },
           },
           false
@@ -222,15 +210,15 @@ export const AddModelContextProvider: React.FC<any> = (props) => {
     setVideo(undefined);
     setThumbnail(undefined);
     setTitle(undefined);
+    setTitleError(undefined);
     setLength(undefined);
-    setModel(undefined);
+    setModel("model 16/9 ème");
     setDescription(undefined);
     setTags(undefined);
     setRessources(undefined);
-    setUser_info(undefined);
     setVisibility(undefined);
     setCopywrite(undefined);
-    setWorktime(undefined);
+    setWorktime("base");
     setIs_highlighed(undefined);
   };
 
@@ -297,6 +285,8 @@ export const AddModelContextProvider: React.FC<any> = (props) => {
         setThumbnail,
         title,
         setTitle,
+        titleError,
+        setTitleError,
         length,
         setLength,
         model,
@@ -307,8 +297,6 @@ export const AddModelContextProvider: React.FC<any> = (props) => {
         setTags,
         ressources,
         setRessources,
-        user_info,
-        setUser_info,
         visibility,
         setVisibility,
         copywrite,

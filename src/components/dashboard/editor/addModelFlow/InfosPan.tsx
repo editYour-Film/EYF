@@ -17,6 +17,10 @@ import { FormatsType } from "../data/metaValues";
 
 import Close from "@/icons/dashboard/x.svg";
 import { AuthContext } from "@/context/authContext";
+import validator from "validator";
+import toast from "react-hot-toast";
+import { inputErrors } from "@/const";
+import Error from "@/icons/x-circle.svg";
 
 type InfosPanProps = {};
 
@@ -128,25 +132,19 @@ export const InfosPan = ({}: InfosPanProps) => {
   const handleSubmit = () => {
     setDescriptionError("");
     setTagsError("");
+    setTitleError("");
 
-    context.setUser_info(authContext.user.details.id);
-    context.setLength(
-      duration
-        ? duration?.min !== 0
-          ? duration?.min.toString() + " minutes"
-          : duration?.sec.toString() + " secondes"
-        : ""
-    );
+    if (context.title !== undefined && !validator.isEmpty(context.title)) {
+      if (isMobile) context.setCurrentStep(2);
+      else {
+        setVisibilityPanAdded(true);
 
-    if (isMobile) context.setCurrentStep(2);
-    else {
-      setVisibilityPanAdded(true);
-
-      dashboardContext.addPannel({
-        title: "Details",
-        panel: <AddModel step={2} />,
-      });
-    }
+        dashboardContext.addPannel({
+          title: "Details",
+          panel: <AddModel step={2} />,
+        });
+      }
+    } else context.setTitleError(inputErrors.required);
   };
 
   const handleAddTag = (e: any) => {
@@ -185,12 +183,7 @@ export const InfosPan = ({}: InfosPanProps) => {
         />
       )}
       <div className="info-pan__video-w relative rounded-t-2xl overflow-hidden border">
-        {entry && 
-          <Video 
-            playerFullWidth
-            video={entry.video.data.attributes} 
-          />
-        }
+        {entry && <Video playerFullWidth video={entry.video.data.attributes} />}
       </div>
 
       <div className="info-pan__title flex items-baseline gap-2">
@@ -235,6 +228,7 @@ export const InfosPan = ({}: InfosPanProps) => {
               context.setTitle(e.target.value);
             }}
             className="bg-transparent"
+            error={context.titleError}
           />
           {titleError && (
             <div className="text-appleRed text-sm mt-2">{titleError}</div>
