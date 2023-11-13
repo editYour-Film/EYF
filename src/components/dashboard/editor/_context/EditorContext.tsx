@@ -215,8 +215,6 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
         _arrayStringTags.push(x.name);
       });
       setTagsArrayString(_arrayStringTags);
-
-      console.log("currentModelToModify", currentModelToModify);
     }
   }, [currentModelToModify]);
 
