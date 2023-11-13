@@ -37,8 +37,8 @@ export interface EditorVideo {
   worktime: WorkTimeType;
   is_highlighted: boolean;
   description: string;
-  video_tags: any /*video_tag[]*/;
-  video_softwares?: any;
+  video_tags: video_tag[];
+  video_softwares?: video_softwares[];
 }
 
 export interface video_tag {
@@ -204,14 +204,14 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
 
       setModelSoftware(currentModelToModify.video_softwares);
       let _arrayStringSoftware: string[] = [];
-      currentModelToModify.video_softwares?.map((x: any) => {
+      currentModelToModify.video_softwares?.map((x) => {
         _arrayStringSoftware.push(x.label);
       });
       setModelSoftwareArrayString(_arrayStringSoftware);
 
       setTags(currentModelToModify?.video_tags);
       let _arrayStringTags: string[] = [];
-      currentModelToModify.video_tags?.map((x: any) => {
+      currentModelToModify.video_tags?.map((x) => {
         _arrayStringTags.push(x.name);
       });
       setTagsArrayString(_arrayStringTags);
