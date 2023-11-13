@@ -84,10 +84,7 @@ export const OverlayModel = ({className, toggle, onClose, onClosed, children}: P
         }
       })
 
-      tl.fromTo(container.current, {
-        y: 0,
-        x: 0
-      }, {
+      tl.to(container.current, {
         y: isMobile ? 0 : window.innerHeight * 1.1,
         x: isMobile ? window.innerWidth : 0,
         ease: 'power3.in',
@@ -164,7 +161,7 @@ export const OverlayModel = ({className, toggle, onClose, onClosed, children}: P
       <div 
         ref={container}
         data-lenis-prevent
-        className="relative w-full flex justify-center md:py-[100px] overflow-scroll z-10 no-scroll-bar pointer-events-none"
+        className={`relative w-full flex justify-center md:py-[100px] overflow-scroll z-10 no-scroll-bar pointer-events-none`}
       >
         <div 
           className={`overlay-model md:p-dashboard-button-separation-spacing relative max-w-[876px] md:w-[80%] xl:w-[60%] md:min-h-[100vh] bg-dashboard-background-content-area border-03 rounded-dashboard-button-square-radius shadow-large ${isOpen ? 'pointer-events-auto' : 'pointer-events-none'} ${className}`}

@@ -37,7 +37,7 @@ export interface EditorVideo {
   worktime: WorkTimeType;
   is_highlighted: boolean;
   description: string;
-  video_tags?: video_tag[];
+  video_tags: video_tag[];
   video_softwares?: video_softwares[];
 }
 
