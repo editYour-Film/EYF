@@ -30,6 +30,7 @@ module.exports = {
         },
 
         'dashboard-success-dark': tokens.dashboard_success_dark,
+        'dashboard-success': tokens.dashboard_success,
 
         // Backgrounds
         'dashboard-button-island-BlueBerry-default' : tokens.dashboard_button_island_BlueBerry_default,
