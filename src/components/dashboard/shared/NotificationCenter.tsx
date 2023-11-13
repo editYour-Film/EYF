@@ -88,7 +88,7 @@ export const NotificationCenter = ({ className }: NotificationCenterProps) => {
   }, [context.notificationCenterOpen]);
 
   return (
-    <div ref={wrapper} className={`notification-center pb-[12px] relative z-0 overflow-hidden md:overflow-visible ${className ?? ''}`}>
+    <div ref={wrapper} className={`notification-center h-0 pb-[12px] relative z-0 overflow-hidden md:overflow-visible ${className ?? ''}`}>
       <div ref={content} className="p-dashboard-button-separation-spacing pb-dashboard-spacing-element-medium bg-dashboard-button-dark border-03 shadow-large rounded-dashboard-button-square-radius">
         <div className="rounded-dashboard-button-separation-spacing border-05">
           {notifications && notifications.map((notif:notificationType, i:number) => {

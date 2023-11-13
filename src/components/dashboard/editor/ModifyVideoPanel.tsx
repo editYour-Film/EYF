@@ -552,7 +552,7 @@ export const ModifyVideoPanel = () => {
 
                     {editorContext.currentModelToModify.video_tags &&
                       editorContext.currentModelToModify.video_tags.map(
-                        (tag, i) => {
+                        (tag:any, i:number) => {
                           return (
                             <Keyword
                               key={i}
@@ -566,7 +566,7 @@ export const ModifyVideoPanel = () => {
                                     video_tags:
                                       editorContext.currentModelToModify
                                         ? editorContext.currentModelToModify.video_tags?.filter(
-                                            (t) => t.name !== tag.name
+                                            (t:any) => t.name !== tag.name
                                           )
                                         : undefined,
                                   })
