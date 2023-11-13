@@ -287,6 +287,8 @@ export const InfosPan = ({}: InfosPanProps) => {
           onChange={(file) => {
             context.setThumbnail(file);
           }}
+          maxSize={1 * 1000 * 1000}
+          allowedMimeType={[{mime: 'image/png', name:'png'}, {mime:'image/jpeg', name:'jpeg'}, {mime:'image/jpg', name:'jpg'}]}
         />
       </form>
 
