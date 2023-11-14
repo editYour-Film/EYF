@@ -55,36 +55,23 @@ const LayoutDashboard = ({ children }: LayoutDashboardProps) => {
     <>
       {authContext.isLoggedIn && authContext.user && !authContext.isLoading && (
         <Lenis root>
-          <div className="relative overflow-hidden md:overflow-auto bg-black min-h-screen flex flex-col justify-between gap-10">
+          <div className="relative overflow-hidden md:overflow-visible bg-black min-h-screen flex flex-col justify-between gap-10">
             <main className="md:pt-7">
               <div className="md:px-[30px] xl:px-[113px] md:mt-0 grid grid-dashboard relative z-20 ">
-                <DashBoardContextProvider>
-                  {authContext.user.user.role.name === "editor" ? (
-                    <EditorContextProvider>
-                      {children}
+                {children}
 
-                      <SideBar
-                        type={authContext.user.user.role.name}
-                        className="md:col[1_/_2] row-[2_/_3]"
-                      />
+                <SideBar
+                  type={authContext.user.user.role.name}
+                  className="md:col[1_/_2] row-[2_/_3]"
+                />
+                
+                {authContext.user.user.role.name === "editor" ? (
+                  <DashboardMenuMobile menu={DASHBOARD_EDITOR_MENU} />
+                ) : (
+                  <DashboardMenuMobile menu={DASHBOARD_CLIENT_MENU} />
+                )}
 
-                      <DashboardMenuMobile menu={DASHBOARD_EDITOR_MENU} />
-                    </EditorContextProvider>
-                  ) : (
-                    <ClientContextProvider>
-                      {children}
-
-                      <SideBar
-                        type={authContext.user.user.role.name}
-                        className="md:col[1_/_2] row-[2_/_3]"
-                      />
-
-                      <DashboardMenuMobile menu={DASHBOARD_CLIENT_MENU} />
-                    </ClientContextProvider>
-                  )}
-
-                  <ButtonsWrapper />
-                </DashBoardContextProvider>
+                <ButtonsWrapper />
               </div>
             </main>
           </div>

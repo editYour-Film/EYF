@@ -6,7 +6,7 @@ import "@/styles/components/Footer.scss";
 
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Lenis, useLenis } from "@studio-freight/react-lenis";
 import { Provider } from "react-redux";
 import store from "@/store/store";
@@ -17,7 +17,10 @@ import { Cursor } from "@/components/_shared/UI/Cursor";
 import { PageTransition } from "@/components/transition/PageTransition";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { Loader } from "@/components/_shared/Loader";
-import { AuthProvider } from "@/context/authContext";
+import { AuthContext, AuthProvider } from "@/context/authContext";
+import { DashBoardContextProvider } from "@/components/dashboard/_context/DashBoardContext";
+import { EditorContextProvider } from "@/components/dashboard/editor/_context/EditorContext";
+import { ClientContextProvider } from "@/components/dashboard/client/_context/DashboardClientContext";
 
 if (typeof window !== "undefined") {
   gsap.defaults({ ease: "none" });
@@ -32,13 +35,32 @@ if (typeof window !== "undefined") {
 }
 
 export default function App(pageProps: AppProps) {
-  const hasHover = useMediaQuery("(hover: hover)");
   const lenis = useLenis(ScrollTrigger.update);
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     ScrollTrigger.refresh;
   }, [lenis]);
+
+  return (
+    <Provider store={store}>
+      <AuthProvider>
+        <InstanciatedQueryClientProvider>
+          <Content pageProps={pageProps}/>
+        </InstanciatedQueryClientProvider>
+      </AuthProvider>
+    </Provider>
+  );
+}
+
+type contentProps = {
+  pageProps: AppProps
+}
+
+const Content = ({pageProps}: contentProps) => {
+  const hasHover = useMediaQuery("(hover: hover)");
+  const [isLoading, setIsLoading] = useState(true);
+
+  const authContext = useContext(AuthContext)
 
   useEffect(() => {
     setTimeout(() => {
@@ -46,17 +68,39 @@ export default function App(pageProps: AppProps) {
     }, 1500);
   }, []);
 
-  return (
-    <Provider store={store}>
-      <AuthProvider>
-        <InstanciatedQueryClientProvider>
-          <Loader isLoading={isLoading} />
-          <Lenis root>
-            <PageTransition {...pageProps} />
-          </Lenis>
-          {hasHover && <Cursor />}
-        </InstanciatedQueryClientProvider>
-      </AuthProvider>
-    </Provider>
-  );
+  const mainContent =  <>
+    <Loader isLoading={isLoading} />
+    <Lenis root>
+      <PageTransition {...pageProps} />
+    </Lenis>
+    {hasHover && <Cursor />}
+  </>
+  
+  if (authContext.isLoggedIn && authContext.user && !authContext.isLoading) {
+    return (
+      <>
+        <DashBoardContextProvider>
+        {authContext.user.user.role.name === "editor" 
+        ? (
+          <EditorContextProvider>
+            {mainContent}
+          </EditorContextProvider>
+        )
+        : (
+          <ClientContextProvider>
+            {mainContent}
+          </ClientContextProvider>
+        )
+        }
+        </DashBoardContextProvider>
+      </>
+    )
+
+  } else {
+    return (
+      <>
+        {mainContent}
+      </>
+    )
+  }
 }

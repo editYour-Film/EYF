@@ -11,13 +11,35 @@ export const checkAlphanumeric = (string: string, cb: Function) => {
   else cb("");
 };
 
-export const lockDocumentScroll = (offset:number) => {
-  document.body.style.position = 'fixed';
+export const lockDocumentScroll = (offset: number) => {
+  document.body.style.position = "fixed";
   document.body.style.top = `-${offset}px`;
-}
+};
 
-export const unLockDocumentScroll = (offset:number) => {
-  document.body.style.position = '';
-  document.body.style.top = '';
+export const unLockDocumentScroll = (offset: number) => {
+  document.body.style.position = "";
+  document.body.style.top = "";
   window.scrollTo(0, offset);
-}
+};
+
+export const extractDataFromDate = (
+  string: string,
+  data: "day" | "month" | "year"
+) => {
+  if (string && string.length === 10) {
+    switch (data) {
+      case "day":
+        return string.substring(8, 10);
+      case "month":
+        return string.substring(5, 7);
+      case "year":
+        return string.substring(0, 4);
+    }
+  }
+};
+
+export const formatVideoDuration = (duration: number) => {
+  var mzminutes = Math.floor(duration / 60);
+  var mzseconds = Math.floor(duration - mzminutes * 60);
+  return mzminutes + ":" + (mzseconds < 10 ? "0" + mzseconds : mzseconds);
+};

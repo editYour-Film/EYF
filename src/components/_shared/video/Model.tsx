@@ -40,6 +40,7 @@ export const Model = ({
     handleModify &&
       buttons.push(
         <IslandButton
+          key={buttons.length}
           type="small"
           label="Modifier"
           onClick={() => {
@@ -52,6 +53,7 @@ export const Model = ({
     handleDisable &&
       buttons.push(
         <IslandButton
+          key={buttons.length}
           type="small"
           label="Retirer"
           onClick={() => {
@@ -64,6 +66,7 @@ export const Model = ({
     handleDisable &&
       buttons.push(
         <IslandButton
+          key={buttons.length}
           type="small"
           disabled
           label="Retiré"
@@ -98,7 +101,7 @@ export const Model = ({
       >
         <div>{video.title}</div>
         <div>{video.length}</div>
-        <div className="flex  gap-dashboard-button-separation-spacing">
+        <div className="flex gap-dashboard-button-separation-spacing">
           {buttons}
         </div>
       </div>

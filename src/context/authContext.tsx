@@ -9,11 +9,7 @@ import {
   unsetToken,
 } from "../auth/auth";
 import useLocalStorage, { removeStorage } from "@/hooks/useLocalStorage";
-import {
-  SignedInUser,
-  SigninUser,
-  initSignedInUser,
-} from "@/components/model/signin";
+import { SignedInUser, initSignedInUser } from "@/components/model/signin";
 import router from "next/router";
 import routes from "@/routes";
 import { useStrapiPost } from "@/hooks/useStrapi";
@@ -25,6 +21,7 @@ export const AuthContext = createContext({
   isLoggedIn: false,
   isLoading: true,
   SignOut: () => {},
+  RefreshUserData: () => {},
 });
 
 export const AuthProvider: React.FC<any> = ({ children }: any) => {
@@ -36,6 +33,50 @@ export const AuthProvider: React.FC<any> = ({ children }: any) => {
   const [userCode, setUserCode] = useState<string>(
     getTempCodeFromLocalCookie() ? (getTempCodeFromLocalCookie() as string) : ""
   );
+
+  const RefreshUserData = (isRefresh: boolean = true) => {
+    //temporary code
+    if (isRefresh) {
+      setTimeout(() => {
+        location.reload();
+      }, 1000);
+    } else {
+      if (!isRefresh) setIsLoading(true);
+
+      if (userCode && userCode.length > 0) {
+        const checkUserByCode = async () => {
+          return useStrapiPost(
+            "validate-user-by-code",
+            {
+              code: userCode,
+            },
+            false
+          );
+        };
+        checkUserByCode()
+          .then((res) => {
+            if (res.status === 200 && typeof res.data !== "string") {
+              setTempCode(userCode);
+              setToken(res.data.jwt);
+              setUserInfo({
+                user: res.data.user,
+                details: res.data.details,
+                models: res.data.models,
+              });
+              if (!isRefresh) {
+                if (res.data.user.role.name === "editor")
+                  router.push(routes.DASHBOARD_EDITOR_HOME);
+                else router.push(routes.DASHBOARD_CLIENT_HOME);
+              }
+            } else SignOut();
+            if (!isRefresh) setIsLoading(false);
+          })
+          .catch(() => {
+            SignOut();
+          });
+      }
+    }
+  };
 
   const SignOut = (redirect = true) => {
     unsetToken();
@@ -51,38 +92,7 @@ export const AuthProvider: React.FC<any> = ({ children }: any) => {
 
   // validate user
   useEffect(() => {
-    setIsLoading(true);
-    if (userCode && userCode.length > 0) {
-      const checkUserByCode = async () => {
-        return useStrapiPost(
-          "validate-user-by-code",
-          {
-            code: userCode,
-          },
-          false
-        );
-      };
-      checkUserByCode()
-        .then((res) => {
-          if (res.status === 200 && typeof res.data !== "string") {
-            setTempCode(userCode);
-            setToken(res.data.jwt);
-            setUserInfo({
-              user: res.data.user,
-              details: res.data.details,
-              models: res.data.models,
-            });
-            if (res.data.user.role.name === "editor")
-              router.push(routes.DASHBOARD_EDITOR_HOME);
-            else router.push(routes.DASHBOARD_CLIENT_HOME);;
-          } else SignOut();
-
-          setIsLoading(false);
-        })
-        .catch((error) => {
-          SignOut();
-        });
-    }
+    RefreshUserData(false);
   }, [userCode]);
 
   return (
@@ -94,6 +104,7 @@ export const AuthProvider: React.FC<any> = ({ children }: any) => {
         isLoggedIn: Object.keys(userInfo.user).length > 0,
         isLoading,
         SignOut,
+        RefreshUserData,
       }}
     >
       {children}

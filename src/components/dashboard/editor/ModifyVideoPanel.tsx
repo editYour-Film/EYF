@@ -1,13 +1,5 @@
-import {
-  RefObject,
-  SyntheticEvent,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
-import { EditorContext } from "./_context/EditorContext";
-import { SimpleCard } from "@/components/_shared/UI/CardSimple";
+import { RefObject, useContext, useEffect, useRef, useState } from "react";
+import { EditorContext, EditorVideo } from "./_context/EditorContext";
 import { OverlayModel } from "@/components/_shared/UI/OverlayModel";
 import { Video } from "@/components/_shared/video/Video";
 import { IslandButton } from "@/components/_shared/buttons/IslandButton";
@@ -22,16 +14,20 @@ import Headphones from "@/icons/headphones.svg";
 import Barchart from "@/icons/bar-chart.svg";
 import Mouse from "@/icons/mouse.svg";
 import LinkIcon from "@/icons/link.svg";
-import { Difficulty, Formats, Languages, Softwares } from "./data/metaValues";
+import { Formats, Languages, Worktime } from "./data/metaValues";
 import { DropBox } from "@/components/_shared/form/DropBox";
 
 import Close from "@/icons/dashboard/x.svg";
 import Plus from "@/icons/plus.svg";
 
 import { Keyword } from "@/components/_shared/UI/Keyword";
+import { AuthContext } from "@/context/authContext";
+import toast from "react-hot-toast";
+import GreenCheck from "@/icons/check-green.svg";
 
 export const ModifyVideoPanel = () => {
   const editorContext = useContext(EditorContext);
+  const authContext = useContext(AuthContext);
 
   const isMobile = useMediaQuery("(max-width: 768px)");
 
@@ -68,9 +64,17 @@ export const ModifyVideoPanel = () => {
         type="textarea"
         bg="black"
         value={editorContext.modelTitle}
-        onChange={(e) => {
-          editorContext.setModelTitle(e.target.value);
-          editorContext.setCurrentModelHasBeenModified(true);
+        onChange={(val) => {
+          if (val) {
+            editorContext.setModelTitle(val.target.value);
+            editorContext.setCurrentModelHasBeenModified(true);
+            editorContext.setCurrentModelToModify(
+              (previousState: EditorVideo) => ({
+                ...previousState,
+                title: val.target.value,
+              })
+            );
+          }
         }}
       />
     </div>
@@ -100,9 +104,17 @@ export const ModifyVideoPanel = () => {
           type="textarea"
           bg="black"
           value={editorContext.modelDescription}
-          onChange={(e) => {
-            editorContext.setModelDescription(e.target.value);
-            editorContext.setCurrentModelHasBeenModified(true);
+          onChange={(val) => {
+            if (val) {
+              editorContext.setModelDescription(val.target.value);
+              editorContext.setCurrentModelHasBeenModified(true);
+              editorContext.setCurrentModelToModify(
+                (previousState: EditorVideo) => ({
+                  ...previousState,
+                  description: val.target.value,
+                })
+              );
+            }
           }}
         />
       </div>
@@ -196,7 +208,16 @@ export const ModifyVideoPanel = () => {
                   Icon={LinkIcon}
                   label="Lien"
                   onClick={() => {
-                    // Router push the link of the catalogue
+                    if (editorContext.currentModelToModify) {
+                      navigator.clipboard.writeText(
+                        editorContext.currentModelToModify?.video.url
+                      );
+                      toast("Lien copié", {
+                        icon: GreenCheck,
+                        duration: 5000,
+                        className: "bg-blackBerry",
+                      });
+                    }
                   }}
                 />
 
@@ -234,6 +255,7 @@ export const ModifyVideoPanel = () => {
                           : "Ajoutez le format de la vidéo"
                       }
                       onClick={() => {
+                        editorContext.setCurrentModelHasBeenModified(false);
                         setOpenFrameToolbox(!openFrameToolbox);
                       }}
                     />
@@ -245,11 +267,19 @@ export const ModifyVideoPanel = () => {
                         choices={Formats}
                         currentValue={editorContext.modelFormat}
                         onChange={(val) => {
-                          editorContext.setModelFormat(val);
-                          editorContext.setCurrentModelHasBeenModified(true);
+                          if (val) {
+                            editorContext.setModelFormat(val);
+                            editorContext.setCurrentModelToModify(
+                              (previousState: EditorVideo) => ({
+                                ...previousState,
+                                model: val,
+                              })
+                            );
+                          }
                         }}
                         toggle={openFrameToolbox}
                         setToggle={(val) => {
+                          editorContext.setCurrentModelHasBeenModified(true);
                           setOpenFrameToolbox(val);
                         }}
                         className="hidden md:block absolute top-0 left-1/2"
@@ -265,9 +295,10 @@ export const ModifyVideoPanel = () => {
                           ? editorContext.modelAudio.length > 20
                             ? editorContext.modelAudio.slice(0, 16) + "..."
                             : editorContext.modelAudio
-                          : "Ajoutez le format de la vidéo"
+                          : "Ajoutez le audio de la vidéo"
                       }
                       onClick={() => {
+                        editorContext.setCurrentModelHasBeenModified(false);
                         setOpenLangToolbox(!openLangToolbox);
                       }}
                     />
@@ -280,11 +311,19 @@ export const ModifyVideoPanel = () => {
                         choices={Languages}
                         currentValue={editorContext.modelAudio}
                         onChange={(val) => {
-                          editorContext.setModelAudio(val);
-                          editorContext.setCurrentModelHasBeenModified(true);
+                          if (val) {
+                            editorContext.setModelAudio(val);
+                            editorContext.setCurrentModelToModify(
+                              (previousState: EditorVideo) => ({
+                                ...previousState,
+                                audio: val,
+                              })
+                            );
+                          }
                         }}
                         toggle={openLangToolbox}
                         setToggle={(val) => {
+                          editorContext.setCurrentModelHasBeenModified(true);
                           setOpenLangToolbox(val);
                         }}
                         className="hidden md:block absolute top-0 left-1/2"
@@ -297,12 +336,20 @@ export const ModifyVideoPanel = () => {
                       Icon={Barchart}
                       label={
                         editorContext.modelWorkTime
-                          ? editorContext.modelWorkTime.length > 20
-                            ? editorContext.modelWorkTime.slice(0, 16) + "..."
-                            : editorContext.modelWorkTime
+                          ? editorContext.modelWorkTime === "base" ||
+                            editorContext.modelWorkTime === "Basique"
+                            ? "Basique"
+                            : editorContext.modelWorkTime === "medium" ||
+                              editorContext.modelWorkTime === "Moyen"
+                            ? "Moyen"
+                            : (editorContext.modelWorkTime === "high" ||
+                                editorContext.modelWorkTime ===
+                                  "Très compliqué") &&
+                              "Très compliqué"
                           : "Ajoutez le format de la vidéo"
                       }
                       onClick={() => {
+                        editorContext.setCurrentModelHasBeenModified(false);
                         setOpenWorktimeToolbox(!openWorktimeToolbox);
                       }}
                     />
@@ -312,14 +359,23 @@ export const ModifyVideoPanel = () => {
                         type="simple"
                         Icon={Barchart}
                         title="Difficulté"
-                        choices={Difficulty}
+                        choices={Worktime}
                         currentValue={editorContext.modelWorkTime}
                         onChange={(val) => {
-                          editorContext.setModelWorkTime(val);
-                          editorContext.setCurrentModelHasBeenModified(true);
+                          if (val) {
+                            editorContext.setModelWorkTime(val);
+
+                            editorContext.setCurrentModelToModify(
+                              (previousState: EditorVideo) => ({
+                                ...previousState,
+                                worktime: val,
+                              })
+                            );
+                          }
                         }}
                         toggle={openWorktimeToolbox}
                         setToggle={(val) => {
+                          editorContext.setCurrentModelHasBeenModified(true);
                           setOpenWorktimeToolbox(val);
                         }}
                         className="hidden md:block absolute top-0 left-1/2"
@@ -331,36 +387,58 @@ export const ModifyVideoPanel = () => {
                     <ToolboxButton
                       Icon={Mouse}
                       label={
-                        editorContext.modelSoftware
-                          ? editorContext.modelSoftware.join(", ").length > 20
-                            ? editorContext.modelSoftware
+                        editorContext.modelSoftwareArrayString &&
+                        editorContext.modelSoftwareArrayString.length > 0
+                          ? editorContext.modelSoftwareArrayString.join(", ")
+                              .length > 20
+                            ? editorContext.modelSoftwareArrayString
                                 .join(", ")
                                 .slice(0, 16) + "..."
-                            : editorContext.modelSoftware.join(", ")
+                            : editorContext.modelSoftwareArrayString.join(", ")
                           : "Ajoutez un logiciel"
                       }
                       onClick={() => {
+                        editorContext.setCurrentModelHasBeenModified(false);
                         setOpenSoftwareToolbox(!openSoftwareToolbox);
                       }}
                     />
 
                     {!isMobile && (
-                      <DropBox
-                        type="multiple"
-                        Icon={Mouse}
-                        title="Logiciels"
-                        choices={Softwares}
-                        currentValue={editorContext.modelSoftware}
-                        onChange={(val) => {
-                          editorContext.setModelSoftware(val);
-                          editorContext.setCurrentModelHasBeenModified(true);
-                        }}
-                        toggle={openSoftwareToolbox}
-                        setToggle={(val) => {
-                          setOpenSoftwareToolbox(val);
-                        }}
-                        className="hidden md:block absolute top-0 left-1/2"
-                      />
+                      <>
+                        <DropBox
+                          type="multiple"
+                          Icon={Mouse}
+                          title="Logiciels"
+                          choices={
+                            editorContext.modelSoftwareOptionsArrayString
+                          }
+                          currentValue={editorContext.modelSoftwareArrayString}
+                          onChange={(val) => {
+                            if (val) {
+                              editorContext.setModelSoftwareArrayString(val);
+
+                              let _video_softwares: any[] = [];
+                              editorContext.modelSoftwareOptions?.map((x) => {
+                                if (val?.includes(x.label))
+                                  _video_softwares.push(x);
+                              });
+
+                              editorContext.setCurrentModelToModify(
+                                (previousState: EditorVideo) => ({
+                                  ...previousState,
+                                  video_softwares: _video_softwares,
+                                })
+                              );
+                            }
+                          }}
+                          toggle={openSoftwareToolbox}
+                          setToggle={(val) => {
+                            editorContext.setCurrentModelHasBeenModified(true);
+                            setOpenSoftwareToolbox(val);
+                          }}
+                          className="hidden md:block absolute top-0 left-1/2"
+                        />
+                      </>
                     )}
                   </div>
 
@@ -377,6 +455,7 @@ export const ModifyVideoPanel = () => {
                         </span>
                       }
                       onClick={() => {
+                        editorContext.setCurrentModelHasBeenModified(false);
                         setOpenLinkToolbox(!openLinkToolbox);
                       }}
                     />
@@ -387,11 +466,13 @@ export const ModifyVideoPanel = () => {
                         Icon={LinkIcon}
                         currentValue={editorContext.outLink}
                         onChange={(val) => {
-                          editorContext.setOutLink(val);
-                          editorContext.setCurrentModelHasBeenModified(true);
+                          if (val) {
+                            editorContext.setOutLink(val);
+                          }
                         }}
                         toggle={openLinkToolbox}
                         setToggle={(val) => {
+                          editorContext.setCurrentModelHasBeenModified(true);
                           setOpenLinkToolbox(val);
                         }}
                         className="hidden md:block md:absolute md:top-0 md:left-1/2"
@@ -408,6 +489,7 @@ export const ModifyVideoPanel = () => {
 
                       <div
                         onClick={() => {
+                          editorContext.setCurrentModelHasBeenModified(false);
                           editorContext.setNewTag("");
                           setOpenTagToolbox(!openLinkToolbox);
                         }}
@@ -419,53 +501,100 @@ export const ModifyVideoPanel = () => {
 
                     {!isMobile && (
                       <DropBox
+                        type="multiple"
+                        Icon={Plus}
+                        title="Nouveau Tag"
+                        choices={editorContext.tagsOptionsArrayString}
+                        currentValue={editorContext.tagsArrayString}
+                        onChange={(val) => {
+                          if (val) {
+                            editorContext.setTagsArrayString(val);
+
+                            let _tags: any[] = [];
+                            editorContext.tagsOptions?.map((x) => {
+                              if (val?.includes(x.name)) _tags.push(x);
+                            });
+                            editorContext.setCurrentModelToModify(
+                              (previousState: EditorVideo) => ({
+                                ...previousState,
+                                video_tags: _tags,
+                              })
+                            );
+                          }
+                        }}
+                        toggle={openTagToolbox}
+                        setToggle={(val) => {
+                          editorContext.setCurrentModelHasBeenModified(true);
+                          setOpenTagToolbox(val);
+                        }}
+                        className="hidden md:block absolute top-0 left-1/2"
+                      />
+                      /* 
+                      <DropBox
                         type="add"
                         placeholder="Nouveau Tag"
                         Icon={Plus}
                         currentValue={""}
                         onChange={(val) => {
+                          if (val) {
                           editorContext.addTag(val);
-                          editorContext.setCurrentModelHasBeenModified(true);
+                          }
                         }}
                         toggle={openTagToolbox}
                         setToggle={(val) => {
+                          editorContext.setCurrentModelHasBeenModified(true);
                           setOpenTagToolbox(val);
                         }}
                         className="hidden md:block md:absolute md:top-0 md:left-1/2"
                       />
+                      */
                     )}
 
-                    {editorContext.tags && editorContext.tags.map((tag, i) => {                      
-                      return (
-                        <Keyword
-                          key={i}
-                          text={tag.name}
-                          icon="cross"
-                          className="relative w-ful shrink-0"
-                          onClose={() => {
-                            editorContext.setTags(editorContext.tags?.filter((t) => t !== tag))
-                            editorContext.setCurrentModelHasBeenModified(true)
-                          }}
-                         />
-                      )
-                    })}
-                  </div>                  
+                    {editorContext.currentModelToModify.video_tags &&
+                      editorContext.currentModelToModify.video_tags.map(
+                        (tag:any, i:number) => {
+                          return (
+                            <Keyword
+                              key={i}
+                              text={tag.name}
+                              icon="cross"
+                              className="relative w-ful shrink-0"
+                              onClose={() => {
+                                editorContext.setCurrentModelToModify(
+                                  (previousState: EditorVideo) => ({
+                                    ...previousState,
+                                    video_tags:
+                                      editorContext.currentModelToModify
+                                        ? editorContext.currentModelToModify.video_tags?.filter(
+                                            (t:any) => t.name !== tag.name
+                                          )
+                                        : undefined,
+                                  })
+                                );
+                                editorContext.setCurrentModelHasBeenModified(
+                                  true
+                                );
+                              }}
+                            />
+                          );
+                        }
+                      )}
+                  </div>
                 </div>
               </div>
 
               <div className="modify-video__headline md:col-[content-start_/_content-end] row-[2_/_3] md:row-[3_/_4] align-self-auto md:py-dashboard-spacing-element-medium  md:pl-dashboard-spacing-element-medium flex flex-col gap-dashboard-spacing-element-medium">
                 <div className="flex gap-dashboard-button-separation-spacing">
                   <div className="shrink-0">
-                    <ProfilPicture />
+                    <ProfilPicture user={authContext.user.details} />
                   </div>
                   <div className="flex flex-col">
                     <div className="w-full text-title-medium n27 uppercase leading-none">
-                      {" "}
-                      {titleContent}{" "}
+                      {titleContent}
                     </div>
                     <div className="text-dashboard-text-description-base-low text-base">
-                      Par {editorContext.currentModelToModify.user_info.f_name}
-                      {editorContext.currentModelToModify.user_info.l_name}{" "}
+                      Par {authContext.user.details.f_name}{" "}
+                      {authContext.user.details.l_name}
                     </div>
                   </div>
                 </div>
@@ -520,11 +649,19 @@ export const ModifyVideoPanel = () => {
             choices={Formats}
             currentValue={editorContext.modelFormat}
             onChange={(val) => {
-              editorContext.setModelFormat(val);
-              editorContext.setCurrentModelHasBeenModified(true);
+              if (val) {
+                editorContext.setModelFormat(val);
+                editorContext.setCurrentModelToModify(
+                  (previousState: EditorVideo) => ({
+                    ...previousState,
+                    model: val,
+                  })
+                );
+              }
             }}
             toggle={openFrameToolbox}
             setToggle={(val) => {
+              editorContext.setCurrentModelHasBeenModified(true);
               setOpenFrameToolbox(val);
             }}
             className="fixed bottom-0 h-max z-20 md:hidden md:absolute md:top-0 md:left-1/2"
@@ -537,11 +674,19 @@ export const ModifyVideoPanel = () => {
             choices={Languages}
             currentValue={editorContext.modelAudio}
             onChange={(val) => {
-              editorContext.setModelAudio(val);
-              editorContext.setCurrentModelHasBeenModified(true);
+              if (val) {
+                editorContext.setModelAudio(val);
+                editorContext.setCurrentModelToModify(
+                  (previousState: EditorVideo) => ({
+                    ...previousState,
+                    audio: val,
+                  })
+                );
+              }
             }}
             toggle={openLangToolbox}
             setToggle={(val) => {
+              editorContext.setCurrentModelHasBeenModified(true);
               setOpenLangToolbox(val);
             }}
             className="fixed bottom-0 h-max z-20 md:hidden md:absolute md:top-0 md:left-1/2"
@@ -551,14 +696,22 @@ export const ModifyVideoPanel = () => {
             type="simple"
             Icon={Barchart}
             title="Difficulté"
-            choices={Difficulty}
+            choices={Worktime}
             currentValue={editorContext.modelWorkTime}
             onChange={(val) => {
-              editorContext.setModelWorkTime(val);
-              editorContext.setCurrentModelHasBeenModified(true);
+              if (val) {
+                editorContext.setModelWorkTime(val);
+                editorContext.setCurrentModelToModify(
+                  (previousState: EditorVideo) => ({
+                    ...previousState,
+                    worktime: val,
+                  })
+                );
+              }
             }}
             toggle={openWorktimeToolbox}
             setToggle={(val) => {
+              editorContext.setCurrentModelHasBeenModified(true);
               setOpenWorktimeToolbox(val);
             }}
             className="fixed bottom-0 h-max z-20 md:hidden md:absolute md:top-0 md:left-1/2"
@@ -568,14 +721,27 @@ export const ModifyVideoPanel = () => {
             type="multiple"
             Icon={Mouse}
             title="Logiciels"
-            choices={Softwares}
-            currentValue={editorContext.modelSoftware}
+            choices={editorContext.modelSoftwareOptionsArrayString}
+            currentValue={editorContext.modelSoftwareArrayString}
             onChange={(val) => {
-              editorContext.setModelSoftware(val);
-              editorContext.setCurrentModelHasBeenModified(true);
+              if (val) {
+                editorContext.setModelSoftware(val);
+
+                let _video_softwares: any[] = [];
+                editorContext.modelSoftwareOptions?.map((x) => {
+                  if (val?.includes(x.label)) _video_softwares.push(x);
+                });
+                editorContext.setCurrentModelToModify(
+                  (previousState: EditorVideo) => ({
+                    ...previousState,
+                    video_softwares: _video_softwares,
+                  })
+                );
+              }
             }}
             toggle={openSoftwareToolbox}
             setToggle={(val) => {
+              editorContext.setCurrentModelHasBeenModified(true);
               setOpenSoftwareToolbox(val);
             }}
             className="fixed bottom-0 h-max z-20 md:hidden md:absolute md:top-0 md:left-1/2"
@@ -587,31 +753,67 @@ export const ModifyVideoPanel = () => {
             Icon={LinkIcon}
             currentValue={editorContext.outLink}
             onChange={(val) => {
-              editorContext.setOutLink(val);
-              editorContext.setCurrentModelHasBeenModified(true);
+              if (val) {
+                editorContext.setOutLink(val);
+              }
             }}
             toggle={openLinkToolbox}
             setToggle={(val) => {
+              editorContext.setCurrentModelHasBeenModified(true);
               setOpenLinkToolbox(val);
             }}
             className="fixed bottom-0 h-max z-20 md:hidden md:absolute md:top-0 md:left-1/2"
           />
 
           <DropBox
+            type="multiple"
+            Icon={Plus}
+            title="Nouveau Tag"
+            choices={editorContext.tagsOptionsArrayString}
+            currentValue={editorContext.tagsArrayString}
+            onChange={(val) => {
+              if (val) {
+                editorContext.setTagsArrayString(val);
+
+                let _tags: any[] = [];
+                editorContext.tagsOptions?.map((x) => {
+                  if (val?.includes(x.name)) _tags.push(x);
+                });
+                editorContext.setCurrentModelToModify(
+                  (previousState: EditorVideo) => ({
+                    ...previousState,
+                    video_tags: _tags,
+                  })
+                );
+              }
+            }}
+            toggle={openTagToolbox}
+            setToggle={(val) => {
+              editorContext.setCurrentModelHasBeenModified(true);
+              setOpenTagToolbox(val);
+            }}
+            className="fixed bottom-0 h-max z-20 md:hidden md:absolute md:top-0 md:left-1/2"
+          />
+
+          {/* 
+          <DropBox
             type="add"
             placeholder="Nouveau Tag"
             Icon={Plus}
             currentValue={""}
             onChange={(val) => {
-              editorContext.addTag(val);
-              editorContext.setCurrentModelHasBeenModified(true);
+              if (val) {
+                editorContext.addTag(val);
+              }
             }}
             toggle={openTagToolbox}
             setToggle={(val) => {
+              editorContext.setCurrentModelHasBeenModified(true);
               setOpenTagToolbox(val);
             }}
             className="fixed bottom-0 h-max z-20 md:hidden md:absolute md:top-0 md:left-1/2"
           />
+          */}
         </>
       )}
     </div>

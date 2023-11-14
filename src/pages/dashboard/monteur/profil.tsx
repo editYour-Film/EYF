@@ -12,6 +12,7 @@ import { useContext, useEffect } from "react";
 import { DashBoardContext } from "@/components/dashboard/_context/DashBoardContext";
 import { ProfilMobile } from "@/components/dashboard/shared/ProfilMobile";
 import { EditorProfilContextProvider } from "@/components/dashboard/_context/ProfilContext";
+import { FooterDashboard } from "@/components/dashboard/shared/FooterDashBoard";
 
 export default function DashBoardContentProfile() {
   const authContext = useContext(AuthContext);
@@ -56,7 +57,7 @@ const DashBoardPageProfil = () => {
           {!isMobile && <DashboardContainer className='relative z-10' />}
         </div>
 
-        <Footer />
+        <FooterDashboard />
       </div>
     </EditorProfilContextProvider>
   </>)

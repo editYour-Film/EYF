@@ -1,6 +1,7 @@
+import { AuthContext } from "@/context/authContext"
 import useStrapi from "@/hooks/useStrapi"
 import { getNotifications } from "@/store/slices/NotificationsSlice"
-import { PropsWithChildren, createContext, useEffect, useState } from "react"
+import { PropsWithChildren, createContext, useContext, useEffect, useState } from "react"
 import { useDispatch } from "react-redux"
 
 export interface dashBoardPanelType {
@@ -48,10 +49,17 @@ export const DashBoardContext = createContext({
 
   buttons: undefined as any,
   setButtons: (payload:any) => {},
+
+  sendSponsorLink: (email: string) => {},
+
+  initials: undefined as string | undefined
 })
 
 export const DashBoardContextProvider = ({children}:PropsWithChildren) => {
+  const authContext = useContext(AuthContext)
   const dispatch = useDispatch()
+  
+  const initials = authContext.user.details.f_name[0] + authContext.user.details.l_name[0]  
   
   const { data: data, mutate: getStrapi } = useStrapi(
     "dashboard-monteur?" +
@@ -132,6 +140,10 @@ export const DashBoardContextProvider = ({children}:PropsWithChildren) => {
     setNotificationCenterOpen(!notificationCenterOpen)
   }
 
+  const sendSponsorLink = (email: string) => {
+    // TODO: Integration do the logic of the sponsor friend feature
+  }
+
   return (
     <DashBoardContext.Provider
       value={{
@@ -158,6 +170,10 @@ export const DashBoardContextProvider = ({children}:PropsWithChildren) => {
 
         buttons,
         setButtons,
+
+        sendSponsorLink,
+
+        initials
       }}
     >
       {children}

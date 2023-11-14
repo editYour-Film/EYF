@@ -10,6 +10,8 @@ type InputVignetProps = {
   desc: string;
   image: string;
   onChange: (file: File) => void;
+  maxSize: number;
+  allowedMimeType: {mime:string, name:string}[];
 };
 export const InputVignet = ({
   label,
@@ -18,6 +20,8 @@ export const InputVignet = ({
   desc,
   image,
   onChange,
+  maxSize,
+  allowedMimeType,
 }: InputVignetProps) => {
   const [img, setImg] = useState(image);
   const [error, setError] = useState("");
@@ -33,15 +37,14 @@ export const InputVignet = ({
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (
-      e.target.files &&
-      ["image/jpg", "image/jpeg", "image/png", "image/svg+xml"].includes(
-        e.target.files[0].type
-      )
+      e.target.files
     ) {
-      setImg(URL.createObjectURL(e.target.files[0]));
-      onChange(e.target.files[0]);
-    } else {
-      setError("Le format du fichier n'est pas compatible");
+      if( !allowedMimeType.map((el) => el.mime).includes(e.target.files[0].type) ) setError("Le format du fichier n'est pas compatible");
+      else if (e.target.files[0].size > maxSize) setError("Le fichier est trop volumineux");
+      else {
+        setImg(URL.createObjectURL(e.target.files[0]));
+        onChange(e.target.files[0]);
+      }
     }
   };
 
@@ -83,7 +86,12 @@ export const InputVignet = ({
               </div>
             )}
 
-            {error && <div className="text-applRed text-sm">{error}</div>}
+            <div className="flex flex-col">
+              {allowedMimeType && <span className='text-dashboard-text-disabled'>Formats acceptés : {allowedMimeType.map((el) => el.name).join(', ')}</span>}
+              {maxSize && <span className='text-dashboard-text-disabled'>Le fichier ne peut être supérieur à {maxSize / (1000 * 1000)}Mo</span>}
+            </div>
+
+            {error && <div className="text-appleRed text-sm">{error}</div>}
 
             <IslandButton
               type="small"
@@ -99,6 +107,7 @@ export const InputVignet = ({
         <input
           ref={input}
           type="file"
+          accept={allowedMimeType.join(',')}
           name="vignet"
           id="vignet"
           onChange={(e) => {

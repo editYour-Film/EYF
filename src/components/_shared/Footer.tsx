@@ -156,7 +156,7 @@ const Footer = () => {
           <Link href={routes.CGUCLIENTS} className={linksClass}>
             CGU
           </Link>
-          <Link href={routes.CGUMENOTRS} className={linksClass}>
+          <Link href={routes.CGUEDITOR} className={linksClass}>
             CGU monteur
           </Link>
           <Link href={routes.PC} className={linksClass}>

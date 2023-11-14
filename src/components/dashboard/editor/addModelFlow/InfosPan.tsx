@@ -17,6 +17,10 @@ import { FormatsType } from "../data/metaValues";
 
 import Close from "@/icons/dashboard/x.svg";
 import { AuthContext } from "@/context/authContext";
+import validator from "validator";
+import toast from "react-hot-toast";
+import { inputErrors } from "@/const";
+import Error from "@/icons/x-circle.svg";
 
 type InfosPanProps = {};
 
@@ -128,25 +132,19 @@ export const InfosPan = ({}: InfosPanProps) => {
   const handleSubmit = () => {
     setDescriptionError("");
     setTagsError("");
+    setTitleError("");
 
-    context.setUser_info(authContext.user.details.id);
-    context.setLength(
-      duration
-        ? duration?.min !== 0
-          ? duration?.min.toString() + " minutes"
-          : duration?.sec.toString() + " secondes"
-        : ""
-    );
+    if (context.title !== undefined && !validator.isEmpty(context.title)) {
+      if (isMobile) context.setCurrentStep(2);
+      else {
+        setVisibilityPanAdded(true);
 
-    if (isMobile) context.setCurrentStep(2);
-    else {
-      setVisibilityPanAdded(true);
-
-      dashboardContext.addPannel({
-        title: "Details",
-        panel: <AddModel step={2} />,
-      });
-    }
+        dashboardContext.addPannel({
+          title: "Details",
+          panel: <AddModel step={2} />,
+        });
+      }
+    } else context.setTitleError(inputErrors.required);
   };
 
   const handleAddTag = (e: any) => {
@@ -158,8 +156,22 @@ export const InfosPan = ({}: InfosPanProps) => {
       name: e,
       slug: slugify(e, { lower: true }),
     };
-    context.setTags(context.tags ? [...context.tags, _tag] : [_tag]);
+
+    if (context.tags) {
+      if (context.tags.length < 6) {
+        !context.tags.find((e) => e.slug === _tag.slug) &&
+          context.setTags([...context.tags, _tag]);
+      } else {
+        setTagsError("6 tags maximum");
+      }
+    } else {
+      context.setTags([_tag]);
+    }
   };
+
+  useEffect(() => {
+    tagsError && context.tags && context.tags?.length < 6 && setTagsError("");
+  }, [context.tags]);
 
   const handleRemoveTag = (e: any) => {
     const _tags = context.tags.filter((tag) => {
@@ -203,7 +215,7 @@ export const InfosPan = ({}: InfosPanProps) => {
         />
       )}
       <div className="info-pan__video-w relative rounded-t-2xl overflow-hidden border">
-        {entry && <Video video={entry.video.data.attributes} />}
+        {entry && <Video playerFullWidth video={entry.video.data.attributes} />}
       </div>
 
       <div className="info-pan__title flex items-baseline gap-2">
@@ -248,6 +260,7 @@ export const InfosPan = ({}: InfosPanProps) => {
               context.setTitle(e.target.value);
             }}
             className="bg-transparent"
+            error={context.titleError}
           />
           {titleError && (
             <div className="text-appleRed text-sm mt-2">{titleError}</div>
@@ -256,7 +269,7 @@ export const InfosPan = ({}: InfosPanProps) => {
 
         <div>
           <Input
-            label="Présentez-vous à vos futurs clients..."
+            label="Décrivez votre modèle de montage…"
             type="textarea"
             labelType="dashboard"
             helpIconText="Entrez la description"
@@ -280,21 +293,24 @@ export const InfosPan = ({}: InfosPanProps) => {
           }}
         />
 
-        <div className="infos-pan__tag-container flex flex-wrap gap-2">
-          {context.tags &&
-            context.tags.length > 0 &&
-            context.tags.map((tag: any, i: number) => {
-              return (
-                <Keyword
-                  key={i}
-                  icon="cross"
-                  text={tag.name}
-                  onClose={() => {
-                    handleRemoveTag(tag.slug);
-                  }}
-                />
-              );
-            })}
+        <div className="flex flex-col gap-1.5">
+          <div className="infos-pan__tag-container flex flex-wrap gap-2">
+            {context.tags &&
+              context.tags.length > 0 &&
+              context.tags.map((tag: any, i: number) => {
+                return (
+                  <Keyword
+                    key={i}
+                    icon="cross"
+                    text={tag.name}
+                    onClose={() => {
+                      handleRemoveTag(tag.slug);
+                    }}
+                  />
+                );
+              })}
+          </div>
+          {tagsError && <div className="text-appleRed">{tagsError}</div>}
         </div>
 
         <InputVignet
@@ -306,6 +322,14 @@ export const InfosPan = ({}: InfosPanProps) => {
           onChange={(file) => {
             context.setThumbnail(file);
           }}
+          maxSize={1 * 1000 * 1000}
+          allowedMimeType={[
+            { mime: "image/png", name: "png" },
+            { mime: "image/jpeg", name: "jpeg" },
+            { mime: "image/jpg", name: "jpg" },
+            { mime: "image/svg+xml", name: "svg" },
+            { mime: "image/webp", name: "webp" },
+          ]}
         />
       </form>
 

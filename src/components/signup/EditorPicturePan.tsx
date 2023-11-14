@@ -125,7 +125,7 @@ export const EditorPicturePan = () => {
                 label="Présentez-vous à vos futurs clients..."
                 placeholder="..."
                 minlength={50}
-                helpIconText="xxx"
+                helpIconText=""
                 value={context.editorDescription}
                 onChange={(e) => {
                   context.setEditorDescription(e.target.value);

@@ -20,7 +20,6 @@ type DropdownProps = {
 };
 
 export const Dropdown = ({
-  label,
   title,
   onChange,
   options,

@@ -11,7 +11,9 @@ import { TopBar } from "@/components/dashboard/shared/TopBar";
 import { NotificationCenter } from "@/components/dashboard/shared/NotificationCenter";
 import { useMediaQuery } from "@uidotdev/usehooks";
 import { AddModelContextProvider } from "@/components/dashboard/editor/_context/AddModelContext";
-import { MessageManager } from "@/components/_shared/UI/MessageManager";
+import { FooterDashboard } from "@/components/dashboard/shared/FooterDashBoard";
+import { GradientCard } from "@/components/dashboard/shared/GradientCard";
+import {toast} from 'react-hot-toast'
 
 export default function DashBoardContentHome() {
   return (
@@ -35,6 +37,8 @@ const DashBoardPageHome = ({ children }: PropsWithChildren) => {
   const isMobile = useMediaQuery("(max-width: 768px)");
 
   useEffect(() => {
+    toast('Hello there')
+
     context.setPanels([
       {
         title: "Accueil - Modèles",
@@ -47,12 +51,6 @@ const DashBoardPageHome = ({ children }: PropsWithChildren) => {
     <TopBar
       className=""
     >
-      {!isMobile &&
-        <MessageManager 
-          className='shrink ml-0 mr-auto'
-        />
-      }
-
         <IslandButton
           type="small-secondary"
           label="Obtenir un devis"
@@ -72,8 +70,16 @@ const DashBoardPageHome = ({ children }: PropsWithChildren) => {
             <DashboardContainer className="relative z-10" />
 
           </div>
-          <NewsletterSection />
-          <Footer />
+          <GradientCard 
+            title='PARRAINER UN AMI'
+            content='Bénéficiez d’avantages exclusifs en rejoignant la communauté des parrains editYour.Film dès aujourd’hui.'
+            hasCta 
+            type="email"
+            placeholder="Email" 
+            ctaLabel="Envoyer le lien de parrainage"
+            onClick={(email: string) => { context.sendSponsorLink(email)}}
+          />
+          <FooterDashboard />
         </div>
 
       </AddModelContextProvider>

@@ -6,26 +6,13 @@ import {
 } from "@/hooks/useStrapi";
 import { VideoDuration } from "@/utils/Video";
 import { createContext, useContext, useEffect, useState } from "react";
-import slugify from "slugify";
 import { DashBoardContext } from "../../_context/DashBoardContext";
-import { modelType, user_info } from "./EditorContext";
+import { modelType } from "./EditorContext";
 import { VisibilityType, WorkTimeType } from "../data/metaValues";
-
-type editorVideo = {
-  video?: File | undefined;
-  thumbnail?: File | undefined;
-  title?: string | undefined;
-  length?: string | undefined;
-  model?: string | undefined;
-  description?: string | undefined;
-  tags?: { name: string; slug: string }[] | undefined;
-  ressources?: File[] | undefined;
-  user_info?: number | undefined;
-  visibility?: string | undefined;
-  copywrite?: string | undefined;
-  workTime?: string | undefined;
-  is_highlighted?: boolean | undefined;
-};
+import toast from "react-hot-toast";
+import Error from "@/icons/x-circle.svg";
+import { AuthContext } from "@/context/authContext";
+import { formatVideoDuration } from "@/utils/utils";
 
 export const AddModelContext = createContext({
   currentStep: undefined as number | undefined,
@@ -54,6 +41,8 @@ export const AddModelContext = createContext({
   setThumbnail: (payload: File | undefined) => {},
   title: undefined as string | undefined,
   setTitle: (payload: string | undefined) => {},
+  titleError: undefined as string | undefined,
+  setTitleError: (payload: string | undefined) => {},
   length: undefined as string | undefined,
   setLength: (payload: string | undefined) => {},
   model: undefined as modelType | undefined,
@@ -64,8 +53,6 @@ export const AddModelContext = createContext({
   setTags: (payload: { name: string; slug: string }[] | undefined) => {},
   ressources: undefined as any,
   setRessources: (payload: any) => {},
-  user_info: undefined as user_info | undefined,
-  setUser_info: (payload: user_info | undefined) => {},
   visibility: undefined as VisibilityType | undefined,
   setVisibility: (payload: VisibilityType | undefined) => {},
   copywrite: undefined as string | undefined,
@@ -80,6 +67,7 @@ export const AddModelContext = createContext({
 
 export const AddModelContextProvider: React.FC<any> = (props) => {
   const dashboardContext = useContext(DashBoardContext);
+  const authContext = useContext(AuthContext);
 
   const [currentStep, setCurrentStep] = useState<number | undefined>(undefined);
   const [currentEditorVideo, setCurrentEditorVideo] = useState<number | null>(
@@ -88,20 +76,22 @@ export const AddModelContextProvider: React.FC<any> = (props) => {
 
   const [video, setVideo] = useState<number | undefined>(undefined);
   const [thumbnail, setThumbnail] = useState<File | undefined>(undefined);
+
   const [title, setTitle] = useState<string | undefined>(undefined);
+  const [titleError, setTitleError] = useState<string | undefined>(undefined);
+
   const [length, setLength] = useState<string | undefined>(undefined);
-  const [model, setModel] = useState<modelType | undefined>(undefined);
+  const [model, setModel] = useState<modelType | undefined>("model 16/9 ème");
   const [description, setDescription] = useState<string | undefined>(undefined);
   const [tags, setTags] = useState<
     { name: string; slug: string }[] | undefined
   >(undefined);
   const [ressources, setRessources] = useState<any>(undefined);
-  const [user_info, setUser_info] = useState<user_info | undefined>(undefined);
   const [visibility, setVisibility] = useState<VisibilityType | undefined>(
     undefined
   );
   const [copywrite, setCopywrite] = useState<string | undefined>(undefined);
-  const [worktime, setWorktime] = useState<WorkTimeType | undefined>(undefined);
+  const [worktime, setWorktime] = useState<WorkTimeType | undefined>("base");
   const [is_highlighed, setIs_highlighed] = useState<boolean | undefined>(
     undefined
   );
@@ -115,7 +105,6 @@ export const AddModelContextProvider: React.FC<any> = (props) => {
     description,
     tags,
     ressources,
-    user_info,
     visibility,
     copywrite,
     worktime,
@@ -137,7 +126,6 @@ export const AddModelContextProvider: React.FC<any> = (props) => {
       description,
       tags,
       ressources,
-      user_info,
       visibility,
       copywrite,
       worktime,
@@ -147,85 +135,69 @@ export const AddModelContextProvider: React.FC<any> = (props) => {
 
   const handleUpdateEditorVideo = async (): Promise<unknown> => {
     if (currentEditorVideo) {
-      const formData = new FormData();
-      const fieldsData: any = {};
+      if (thumbnail) {
+        const formData = new FormData();
+        const fileSize = (thumbnail.size / 1024 / 1024).toFixed(2);
+        if (
+          parseInt(fileSize) >
+          parseInt(process.env.NEXT_PUBLIC_MAX_FILE_SIZE_PROFILE as string)
+        )
+          toast(
+            "La miniature a une photo très volumineuse, elle ne doit pas dépasser les " +
+              process.env.NEXT_PUBLIC_MAX_FILE_SIZE +
+              " mb.",
+            {
+              icon: Error,
+              duration: 5000,
+              className: "bg-blackBerry",
+            }
+          );
+        else {
+          formData.append("files", thumbnail, thumbnail?.name);
+          formData.append("ref", "api::editor-video.editor-video");
+          formData.append("refId", String(currentEditorVideo));
+          formData.append("field", "thumbnail");
 
-      for (const [key, value] of Object.entries(modifiedData)) {
-        if (value) {
-          if (["video", "thumbnail"].includes(key)) {
-            formData.append(
-              `files.${key}`,
-              value as File,
-              (value as File).name
-            );
-          }
+          const uploadRes = await useStrapiPost(
+            "upload",
+            formData,
+            false,
+            true
+          );
 
-          // else if (key === 'ressources') {
-          //   for (let i = 0; i < value.files.length; i++)
-          //     formData.append(
-          //       `files.${key}`,
-          //       value.files[i],
-          //       value.files[i].name
-          //   );
-          // }
-          else if (key === "is_highlighted")
-            fieldsData["is_highlighted"] = value;
-          else if (key === "tags") {
-            const tagArray = value;
-
-            const existingTags = await useStrapiGet("video-tags", true);
-
-            let tagsIds: number[] = [];
-            (tagArray as { name: string; slug: string }[]).forEach(
-              async (tag: any) => {
-                let toCreate = true;
-                existingTags.data.data.forEach((existingTag: any) => {
-                  const slug = existingTag.attributes.slug;
-
-                  if (slug === tag.slug) {
-                    toCreate = false;
-                    tagsIds.push(existingTag.id);
-                    return;
-                  }
-                });
-
-                if (toCreate) {
-                  // eslint-disable-next-line react-hooks/rules-of-hooks
-                  const newTag = await useStrapiPost(
-                    "video-tags",
-                    {
-                      data: {
-                        name: tag.name,
-                        slug: slugify(tag.slug, { lower: true }),
-                      },
-                    },
-                    // user[1]
-                    false
-                  );
-
-                  tagsIds.push(newTag.data.data.id);
-                }
+          if (uploadRes.status !== 200)
+            toast(
+              "Une erreur est survenue lors de l'upload de votre miniature.",
+              {
+                icon: Error,
+                duration: 5000,
+                className: "bg-blackBerry",
               }
             );
-
-            fieldsData["video_tags"] = {
-              set: tagsIds,
-            };
-          } else {
-            fieldsData[key] = value.toString();
-          }
         }
       }
 
-      formData.append("data", JSON.stringify(fieldsData));
-
       const prom = new Promise(async (resolve, reject) => {
-        // eslint-disable-next-line react-hooks/rules-of-hooks
+        var video = document.querySelector("video") as HTMLVideoElement;
+
         const res = await useStrapiPut(
-          `editor-videos/${currentEditorVideo}?populate=*`,
-          formData,
-          true
+          `editor-videos/${currentEditorVideo}`,
+          {
+            data: {
+              title: title,
+              copywrite: copywrite,
+              description: description,
+              is_highlighed: is_highlighed === true,
+              model: model,
+              visibility: visibility,
+              worktime: worktime,
+              length: formatVideoDuration(video.duration),
+            },
+          },
+          false
         );
+
+        if (res.status === 200) authContext.RefreshUserData();
 
         resolve(res);
       });
@@ -238,15 +210,15 @@ export const AddModelContextProvider: React.FC<any> = (props) => {
     setVideo(undefined);
     setThumbnail(undefined);
     setTitle(undefined);
+    setTitleError(undefined);
     setLength(undefined);
-    setModel(undefined);
+    setModel("model 16/9 ème");
     setDescription(undefined);
     setTags(undefined);
     setRessources(undefined);
-    setUser_info(undefined);
     setVisibility(undefined);
     setCopywrite(undefined);
-    setWorktime(undefined);
+    setWorktime("base");
     setIs_highlighed(undefined);
   };
 
@@ -259,24 +231,22 @@ export const AddModelContextProvider: React.FC<any> = (props) => {
 
   const abort = () => {
     resetData();
-
-    //TODO: Integration delete the draft editor video if present
-    if (currentEditorVideo) {
-      useStrapiDelete(`editor-videos/${currentEditorVideo}`, true);
-    }
+    if (currentEditorVideo)
+      useStrapiDelete(`editor-videos/${currentEditorVideo}`, false /*true*/);
   };
 
   const [strapiObject, setStrapiObject] = useState<any>();
   const getCurrentStrapiObject = () => {
     return new Promise(async (res) => {
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-      const response = await useStrapiGet(
-        `editor-videos/${currentEditorVideo}?populate=*`,
-        false /*true*/
-      );
-      setStrapiObject(response.data.data);
+      if (currentEditorVideo) {
+        const response = await useStrapiGet(
+          `editor-videos/${currentEditorVideo}?populate=*`,
+          false /*true*/
+        );
+        setStrapiObject(response.data.data);
 
-      res(response);
+        res(response);
+      }
     });
   };
 
@@ -315,6 +285,8 @@ export const AddModelContextProvider: React.FC<any> = (props) => {
         setThumbnail,
         title,
         setTitle,
+        titleError,
+        setTitleError,
         length,
         setLength,
         model,
@@ -325,8 +297,6 @@ export const AddModelContextProvider: React.FC<any> = (props) => {
         setTags,
         ressources,
         setRessources,
-        user_info,
-        setUser_info,
         visibility,
         setVisibility,
         copywrite,
