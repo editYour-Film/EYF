@@ -31,6 +31,7 @@ type inputProps = {
   className?: string;
   size?: "sm" | undefined;
   helper?: string;
+  helperTop?: string;
   helpIconText?: string;
   error?: string | ReactNode;
   bg?: "white" | "black" | "light" | "card" | "underlined" | 'none';
@@ -71,6 +72,7 @@ const Input = ({
   className = "",
   size,
   helper,
+  helperTop,
   helpIconText,
   error,
   bg = "white",
@@ -303,13 +305,16 @@ const Input = ({
     case "select":
       return (
         <div className="flex flex-col justify-stretch h-full gap-dashboard-button-separation-spacing">
-          {label && (
-            <label className={labelClass}>
-              {label}
-  
-              {helpIconText && <Help text={helpIconText} label={label} />}
-            </label>
-          )}
+          <div>
+            {label && (
+              <label className={labelClass}>
+                {label}
+    
+                {helpIconText && <Help text={helpIconText} label={label} />}
+              </label>
+            )}
+            {helperTop && <p className={helperClass + 'mb-0'}>{helperTop}</p>}
+          </div>
           <div className={`relative flex flex-col items-end`}>
             <select
               title={label}
