@@ -50,6 +50,11 @@ export const FileInput = ({}: FileInputProps) => {
       Format de fichier incorrect. <Link href="/">En savoir plus</Link>
     </span>
   );
+  const sizeError = (
+    <span>
+      La taille de la vidéo dépasse la limite maximum.
+    </span>
+  );
   const unknowError = (
     <span>Quelque chose s&#39;est mal passé, veuillez réessayer</span>
   );
@@ -138,10 +143,15 @@ export const FileInput = ({}: FileInputProps) => {
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files![0]) {
-      if (!["video/mp4"].includes(e.target.files![0].type)) {
+      if (!["video/mp4", "video/m4v"].includes(e.target.files![0].type)) {
         setError(true);
         setErrorMsg(formatError);
-      } else {
+      } 
+      else if (e.target.files![0].size > 200 * 1000 * 1000) {
+        setError(true);
+        setErrorMsg(sizeError);
+      }
+      else {
         setSelectedFile(e.target.files![0]);
         context.setCurrentEditorVideo(null);
         form.current?.requestSubmit();
@@ -254,6 +264,11 @@ export const FileInput = ({}: FileInputProps) => {
               <div className="text-dashboard-text-description-base text-base-light w-8/12">
                 Vos vidéos resteront privées jusqu’à leur publication. Chaque
                 modèle est vérifié avant d’être publié dans le catalogue.
+              </div>
+
+              <div className="flex flex-col">
+                <span className='text-dashboard-text-disabled'>Formats acceptés : mp4, m4v</span>
+                <span className='text-dashboard-text-disabled'>Le fichier ne peut être supérieur à 200Mo</span>
               </div>
 
               {error && (
