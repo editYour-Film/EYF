@@ -147,7 +147,7 @@ export const ModifyVideoPanel = () => {
   }, [editorContext.showModifyPanel]);
 
   return (
-    <div className="modify-video fixed flex justify-center top-0 left-0 w-full h-full z-popup overflow-hidden pointer-events-none">
+    <div className="modify-video fixed flex justify-center top-0 left-0 w-full h-full z-popup pointer-events-none">
       <OverlayModel
         className="min-h-screen h-max"
         toggle={editorContext.showModifyPanel}
@@ -158,7 +158,7 @@ export const ModifyVideoPanel = () => {
           editorContext.setCurrentModelToModify(undefined);
         }}
       >
-        <div className="modify-video__inner min-h-full p-dashboard-button-separation-spacing md:p-0 bg-dashboard-button-dark md:border-03 md:rounded-dashboard-button-separation-spacing grid grid-modify-video pb-[50px] overflow-hidden">
+        <div className="modify-video__inner min-h-full p-dashboard-button-separation-spacing md:p-0 bg-dashboard-button-dark md:border-03 md:rounded-dashboard-button-separation-spacing grid grid-modify-video pb-[50px]">
           {editorContext.currentModelToModify && (
             <>
               {isMobile && (
