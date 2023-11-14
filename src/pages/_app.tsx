@@ -75,11 +75,8 @@ const Content = ({pageProps}: contentProps) => {
     </Lenis>
     {hasHover && <Cursor />}
   </>
-
-  console.log(authContext);
   
   if (authContext.isLoggedIn && authContext.user && !authContext.isLoading) {
-    console.log('1234');
     return (
       <>
         <DashBoardContextProvider>

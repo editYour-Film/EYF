@@ -15,13 +15,14 @@ export const DashboardEditorModels = ({
   const editorContext = useContext(EditorContext);
   const Grids = possibleModelFormat.map((type, g) => {
     let items = [];
+    let key = 0;
 
     models &&
       models.map((model: any, i: number) => {
         if (model.model === type) {
           items.push(
             <Model
-              key={g * 10 + i}
+              key={key}
               video={model}
               thumbnail={model.thumbnail ? model.thumbnail.url : undefined}
               active={model.visibility === "public"}
@@ -33,6 +34,8 @@ export const DashboardEditorModels = ({
               }}
             />
           );
+
+          key++
         }
       });
 
@@ -40,16 +43,18 @@ export const DashboardEditorModels = ({
       for (let i = 0; i <= 3 - items.length; i++) {
         items.push(
           <div
-            key={g * 10 + i}
+            key={key}
             className="w-full h-full bg-dashboard-button-dark rounded-dashboard-button-square-radius"
           ></div>
         );
+
+        key++
       }
     }
 
     if (items.length > 0) {
       return (
-        <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-dashboard-mention-padding-right-left">
+        <div key={Math.random()} className="grid md:grid-cols-2 xl:grid-cols-3 gap-dashboard-mention-padding-right-left">
           {items}
         </div>
       );
@@ -67,7 +72,9 @@ export const DashboardEditorModels = ({
         className={`dashboard-editor-models__models mt-dashboard-spacing-element-medium flex flex-col gap-dashboard-spacing-element-medium`}
       >
         {models && models.length > 0 ? (
-          Grids
+          <div key={1}>
+            {Grids}
+          </div>
         ) : (
           <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-dashboard-mention-padding-right-left">
             {[1, 2, 3].map((el, i) => {

@@ -45,15 +45,6 @@ export const AgendaContextProvider = ({children}:PropsWithChildren) => {
     type === 'proposed' && setNewRemainingDaysNb(newRemainingDaysNb + 1)
   }
 
-  // useEffect(() => {
-  //   console.log(modifiedDays);
-  // }, [modifiedDays])
-
-  useEffect(() => {
-    console.log(proposedDays);
-    
-  }, [proposedDays])
-
   const save = () => {
     // TODO: For each modified days switch status, if 'proposed' -> 'remaining', and the opposite
     // and fetch again
