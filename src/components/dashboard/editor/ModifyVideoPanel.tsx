@@ -212,7 +212,7 @@ export const ModifyVideoPanel = () => {
                       navigator.clipboard.writeText(
                         editorContext.currentModelToModify?.video.url
                       );
-                      toast("Lien copié", {
+                      toast("Et hop dans le presse-papier", {
                         icon: GreenCheck,
                         duration: 5000,
                         className: "bg-blackBerry",
