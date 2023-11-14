@@ -152,11 +152,24 @@ export const InfosPan = ({}: InfosPanProps) => {
       name: e,
       slug: slugify(e, { lower: true }),
     };
-    context.setTags(context.tags ? [...context.tags, _tag] : [_tag]);
+
+    if(context.tags) {
+      if(context.tags.length < 6) {        
+        !context.tags.find((e) => e.slug === _tag.slug) && context.setTags([...context.tags, _tag])
+      } else {
+        setTagsError('6 tags maximum')
+      }
+    } else {
+      context.setTags([_tag])
+    }
   };
 
+  useEffect(() => {
+    tagsError && context.tags && context.tags?.length < 6 && setTagsError('')
+  }, [context.tags])
+
   const handleRemoveTag = (e: any) => {
-    const _tags = tags.filter((tag) => {
+    const _tags = context.tags && context.tags.filter((tag) => {      
       return tag.slug !== slugify(e);
     });
     context.setTags(_tags);
@@ -237,7 +250,7 @@ export const InfosPan = ({}: InfosPanProps) => {
 
         <div>
           <Input
-            label="Présentez votre modèle à vos futurs clients..."
+            label="Décrivez votre modèle de montage…"
             type="textarea"
             labelType="dashboard"
             helpIconText="Entrez la description"
@@ -261,22 +274,26 @@ export const InfosPan = ({}: InfosPanProps) => {
           }}
         />
 
-        <div className="infos-pan__tag-container flex flex-wrap gap-2">
-          {context.tags &&
-            context.tags.length > 0 &&
-            context.tags.map((tag: any, i: number) => {
-              return (
-                <Keyword
-                  key={i}
-                  icon="cross"
-                  text={tag.name}
-                  onClose={() => {
-                    handleRemoveTag(tag.slug);
-                  }}
-                />
-              );
-            })}
+        <div className="flex flex-col gap-1.5">
+          <div className="infos-pan__tag-container flex flex-wrap gap-2">
+            {context.tags &&
+              context.tags.length > 0 &&
+              context.tags.map((tag: any, i: number) => {
+                return (
+                  <Keyword
+                    key={i}
+                    icon="cross"
+                    text={tag.name}
+                    onClose={() => {
+                      handleRemoveTag(tag.slug);
+                    }}
+                  />
+                );
+              })}
+          </div>
+          {tagsError && <div className="text-appleRed">{tagsError}</div>}
         </div>
+
 
         <InputVignet
           label="Ajoutez une miniature"
