@@ -13,6 +13,7 @@ export type ModelsProps = {
   type?: 'default' | 'dashboard'
   handleModify?: () => void,
   handleDisable?: () => void,
+  handleEnable?: () => void,
   handleDelete?: () => void,
   handleSetHighlighted?: () => void,
 }

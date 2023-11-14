@@ -68,7 +68,7 @@ export const IslandButton: React.FC<IslandButtonProps> = ({
       typeStyle = `${
         disabled
           ? "bg-background-dashboard-button-dark border"
-          : "bg-dashboard-button-white-default "
+          : "bg-dashboard-button-white-default border border-transparent"
       } text-small text-dashboard-text-description-base ${size} hover:bg-dashboard-button-white-hover hover:text-dashboard-text-title-white-high focus:bg-dashboard-button-white-hover focus:text-dashboard-text-title-white-high hover:border-dashboard-button-stroke-hover`;
       break;
     case "small-secondary":

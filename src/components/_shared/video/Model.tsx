@@ -1,7 +1,8 @@
+import { useState } from "react";
 import { IslandButton } from "../buttons/IslandButton";
 import { ModelsProps } from "./ModelLarge";
 import Image from "next/image";
-
+import Undo from '@/icons/undo.svg'
 interface ModelProps extends ModelsProps {
   active: boolean;
 }
@@ -14,7 +15,10 @@ export const Model = ({
   handleDisable,
   handleDelete,
   handleSetHighlighted,
+  handleEnable,
 }: ModelProps) => {
+  const [hover, setHover] = useState(false)
+
   let imgRatio;
 
   switch (video.model) {
@@ -68,10 +72,11 @@ export const Model = ({
         <IslandButton
           key={buttons.length}
           type="small"
-          disabled
+          disabled={!hover}
+          Icon={Undo}
           label="Retiré"
           onClick={() => {
-            handleDisable();
+            handleEnable && handleEnable();
           }}
           className="w-full leading-none shrink-1"
         />
@@ -83,6 +88,12 @@ export const Model = ({
       className={`model bg-dashboard-button-dark md:rounded-dashboard-button-square-radius overflow-hidden border ${
         active ? "hover:border-dashboard-button-stroke-hover" : ""
       } focus-within:border-dashboard-button-focus-stroke focus-within:border-2`}
+      onMouseOver={() => {
+        setHover(true)
+      }}
+      onMouseLeave={() => {
+        setHover(false)
+      }}
     >
       <div className={`model__image w-full relative h-0 ${imgRatio}`}>
         {thumbnail ? (

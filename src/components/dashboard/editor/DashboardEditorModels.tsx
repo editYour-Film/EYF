@@ -32,6 +32,9 @@ export const DashboardEditorModels = ({
               handleDisable={() => {
                 editorContext.handleDisableVideo(model.id);
               }}
+              handleEnable={() => {
+                editorContext.handleEnableVideo(model.id);
+              }}
             />
           );
 
