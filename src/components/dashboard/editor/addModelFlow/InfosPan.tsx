@@ -153,25 +153,28 @@ export const InfosPan = ({}: InfosPanProps) => {
       slug: slugify(e, { lower: true }),
     };
 
-    if(context.tags) {
-      if(context.tags.length < 6) {        
-        !context.tags.find((e) => e.slug === _tag.slug) && context.setTags([...context.tags, _tag])
+    if (context.tags) {
+      if (context.tags.length < 6) {
+        !context.tags.find((e) => e.slug === _tag.slug) &&
+          context.setTags([...context.tags, _tag]);
       } else {
-        setTagsError('6 tags maximum')
+        setTagsError("6 tags maximum");
       }
     } else {
-      context.setTags([_tag])
+      context.setTags([_tag]);
     }
   };
 
   useEffect(() => {
-    tagsError && context.tags && context.tags?.length < 6 && setTagsError('')
-  }, [context.tags])
+    tagsError && context.tags && context.tags?.length < 6 && setTagsError("");
+  }, [context.tags]);
 
   const handleRemoveTag = (e: any) => {
-    const _tags = context.tags && context.tags.filter((tag) => {      
-      return tag.slug !== slugify(e);
-    });
+    const _tags =
+      context.tags &&
+      context.tags.filter((tag) => {
+        return tag.slug !== slugify(e);
+      });
     context.setTags(_tags);
   };
 
@@ -294,7 +297,6 @@ export const InfosPan = ({}: InfosPanProps) => {
           {tagsError && <div className="text-appleRed">{tagsError}</div>}
         </div>
 
-
         <InputVignet
           label="Ajoutez une miniature"
           buttonLabel="Ajouter un fichier"
@@ -305,7 +307,13 @@ export const InfosPan = ({}: InfosPanProps) => {
             context.setThumbnail(file);
           }}
           maxSize={1 * 1000 * 1000}
-          allowedMimeType={[{mime: 'image/png', name:'png'}, {mime:'image/jpeg', name:'jpeg'}, {mime:'image/jpg', name:'jpg'}]}
+          allowedMimeType={[
+            { mime: "image/png", name: "png" },
+            { mime: "image/jpeg", name: "jpeg" },
+            { mime: "image/jpg", name: "jpg" },
+            { mime: "image/svg+xml", name: "svg" },
+            { mime: "image/webp", name: "webp" },
+          ]}
         />
       </form>
 
