@@ -96,6 +96,7 @@ export const Month = ({id, year}: MonthProps) => {
             {days.map((day, i) => {
               return (
               <Day 
+                key={i}
                 dayNb={day.dayNb}
                 type={day.type}
                 precBooked={i !== 0 && i % 7 !== 0 && days[i - 1].type === 'booked'}

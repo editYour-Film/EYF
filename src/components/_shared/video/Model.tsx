@@ -40,6 +40,7 @@ export const Model = ({
     handleModify &&
       buttons.push(
         <IslandButton
+          key={buttons.length}
           type="small"
           label="Modifier"
           onClick={() => {
@@ -52,6 +53,7 @@ export const Model = ({
     handleDisable &&
       buttons.push(
         <IslandButton
+          key={buttons.length}
           type="small"
           label="Retirer"
           onClick={() => {
@@ -64,6 +66,7 @@ export const Model = ({
     handleDisable &&
       buttons.push(
         <IslandButton
+          key={buttons.length}
           type="small"
           disabled
           label="Retiré"

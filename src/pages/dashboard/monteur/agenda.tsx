@@ -42,7 +42,7 @@ const Agenda = () => {
       
       panels.push({
         title: monthNames[month.getMonth()],
-        panel: <Month id={month.getMonth()} year={month.getFullYear()}/>
+        panel: <Month key={i} id={month.getMonth()} year={month.getFullYear()}/>
       })
     }
 
