@@ -185,7 +185,7 @@ export const DropBox = ({
   return (
     <div
       ref={container}
-      className={`relative dropbox min-w-[128px] w-full md:w-max py-dashboard-spacing-element-medium md:py-0 px-dashboard-mention-padding-right-left md:px-0 bg-dashboard-background-content-area md:bg-dashboard-button-white-default rounded-dashboard-mention-radius border-03 overflow-hidden backdrop-blur-[6.5px] z-popup ${className} ${
+      className={`absolute dropbox min-w-[128px] w-full md:w-max py-dashboard-spacing-element-medium md:py-0 px-dashboard-mention-padding-right-left md:px-0 bg-dashboard-background-content-area md:bg-dashboard-button-white-default rounded-dashboard-mention-radius border-03 overflow-hidden backdrop-blur-[6.5px] z-popup ${className} ${
         toggle ? "pointer-events-auto" : "pointer-events-none"
       }`}
     >
@@ -214,7 +214,7 @@ export const DropBox = ({
       </div>
 
       {(type === "simple" || type === "multiple") && (
-        <div className="py-dashboard-mention-padding-right-left md:py-dashboard-mention-padding-top-bottom ">
+        <div className="py-dashboard-mention-padding-right-left md:py-dashboard-mention-padding-top-bottom max-h-[300px] overflow-scroll no-scroll-bar">
           {choices &&
             choices.map((item, i) => {
               return (
