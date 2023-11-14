@@ -48,7 +48,7 @@ export const DashboardEditorHome = ({
           <TitleSvgCard
             className=""
             type="imgBottomRight"
-            img="/img/dashboard/computer-coffee.png"
+            img="/img/dashboard/computer-coffee.svg"
             title="Ajoutez un modèle de montage, et rejoignez notre catalogue."
             text="Ajoutez jusqu'à 6 modèles de montage à afficher dans le catalogue. Vos modèles augmentent votre visibilité auprès des créateur.rice.s en quête d'un monteur.se. Le premier modèle que vous ajoutez sera mis en avant sur votre profil public."
           />
