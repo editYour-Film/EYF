@@ -34,9 +34,10 @@ export const ProfilPicture = ({ user, size }: ProfilPictureProps) => {
         " " +
         user?.l_name.substring(0, 1)
       ).toUpperCase()}
-      img={user && user.picture.formats.thumbnail.url}
+      img={user && user.picture && user.picture.formats.thumbnail.url}
       className="w-full h-full"
       textSize="sm"
+      noHover
     />
   );
 
