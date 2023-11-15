@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { IslandButton } from "../buttons/IslandButton";
 import { ModelsProps } from "./ModelLarge";
 import Image from "next/image";
 import Undo from '@/icons/undo.svg'
+import { Video } from "./Video";
 interface ModelProps extends ModelsProps {
   active: boolean;
 }
@@ -18,7 +19,7 @@ export const Model = ({
   handleEnable,
 }: ModelProps) => {
   const [hover, setHover] = useState(false)
-
+  const videoRef = useRef<HTMLVideoElement>(null)
   let imgRatio;
 
   switch (video.model) {
@@ -83,9 +84,20 @@ export const Model = ({
       );
   }
 
+  useEffect(() => {
+    if (hover) {      
+      videoRef.current && videoRef.current.play()
+    } else {
+      if (videoRef.current) {
+        videoRef.current.pause()
+        setTimeout(() => { if (videoRef.current) videoRef.current.currentTime = 0 }, 500)
+      }
+    }
+  }, [hover])
+
   return (
     <div
-      className={`model bg-dashboard-button-dark md:rounded-dashboard-button-square-radius overflow-hidden border ${
+      className={`model group bg-dashboard-button-dark md:rounded-dashboard-button-square-radius overflow-hidden border ${
         active ? "hover:border-dashboard-button-stroke-hover" : ""
       } focus-within:border-dashboard-button-focus-stroke focus-within:border-2`}
       onMouseOver={() => {
@@ -97,10 +109,18 @@ export const Model = ({
     >
       <div className={`model__image w-full relative h-0 ${imgRatio}`}>
         {thumbnail ? (
-          <Image src={thumbnail} alt="" fill className="object-cover" />
+          <Image src={thumbnail} alt="" fill className="object-cover group-hover:opacity-0 transition-opacity duration-500 z-10" />
         ) : (
           <></>
         )}
+
+        <div className="relative h-full w-full z-0">
+          <Video
+            video={video.video}
+            ref={videoRef}
+            noPlayer
+          />
+        </div>
       </div>
 
       <div

@@ -1,4 +1,3 @@
-import { Video as VideoType } from "@/components/model/videos";
 import { RefObject, forwardRef, useRef, useState } from "react";
 import { Player } from "./Player";
 
@@ -6,6 +5,7 @@ type VideoProps = {
   video: any;
   defaultPlayer?: boolean;
   playerFullWidth?: boolean;
+  noPlayer?: boolean;
   className?: string;
   hFull?: boolean;
   onLoadedMetadata?: () => void;
@@ -16,6 +16,7 @@ export const Video = forwardRef<HTMLVideoElement, VideoProps>(function Video(
     video,
     defaultPlayer = false,
     playerFullWidth = false,
+    noPlayer = false,
     className,
     hFull,
     onLoadedMetadata,
@@ -60,7 +61,7 @@ export const Video = forwardRef<HTMLVideoElement, VideoProps>(function Video(
       <video
         ref={videoEl}
         className={`video relative w-full h-full object-cover z-0`}
-        controls={defaultPlayer}
+        controls={(defaultPlayer && !noPlayer)}
         onClick={(e) => {
           e.preventDefault();
           handleClick();
@@ -83,14 +84,14 @@ export const Video = forwardRef<HTMLVideoElement, VideoProps>(function Video(
         ) : (
           video.data && (
             <source
-              src={video.data.attributes.url}
-              type={video.data.attributes.mime}
+              src={video.url}
+              type={video.mime}
             />
           )
         )}
       </video>
 
-      {!defaultPlayer && (
+      {(!defaultPlayer && !noPlayer) && (
         <>
           <Player
             isPlaying={isPlaying}
