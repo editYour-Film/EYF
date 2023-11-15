@@ -1,4 +1,4 @@
-import { ReactNode, useRef, useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { Help } from "./Help";
 import { EditButton } from "../UI/EditButton";
@@ -96,6 +96,7 @@ const Input = ({
 }: inputProps) => {
   const [isPassword, setIsPassword] = useState(true);
 
+  const inputRef = useRef<any>(null)
   const dayRef = useRef<HTMLInputElement>(null);
   const monthRef = useRef<HTMLInputElement>(null);
   const yearRef = useRef<HTMLInputElement>(null);
@@ -150,6 +151,31 @@ const Input = ({
   }
 
   const helperClass = "text-base text-dashboard-text-description-base-low mt-dashboard-mention-padding-top-bottom mb-8";
+
+  const hiddenDiv = useRef<HTMLDivElement>()
+  
+  useEffect(() => {
+    if (type === 'textarea') {
+      hiddenDiv.current = document.createElement('div')
+      hiddenDiv.current.style.display = 'none';
+      hiddenDiv.current.style.whiteSpace = 'pre-wrap';
+      hiddenDiv.current.style.wordBreak = 'break-word';
+      hiddenDiv.current.style.lineHeight = '1.4';
+      hiddenDiv.current.style.padding = '0 8px'
+    }
+  }, [])
+
+  const resizeTextArea = (e) => {
+    if(hiddenDiv.current) {
+      inputRef.current.parentNode.appendChild(hiddenDiv.current);
+      hiddenDiv.current.innerHTML = e.target.value + '<br style="line-height: 1.4;">';
+      hiddenDiv.current.style.visibility = 'hidden';
+      hiddenDiv.current.style.display = 'block';
+      inputRef.current.style.height = hiddenDiv.current.offsetHeight + 'px';
+      hiddenDiv.current.style.visibility = 'visible';
+      hiddenDiv.current.style.display = 'none';
+    }
+  }
 
   switch (type) {
     case "text":
@@ -207,9 +233,13 @@ const Input = ({
             className={`relative flex flex-col grow items-end ${inputClass} focus-within:outline-blueBerry focus-within:outline`}
           >
             <textarea
-              onChange={onChange}
+              ref={inputRef}
+              onChange={(e) => {
+                resizeTextArea(e)
+                onChange && onChange(e)
+              }}
               onBlur={onBlur}
-              className="bg-transparent w-full h-full resize-none px-[8px]"
+              className="bg-transparent w-full h-full min-h-[100px] resize-none px-[8px] overflow-hidden leading-[1.4]"
               value={value as string}
               name={name}
               placeholder={placeholder}
