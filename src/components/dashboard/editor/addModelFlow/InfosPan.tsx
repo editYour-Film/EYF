@@ -161,9 +161,7 @@ export const InfosPan = ({}: InfosPanProps) => {
       if (context.tags.length < 6) {
         !context.tags.find((e) => e.slug === _tag.slug) &&
           context.setTags([...context.tags, _tag]);
-      } else {
-        setTagsError("6 tags maximum");
-      }
+      } else setTagsError("6 tags maximum");
     } else {
       context.setTags([_tag]);
     }
@@ -174,7 +172,7 @@ export const InfosPan = ({}: InfosPanProps) => {
   }, [context.tags]);
 
   const handleRemoveTag = (e: any) => {
-    const _tags = context.tags.filter((tag) => {
+    const _tags = context.tags?.filter((tag) => {
       return tag.slug !== slugify(e);
     });
     context.setTags(_tags);
