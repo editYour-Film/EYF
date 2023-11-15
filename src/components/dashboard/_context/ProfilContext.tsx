@@ -56,11 +56,13 @@ export const EditorProfilContext = createContext({
   setYear: (payload: string) => {},
 
   langOptions: [] as spokenLanguageInterface[] | undefined,
+  usageLang: undefined as spokenLanguageInterface | undefined,
   spokenLanguages: [] as spokenLanguageInterface[],
   skillsOptions: [] as skillsInterface[] | undefined,
   skills: [] as skillsInterface[],
 
   handleModelChange: (payload: any) => {},
+  handleAddUsedLang: (payload: spokenLanguageInterface) => {},
   handleAddLang: (payload: spokenLanguageInterface) => {},
   handleRemoveLang: (payload: spokenLanguageInterface) => {},
   handleAddSkill: (payload: skillsInterface) => {},
@@ -133,6 +135,7 @@ export const EditorProfilContextProvider: React.FC<any> = (props) => {
   );
 
   const [langOptions, setLangOptions] = useState<spokenLanguageInterface[]>();
+  const [usageLang, setUsageLang] = useState<spokenLanguageInterface>()
   const [spokenLanguages, setSpokenLanguages] = useState<
     spokenLanguageInterface[]
   >(user.details.languages ? user.details.languages : []);
@@ -173,9 +176,14 @@ export const EditorProfilContextProvider: React.FC<any> = (props) => {
 
   const [skills, setSkills] = useState<skillsInterface[]>(
     user.details.skills ? user.details.skills : []
-  );
+  );  
 
   const handleModelChange = () => {};
+
+  const handleAddUsedLang = (lang: spokenLanguageInterface) => {
+    if (usageLang !== lang)
+      setUsageLang(lang);
+  };
 
   const handleAddLang = (lang: spokenLanguageInterface) => {
     if (!spokenLanguages.find((x) => x.id === lang.id))
@@ -419,6 +427,8 @@ export const EditorProfilContextProvider: React.FC<any> = (props) => {
 
         langOptions,
         spokenLanguages,
+        usageLang,
+        handleAddUsedLang,
 
         skillsOptions,
         skills,

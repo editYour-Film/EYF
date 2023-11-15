@@ -2,7 +2,6 @@ import routes from "@/routes";
 import house from "@/icons/house.svg";
 import schedule from "@/icons/schedule.svg";
 import camera from "@/icons/camera.svg";
-import chartArrow from "@/icons/chart-arrow.svg";
 import person from "@/icons/person.svg";
 
 import clock from "@/icons/Clock.svg";
@@ -23,19 +22,33 @@ export const DASHBOARD_EDITOR_MENU = [
     link: routes.DASHBOARD_EDITOR_SCHEDULE,
   },
   {
-    icon: camera,
-    label: "Missions",
-    link: routes.DASHBOARD_EDITOR_MISSIONS,
+    icon: clock,
+    label: "Commandes",
+    link: routes.DASHBOARD_EDITOR_ORDERS,
+    disabled: true,
   },
   {
-    icon: chartArrow,
-    label: "Historique",
-    link: routes.DASHBOARD_EDITOR_HISTORY,
+    icon: mouse,
+    label: "Studio",
+    link: routes.DASHBOARD_EDITOR_STUDIO,
+    disabled: true,
+  },
+  {
+    icon: folder,
+    label: "Documents",
+    link: routes.DASHBOARD_EDITOR_DOCUMENTS,
+    disabled: true,
   },
   {
     icon: person,
     label: "Profil",
     link: routes.DASHBOARD_EDITOR_PROFIL,
+  },
+  {
+    icon: settings,
+    label: "Paramètres",
+    link: routes.DASHBOARD_EDITOR_SETTINGS,
+    disabled: true,
   },
 ]
 

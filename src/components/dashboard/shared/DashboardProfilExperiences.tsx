@@ -72,6 +72,23 @@ export const InputsExperience = () => {
 
   return (
     <>
+      <Input
+        type="select"
+        bg="light"
+        label="Langue d'usage"
+        onChange={(e) => {
+          if (context.langOptions) {
+            const lang = context.langOptions.find(
+              (el) => el.id?.toString() === e.target.value?.toString()
+            );
+            if (lang) context.handleAddUsedLang(lang);
+          }
+        }}
+        className="relative z-20 bg-transparent"
+        options={langOptions}
+        placeholder="Sélectionnez les langues que vous parlez"
+      />
+
       <div>
         <Input
           type="select"
@@ -90,30 +107,31 @@ export const InputsExperience = () => {
           placeholder="Sélectionnez les langues que vous parlez"
         />
       </div>
-
-      <div className="flex gap-2 flex-wrap">
-        {context.spokenLanguages &&
-          context.spokenLanguages.map((lang, i) => {
-            return (
-              <>
-                <Tag
-                  bg="light"
-                  key={i}
-                  text={lang.label}
-                  onClose={() => {
-                    context.handleRemoveLang(lang);
-                  }}
-                  icon="cross"
-                />
-              </>
-            );
-          })}
-      </div>
+      {context.spokenLanguages && context.spokenLanguages.length > 0 &&
+        <div key={Math.random()} className="flex gap-2 flex-wrap">
+          {
+            context.spokenLanguages.map((lang, i) => {
+              return (
+                <>
+                  <Tag
+                    bg="light"
+                    key={i}
+                    text={lang.label}
+                    onClose={() => {
+                      context.handleRemoveLang(lang);
+                    }}
+                    icon="cross"
+                  />
+                </>
+              );
+            })}
+        </div>
+      }
 
       <div>
         <Input
           type="select"
-          label="Ajouter une compétence"
+          label="Compétences complémentaires"
           bg="light"
           onChange={(e) => {
             if (context.skillsOptions) {
@@ -126,12 +144,12 @@ export const InputsExperience = () => {
           className="relative z-10 bg-transparent"
           options={skillsOptions}
           placeholder="Sélectionnez vos compétences"
+          helperTop="Ajoutez jusqu’à 3 compétences maximum sur votre profil."
         />
       </div>
-
-      <div className="flex gap-2 flex-wrap">
-        {context.skills &&
-          context.skills.map((skill, i: number) => {
+      {(context.skills && context.skills.length > 0) &&
+        <div key={Math.random()} className="flex gap-2 flex-wrap">
+          {context.skills.map((skill, i: number) => {
             return (
               <Tag
                 bg="light"
@@ -144,8 +162,8 @@ export const InputsExperience = () => {
               />
             );
           })}
-      </div>
-
+        </div>
+      }
       <div className="flex items-center justify-end gap-dashboard-button-separation-spacing mt-auto md:mt-dashboard-spacing-element-medium mb-0">
         <MentionInteraction onClick={() => context.abort()} className="h-max">
           Annuler

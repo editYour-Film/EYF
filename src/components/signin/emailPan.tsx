@@ -46,7 +46,7 @@ export const EmailPan = ({ disclaimer }: EmailPanProps) => {
           <Input
             type="email"
             label="email"
-            placeholder="Entrez votre adresse mail"
+            placeholder="Entrez votre adresse email"
             bg="light"
             className="w-full"
             error={context.emailErrorMessage}
@@ -59,7 +59,7 @@ export const EmailPan = ({ disclaimer }: EmailPanProps) => {
 
           <Button
             type="secondary"
-            label="Confirmer mon mail"
+            label="Confirmer mon email"
             disabled={context.email.length === 0}
             onClick={() => {
               handleConfirmEmail();

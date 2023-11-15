@@ -42,9 +42,7 @@ export const DashboardMenuMobile = ({ className, menu }: DashboardMenuMobileProp
           }
         })
 
-        tl.fromTo(menuContainer.current, {
-          x: window.innerWidth * 1.1
-        }, {
+        tl.to(menuContainer.current, {
           x: 0,
           duration: 1,
           ease: 'power4.out'
@@ -61,9 +59,7 @@ export const DashboardMenuMobile = ({ className, menu }: DashboardMenuMobileProp
           }
         })
 
-        tl.fromTo(menuContainer.current, {
-          x: 0
-        }, {
+        tl.to(menuContainer.current, {
           x: window.innerWidth * 1.1,
           duration: 0.4,
           ease: 'power2.in'
