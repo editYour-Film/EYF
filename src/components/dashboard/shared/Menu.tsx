@@ -20,7 +20,7 @@ export const Menu = ({ items }: MenuProps) => {
   const router = useRouter();
 
   return (
-    <div className="sidebar__menu flex flex-col gap-dashboard-mention-padding-right-left w-full dashboard-button-dark">
+    <div className="sidebar__menu flex flex-col md:gap-dashboard-mention-padding-right-left w-full dashboard-button-dark">
       {items &&
         items.map((item: any, i: number) => {
           return (

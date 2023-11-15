@@ -50,9 +50,11 @@ let routes = {
   DASHBOARD_EDITOR: "/dashboard/monteur/accueil",
   DASHBOARD_EDITOR_HOME: "/dashboard/monteur/accueil",
   DASHBOARD_EDITOR_SCHEDULE: "/dashboard/monteur/agenda",
-  DASHBOARD_EDITOR_MISSIONS: "/dashboard/monteur/missions",
-  DASHBOARD_EDITOR_HISTORY: "/dashboard/monteur/historique",
+  DASHBOARD_EDITOR_ORDERS: "/dashboard/monteur/commandes",
+  DASHBOARD_EDITOR_STUDIO: "/dashboard/monteur/studio",
+  DASHBOARD_EDITOR_DOCUMENTS: "/dashboard/monteur/documents",
   DASHBOARD_EDITOR_PROFIL: "/dashboard/monteur/profil",
+  DASHBOARD_EDITOR_SETTINGS: "/dashboard/monteur/settings",
 
   DASHBOARD_CLIENT: '/dashboard/client/accueil',
   DASHBOARD_CLIENT_HOME: '/dashboard/client/accueil',
