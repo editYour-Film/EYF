@@ -38,14 +38,14 @@ export const EmailPan = () => {
       <SignInSignUpContainer ref={container}>
         <LogoSignup />
         <hr className="w-full border-05" />
-        <div className="text-large text-center">Ajouter votre mail</div>
+        <div className="text-large text-center">Ajouter votre email</div>
         <hr className="w-full border-05" />
 
         <div className="w-full">
           <Input
             type="email"
             label="email"
-            placeholder="Entrez votre adresse mail"
+            placeholder="Entrez votre adresse email"
             bg="light"
             className="w-full"
             error={context.emailErrorMessage}

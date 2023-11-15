@@ -81,7 +81,7 @@ export const SignInContextProvider: React.FC<any> = (props) => {
     notValid: <span>{inputErrors.invalidEmail}</span>,
     notFound: (
       <span>
-        Aucun compte n'est lié à cette adresse mail.{" "}
+        Aucun compte n'est lié à cette adresse email.{" "}
         <Link href={routes.SIGNUP}>
           {" "}
           <span className="text-dashboard-text-description-base">
