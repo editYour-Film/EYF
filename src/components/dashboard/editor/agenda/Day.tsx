@@ -10,7 +10,7 @@ type DayProps = {
 }
 
 export const Day = ({dayNb, type = 'remaining', precBooked, nextBooked, disabled, onClick}:PropsWithChildren<DayProps>) => {
-  const dayRadius = 'w-[51px] h-[51px]'
+  const dayRadius = 'w-[40px] h-[40px] sm:w-[51px] sm:h-[51px]'
   const [_type, set_Type] = useState(type)
 
   let colors
@@ -30,7 +30,7 @@ export const Day = ({dayNb, type = 'remaining', precBooked, nextBooked, disabled
 
   return (
     <button 
-      className="relative px-[3px] flex items-center justify-center n27 text-[25px] font-[300] tracking-[2px]"
+      className="relative px-[3px] flex items-center justify-center n27 text-[20px] sm:text-[25px] font-[300] tracking-[2px]"
       disabled={disabled || type === 'booked'}
       onClick={() => { 
         onClick && onClick() 

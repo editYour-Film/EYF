@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react"
+import { forwardRef, useContext, useEffect, useState } from "react"
 import { Day } from "./Day"
 import { TitleSvgCard } from "../../shared/TitleSvgCard"
 
@@ -10,13 +10,15 @@ import Clock from '@/icons/Clock.svg'
 import Info from '@/icons/info.svg'
 import { IslandButton } from "@/components/_shared/buttons/IslandButton"
 import { AgendaContext } from "../_context/AgendaContext"
+import { MentionInteraction } from "@/components/_shared/buttons/MentionInteraction"
+import { useMediaQuery } from "@uidotdev/usehooks"
 
 type MonthProps = {
   id: number;
   year: number;
 };
 
-export const Month = ({id, year}: MonthProps) => {
+export const Month = forwardRef<HTMLDivElement, MonthProps>(function({id, year}, ref) {
   const agendaContext = useContext(AgendaContext)
 
   const [bookedDays] = useState<Date[]>(agendaContext.bookedDays.filter((d) => {
@@ -34,6 +36,8 @@ export const Month = ({id, year}: MonthProps) => {
   const precMonthLastDay = new Date(year, id, 0).getDate()
   
   const [days, setDays] = useState<any[]>([])
+
+  const isMobile = useMediaQuery('(max-width: 768px)')
 
   useEffect(() => {
     let newDays = []
@@ -84,10 +88,18 @@ export const Month = ({id, year}: MonthProps) => {
    
   return (
     <div className="month-pan flex flex-col gap-dashboard-spacing-element-medium">
-      <div className="flex flex-col gap-dashboard-mention-padding-right-left">
-        <div className="text-title-m text-dashboard-text-description-base n27 uppercase">Période de {monthNames[id]} {year}</div>
-        <hr />
-        <div className={`flex flex-col lg:flex-row justify-stretch gap-dashboard-mention-padding-right-left`}>
+      <div className="flex flex-col items-center md:items-stretch gap-dashboard-mention-padding-right-left">
+        {
+          !isMobile &&
+          <>
+            <div className="text-title-m text-dashboard-text-description-base n27 uppercase">Période de {monthNames[id]} {year}</div>
+            <hr />
+          </>
+        }
+
+        <div 
+          ref={ref}
+          className={`flex flex-col lg:flex-row justify-stretch gap-dashboard-spacing-element-medium md:gap-dashboard-mention-padding-right-left`}>
           <div className={`grid grid-month p-dashboard-button-separation-spacing ${agendaContext.isModifying ? 'opacity-100' : 'opacity-70'}`}>
             {dayNames.map((label) => {
               return <div className="w-max place-self-center text-dashboard-text-description-base">{label}</div>
@@ -107,13 +119,16 @@ export const Month = ({id, year}: MonthProps) => {
             })}
           </div>
 
-          <div className="p-padding-medium w-full fullHd:w-max flex flex-col justify-between gap-padding-medium">
-            <div className="flex flex-col gap-dashboard-mention-padding-right-left text-small text-dashboard-text-description-base-low">
-              <div className="flex gap-[10px]"><Check className="svg-color-[rgba(82,74,110,1)] w-[24px] h-[24px]"/> {bookedDays.length} jours réservé(s)</div>
-              <div className="flex gap-[10px]"><Check className="svg-color-dashboard-success-dark w-[24px] h-[24px]"/> {proposedDays.length} jours affichés disponibles</div>
-              <div className="flex gap-[10px]"><Clock className="svg-color-dashboard-button-white-hover w-[24px] h-[24px]"/> {lastDate - (bookedDays.length + proposedDays.length)} jours encore disponible</div>
-              <div className="flex gap-[10px]"><Info className="svg-color-dashboard-button-white-hover w-[24px] h-[24px]"/> 2 client(s) ce mois</div>
+          <div className="md:p-padding-medium w-full fullHd:w-max flex flex-col justify-between gap-dashboard-spacing-element-medium md:gap-padding-medium">
+            <div className={`flex flex-col gap-dashboard-mention-padding-right-left text-small ${agendaContext.isModifying ? 'text-dashboard-text-description-base' : 'text-dashboard-text-description-base-low'}`}>
+              <div className="flex gap-[10px]"><Check className={`${agendaContext.isModifying ? 'svg-color-blueBerry' : 'svg-color-[rgba(82,74,110,1)]'} w-[24px] h-[24px]`}/> {bookedDays.length} jours réservé(s)</div>
+              <div className="flex gap-[10px]"><Check className={`${agendaContext.isModifying ? 'svg-color-dashboard-success' : 'svg-color-dashboard-success-dark'} w-[24px] h-[24px]`}/> {proposedDays.length} jours affichés disponibles</div>
+              <div className="flex gap-[10px]"><Clock className={`${agendaContext.isModifying ? 'svg-color-soyMilk' : 'svg-color-dashboard-button-white-hover'} w-[24px] h-[24px]`}/> {lastDate - (bookedDays.length + proposedDays.length)} jours encore disponible</div>
+              <div className="flex gap-[10px]"><Info className={`${agendaContext.isModifying ? 'svg-color-soyMilk' : 'svg-color-dashboard-button-white-hover'} w-[24px] h-[24px]`}/> 2 client(s) ce mois</div>
             </div>
+
+            {isMobile && <hr />}
+
             {
               agendaContext.isModifying === false ?
                 <IslandButton 
@@ -123,22 +138,30 @@ export const Month = ({id, year}: MonthProps) => {
                   className="w-max lg:self-end"
                 />
               :
-                <IslandButton 
-                  label="Enregistrer"
-                  type="primary"
-                  onClick={() => { handleSave() }}
-                  className="w-max lg:self-end"
-                />
+                <div className="flex flex-row self-end items-center gap-dashboard-specific-radius">
+                  {
+                    isMobile &&
+                    <MentionInteraction >Annuler</MentionInteraction>
+                  }
+                  <IslandButton 
+                    label="Enregistrer"
+                    type="primary"
+                    onClick={() => { handleSave() }}
+                    className="w-max lg:self-end"
+                  />
+                </div>
             }
           </div>
         </div>
       </div>
       
-      <TitleSvgCard 
-        title="Travaillez quand et où vous voulez"
-        text="Ajoutez jusqu'à 6 modèles de montage à afficher dans le catalogue. Vos modèles augmentent votre visibilité auprès des créateur.rice.s en quête d'un monteur.se. Le premier modèle que vous ajoutez sera mis en avant sur votre profil public."
-        Svg={coffeeClock}
-      />
+      {!isMobile &&
+        <TitleSvgCard 
+          title="Travaillez quand et où vous voulez"
+          text="Ajoutez jusqu'à 6 modèles de montage à afficher dans le catalogue. Vos modèles augmentent votre visibilité auprès des créateur.rice.s en quête d'un monteur.se. Le premier modèle que vous ajoutez sera mis en avant sur votre profil public."
+          Svg={coffeeClock}
+        />
+      }
     </div>
   );
-};
+})
