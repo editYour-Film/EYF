@@ -206,13 +206,13 @@ const Input = ({
 
           {maxlength && (
             <div className="input__maxlength ml-auto mr-0 text-xs text-dashboard-text-description-base">{`${
-              (value as string).length
-            } / ${maxlength}`}</div>
+              (value as string).split(' ').length
+            } / ${maxlength}max`}</div>
           )}
           {minlength && (
             <div className="input__minlength ml-auto mr-0 text-xs text-dashboard-text-description-base">{`${
-              (value as string).length
-            } / ${minlength}`}</div>
+              (value as string).split(' ').length
+            } / ${minlength}min`}</div>
           )}
           {helper && <p className={helperClass}>{helper}</p>}
           {error && <p className="text-appleRed mt-1.5 ">{error}</p>}
@@ -250,13 +250,13 @@ const Input = ({
 
           {maxlength && (
             <div className="input__maxlength ml-auto mr-0 text-xs text-dashboard-text-description-base">{`${
-              (value as string).length
-            } / ${maxlength}`}</div>
+              (value as string).split(' ').length
+            } / ${maxlength}max`}</div>
           )}
           {minlength && (
-            <div className="input__minlength ml-auto mr-0 text-xs text-dashboard-text-description-base">{`Minimum ${minlength} caractères ${
-              (value as string).length
-            } / ${minlength}`}</div>
+            <div className="input__minlength ml-auto mr-0 text-xs text-dashboard-text-description-base">{`Minimum ${minlength} mots ${
+              (value as string).split(' ').length
+            } / ${minlength}min`}</div>
           )}
           {error && <p className="text-appleRed mt-1.5 ">{error}</p>}
         </div>

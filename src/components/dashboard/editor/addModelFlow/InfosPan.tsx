@@ -148,6 +148,10 @@ export const InfosPan = ({}: InfosPanProps) => {
   };
 
   const handleAddTag = (e: any) => {
+    if (e.includes(" ")) {
+      setTagsError("Les mots clés ne doivent pas contenir d'espaces.");
+      return;
+    }
     const _tag = {
       name: e,
       slug: slugify(e, { lower: true }),
@@ -170,11 +174,9 @@ export const InfosPan = ({}: InfosPanProps) => {
   }, [context.tags]);
 
   const handleRemoveTag = (e: any) => {
-    const _tags =
-      context.tags &&
-      context.tags.filter((tag) => {
-        return tag.slug !== slugify(e);
-      });
+    const _tags = context.tags.filter((tag) => {
+      return tag.slug !== slugify(e);
+    });
     context.setTags(_tags);
   };
 
@@ -182,6 +184,20 @@ export const InfosPan = ({}: InfosPanProps) => {
     if (titleError || descriptionError || tagsError) setError(true);
     else setError(false);
   }, [titleError, descriptionError, tagsError]);
+
+  const areRequiredFieldsFilled = () => {
+    if (context.tags?.length) {
+      return (
+        context.model &&
+        context.title &&
+        context.description &&
+        context.description.split(" ").length >= 100 &&
+        context.thumbnail &&
+        context.tags.length > 0
+      );
+    }
+    return false;
+  };
 
   return (
     <div className="infos-pan flex flex-col gap-dashboard-spacing-element-medium bg-dashboard-background-content-area pt-[50px] pb-[150px] md:py-0">
@@ -263,7 +279,7 @@ export const InfosPan = ({}: InfosPanProps) => {
             onChange={(e) => {
               context.setDescription(e.target.value);
             }}
-            maxlength={100}
+            minlength={100}
             className="bg-transparent"
           />
           {descriptionError && (
@@ -322,7 +338,7 @@ export const InfosPan = ({}: InfosPanProps) => {
           type="primary"
           label="Confirmer"
           className={`w-max self-end`}
-          disabled={error || visibilityPanAdded}
+          disabled={!areRequiredFieldsFilled() || error}
           onClick={() => {
             !error && handleSubmit();
           }}
