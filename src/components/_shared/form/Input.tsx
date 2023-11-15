@@ -165,10 +165,10 @@ const Input = ({
     }
   }, [])
 
-  const resizeTextArea = (e) => {
+  const resizeTextArea = (e:React.FormEvent<HTMLTextAreaElement>) => {
     if(hiddenDiv.current) {
       inputRef.current.parentNode.appendChild(hiddenDiv.current);
-      hiddenDiv.current.innerHTML = e.target.value + '<br style="line-height: 1.4;">';
+      hiddenDiv.current.innerHTML = e.currentTarget.value + '<br style="line-height: 1.4;">';
       hiddenDiv.current.style.visibility = 'hidden';
       hiddenDiv.current.style.display = 'block';
       inputRef.current.style.height = hiddenDiv.current.offsetHeight + 'px';
