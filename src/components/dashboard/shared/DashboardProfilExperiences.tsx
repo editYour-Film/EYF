@@ -1,5 +1,4 @@
 import { Tag } from "@/components/_shared/UI/Tag";
-import Input from "@/components/_shared/form/Input";
 import {
   EditorProfilContext,
   EditorProfilContextProvider,
@@ -7,6 +6,7 @@ import {
 import { ReactElement, useContext, useEffect, useState } from "react";
 import { IslandButton } from "@/components/_shared/buttons/IslandButton";
 import { MentionInteraction } from "@/components/_shared/buttons/MentionInteraction";
+import { Select } from "@/components/_shared/form/Select";
 
 export const DashboardEditorProfilExperiences = () => {
   return (
@@ -72,80 +72,75 @@ export const InputsExperience = () => {
 
   return (
     <>
-      <Input
-        type="select"
-        bg="light"
+      <Select
         label="Langue d'usage"
-        onChange={(e) => {
+        onSelectOption={(val) => {
           if (context.langOptions) {
             const lang = context.langOptions.find(
-              (el) => el.id?.toString() === e.target.value?.toString()
+              (el) => el.id === val
             );
             if (lang) context.handleAddUsedLang(lang);
           }
         }}
-        className="relative z-20 bg-transparent"
-        options={langOptions}
-        placeholder="Sélectionnez les langues que vous parlez"
+        list={context.langOptions}
+        placeholder={context.usageLang?.label ?? "Sélectionnez votre langue d'usage"}
       />
 
-      <div>
-        <Input
-          type="select"
-          bg="light"
-          label="Rechercher une langue"
-          onChange={(e) => {
-            if (context.langOptions) {
-              const lang = context.langOptions.find(
-                (el) => el.id?.toString() === e.target.value?.toString()
-              );
-              if (lang) context.handleAddLang(lang);
-            }
-          }}
-          className="relative z-20 bg-transparent"
-          options={langOptions}
-          placeholder="Sélectionnez les langues que vous parlez"
-        />
-      </div>
+      <Select
+        label="Rechercher une langue"
+        onSelectOption={(id) => {
+          if (context.langOptions) {
+            const lang = context.langOptions.find(
+              (el) => el.id === id
+            );
+            if (lang) context.handleAddLang(lang);
+          }
+        }}
+        list={context.langOptions}
+        placeholder={"Sélectionnez les langues que vous parlez"}
+      />
+
       {context.spokenLanguages && context.spokenLanguages.length > 0 &&
         <div key={Math.random()} className="flex gap-2 flex-wrap">
           {
             context.spokenLanguages.map((lang, i) => {
               return (
-                <>
-                  <Tag
-                    bg="light"
-                    key={i}
-                    text={lang.label}
-                    onClose={() => {
-                      context.handleRemoveLang(lang);
-                    }}
-                    icon="cross"
-                  />
-                </>
+                <Tag
+                  bg="light"
+                  key={i}
+                  text={lang.label}
+                  onClose={() => {
+                    context.handleRemoveLang(lang);
+                  }}
+                  icon="cross"
+                />
               );
             })}
         </div>
       }
 
       <div>
-        <Input
-          type="select"
-          label="Compétences complémentaires"
-          bg="light"
-          onChange={(e) => {
-            if (context.skillsOptions) {
+        <Select 
+          search
+          placeholder="Sélectionnez ou ajoutez vos compétences"
+          helperTop="Ajoutez jusqu’à 3 compétences maximum sur votre profil."
+          label="Ajoutez vos compétences"
+          list={context.skillsOptions}
+          onAdd={(val) => {
+            //TODO: Integration add a new tag from the val entered by the user
+          }}
+          onSelectOption={(val) => {
+            if (context.skillsOptions) {              
               const skill = context.skillsOptions.find(
-                (el) => el.id?.toString() === e.target.value.toString()
+                (el) => {
+                  return el.id === val
+                }
               );
               if (skill) context.handleAddSkill(skill);
             }
           }}
-          className="relative z-10 bg-transparent"
-          options={skillsOptions}
-          placeholder="Sélectionnez vos compétences"
-          helperTop="Ajoutez jusqu’à 3 compétences maximum sur votre profil."
         />
+
       </div>
       {(context.skills && context.skills.length > 0) &&
         <div key={Math.random()} className="flex gap-2 flex-wrap">
