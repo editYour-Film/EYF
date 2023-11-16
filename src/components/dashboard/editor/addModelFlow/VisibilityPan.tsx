@@ -9,7 +9,6 @@ import { Button } from "@/components/_shared/buttons/Button";
 import { IslandButton } from "@/components/_shared/buttons/IslandButton";
 import { DashBoardContext } from "../../_context/DashBoardContext";
 import GreenCheck from "@/icons/check-green.svg";
-import { EditorContext } from "../_context/EditorContext";
 import {
   VisibilityType,
   WorkTimeLabelType,
@@ -26,8 +25,6 @@ import Error from "@/icons/x-circle.svg";
 
 export const VisibilityPan = () => {
   const context = useContext(AddModelContext);
-  const editorContext = useContext(EditorContext);
-
   const dashboardContext = useContext(DashBoardContext);
 
   const form = useRef<HTMLFormElement>(null);
@@ -96,29 +93,37 @@ export const VisibilityPan = () => {
   const lenis = useLenis();
 
   const handleSubmit = async () => {
-    setTimeout(() => {
-      const updateRes = context.handleUpdateEditorVideo();
-      updateRes.then((res: StrapiResponse) => {
-        if (res.status === 200) {
-          context.resetData();
-          dashboardContext.setIsAddModelPannelOpen(false);
-          dashboardContext.closePanels();
-          lenis.scrollTo(0);
+    let err = false 
+    if (context.copywrite && context.copywrite?.split(' ').length > 200) {
+      setCopyWriteError('Le text doit contenir 200 mots maximum')
+      err = true
+    }
 
-          toast.custom(
-            <InfoMessage
-              message="Votre modèle a été ajouté avec succès."
-              Icon={GreenCheck}
-            />
-          );
-        } else
-          toast(inputErrors.general, {
-            icon: Error,
-            duration: 5000,
-            className: "bg-blackBerry",
-          });
-      });
-    }, 500);
+    if(!err) {
+      setTimeout(() => {
+        const updateRes = context.handleUpdateEditorVideo();
+        updateRes.then((res: StrapiResponse) => {
+          if (res.status === 200) {
+            context.resetData();
+            dashboardContext.setIsAddModelPannelOpen(false);
+            dashboardContext.closePanels();
+            lenis.scrollTo(0);
+  
+            toast.custom(
+              <InfoMessage
+                message="Votre modèle a été ajouté avec succès."
+                Icon={GreenCheck}
+              />
+            );
+          } else
+            toast(inputErrors.general, {
+              icon: Error,
+              duration: 5000,
+              className: "bg-blackBerry",
+            });
+        });
+      }, 500);
+    }
   };
 
   useEffect(() => {
@@ -227,9 +232,9 @@ export const VisibilityPan = () => {
             bg="light"
             labelType="dashboard"
             value={context.copywrite}
-            maxlength={150}
+            maxlength={200}
             size="sm"
-            helpIconText="Help"
+            helpIconText="Maximum 200 mots"
             onChange={(e) => {
               context.setCopywrite(e.target.value);
             }}

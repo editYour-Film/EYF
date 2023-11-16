@@ -95,6 +95,9 @@ const Input = ({
   searchIcon
 }: inputProps) => {
   const [isPassword, setIsPassword] = useState(true);
+  
+  const [textValue, setTextValue] = useState<string | undefined>(undefined);
+  const [lengthError, setLengthError] = useState<string | undefined>(undefined)
 
   const inputRef = useRef<any>(null)
   const dayRef = useRef<HTMLInputElement>(null);
@@ -165,10 +168,10 @@ const Input = ({
     }
   }, [])
 
-  const resizeTextArea = (e:React.FormEvent<HTMLTextAreaElement>) => {
+  const resizeTextArea = (value: string | undefined) => {
     if(hiddenDiv.current) {
       inputRef.current.parentNode.appendChild(hiddenDiv.current);
-      hiddenDiv.current.innerHTML = e.currentTarget.value + '<br style="line-height: 1.4;">';
+      hiddenDiv.current.innerHTML = value ? value + '<br style="line-height: 1.4;">' : '';
       hiddenDiv.current.style.visibility = 'hidden';
       hiddenDiv.current.style.display = 'block';
       inputRef.current.style.height = hiddenDiv.current.offsetHeight + 'px';
@@ -191,7 +194,14 @@ const Input = ({
           <div className={`relative flex flex-col items-end ${inputClass} focus-within:outline-blueBerry focus-within:outline`}>
             <input
               type="text"
-              onChange={onChange}
+              onChange={(e) => {
+                if ( maxlength ? e.target.value.trim().split(' ').length < maxlength : true) {
+                    setTextValue(e.target.value);
+                    onChange(e);
+                } else {
+                  setLengthError(`Le texte est limité à ${maxlength} mots`)
+                }
+              }}
               onBlur={onBlur}
               className={`bg-transparent w-full h-full ${
                 textSunset ? "text-linear-sunset" : ""
@@ -203,18 +213,19 @@ const Input = ({
               disabled={disabled}
             />
           </div>
-
+{/* 
           {maxlength && (
             <div className="input__maxlength ml-auto mr-0 text-xs text-dashboard-text-description-base">{`${
               (value as string).split(' ').length
             } / ${maxlength}max`}</div>
-          )}
+          )} */}
           {minlength && (
             <div className="input__minlength ml-auto mr-0 text-xs text-dashboard-text-description-base">{`${
               (value as string).split(' ').length
             } / ${minlength}min`}</div>
           )}
           {helper && <p className={helperClass}>{helper}</p>}
+          {lengthError && <p className="text-appleRed mt-1.5 ">{lengthError}</p>}
           {error && <p className="text-appleRed mt-1.5 ">{error}</p>}
         </div>
       );
@@ -235,29 +246,35 @@ const Input = ({
             <textarea
               ref={inputRef}
               onChange={(e) => {
-                resizeTextArea(e)
-                onChange && onChange(e)
+                if ( maxlength ? e.target.value.trim().split(' ').length < maxlength : true) {
+                    setTextValue(e.target.value);
+                    resizeTextArea(textValue)
+                    onChange(e);
+                } else {
+                  setLengthError(`Le texte est limité à ${maxlength} mots`)
+                }
               }}
+
               onBlur={onBlur}
               className="bg-transparent w-full h-full min-h-[100px] resize-none px-[8px] overflow-hidden leading-[1.4]"
               value={value as string}
               name={name}
               placeholder={placeholder}
-              maxLength={maxlength}
               disabled={disabled}
             ></textarea>
           </div>
 
-          {maxlength && (
+          {/* {maxlength && (
             <div className="input__maxlength ml-auto mr-0 text-xs text-dashboard-text-description-base">{`${
               (value as string).split(' ').length
             } / ${maxlength}max`}</div>
-          )}
+          )} */}
           {minlength && (
             <div className="input__minlength ml-auto mr-0 text-xs text-dashboard-text-description-base">{`Minimum ${minlength} mots ${
               (value as string).split(' ').length
             } / ${minlength}min`}</div>
           )}
+          {lengthError && <p className="text-appleRed mt-1.5 ">{lengthError}</p>}
           {error && <p className="text-appleRed mt-1.5 ">{error}</p>}
         </div>
       );
