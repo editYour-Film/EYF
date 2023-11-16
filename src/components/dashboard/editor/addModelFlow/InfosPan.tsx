@@ -134,7 +134,18 @@ export const InfosPan = ({}: InfosPanProps) => {
     setTagsError("");
     setTitleError("");
 
-    if (context.title !== undefined && !validator.isEmpty(context.title)) {
+    let err = false;
+    if (context.description && context.description?.split(' ').length < 50) {
+      err = true
+      setDescriptionError("Veuillez entrer un texte de 50 mots minimum");
+    }
+ 
+    if (context.title === undefined || !validator.isEmpty(context.title)) {
+      err = true
+      context.setTitleError(inputErrors.required);
+    }
+
+    if (!err) {
       if (isMobile) context.setCurrentStep(2);
       else {
         setVisibilityPanAdded(true);
@@ -144,7 +155,7 @@ export const InfosPan = ({}: InfosPanProps) => {
           panel: <AddModel step={2} />,
         });
       }
-    } else context.setTitleError(inputErrors.required);
+    }
   };
 
   const handleAddTag = (e: any) => {
@@ -189,7 +200,7 @@ export const InfosPan = ({}: InfosPanProps) => {
         context.model &&
         context.title &&
         context.description &&
-        context.description.split(" ").length >= 100 &&
+        // context.description.split(" ").length >= 50 &&
         context.thumbnail &&
         context.tags.length > 0
       );
@@ -270,14 +281,15 @@ export const InfosPan = ({}: InfosPanProps) => {
             label="Décrivez votre modèle de montage…"
             type="textarea"
             labelType="dashboard"
-            helpIconText="Entrez la description"
+            helpIconText="150 mots maximum."
             bg="light"
             value={context.description}
             placeholder="Présentez votre vidéo à vos spectateurs..."
             onChange={(e) => {
               context.setDescription(e.target.value);
             }}
-            minlength={100}
+            minlength={50}
+            maxlength={150}
             className="bg-transparent"
           />
           {descriptionError && (
