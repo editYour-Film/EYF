@@ -29,6 +29,7 @@ export const EditorProfilContext = createContext({
 
   desc: "",
   setDesc: (payload: string) => {},
+  descError: "",
 
   email: "",
   setEmail: (payload: string) => {},
@@ -95,6 +96,7 @@ export const EditorProfilContextProvider: React.FC<any> = (props) => {
   const [email, setEmail] = useState(user.user.email ? user.user.email : "");
 
   const [desc, setDesc] = useState(user.details.bio ? user.details.bio : "");
+  const [descError, setDescError] = useState<string>("");
 
   const [phone, setPhone] = useState(
     user.details.phone ? user.details.phone : ""
@@ -305,6 +307,10 @@ export const EditorProfilContextProvider: React.FC<any> = (props) => {
       setUsernameError(inputErrors.invalid);
       isValid = false;
     }
+    if (desc.split(' ').length < 50) {
+      setDescError('La description doit faire 50 mots au minimum');
+      isValid = false;
+    }
     if (!validator.isPostalCode(zipcode, "FR")) {
       setZipcodeError(inputErrors.invalid);
       isValid = false;
@@ -399,6 +405,7 @@ export const EditorProfilContextProvider: React.FC<any> = (props) => {
 
         desc,
         setDesc,
+        descError,
 
         email,
         setEmail,

@@ -3,21 +3,24 @@ import { useContext } from "react";
 import { EditorProfilContext } from "../../_context/ProfilContext";
 
 export const DescInput = () => {
-  const { desc, setDesc } = useContext(EditorProfilContext);
+  const { desc, setDesc, descError } = useContext(EditorProfilContext);
 
   return (
     <Input
       type="textarea"
       bg="light"
       value={desc}
-      maxlength={100}
+      maxlength={150}
+      minlength={50}
+      helpIconText="Maximum 150 mots"
       label="Description"
       labelType="dashboard"
-      className="h-40 bg-transparent"
+      className="bg-transparent"
       onChange={(e) => {
         setDesc(e.target.value);
       }}
       placeholder="Entrez votre description"
+      error={descError}
     />
   );
 };
