@@ -140,7 +140,7 @@ export const InfosPan = ({}: InfosPanProps) => {
       setDescriptionError("Veuillez entrer un texte de 50 mots minimum");
     }
  
-    if (context.title === undefined || !validator.isEmpty(context.title)) {
+    if (context.title === undefined || validator.isEmpty(context.title)) {
       err = true
       context.setTitleError(inputErrors.required);
     }
