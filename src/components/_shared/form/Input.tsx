@@ -241,14 +241,14 @@ const Input = ({
           )}
           {helper && <p className={helperClass}>{helper}</p>}
           <div
-            className={`relative flex flex-col grow items-end ${inputClass} focus-within:outline-blueBerry focus-within:outline`}
+            className={`relative grow items-end ${inputClass} focus-within:outline-blueBerry focus-within:outline`}
           >
             <textarea
               ref={inputRef}
               onChange={(e) => {
                 if ( maxlength ? e.target.value.trim().split(' ').length < maxlength : true) {
                     setTextValue(e.target.value);
-                    resizeTextArea(textValue)
+                    resizeTextArea(e.target.value)
                     onChange(e);
                 } else {
                   setLengthError(`Le texte est limité à ${maxlength} mots`)

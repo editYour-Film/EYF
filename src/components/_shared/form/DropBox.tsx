@@ -135,11 +135,10 @@ export const DropBox = ({
     };
 
     if (isOpen) {
+      handleOpen();
       setValue(currentValue);
       window.addEventListener("click", handleClickOutside);
     }
-
-    if (isOpen) handleOpen();
     else {
       handleClose();
     }
@@ -149,12 +148,12 @@ export const DropBox = ({
     };
   }, [isOpen]);
 
-  useEffect(() => {
+  useEffect(() => {    
     if (!isTweening) {
       if (toggle) setIsOpen(true);
       else setIsOpen(false);
     }
-  }, [toggle, ctx.current]);
+  }, [toggle]);
 
   const handleOpen = () => {
     ctx.current && ctx.current.open();
