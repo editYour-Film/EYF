@@ -62,8 +62,14 @@ export const Video = forwardRef<HTMLVideoElement, VideoProps>(function Video(
     setCurrentTime(videoEl.current?.currentTime);
   };
 
-  useEffect(() => {    
-    handleClick();
+  useEffect(() => {  
+    if (trigger) {
+      // videoEl.current && videoEl.current.pause();
+      handlePlay()
+    } else {
+      handlePause()
+      // videoEl.current && videoEl.current.play();
+    }
   }, [trigger])
 
   return (
