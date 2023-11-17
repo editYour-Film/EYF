@@ -211,6 +211,7 @@ const Input = ({
               placeholder={placeholder}
               maxLength={maxlength}
               disabled={disabled}
+              onKeyDown={(e) => {onKeyDown && onKeyDown(e)}}
             />
           </div>
 {/* 
@@ -261,6 +262,7 @@ const Input = ({
               name={name}
               placeholder={placeholder}
               disabled={disabled}
+              onKeyDown={(e) => {onKeyDown && onKeyDown(e)}}
             ></textarea>
           </div>
 
@@ -298,6 +300,7 @@ const Input = ({
               name={name}
               placeholder={placeholder}
               disabled={disabled}
+              onKeyDown={(e) => {onKeyDown && onKeyDown(e)}}
             />
           </div>
           {helper && <p className={helperClass}>{helper}</p>}
@@ -324,6 +327,7 @@ const Input = ({
               name={name}
               placeholder={placeholder}
               disabled={disabled}
+              onKeyDown={(e) => {onKeyDown && onKeyDown(e)}}
             />
             {isPassword ? (
               <Image

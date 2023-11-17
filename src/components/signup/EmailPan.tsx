@@ -54,6 +54,7 @@ export const EmailPan = () => {
             onChange={(e) => {
               context.setEmail(e.target.value);
             }}
+            onKeyDown={(e) => { handleKeyDown(e) }}
           />
         </div>
 

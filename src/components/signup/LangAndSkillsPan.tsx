@@ -45,7 +45,7 @@ export const LangAndSkillsPan = () => {
           <>
             <hr className="form-separator" />
 
-            <div>
+            <div className={`${isMobile ? 'w-screen' : 'sm:w-auto'}`}>
               <div
                 className={`flex ${
                   isMobile ? "justify-start" : "justify-center"
