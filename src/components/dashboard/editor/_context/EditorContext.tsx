@@ -406,7 +406,13 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
           className: "bg-blackBerry",
         }
       );
+    } else {
+      if(authContext.user.models.length === 1) {
+        !authContext.user.models[0].is_highlighted && storeHighlightedVideo(authContext.user.models[0].id)
+      }
     }
+
+    setHighlightedVideo(authContext.user.models.find((e:any) => e.is_highlighted === true))
   }, []);
 
   return (
