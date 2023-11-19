@@ -41,35 +41,41 @@ export const DashboardEditorHome = ({
         className ?? ""
       }`}
     >
-      {editorContext.highlightedVideo ? (
-        <HightlightedVideo />
+      {authContext.isLoading ? (
+        <p>Loading...</p>
       ) : (
         <>
-          <TitleSvgCard
-            className=""
-            type="imgBottomRight"
-            img="/img/dashboard/computer-coffee.svg"
-            title="Ajoutez un modèle de montage, et rejoignez notre catalogue."
-            text="Ajoutez jusqu'à 6 modèles de montage à afficher dans le catalogue. Vos modèles augmentent votre visibilité auprès des créateur.rice.s en quête d'un monteur.se. Le premier modèle que vous ajoutez sera mis en avant sur votre profil public."
-          />
-          <IslandButton
-            type="secondary"
-            label="Ajouter un modèle"
-            onClick={() => {
-              dashboardContext.setIsAddModelPannelOpen(true);
-            }}
-            className="md:hidden"
-          />
-        </>
-      )}
+          {editorContext.highlightedVideo ? (
+            <HightlightedVideo />
+          ) : (
+            <>
+              <TitleSvgCard
+                className=""
+                type="imgBottomRight"
+                img="/img/dashboard/computer-coffee.svg"
+                title="Ajoutez un modèle de montage, et rejoignez notre catalogue."
+                text="Ajoutez jusqu'à 6 modèles de montage à afficher dans le catalogue. Vos modèles augmentent votre visibilité auprès des créateur.rice.s en quête d'un monteur.se. Le premier modèle que vous ajoutez sera mis en avant sur votre profil public."
+              />
+              <IslandButton
+                type="secondary"
+                label="Ajouter un modèle"
+                onClick={() => {
+                  dashboardContext.setIsAddModelPannelOpen(true);
+                }}
+                className="md:hidden"
+              />
+            </>
+          )}
 
-      <hr />
-      <DashboardEditorModels models={authContext.user.models} />
-      {(dashboardContext.infoCardActive ||
-        (dashboardContext.posts && dashboardContext.posts.length > 0)) && (
-        <>
           <hr />
-          <NewsAndInfos />
+          <DashboardEditorModels models={authContext.user.models} />
+          {(dashboardContext.infoCardActive ||
+            (dashboardContext.posts && dashboardContext.posts.length > 0)) && (
+            <>
+              <hr />
+              <NewsAndInfos />
+            </>
+          )}
         </>
       )}
       <hr />

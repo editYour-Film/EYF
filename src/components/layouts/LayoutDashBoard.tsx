@@ -11,7 +11,10 @@ import { EditorContextProvider } from "../dashboard/editor/_context/EditorContex
 import { SideBar } from "../dashboard/shared/SideBar";
 import { DashboardMenuMobile } from "../dashboard/shared/DashboardMenuMobile";
 
-import { DASHBOARD_EDITOR_MENU, DASHBOARD_CLIENT_MENU } from "../dashboard/editor/data/menus";
+import {
+  DASHBOARD_EDITOR_MENU,
+  DASHBOARD_CLIENT_MENU,
+} from "../dashboard/editor/data/menus";
 
 import { ButtonsWrapper } from "../dashboard/shared/ButtonsWrapper";
 import { AuthContext } from "@/context/authContext";
@@ -53,7 +56,7 @@ const LayoutDashboard = ({ children }: LayoutDashboardProps) => {
 
   return (
     <>
-      {authContext.isLoggedIn && authContext.user && !authContext.isLoading && (
+      {authContext.isLoggedIn && authContext.user && (
         <Lenis root>
           <div className="relative overflow-hidden md:overflow-visible bg-black min-h-screen flex flex-col justify-between gap-10">
             <main className="md:pt-7">
@@ -64,7 +67,7 @@ const LayoutDashboard = ({ children }: LayoutDashboardProps) => {
                   type={authContext.user.user.role.name}
                   className="md:col[1_/_2] row-[2_/_3]"
                 />
-                
+
                 {authContext.user.user.role.name === "editor" ? (
                   <DashboardMenuMobile menu={DASHBOARD_EDITOR_MENU} />
                 ) : (

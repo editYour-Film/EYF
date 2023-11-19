@@ -16,39 +16,48 @@ import { ReactElement } from "react-markdown/lib/react-markdown";
 import { MentionInteraction } from "@/components/_shared/buttons/MentionInteraction";
 import { IslandButton } from "@/components/_shared/buttons/IslandButton";
 import { DashBoardContext } from "../_context/DashBoardContext";
+import { AuthContext } from "@/context/authContext";
 
 export const DashboardEditorProfil = () => {
   const context = useContext(EditorProfilContext);
   const dashboardContext = useContext(DashBoardContext);
+  const authContext = useContext(AuthContext);
 
   return (
-    <div className="db-profil flex flex-col gap-dashboard-spacing-element-medium">
-      <div className="db-profil__head">
-        <div className="db-profil__infos flex flex-col justify-center sm:justify-start text-center sm:text-left items-center py-dashboard-spacing-element-medium gap-dashboard-spacing-element-medium">
-          <div className="flex flex-col items-center gap-dashboard-spacing-element-medium">
-            <AvatarInput
-              img={context.avatar}
-              onChange={(e: ChangeEvent) => {
-                context.handleAvatarChange(e);
-              }}
-              imgSize="w-[145px] h-[145px]"
-              label={dashboardContext.initials}
-            />
+    <>
+      {authContext.isLoading ? (
+        <p className="text-white">Loading...</p>
+      ) : (
+        <div className="db-profil flex flex-col gap-dashboard-spacing-element-medium">
+          <div className="db-profil__head">
+            <div className="db-profil__infos flex flex-col justify-center sm:justify-start text-center sm:text-left items-center py-dashboard-spacing-element-medium gap-dashboard-spacing-element-medium">
+              <div className="flex flex-col items-center gap-dashboard-spacing-element-medium">
+                <AvatarInput
+                  img={context.avatar}
+                  onChange={(e: ChangeEvent) => {
+                    context.handleAvatarChange(e);
+                  }}
+                  imgSize="w-[145px] h-[145px]"
+                  label={dashboardContext.initials}
+                />
+              </div>
+
+              <div className="n27 font-medium text-title-medium uppercase">
+                {context.fName} {context.lName}
+              </div>
+            </div>
           </div>
 
-          <div className="n27 font-medium text-title-medium uppercase">
-            {context.fName} {context.lName}
-          </div>
+          <Inputs />
         </div>
-      </div>
-
-      <Inputs />
-    </div>
+      )}
+    </>
   );
 };
 
 export const Inputs = () => {
   const context = useContext(EditorProfilContext);
+  const authContext = useContext(AuthContext);
 
   const days = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
   const months = [
