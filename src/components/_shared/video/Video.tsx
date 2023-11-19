@@ -1,4 +1,4 @@
-import { RefObject, forwardRef, useRef, useState } from "react";
+import { RefObject, forwardRef, useEffect, useRef, useState } from "react";
 import { Player } from "./Player";
 
 type VideoProps = {
@@ -9,6 +9,9 @@ type VideoProps = {
   className?: string;
   hFull?: boolean;
   onLoadedMetadata?: () => void;
+  onPlay?: () => void; 
+  onPause?: () => void; 
+  trigger?: boolean;
 };
 
 export const Video = forwardRef<HTMLVideoElement, VideoProps>(function Video(
@@ -20,6 +23,9 @@ export const Video = forwardRef<HTMLVideoElement, VideoProps>(function Video(
     className,
     hFull,
     onLoadedMetadata,
+    onPlay,
+    onPause,
+    trigger,
   },
   ref
 ) {
@@ -29,10 +35,12 @@ export const Video = forwardRef<HTMLVideoElement, VideoProps>(function Video(
   const [currentTime, setCurrentTime] = useState<number | undefined>(0);
 
   const handlePause = () => {
+    onPause && onPause()
     videoEl.current && videoEl.current.pause();
   };
 
-  const handlePlay = () => {
+  const handlePlay = () => {    
+    onPlay && onPlay()
     videoEl.current && videoEl.current.play();
   };
 
@@ -42,15 +50,27 @@ export const Video = forwardRef<HTMLVideoElement, VideoProps>(function Video(
 
   const handleClick = () => {
     if (isPlaying) {
-      videoEl.current && videoEl.current.pause();
+      // videoEl.current && videoEl.current.pause();
+      handlePause()
     } else {
-      videoEl.current && videoEl.current.play();
+      handlePlay()
+      // videoEl.current && videoEl.current.play();
     }
   };
 
   const handleTimeUpdate = () => {
     setCurrentTime(videoEl.current?.currentTime);
   };
+
+  useEffect(() => {  
+    if (trigger) {
+      // videoEl.current && videoEl.current.pause();
+      handlePlay()
+    } else {
+      handlePause()
+      // videoEl.current && videoEl.current.play();
+    }
+  }, [trigger])
 
   return (
     <div

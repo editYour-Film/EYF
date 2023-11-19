@@ -22,6 +22,8 @@ import { InfoMessage } from "@/components/_shared/UI/InfoMessage";
 import { MentionInteraction } from "@/components/_shared/buttons/MentionInteraction";
 import { inputErrors } from "@/const";
 import Error from "@/icons/x-circle.svg";
+import Play from "@/icons/player-play.svg";
+import Image from "next/image";
 
 export const VisibilityPan = () => {
   const context = useContext(AddModelContext);
@@ -89,6 +91,9 @@ export const VisibilityPan = () => {
   const [videoDuration, setVideoDuration] = useState<VideoDuration>();
   const [error, setError] = useState<boolean>(false);
   const [copywriteError, setCopyWriteError] = useState("");
+
+  const [imgUrl, setImgUrl] = useState<string | undefined>(undefined)
+  const [hideCover, setHideCover] = useState<boolean>(false);
 
   const lenis = useLenis();
 
@@ -164,11 +169,17 @@ export const VisibilityPan = () => {
     );
 
     lenis.scrollTo(0);
-
+    
     return () => {
       dashboardContext.setButtons(undefined);
     };
   }, []);
+
+  useEffect(() => {
+    context.thumbnail && setImgUrl(URL.createObjectURL(context.thumbnail as File)) 
+  }, [context.thumbnail])
+
+  const [playVideo, setPlayVideo] = useState(false)
 
   return (
     <div className="visibility-pan bg-dashboard-background-content-area flex flex-col gap-dashboard-spacing-element-medium pt-[50px] md:pt-0 pb-[150px] md:pb-0">
@@ -188,10 +199,36 @@ export const VisibilityPan = () => {
 
       <div className="visibility-pan__video-w relative h-0 pb-[57.6%] rounded-t-2xl overflow-hidden border">
         <div className="absolute w-full h-full">
+          {imgUrl && 
+            <div
+              className={`absolute group top-0 left-0 w-full h-full flex justify-center items-center z-10 transition-opacity ${playVideo ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+              onClick={() => {
+                setPlayVideo(true) 
+              }}
+            >
+              <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center z-10 bg-blackBerry bg-opacity-20 transition-opacity opacity-0 group-hover:opacity-100 cursor-pointer">
+                <Play className='w-[50px] h-[50px] ' />
+              </div>
+              <Image
+                src={imgUrl}
+                alt="cover de la vidéo"
+                fill
+                className={`object-cover`}
+              />
+            </div>
+          }
           <Video
             playerFullWidth
             video={context.strapiObject?.attributes.video.data.attributes}
-            className="h-full"
+            className="h-full z-0"
+            onPlay={() => {
+              setHideCover(true)
+            }}
+            onPause={() => { 
+              setHideCover(false)
+              setPlayVideo(false)
+            }}
+            trigger={playVideo}
           />
         </div>
       </div>

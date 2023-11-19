@@ -29,6 +29,12 @@ export const EmailPan = ({ disclaimer }: EmailPanProps) => {
     if (emailOk) context.goNext();
   };
 
+  const handleKeyDown = (e:React.KeyboardEvent) => {
+    console.log(e);
+    
+    if (e.key === 'Enter') handleConfirmEmail()
+  }
+
   return (
     <div className="signIn_email max-w-[100vw] w-[360px] px-dashboard-specific-radius md:px-0 pb-[75px]">
       <div
@@ -55,6 +61,7 @@ export const EmailPan = ({ disclaimer }: EmailPanProps) => {
             onChange={(e) => {
               context.setEmail(e.target.value);
             }}
+            onKeyDown={(e) => { handleKeyDown(e) }}
           />
 
           <Button
