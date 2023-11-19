@@ -7,12 +7,14 @@ import { PropsWithChildren, useEffect, useRef, useState } from "react"
 type OverlayModelProps = {
   className?: string,
   toggle?: boolean,
+  onOpen?: () => void,
+  onOpened?: () => void,
   onClose?: () => void,
   onClosed?: () => void
 
 }
 
-export const OverlayModel = ({className, toggle, onClose, onClosed, children}: PropsWithChildren<OverlayModelProps>) => {
+export const OverlayModel = ({className, toggle, onOpen, onOpened, onClose, onClosed, children}: PropsWithChildren<OverlayModelProps>) => {
   const lenis = useLenis()
 
   const [isOpen, setIsOpen] = useState(true)
@@ -45,10 +47,11 @@ export const OverlayModel = ({className, toggle, onClose, onClosed, children}: P
           onStart: () => {
             setIsOpen(true)
             setIsTweening(true)
-
+            onOpen && onOpen()
           },
           onComplete: () => {
             setIsTweening(false)
+            onOpened && onOpened()
           }
         })
 
@@ -128,6 +131,9 @@ export const OverlayModel = ({className, toggle, onClose, onClosed, children}: P
     unLockDocumentScroll(tempScroll.current)
 
     setIsTweening(true)
+
+    container.current && container.current.scrollTo({top:0, left:0, behavior: 'smooth'})
+
     ctx.current && ctx.current.close().then(() => {
       setIsTweening(false)
       setIsOpen(false)	

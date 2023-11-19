@@ -14,7 +14,9 @@ import Headphones from "@/icons/headphones.svg";
 import Barchart from "@/icons/bar-chart.svg";
 import Mouse from "@/icons/mouse.svg";
 import LinkIcon from "@/icons/link.svg";
-import { Formats, Languages, Worktime } from "./data/metaValues";
+import Lock from "@/icons/lock.svg";
+
+import { Formats, Languages, Worktime, Visibility } from "./data/metaValues";
 import { DropBox } from "@/components/_shared/form/DropBox";
 
 import Close from "@/icons/dashboard/x.svg";
@@ -35,6 +37,7 @@ export const ModifyVideoPanel = () => {
   const [titleEnabled, setTitleEnabled] = useState(false);
 
   const [openFrameToolbox, setOpenFrameToolbox] = useState(false);
+  const [openVisibilityToolbox, setOpenVisibilityToolbox] = useState(false);
   const [openLangToolbox, setOpenLangToolbox] = useState(false);
   const [openLinkToolbox, setOpenLinkToolbox] = useState(false);
   const [openWorktimeToolbox, setOpenWorktimeToolbox] = useState(false);
@@ -89,11 +92,11 @@ export const ModifyVideoPanel = () => {
       className="relative"
     >
       <div
-        className={`${
+        className={`min-h-[100px] px-[20px] py-[12px] leading-[1.4] ${
           descriptionEnabled ? "opacity-0 pointer-events-none" : ""
         } text-dashboard-text-description-base hover:text-dashboard-text-title-white-high cursor-pointer`}
       >
-        {editorContext.modelDescription}
+        {editorContext.modelDescription && editorContext.modelDescription.length ? editorContext.modelDescription : 'Entrez une description pour votre vidéo'}
       </div>
       <div
         className={`absolute top-0 h-full w-full ${
@@ -105,7 +108,7 @@ export const ModifyVideoPanel = () => {
           bg="black"
           value={editorContext.modelDescription}
           onChange={(val) => {
-            if (val) {
+            if (val) {              
               editorContext.setModelDescription(val.target.value);
               editorContext.setCurrentModelHasBeenModified(true);
               editorContext.setCurrentModelToModify(
@@ -116,6 +119,7 @@ export const ModifyVideoPanel = () => {
               );
             }
           }}
+          className="min-h-[auto]"
         />
       </div>
     </div>
@@ -151,8 +155,12 @@ export const ModifyVideoPanel = () => {
       <OverlayModel
         className="min-h-screen h-max"
         toggle={editorContext.showModifyPanel}
+        onOpened={() => {
+          editorContext.setCurrentModelHasBeenModified(false)
+        }}
         onClose={() => {
           editorContext.hideModifyPanel();
+          editorContext.setCurrentModelHasBeenModified(false)
         }}
         onClosed={() => {
           editorContext.setCurrentModelToModify(undefined);
@@ -279,8 +287,52 @@ export const ModifyVideoPanel = () => {
                         }}
                         toggle={openFrameToolbox}
                         setToggle={(val) => {
-                          editorContext.setCurrentModelHasBeenModified(true);
                           setOpenFrameToolbox(val);
+                        }}
+                        className="hidden md:block absolute top-0 left-1/2"
+                      />
+                    )}
+                  </div>
+
+                  <div className="relative">
+                    <ToolboxButton
+                      Icon={Lock}
+                      label={
+                        editorContext.modelVisibility
+                          ? editorContext.modelVisibility.length > 20
+                            ? editorContext.modelVisibility.slice(0, 16) + "..."
+                            : editorContext.modelVisibility
+                          : "Définir la visibilité"
+                      }
+                      onClick={() => {
+                        editorContext.setCurrentModelHasBeenModified(false);
+                        setOpenVisibilityToolbox(!openVisibilityToolbox);
+                      }}
+                    />
+
+                    {!isMobile && (
+                      <DropBox
+                        type="simple"
+                        Icon={Lock}
+                        title="Visibilité"
+                        choices={Visibility}
+                        currentValue={editorContext.modelVisibility}
+                        onChange={(val) => {
+                          if (val) {
+                            editorContext.setModelVisibility(val);
+                            editorContext.setCurrentModelToModify(
+                              (previousState: EditorVideo) => ({
+                                ...previousState,
+                                visibility: val,
+                              })
+                            );
+
+                            val
+                          }
+                        }}
+                        toggle={openVisibilityToolbox}
+                        setToggle={(val) => {
+                          setOpenVisibilityToolbox(val);
                         }}
                         className="hidden md:block absolute top-0 left-1/2"
                       />
@@ -295,7 +347,7 @@ export const ModifyVideoPanel = () => {
                           ? editorContext.modelAudio.length > 20
                             ? editorContext.modelAudio.slice(0, 16) + "..."
                             : editorContext.modelAudio
-                          : "Ajoutez le audio de la vidéo"
+                          : "Ajoutez la langue de la vidéo"
                       }
                       onClick={() => {
                         editorContext.setCurrentModelHasBeenModified(false);
@@ -323,7 +375,6 @@ export const ModifyVideoPanel = () => {
                         }}
                         toggle={openLangToolbox}
                         setToggle={(val) => {
-                          editorContext.setCurrentModelHasBeenModified(true);
                           setOpenLangToolbox(val);
                         }}
                         className="hidden md:block absolute top-0 left-1/2"
@@ -375,7 +426,6 @@ export const ModifyVideoPanel = () => {
                         }}
                         toggle={openWorktimeToolbox}
                         setToggle={(val) => {
-                          editorContext.setCurrentModelHasBeenModified(true);
                           setOpenWorktimeToolbox(val);
                         }}
                         className="hidden md:block absolute top-0 left-1/2"
@@ -433,7 +483,6 @@ export const ModifyVideoPanel = () => {
                           }}
                           toggle={openSoftwareToolbox}
                           setToggle={(val) => {
-                            editorContext.setCurrentModelHasBeenModified(true);
                             setOpenSoftwareToolbox(val);
                           }}
                           className="hidden md:block absolute top-0 left-1/2"
@@ -472,7 +521,6 @@ export const ModifyVideoPanel = () => {
                         }}
                         toggle={openLinkToolbox}
                         setToggle={(val) => {
-                          editorContext.setCurrentModelHasBeenModified(true);
                           setOpenLinkToolbox(val);
                         }}
                         className="hidden md:block md:absolute md:top-0 md:left-1/2"
@@ -524,7 +572,6 @@ export const ModifyVideoPanel = () => {
                         }}
                         toggle={openTagToolbox}
                         setToggle={(val) => {
-                          editorContext.setCurrentModelHasBeenModified(true);
                           setOpenTagToolbox(val);
                         }}
                         className="hidden md:block absolute top-0 left-1/2"
@@ -571,9 +618,8 @@ export const ModifyVideoPanel = () => {
                                         : undefined,
                                   })
                                 );
-                                editorContext.setCurrentModelHasBeenModified(
-                                  true
-                                );
+
+                                editorContext.setCurrentModelHasBeenModified(true);
                               }}
                             />
                           );
@@ -583,7 +629,7 @@ export const ModifyVideoPanel = () => {
                 </div>
               </div>
 
-              <div className="modify-video__headline md:col-[content-start_/_content-end] row-[2_/_3] md:row-[3_/_4] align-self-auto md:py-dashboard-spacing-element-medium  md:pl-dashboard-spacing-element-medium flex flex-col gap-dashboard-spacing-element-medium">
+              <div className="modify-video__headline md:col-[content-start_/_content-end] row-[2_/_3] md:row-[3_/_4] align-self-auto md:py-dashboard-spacing-element-medium md:pl-dashboard-spacing-element-medium flex flex-col gap-dashboard-spacing-element-medium">
                 <div className="flex gap-dashboard-button-separation-spacing">
                   <div className="shrink-0">
                     <ProfilPicture user={authContext.user.details} />
@@ -658,11 +704,36 @@ export const ModifyVideoPanel = () => {
                   })
                 );
               }
+              editorContext.setCurrentModelHasBeenModified(true);
             }}
             toggle={openFrameToolbox}
             setToggle={(val) => {
-              editorContext.setCurrentModelHasBeenModified(true);
               setOpenFrameToolbox(val);
+            }}
+            className="fixed bottom-0 h-max z-20 md:hidden md:absolute md:top-0 md:left-1/2"
+          />
+
+          <DropBox
+            type="simple"
+            Icon={Lock}
+            title="Visibilité"
+            choices={Visibility}
+            currentValue={editorContext.modelVisibility}
+            onChange={(val) => {
+              if (val) {
+                editorContext.setModelVisibility(val);
+                editorContext.setCurrentModelToModify(
+                  (previousState: EditorVideo) => ({
+                    ...previousState,
+                    visibility: val,
+                  })
+                );
+              }
+              editorContext.setCurrentModelHasBeenModified(true);
+            }}
+            toggle={openVisibilityToolbox}
+            setToggle={(val) => {
+              setOpenVisibilityToolbox(val);
             }}
             className="fixed bottom-0 h-max z-20 md:hidden md:absolute md:top-0 md:left-1/2"
           />
@@ -683,10 +754,10 @@ export const ModifyVideoPanel = () => {
                   })
                 );
               }
+              editorContext.setCurrentModelHasBeenModified(true);
             }}
             toggle={openLangToolbox}
             setToggle={(val) => {
-              editorContext.setCurrentModelHasBeenModified(true);
               setOpenLangToolbox(val);
             }}
             className="fixed bottom-0 h-max z-20 md:hidden md:absolute md:top-0 md:left-1/2"
@@ -708,10 +779,10 @@ export const ModifyVideoPanel = () => {
                   })
                 );
               }
+              editorContext.setCurrentModelHasBeenModified(true);
             }}
             toggle={openWorktimeToolbox}
             setToggle={(val) => {
-              editorContext.setCurrentModelHasBeenModified(true);
               setOpenWorktimeToolbox(val);
             }}
             className="fixed bottom-0 h-max z-20 md:hidden md:absolute md:top-0 md:left-1/2"
@@ -738,10 +809,10 @@ export const ModifyVideoPanel = () => {
                   })
                 );
               }
+              editorContext.setCurrentModelHasBeenModified(true);
             }}
             toggle={openSoftwareToolbox}
             setToggle={(val) => {
-              editorContext.setCurrentModelHasBeenModified(true);
               setOpenSoftwareToolbox(val);
             }}
             className="fixed bottom-0 h-max z-20 md:hidden md:absolute md:top-0 md:left-1/2"
@@ -756,10 +827,10 @@ export const ModifyVideoPanel = () => {
               if (val) {
                 editorContext.setOutLink(val);
               }
+              editorContext.setCurrentModelHasBeenModified(true);
             }}
             toggle={openLinkToolbox}
             setToggle={(val) => {
-              editorContext.setCurrentModelHasBeenModified(true);
               setOpenLinkToolbox(val);
             }}
             className="fixed bottom-0 h-max z-20 md:hidden md:absolute md:top-0 md:left-1/2"
@@ -786,10 +857,10 @@ export const ModifyVideoPanel = () => {
                   })
                 );
               }
+              editorContext.setCurrentModelHasBeenModified(true);
             }}
             toggle={openTagToolbox}
             setToggle={(val) => {
-              editorContext.setCurrentModelHasBeenModified(true);
               setOpenTagToolbox(val);
             }}
             className="fixed bottom-0 h-max z-20 md:hidden md:absolute md:top-0 md:left-1/2"
@@ -834,7 +905,7 @@ const ToolboxButton = ({ Icon, label, onClick }: ToolboxButtonProps) => {
       className="flex gap-[10px] justify-start text-dashboard-text-description-base p-dashboard-mention-padding-right-left hover:bg-dashboard-background-content-area"
     >
       <div>
-        <Icon className="w-[24px] h-[24px] flex" />
+        <Icon className="svg-color-dashboard-text-description-base w-[24px] h-[24px] flex" />
       </div>
       {label && <div className="text-left w-max md:w-full">{label}</div>}
     </button>
