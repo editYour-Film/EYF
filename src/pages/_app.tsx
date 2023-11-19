@@ -45,7 +45,7 @@ export default function App(pageProps: AppProps) {
     <Provider store={store}>
       <AuthProvider>
         <InstanciatedQueryClientProvider>
-          <Content pageProps={pageProps}/>
+          <Content pageProps={pageProps} />
         </InstanciatedQueryClientProvider>
       </AuthProvider>
     </Provider>
@@ -53,14 +53,14 @@ export default function App(pageProps: AppProps) {
 }
 
 type contentProps = {
-  pageProps: AppProps
-}
+  pageProps: AppProps;
+};
 
-const Content = ({pageProps}: contentProps) => {
+const Content = ({ pageProps }: contentProps) => {
   const hasHover = useMediaQuery("(hover: hover)");
   const [isLoading, setIsLoading] = useState(true);
 
-  const authContext = useContext(AuthContext)
+  const authContext = useContext(AuthContext);
 
   useEffect(() => {
     setTimeout(() => {
@@ -68,39 +68,29 @@ const Content = ({pageProps}: contentProps) => {
     }, 1500);
   }, []);
 
-  const mainContent =  <>
-    <Loader isLoading={isLoading} />
-    <Lenis root>
-      <PageTransition {...pageProps} />
-    </Lenis>
-    {hasHover && <Cursor />}
-  </>
-  
-  if (authContext.isLoggedIn && authContext.user && !authContext.isLoading) {
+  const mainContent = (
+    <>
+      <Loader isLoading={isLoading} />
+      <Lenis root>
+        <PageTransition {...pageProps} />
+      </Lenis>
+      {hasHover && <Cursor />}
+    </>
+  );
+
+  if (authContext.isLoggedIn && authContext.user) {
     return (
       <>
         <DashBoardContextProvider>
-        {authContext.user.user.role.name === "editor" 
-        ? (
-          <EditorContextProvider>
-            {mainContent}
-          </EditorContextProvider>
-        )
-        : (
-          <ClientContextProvider>
-            {mainContent}
-          </ClientContextProvider>
-        )
-        }
+          {authContext.user.user.role.name === "editor" ? (
+            <EditorContextProvider>{mainContent}</EditorContextProvider>
+          ) : (
+            <ClientContextProvider>{mainContent}</ClientContextProvider>
+          )}
         </DashBoardContextProvider>
       </>
-    )
-
+    );
   } else {
-    return (
-      <>
-        {mainContent}
-      </>
-    )
+    return <>{mainContent}</>;
   }
-}
+};

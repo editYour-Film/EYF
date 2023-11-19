@@ -1,5 +1,4 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import {
   getTempCodeFromLocalCookie,
   getTokenFromLocalCookie,
@@ -34,47 +33,42 @@ export const AuthProvider: React.FC<any> = ({ children }: any) => {
     getTempCodeFromLocalCookie() ? (getTempCodeFromLocalCookie() as string) : ""
   );
 
-  const RefreshUserData = (isRefresh: boolean = true) => {
-    //temporary code
-    if (isRefresh) {
-      setTimeout(() => {
-        location.reload();
-      }, 1000);
-    } else {
-      if (!isRefresh) setIsLoading(true);
+  const RefreshUserData = (redirect = false) => {
+    setIsLoading(true);
 
-      if (userCode && userCode.length > 0) {
-        const checkUserByCode = async () => {
-          return useStrapiPost(
-            "validate-user-by-code",
-            {
-              code: userCode,
-            },
-            false
-          );
-        };
-        checkUserByCode()
-          .then((res) => {
-            if (res.status === 200 && typeof res.data !== "string") {
-              setTempCode(userCode);
-              setToken(res.data.jwt);
-              setUserInfo({
-                user: res.data.user,
-                details: res.data.details,
-                models: res.data.models,
-              });
-              if (!isRefresh) {
-                if (res.data.user.role.name === "editor")
-                  router.push(routes.DASHBOARD_EDITOR_HOME);
-                else router.push(routes.DASHBOARD_CLIENT_HOME);
-              }
-            } else SignOut();
-            if (!isRefresh) setIsLoading(false);
-          })
-          .catch(() => {
-            SignOut();
-          });
-      }
+    if (userCode && userCode.length > 0) {
+      const checkUserByCode = async () => {
+        return useStrapiPost(
+          "validate-user-by-code",
+          {
+            code: userCode,
+          },
+          false
+        );
+      };
+      checkUserByCode()
+        .then((res) => {
+          if (res.status === 200 && typeof res.data !== "string") {
+            setTempCode(userCode);
+            setToken(res.data.jwt);
+            setUserInfo({
+              user: res.data.user,
+              details: res.data.details,
+              models: res.data.models,
+            });
+
+            if (redirect) {
+              if (res.data.user.role.name === "editor")
+                router.push(routes.DASHBOARD_EDITOR_HOME);
+              else router.push(routes.DASHBOARD_CLIENT_HOME);
+            }
+          } else SignOut();
+          setIsLoading(false);
+        })
+        .catch(() => {
+          SignOut();
+          setIsLoading(false);
+        });
     }
   };
 
@@ -92,7 +86,7 @@ export const AuthProvider: React.FC<any> = ({ children }: any) => {
 
   // validate user
   useEffect(() => {
-    RefreshUserData(false);
+    RefreshUserData();
   }, [userCode]);
 
   return (

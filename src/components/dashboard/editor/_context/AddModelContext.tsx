@@ -13,6 +13,10 @@ import toast from "react-hot-toast";
 import Error from "@/icons/x-circle.svg";
 import { AuthContext } from "@/context/authContext";
 import { formatVideoDuration } from "@/utils/utils";
+import validator from "validator";
+import { inputErrors } from "@/const";
+import { AddModel } from "../AddModel";
+import { useMediaQuery } from "@uidotdev/usehooks";
 
 export const AddModelContext = createContext({
   currentStep: undefined as number | undefined,
@@ -26,6 +30,7 @@ export const AddModelContext = createContext({
   abort: () => {},
 
   handleUpdateEditorVideo: (): any => {},
+  handleSubmitInfoPan: (): any => {},
 
   strapiObject: {} as any,
   getCurrentStrapiObject: () => {},
@@ -39,18 +44,26 @@ export const AddModelContext = createContext({
   setVideo: (payload: number | undefined) => {},
   thumbnail: undefined as File | undefined,
   setThumbnail: (payload: File | undefined) => {},
+
   title: undefined as string | undefined,
   setTitle: (payload: string | undefined) => {},
   titleError: undefined as string | undefined,
   setTitleError: (payload: string | undefined) => {},
+
   length: undefined as string | undefined,
   setLength: (payload: string | undefined) => {},
   model: undefined as modelType | undefined,
   setModel: (payload: modelType | undefined) => {},
   description: undefined as string | undefined,
   setDescription: (payload: string | undefined) => {},
+  descriptionError: undefined as string | undefined,
+  setDescriptionError: (payload: string | undefined) => {},
+
   tags: undefined as { name: string; slug: string }[] | undefined,
   setTags: (payload: { name: string; slug: string }[] | undefined) => {},
+  tagsError: undefined as string | undefined,
+  setTagsError: (payload: string | undefined) => {},
+
   ressources: undefined as any,
   setRessources: (payload: any) => {},
   visibility: undefined as VisibilityType | undefined,
@@ -68,6 +81,7 @@ export const AddModelContext = createContext({
 export const AddModelContextProvider: React.FC<any> = (props) => {
   const dashboardContext = useContext(DashBoardContext);
   const authContext = useContext(AuthContext);
+  const isMobile = useMediaQuery("(max-width: 768px)");
 
   const [currentStep, setCurrentStep] = useState<number | undefined>(undefined);
   const [currentEditorVideo, setCurrentEditorVideo] = useState<number | null>(
@@ -82,10 +96,17 @@ export const AddModelContextProvider: React.FC<any> = (props) => {
 
   const [length, setLength] = useState<string | undefined>(undefined);
   const [model, setModel] = useState<modelType | undefined>("model 16/9 ème");
+
   const [description, setDescription] = useState<string | undefined>(undefined);
+  const [descriptionError, setDescriptionError] = useState<string | undefined>(
+    undefined
+  );
+
   const [tags, setTags] = useState<
     { name: string; slug: string }[] | undefined
   >(undefined);
+  const [tagsError, setTagsError] = useState<string | undefined>(undefined);
+
   const [ressources, setRessources] = useState<any>(undefined);
   const [visibility, setVisibility] = useState<VisibilityType | undefined>(
     undefined
@@ -132,6 +153,39 @@ export const AddModelContextProvider: React.FC<any> = (props) => {
       is_highlighed,
     });
   }, [title]);
+
+  const handleSubmitInfoPan = () => {
+    setDescriptionError("");
+    setTagsError("");
+    setTitleError("");
+
+    let err = false;
+
+    if (title === undefined || validator.isEmpty(title)) {
+      err = true;
+      setTitleError(inputErrors.required);
+    }
+
+    if (description === undefined || validator.isEmpty(description)) {
+      err = true;
+      setDescriptionError(inputErrors.required);
+    }
+
+    if (description && description?.split(" ").length < 50) {
+      err = true;
+      setDescriptionError("Veuillez entrer un texte de 50 mots minimum");
+    }
+
+    if (!err) {
+      if (isMobile) setCurrentStep(2);
+      else {
+        dashboardContext.addPannel({
+          title: "Details",
+          panel: <AddModel step={2} />,
+        });
+      }
+    }
+  };
 
   const handleUpdateEditorVideo = async (): Promise<unknown> => {
     if (currentEditorVideo) {
@@ -252,7 +306,7 @@ export const AddModelContextProvider: React.FC<any> = (props) => {
 
   useEffect(() => {
     getCurrentStrapiObject();
-  }, [currentEditorVideo]);
+  }, []);
 
   useEffect(() => {
     dashboardContext.isAddModelPannelOpen === true && handleInitContext();
@@ -274,6 +328,7 @@ export const AddModelContextProvider: React.FC<any> = (props) => {
         getCurrentStrapiObject,
 
         handleUpdateEditorVideo,
+        handleSubmitInfoPan,
         defaultImage: "/img/defaults/video-thumbnail.svg",
 
         isModify,
@@ -283,18 +338,27 @@ export const AddModelContextProvider: React.FC<any> = (props) => {
         setVideo,
         thumbnail,
         setThumbnail,
+
         title,
         setTitle,
         titleError,
         setTitleError,
+
         length,
         setLength,
         model,
         setModel,
+
         description,
         setDescription,
+        descriptionError,
+        setDescriptionError,
+
         tags,
         setTags,
+        tagsError,
+        setTagsError,
+
         ressources,
         setRessources,
         visibility,

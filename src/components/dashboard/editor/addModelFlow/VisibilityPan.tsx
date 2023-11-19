@@ -24,6 +24,7 @@ import { inputErrors } from "@/const";
 import Error from "@/icons/x-circle.svg";
 import Play from "@/icons/player-play.svg";
 import Image from "next/image";
+import validator from "validator";
 
 export const VisibilityPan = () => {
   const context = useContext(AddModelContext);
@@ -88,23 +89,31 @@ export const VisibilityPan = () => {
   const [durationValue, setDurationValue] = useState<WorkTimeType | undefined>(
     undefined
   );
-  const [videoDuration, setVideoDuration] = useState<VideoDuration>();
   const [error, setError] = useState<boolean>(false);
   const [copywriteError, setCopyWriteError] = useState("");
 
-  const [imgUrl, setImgUrl] = useState<string | undefined>(undefined)
+  const [imgUrl, setImgUrl] = useState<string | undefined>(undefined);
   const [hideCover, setHideCover] = useState<boolean>(false);
 
   const lenis = useLenis();
 
   const handleSubmit = async () => {
-    let err = false 
-    if (context.copywrite && context.copywrite?.split(' ').length > 200) {
-      setCopyWriteError('Le text doit contenir 200 mots maximum')
-      err = true
+    setCopyWriteError("");
+
+    let err = false;
+    if (
+      context.copywrite === undefined ||
+      validator.isEmpty(context.copywrite)
+    ) {
+      err = true;
+      setCopyWriteError(inputErrors.required);
+    }
+    if (context.copywrite && context.copywrite?.split(" ").length > 200) {
+      setCopyWriteError("Le text doit contenir 200 mots maximum");
+      err = true;
     }
 
-    if(!err) {
+    if (!err) {
       setTimeout(() => {
         const updateRes = context.handleUpdateEditorVideo();
         updateRes.then((res: StrapiResponse) => {
@@ -113,7 +122,7 @@ export const VisibilityPan = () => {
             dashboardContext.setIsAddModelPannelOpen(false);
             dashboardContext.closePanels();
             lenis.scrollTo(0);
-  
+
             toast.custom(
               <InfoMessage
                 message="Votre modèle a été ajouté avec succès."
@@ -155,31 +164,30 @@ export const VisibilityPan = () => {
   }, [copywriteError]);
 
   useEffect(() => {
-    setVideoDuration(context.videoDuration);
-
     dashboardContext.setButtons(
       <Button
         type="primary"
         label="Confirmer"
         onClick={() => {
-          !error && handleSubmit();
+          handleSubmit();
         }}
         className="w-full"
       />
     );
 
     lenis.scrollTo(0);
-    
+
     return () => {
       dashboardContext.setButtons(undefined);
     };
   }, []);
 
   useEffect(() => {
-    context.thumbnail && setImgUrl(URL.createObjectURL(context.thumbnail as File)) 
-  }, [context.thumbnail])
+    context.thumbnail &&
+      setImgUrl(URL.createObjectURL(context.thumbnail as File));
+  }, [context.thumbnail]);
 
-  const [playVideo, setPlayVideo] = useState(false)
+  const [playVideo, setPlayVideo] = useState(false);
 
   return (
     <div className="visibility-pan bg-dashboard-background-content-area flex flex-col gap-dashboard-spacing-element-medium pt-[50px] md:pt-0 pb-[150px] md:pb-0">
@@ -199,15 +207,17 @@ export const VisibilityPan = () => {
 
       <div className="visibility-pan__video-w relative h-0 pb-[57.6%] rounded-t-2xl overflow-hidden border">
         <div className="absolute w-full h-full">
-          {imgUrl && 
+          {imgUrl && (
             <div
-              className={`absolute group top-0 left-0 w-full h-full flex justify-center items-center z-10 transition-opacity ${playVideo ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+              className={`absolute group top-0 left-0 w-full h-full flex justify-center items-center z-10 transition-opacity ${
+                playVideo ? "opacity-0 pointer-events-none" : "opacity-100"
+              }`}
               onClick={() => {
-                setPlayVideo(true) 
+                setPlayVideo(true);
               }}
             >
               <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center z-10 bg-blackBerry bg-opacity-20 transition-opacity opacity-0 group-hover:opacity-100 cursor-pointer">
-                <Play className='w-[50px] h-[50px] ' />
+                <Play className="w-[50px] h-[50px] " />
               </div>
               <Image
                 src={imgUrl}
@@ -216,17 +226,17 @@ export const VisibilityPan = () => {
                 className={`object-cover`}
               />
             </div>
-          }
+          )}
           <Video
             playerFullWidth
             video={context.strapiObject?.attributes.video.data.attributes}
             className="h-full z-0"
             onPlay={() => {
-              setHideCover(true)
+              setHideCover(true);
             }}
-            onPause={() => { 
-              setHideCover(false)
-              setPlayVideo(false)
+            onPause={() => {
+              setHideCover(false);
+              setPlayVideo(false);
             }}
             trigger={playVideo}
           />
@@ -306,10 +316,9 @@ export const VisibilityPan = () => {
           <IslandButton
             type="primary"
             label="Suivant"
-            disabled={error}
             className={`w-max`}
             onClick={() => {
-              !error && handleSubmit();
+              handleSubmit();
             }}
           />
         </div>

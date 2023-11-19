@@ -129,26 +129,47 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
 
   const [noModelMessageId] = useState(Date.now());
 
-  const [highlightedVideo, setHighlightedVideo] = useState<EditorVideo | undefined>(undefined);
+  const [highlightedVideo, setHighlightedVideo] = useState<
+    EditorVideo | undefined
+  >(undefined);
   const [showModifyPanel, setShowModifyPanel] = useState<boolean>(false);
-  const [currentModelToModify, setCurrentModelToModify] = useState<EditorVideo | undefined>(undefined);
+  const [currentModelToModify, setCurrentModelToModify] = useState<
+    EditorVideo | undefined
+  >(undefined);
 
   // Used to modify a model
-  const [modelDescription, setModelDescription] = useState<string | undefined>(undefined);
+  const [modelDescription, setModelDescription] = useState<string | undefined>(
+    undefined
+  );
   const [modelTitle, setModelTitle] = useState<string | undefined>(undefined);
   const [modelFormat, setModelFormat] = useState<string | undefined>(undefined);
-  const [modelVisibility, setModelVisibility] = useState<VisibilityType | undefined>(undefined);
+  const [modelVisibility, setModelVisibility] = useState<
+    VisibilityType | undefined
+  >(undefined);
   const [modelAudio, setModelAudio] = useState<string | undefined>(undefined);
-  const [modelWorkTime, setModelWorkTime] = useState<string | undefined>(undefined);
+  const [modelWorkTime, setModelWorkTime] = useState<string | undefined>(
+    undefined
+  );
 
-  const [modelSoftwareOptions, setModelSoftwareOptions] = useState<video_softwares[] | undefined>(undefined);
-  const [modelSoftwareOptionsArrayString, setModelSoftwareOptionsArrayString] = useState<string[] | undefined>(undefined);
-  const [modelSoftware, setModelSoftware] = useState<video_softwares[] | undefined>(undefined);
-  const [modelSoftwareArrayString, setModelSoftwareArrayString] = useState<string[] | undefined>(undefined);
+  const [modelSoftwareOptions, setModelSoftwareOptions] = useState<
+    video_softwares[] | undefined
+  >(undefined);
+  const [modelSoftwareOptionsArrayString, setModelSoftwareOptionsArrayString] =
+    useState<string[] | undefined>(undefined);
+  const [modelSoftware, setModelSoftware] = useState<
+    video_softwares[] | undefined
+  >(undefined);
+  const [modelSoftwareArrayString, setModelSoftwareArrayString] = useState<
+    string[] | undefined
+  >(undefined);
 
   const [outLink, setOutLink] = useState<string | undefined>(undefined);
-  const [tagsOptions, setTagsOptions] = useState<video_tag[] | undefined>(undefined);
-  const [tagsOptionsArrayString, setTagsOptionsArrayString] = useState<string[] | undefined>(undefined);
+  const [tagsOptions, setTagsOptions] = useState<video_tag[] | undefined>(
+    undefined
+  );
+  const [tagsOptionsArrayString, setTagsOptionsArrayString] = useState<
+    string[] | undefined
+  >(undefined);
   const [tags, setTags] = useState<video_tag[] | undefined>(undefined);
   const [tagsArrayString, setTagsArrayString] = useState<string[] | undefined>(
     undefined
@@ -156,7 +177,8 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
 
   const [newTag, setNewTag] = useState<string | undefined>(undefined);
 
-  const [currentModelHasBeenModified, setCurrentModelHasBeenModified] = useState(false);
+  const [currentModelHasBeenModified, setCurrentModelHasBeenModified] =
+    useState(false);
 
   const handleModifyVideo = async (videoId?: number) => {
     setShowModifyPanel(true);
@@ -181,7 +203,9 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
       setModelVisibility(currentModelToModify?.visibility);
       setModelAudio(currentModelToModify?.audio);
       setModelWorkTime(currentModelToModify?.worktime);
-      setOutLink(currentModelToModify.video.url ? currentModelToModify.video.url : "");
+      setOutLink(
+        currentModelToModify.video.url ? currentModelToModify.video.url : ""
+      );
 
       setModelSoftware(currentModelToModify.video_softwares);
       let _arrayStringSoftware: string[] = [];
@@ -200,7 +224,7 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
   }, [currentModelToModify]);
 
   useEffect(() => {
-    setCurrentModelHasBeenModified(true)
+    setCurrentModelHasBeenModified(true);
   }, [
     modelDescription,
     modelTitle,
@@ -211,7 +235,7 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
     modelSoftware,
     outLink,
     tags,
-  ])
+  ]);
 
   const updateCurrentModel = async () => {
     const id = currentModelToModify?.id;
@@ -407,13 +431,16 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
         }
       );
     } else {
-      if(authContext.user.models.length === 1) {
-        !authContext.user.models[0].is_highlighted && storeHighlightedVideo(authContext.user.models[0].id)
+      if (authContext.user.models.length === 1) {
+        !authContext.user.models[0].is_highlighted &&
+          storeHighlightedVideo(authContext.user.models[0].id);
       }
     }
 
-    setHighlightedVideo(authContext.user.models.find((e:any) => e.is_highlighted === true))
-  }, []);
+    setHighlightedVideo(
+      authContext.user.models.find((e: any) => e.is_highlighted === true)
+    );
+  }, [authContext.user]);
 
   return (
     <EditorContext.Provider
