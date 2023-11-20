@@ -14,6 +14,7 @@ import { useMediaQuery } from "@uidotdev/usehooks";
 import { FormatsType } from "../data/metaValues";
 
 import Close from "@/icons/dashboard/x.svg";
+import { video_tag } from "../_context/EditorContext";
 
 type InfosPanProps = {};
 
@@ -47,41 +48,6 @@ export const InfosPan = ({}: InfosPanProps) => {
     { value: "Mobile" as FormatsType, label: "Mobile" },
     { value: "Carré" as FormatsType, label: "Carré" },
   ];
-
-  const [defaultImage, setDefaultImage] = useState<string>("");
-
-  /*
-  const handleAddTag = (e: any) => {
-    if (e.includes(" ")) {
-      setTagsError("Les mots clés ne doivent pas contenir d'espaces.");
-      return;
-    }
-    const _tag = {
-      name: e,
-      slug: slugify(e, { lower: true }),
-    };
-
-    if (context.tags) {
-      if (context.tags.length < 6) {
-        !context.tags.find((e) => e.slug === _tag.slug) &&
-          context.setTags([...context.tags, _tag]);
-      } else setTagsError("6 tags maximum");
-    } else {
-      context.setTags([_tag]);
-    }
-  };
-
-  useEffect(() => {
-    tagsError && context.tags && context.tags?.length < 6 && setTagsError("");
-  }, [context.tags]);
-
-  const handleRemoveTag = (e: any) => {
-    const _tags = context.tags?.filter((tag) => {
-      return tag.slug !== slugify(e);
-    });
-    context.setTags(_tags);
-  };
-*/
 
   useEffect(() => {
     context.getCurrentStrapiObject();
@@ -180,7 +146,7 @@ export const InfosPan = ({}: InfosPanProps) => {
 
         <KeyWords
           onChange={(e: any) => {
-            //handleAddTag(e);
+            context.handleAddTag(e);
           }}
         />
 
@@ -188,16 +154,25 @@ export const InfosPan = ({}: InfosPanProps) => {
           <div className="infos-pan__tag-container flex flex-wrap gap-2">
             {context.tags &&
               context.tags.length > 0 &&
-              context.tags.map((tag: any, i: number) => {
+              context.tags.map((tag: video_tag, i: number) => {
                 return (
-                  <Keyword
+                  <div
                     key={i}
-                    icon="cross"
-                    text={tag.name}
-                    onClose={() => {
-                      // handleRemoveTag(tag.slug);
-                    }}
-                  />
+                    className={
+                      "inline " +
+                      (tag.approved
+                        ? ""
+                        : "border border-dashed border-red-50 rounded-lg")
+                    }
+                  >
+                    <Keyword
+                      icon="cross"
+                      text={tag.name}
+                      onClose={() => {
+                        context.handleRemoveTag(tag.id);
+                      }}
+                    />
+                  </div>
                 );
               })}
           </div>
@@ -211,7 +186,13 @@ export const InfosPan = ({}: InfosPanProps) => {
           buttonLabel="Ajouter un fichier"
           title="Glissez-déposez le fichier que vous souhaitez publier."
           desc="Importez une image qui donne un aperçu du contenu de votre vidéo. Une bonne image se remarque et attire l'attention des spectateurs."
-          image={defaultImage}
+          image={
+            context.strapiObject
+              ? context.strapiObject.attributes.thumbnail.data
+                ? context.strapiObject.attributes.thumbnail.data.attributes.url
+                : undefined
+              : undefined
+          }
           onChange={(file) => {
             context.setThumbnail(file);
           }}

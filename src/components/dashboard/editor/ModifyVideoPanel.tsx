@@ -1,5 +1,9 @@
 import { RefObject, useContext, useEffect, useRef, useState } from "react";
-import { EditorContext, EditorVideo } from "./_context/EditorContext";
+import {
+  EditorContext,
+  EditorVideo,
+  video_tag,
+} from "./_context/EditorContext";
 import { OverlayModel } from "@/components/_shared/UI/OverlayModel";
 import { Video } from "@/components/_shared/video/Video";
 import { IslandButton } from "@/components/_shared/buttons/IslandButton";
@@ -96,7 +100,9 @@ export const ModifyVideoPanel = () => {
           descriptionEnabled ? "opacity-0 pointer-events-none" : ""
         } text-dashboard-text-description-base hover:text-dashboard-text-title-white-high cursor-pointer`}
       >
-        {editorContext.modelDescription && editorContext.modelDescription.length ? editorContext.modelDescription : 'Entrez une description pour votre vidéo'}
+        {editorContext.modelDescription && editorContext.modelDescription.length
+          ? editorContext.modelDescription
+          : "Entrez une description pour votre vidéo"}
       </div>
       <div
         className={`absolute top-0 h-full w-full ${
@@ -108,7 +114,7 @@ export const ModifyVideoPanel = () => {
           bg="black"
           value={editorContext.modelDescription}
           onChange={(val) => {
-            if (val) {              
+            if (val) {
               editorContext.setModelDescription(val.target.value);
               editorContext.setCurrentModelHasBeenModified(true);
               editorContext.setCurrentModelToModify(
@@ -156,11 +162,11 @@ export const ModifyVideoPanel = () => {
         className="min-h-screen h-max"
         toggle={editorContext.showModifyPanel}
         onOpened={() => {
-          editorContext.setCurrentModelHasBeenModified(false)
+          editorContext.setCurrentModelHasBeenModified(false);
         }}
         onClose={() => {
           editorContext.hideModifyPanel();
-          editorContext.setCurrentModelHasBeenModified(false)
+          editorContext.setCurrentModelHasBeenModified(false);
         }}
         onClosed={() => {
           editorContext.setCurrentModelToModify(undefined);
@@ -327,7 +333,7 @@ export const ModifyVideoPanel = () => {
                               })
                             );
 
-                            val
+                            val;
                           }
                         }}
                         toggle={openVisibilityToolbox}
@@ -547,14 +553,21 @@ export const ModifyVideoPanel = () => {
                       </div>
                     </div>
 
+                    {editorContext.tagsError && (
+                      <div className="text-appleRed">
+                        {editorContext.tagsError}
+                      </div>
+                    )}
+
                     {!isMobile && (
-                      <DropBox
+                      /* <DropBox
                         type="multiple"
                         Icon={Plus}
                         title="Nouveau Tag"
                         choices={editorContext.tagsOptionsArrayString}
                         currentValue={editorContext.tagsArrayString}
                         onChange={(val) => {
+                          editorContext.setTagsError("");
                           if (val) {
                             editorContext.setTagsArrayString(val);
 
@@ -562,12 +575,15 @@ export const ModifyVideoPanel = () => {
                             editorContext.tagsOptions?.map((x) => {
                               if (val?.includes(x.name)) _tags.push(x);
                             });
-                            editorContext.setCurrentModelToModify(
-                              (previousState: EditorVideo) => ({
-                                ...previousState,
-                                video_tags: _tags,
-                              })
-                            );
+
+                            if (_tags.length <= 6)
+                              editorContext.setCurrentModelToModify(
+                                (previousState: EditorVideo) => ({
+                                  ...previousState,
+                                  video_tags: _tags,
+                                })
+                              );
+                            else editorContext.setTagsError("6 tags maximum");
                           }
                         }}
                         toggle={openTagToolbox}
@@ -575,17 +591,16 @@ export const ModifyVideoPanel = () => {
                           setOpenTagToolbox(val);
                         }}
                         className="hidden md:block absolute top-0 left-1/2"
-                      />
-                      /* 
+                      />*/
+
                       <DropBox
                         type="add"
                         placeholder="Nouveau Tag"
                         Icon={Plus}
                         currentValue={""}
                         onChange={(val) => {
-                          if (val) {
-                          editorContext.addTag(val);
-                          }
+                          editorContext.setTagsError("");
+                          if (val) editorContext.addTag(val);
                         }}
                         toggle={openTagToolbox}
                         setToggle={(val) => {
@@ -594,34 +609,44 @@ export const ModifyVideoPanel = () => {
                         }}
                         className="hidden md:block md:absolute md:top-0 md:left-1/2"
                       />
-                      */
                     )}
 
                     {editorContext.currentModelToModify.video_tags &&
                       editorContext.currentModelToModify.video_tags.map(
-                        (tag:any, i:number) => {
+                        (tag: video_tag, i: number) => {
                           return (
-                            <Keyword
+                            <div
                               key={i}
-                              text={tag.name}
-                              icon="cross"
-                              className="relative w-ful shrink-0"
-                              onClose={() => {
-                                editorContext.setCurrentModelToModify(
-                                  (previousState: EditorVideo) => ({
-                                    ...previousState,
-                                    video_tags:
-                                      editorContext.currentModelToModify
-                                        ? editorContext.currentModelToModify.video_tags?.filter(
-                                            (t:any) => t.name !== tag.name
-                                          )
-                                        : undefined,
-                                  })
-                                );
+                              className={
+                                "inline max-w-min " +
+                                (tag.approved
+                                  ? ""
+                                  : "border border-dashed border-red-50 rounded-lg")
+                              }
+                            >
+                              <Keyword
+                                text={tag.name}
+                                icon="cross"
+                                className="relative w-ful shrink-0"
+                                onClose={() => {
+                                  editorContext.setCurrentModelToModify(
+                                    (previousState: EditorVideo) => ({
+                                      ...previousState,
+                                      video_tags:
+                                        editorContext.currentModelToModify
+                                          ? editorContext.currentModelToModify.video_tags?.filter(
+                                              (t: any) => t.name !== tag.name
+                                            )
+                                          : undefined,
+                                    })
+                                  );
 
-                                editorContext.setCurrentModelHasBeenModified(true);
-                              }}
-                            />
+                                  editorContext.setCurrentModelHasBeenModified(
+                                    true
+                                  );
+                                }}
+                              />
+                            </div>
                           );
                         }
                       )}
@@ -836,7 +861,7 @@ export const ModifyVideoPanel = () => {
             className="fixed bottom-0 h-max z-20 md:hidden md:absolute md:top-0 md:left-1/2"
           />
 
-          <DropBox
+          {/*<DropBox
             type="multiple"
             Icon={Plus}
             title="Nouveau Tag"
@@ -864,18 +889,16 @@ export const ModifyVideoPanel = () => {
               setOpenTagToolbox(val);
             }}
             className="fixed bottom-0 h-max z-20 md:hidden md:absolute md:top-0 md:left-1/2"
-          />
+          />*/}
 
-          {/* 
           <DropBox
             type="add"
             placeholder="Nouveau Tag"
             Icon={Plus}
             currentValue={""}
             onChange={(val) => {
-              if (val) {
-                editorContext.addTag(val);
-              }
+              editorContext.setTagsError("");
+              if (val) editorContext.addTag(val);
             }}
             toggle={openTagToolbox}
             setToggle={(val) => {
@@ -884,7 +907,6 @@ export const ModifyVideoPanel = () => {
             }}
             className="fixed bottom-0 h-max z-20 md:hidden md:absolute md:top-0 md:left-1/2"
           />
-          */}
         </>
       )}
     </div>

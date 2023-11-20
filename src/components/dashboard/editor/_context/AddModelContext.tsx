@@ -5,9 +5,9 @@ import {
   useStrapiPut,
 } from "@/hooks/useStrapi";
 import { VideoDuration } from "@/utils/Video";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { DashBoardContext } from "../../_context/DashBoardContext";
-import { modelType } from "./EditorContext";
+import { modelType, video_tag } from "./EditorContext";
 import { VisibilityType, WorkTimeType } from "../data/metaValues";
 import toast from "react-hot-toast";
 import Error from "@/icons/x-circle.svg";
@@ -17,6 +17,7 @@ import validator from "validator";
 import { inputErrors } from "@/const";
 import { AddModel } from "../AddModel";
 import { useMediaQuery } from "@uidotdev/usehooks";
+import slugify from "slugify";
 
 export const AddModelContext = createContext({
   currentStep: undefined as number | undefined,
@@ -52,28 +53,36 @@ export const AddModelContext = createContext({
 
   length: undefined as string | undefined,
   setLength: (payload: string | undefined) => {},
+
   model: undefined as modelType | undefined,
   setModel: (payload: modelType | undefined) => {},
+
   description: undefined as string | undefined,
   setDescription: (payload: string | undefined) => {},
   descriptionError: undefined as string | undefined,
   setDescriptionError: (payload: string | undefined) => {},
 
-  tags: undefined as { name: string; slug: string }[] | undefined,
-  setTags: (payload: { name: string; slug: string }[] | undefined) => {},
+  tags: undefined as video_tag[] | undefined,
+  setTags: (payload: video_tag[] | undefined) => {},
   tagsError: undefined as string | undefined,
   setTagsError: (payload: string | undefined) => {},
+  handleAddTag: (payload: any): any => {},
+  handleRemoveTag: (payload: number): any => {},
 
   ressources: undefined as any,
   setRessources: (payload: any) => {},
+
   visibility: undefined as VisibilityType | undefined,
   setVisibility: (payload: VisibilityType | undefined) => {},
   copywrite: undefined as string | undefined,
   setCopywrite: (payload: string | undefined) => {},
+
   worktime: undefined as WorkTimeType | undefined,
   setWorktime: (payload: WorkTimeType | undefined) => {},
+
   is_highlighed: undefined as boolean | undefined,
   setIs_highlighed: (payload: boolean | undefined) => {},
+
   videoDuration: undefined as VideoDuration | undefined,
   setVideoDuration: (dur: VideoDuration | undefined) => {},
 });
@@ -102,10 +111,87 @@ export const AddModelContextProvider: React.FC<any> = (props) => {
     undefined
   );
 
-  const [tags, setTags] = useState<
-    { name: string; slug: string }[] | undefined
-  >(undefined);
+  const [strapiTags, setStrapiTags] = useState<video_tag[] | undefined>(
+    undefined
+  );
+  const [tags, setTags] = useState<video_tag[] | undefined>(undefined);
   const [tagsError, setTagsError] = useState<string | undefined>(undefined);
+
+  useMemo(async () => {
+    let _tags: video_tag[] = [];
+    await useStrapiGet("video-tags").then((res) => {
+      if (res.status === 200) {
+        res.data.data.map((x: any) => {
+          _tags.push({
+            name: x.attributes.name,
+            slug: x.attributes.slug,
+            approved: x.attributes.approved,
+            id: x.id,
+          });
+        });
+        setStrapiTags(_tags);
+      }
+    });
+  }, []);
+
+  const handleAddTag = async (e: string) => {
+    if (e.includes(" ")) {
+      setTagsError("Les mots clés ne doivent pas contenir d'espaces.");
+      return;
+    }
+
+    const foundTag = strapiTags?.find(
+      (x) => x.name.toLowerCase() === e.toLowerCase()
+    );
+
+    if (tags === undefined || tags.length < 6) {
+      let _tags: video_tag[];
+
+      if (foundTag) {
+        if (tags) {
+          _tags = [...tags];
+          _tags.push(foundTag);
+          setTags(_tags);
+        } else setTags([foundTag]);
+      } else {
+        await useStrapiPost("video-tags", {
+          data: {
+            name: e,
+            slug: slugify(e, { lower: true }),
+            approved: false,
+          },
+        }).then((res) => {
+          if (res.status === 200) {
+            if (tags) {
+              _tags = [...tags];
+              _tags.push({
+                id: res.data.data.id,
+                name: res.data.data.attributes.name,
+                slug: res.data.data.attributes.slug,
+                approved: res.data.data.attributes.approved,
+              });
+              setTags(_tags);
+            } else
+              setTags([
+                {
+                  id: res.data.data.id,
+                  name: res.data.data.attributes.name,
+                  slug: res.data.data.attributes.slug,
+                  approved: res.data.data.attributes.approved,
+                },
+              ]);
+          }
+        });
+      }
+    } else setTagsError("6 tags maximum");
+  };
+
+  const handleRemoveTag = (id: number) => {
+    const _tags = tags?.filter((tag) => {
+      return tag.id !== id;
+    });
+    setTags(_tags);
+  };
 
   const [ressources, setRessources] = useState<any>(undefined);
   const [visibility, setVisibility] = useState<VisibilityType | undefined>(
@@ -246,6 +332,7 @@ export const AddModelContextProvider: React.FC<any> = (props) => {
               visibility: visibility,
               worktime: worktime,
               length: formatVideoDuration(video.duration),
+              video_tags: tags,
             },
           },
           false
@@ -290,6 +377,7 @@ export const AddModelContextProvider: React.FC<any> = (props) => {
   };
 
   const [strapiObject, setStrapiObject] = useState<any>();
+
   const getCurrentStrapiObject = () => {
     return new Promise(async (res) => {
       if (currentEditorVideo) {
@@ -358,17 +446,24 @@ export const AddModelContextProvider: React.FC<any> = (props) => {
         setTags,
         tagsError,
         setTagsError,
+        handleAddTag,
+        handleRemoveTag,
 
         ressources,
         setRessources,
+
         visibility,
         setVisibility,
+
         copywrite,
         setCopywrite,
+
         worktime,
         setWorktime,
+
         is_highlighed,
         setIs_highlighed,
+
         videoDuration,
         setVideoDuration,
       }}
