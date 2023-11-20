@@ -3,16 +3,18 @@ import { IslandButton } from "@/components/_shared/buttons/IslandButton";
 import routes from "@/routes";
 import { useRouter } from "next/router";
 import { useContext } from "react";
-import { EditorContext } from "./_context/EditorContext";
+import { EditorContext, video_tag } from "./_context/EditorContext";
 import { useMediaQuery } from "@uidotdev/usehooks";
 import { InfoMessage } from "@/components/_shared/UI/InfoMessage";
 
 import Eye from "@/icons/eye.svg";
+import { AuthContext } from "@/context/authContext";
 
 export const DashboardEditorKeyWords = () => {
   const isMobile = useMediaQuery("(max-width: 768px)");
   const router = useRouter();
   const context = useContext(EditorContext);
+  const authContext = useContext(AuthContext);
 
   return (
     <div className="dashboard-editor-keywords flex flex-col gap-dashboard-spacing-element-medium px-dashboard-mention-padding-right-left md:px-0 w-full">
@@ -30,31 +32,56 @@ export const DashboardEditorKeyWords = () => {
         )}
       </div>
 
-      {!context.tags || context.tags.length === 0 ? (
-        <div>
-          <InfoMessage
-            message={
-              <>
-                <p>Vous n'êtes actuellement par visible dans le catalogue.</p>
-                <p>
-                  Ajoutez un modèle et choisissez des mots-clé pour être affiché
-                  dans les filtres du catalogue. Vous pouvez gérer votre
-                  visibilité depuis cette section.
-                </p>
-              </>
-            }
-            bg="black"
-            wFull
-            Icon={Eye}
-          />
-        </div>
+      {authContext.isLoading ? (
+        <p>Loading...</p>
       ) : (
-        <div className="db-editor__tags flex flex-wrap w-full gap-3">
-          {context.tags &&
-            context.tags.map((keyword, i) => {
-              return <Keyword key={i} text={keyword.name} noHover />;
-            })}
-        </div>
+        <>
+          {!authContext.user.models ||
+          authContext.user.models.length === 0 ||
+          !authContext.user.models.find((x: any) => x.video_tags.length > 0) ? (
+            <div>
+              <InfoMessage
+                message={
+                  <>
+                    <p>
+                      Vous n'êtes actuellement par visible dans le catalogue.
+                    </p>
+                    <p>
+                      Ajoutez un modèle et choisissez des mots-clé pour être
+                      affiché dans les filtres du catalogue. Vous pouvez gérer
+                      votre visibilité depuis cette section.
+                    </p>
+                  </>
+                }
+                bg="black"
+                wFull
+                Icon={Eye}
+              />
+            </div>
+          ) : (
+            <div className="db-editor__tags flex flex-wrap w-full gap-3">
+              {/* display list of keywords associated with the current user */}
+              {authContext.user.models &&
+                authContext.user.models.map((x: any) => {
+                  return x.video_tags.map((keyword: video_tag, i: number) => {
+                    return (
+                      <div
+                        key={i}
+                        className={
+                          "inline max-w-min " +
+                          (keyword.approved
+                            ? ""
+                            : "border border-dashed border-red-50 rounded-lg")
+                        }
+                      >
+                        <Keyword text={keyword.name} noHover />
+                      </div>
+                    );
+                  });
+                })}
+            </div>
+          )}
+        </>
       )}
 
       {isMobile && (
