@@ -12,9 +12,15 @@ import { AuthContext } from "@/context/authContext";
 import { AddModel } from "../AddModel";
 import { DashBoardContext } from "../../_context/DashBoardContext";
 import { toast } from "react-hot-toast";
-import { useStrapiDelete, useStrapiGet, useStrapiPut } from "@/hooks/useStrapi";
+import {
+  useStrapiDelete,
+  useStrapiGet,
+  useStrapiPost,
+  useStrapiPut,
+} from "@/hooks/useStrapi";
 import GreenCheck from "@/icons/check-green.svg";
 import { VisibilityType, WorkTimeType } from "../data/metaValues";
+import slugify from "slugify";
 
 export type modelType =
   | "model 16/9 ème"
@@ -39,11 +45,14 @@ export interface EditorVideo {
   description: string;
   video_tags: video_tag[];
   video_softwares?: video_softwares[];
+  approved?: boolean;
 }
 
 export interface video_tag {
   id: number;
   name: string;
+  approved?: boolean;
+  slug?: string;
 }
 
 export interface video_softwares {
@@ -115,6 +124,8 @@ export const EditorContext = createContext({
   setTags: (payload: video_tag[] | undefined) => {},
   tagsArrayString: [] as string[] | undefined,
   setTagsArrayString: (payload: string[] | undefined) => {},
+  tagsError: undefined as string | undefined,
+  setTagsError: (payload: string | undefined) => {},
 
   newTag: undefined as string | undefined,
   setNewTag: (payload: string) => {},
@@ -174,6 +185,7 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
   const [tagsArrayString, setTagsArrayString] = useState<string[] | undefined>(
     undefined
   );
+  const [tagsError, setTagsError] = useState<string | undefined>(undefined);
 
   const [newTag, setNewTag] = useState<string | undefined>(undefined);
 
@@ -197,6 +209,7 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
 
   useEffect(() => {
     if (currentModelToModify) {
+      console.log("currentModelToModify", currentModelToModify);
       setModelDescription(currentModelToModify?.description);
       setModelTitle(currentModelToModify?.title);
       setModelFormat(currentModelToModify?.model);
@@ -352,7 +365,61 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
     }
   };
 
-  const addTag = (tagName: string) => {
+  const addTag = async (tagName: string) => {
+    if (tagName.includes(" ")) {
+      setTagsError("Les mots clés ne doivent pas contenir d'espaces.");
+      return;
+    }
+
+    const foundTag = tagsOptions?.find(
+      (x) => x.name.toLowerCase() === tagName.toLowerCase()
+    );
+
+    if (tags === undefined || tags.length < 6) {
+      let _currentTags = currentModelToModify?.video_tags
+        ? [...currentModelToModify?.video_tags]
+        : [];
+
+      // if found in tags options
+      if (foundTag) {
+        // if doesn't exist in current tag list then add it
+        if (
+          !_currentTags.find(
+            (x) => x.name.toLowerCase() === tagName.toLowerCase()
+          )
+        ) {
+          _currentTags.push(foundTag);
+          setCurrentModelToModify((previousState: any) => ({
+            ...previousState,
+            video_tags: _currentTags,
+          }));
+        }
+      } else {
+        // add it to DB
+        await useStrapiPost("video-tags", {
+          data: {
+            name: tagName,
+            slug: slugify(tagName, { lower: true }),
+            approved: false,
+          },
+        }).then((res) => {
+          if (res.status === 200) {
+            // add to current list
+            _currentTags.push({
+              id: res.data.data.id,
+              name: res.data.data.attributes.name,
+              slug: res.data.data.attributes.slug,
+              approved: res.data.data.attributes.approved,
+            });
+            setCurrentModelToModify((previousState: any) => ({
+              ...previousState,
+              video_tags: _currentTags,
+            }));
+          }
+        });
+      }
+    } else setTagsError("6 tags maximum");
+
     /*if (tagName) {
       const t: { name: string; slug: string } = {
         name: tagName,
@@ -409,6 +476,8 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
           _tags.push({
             name: x.attributes.name,
             id: x.id,
+            slug: x.attributes.slug,
+            approved: x.attributes.approved,
           });
         });
         setTagsOptionsArrayString(_tagsArraysString);
@@ -500,6 +569,8 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
         setTags,
         tagsArrayString,
         setTagsArrayString,
+        tagsError,
+        setTagsError,
 
         newTag,
         setNewTag,

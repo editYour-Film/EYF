@@ -12,6 +12,7 @@ import { toast } from "react-hot-toast";
 import {
   EditorVideo,
   video_softwares,
+  video_tag,
 } from "../../editor/_context/EditorContext";
 
 export const ClientContext = createContext({
@@ -31,7 +32,7 @@ export const ClientContext = createContext({
   modelWorkTime: undefined as string | undefined,
   modelSoftware: undefined as video_softwares[] | undefined,
   outLink: undefined as string | undefined,
-  tags: [] as { name: string; slug: string }[] | undefined,
+  tags: [] as video_tag[] | undefined,
 });
 
 export const ClientContextProvider = ({ children }: PropsWithChildren) => {
@@ -53,9 +54,7 @@ export const ClientContextProvider = ({ children }: PropsWithChildren) => {
   const [modelWorkTime] = useState<string | undefined>(undefined);
   const [modelSoftware] = useState<video_softwares[] | undefined>(undefined);
   const [outLink] = useState<string | undefined>(undefined);
-  const [tags] = useState<{ name: string; slug: string }[] | undefined>(
-    undefined
-  );
+  const [tags] = useState<video_tag[] | undefined>(undefined);
 
   const fetchCurrentModels = () => {
     // TODO: Integration Get the models of the user
