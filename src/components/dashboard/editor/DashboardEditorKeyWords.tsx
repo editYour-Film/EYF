@@ -3,17 +3,16 @@ import { IslandButton } from "@/components/_shared/buttons/IslandButton";
 import routes from "@/routes";
 import { useRouter } from "next/router";
 import { useContext } from "react";
-import { EditorContext, video_tag } from "./_context/EditorContext";
 import { useMediaQuery } from "@uidotdev/usehooks";
 import { InfoMessage } from "@/components/_shared/UI/InfoMessage";
 
 import Eye from "@/icons/eye.svg";
 import { AuthContext } from "@/context/authContext";
+import { video_tag } from "./_context/EditorContext";
 
 export const DashboardEditorKeyWords = () => {
   const isMobile = useMediaQuery("(max-width: 768px)");
   const router = useRouter();
-  const context = useContext(EditorContext);
   const authContext = useContext(AuthContext);
 
   return (
