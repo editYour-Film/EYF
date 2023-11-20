@@ -29,6 +29,10 @@ export const EmailPan = ({ disclaimer }: EmailPanProps) => {
     if (emailOk) context.goNext();
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") handleConfirmEmail();
+  };
+
   return (
     <div className="signIn_email max-w-[100vw] w-[360px] px-dashboard-specific-radius md:px-0 pb-[75px]">
       <div
@@ -46,7 +50,7 @@ export const EmailPan = ({ disclaimer }: EmailPanProps) => {
           <Input
             type="email"
             label="email"
-            placeholder="Entrez votre adresse mail"
+            placeholder="Entrez votre adresse email"
             bg="light"
             className="w-full"
             error={context.emailErrorMessage}
@@ -55,11 +59,14 @@ export const EmailPan = ({ disclaimer }: EmailPanProps) => {
             onChange={(e) => {
               context.setEmail(e.target.value);
             }}
+            onKeyDown={(e) => {
+              handleKeyDown(e);
+            }}
           />
 
           <Button
             type="secondary"
-            label="Confirmer mon mail"
+            label="Confirmer mon email"
             disabled={context.email.length === 0}
             onClick={() => {
               handleConfirmEmail();

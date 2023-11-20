@@ -7,17 +7,20 @@ import { EditorVideo, modelType } from "@/components/dashboard/editor/_context/E
 
 export type ModelsProps = {
   video: EditorVideo,
+  playerFullWidth?: boolean,
   thumbnail?: string,
   model?: modelType,
   type?: 'default' | 'dashboard'
   handleModify?: () => void,
   handleDisable?: () => void,
+  handleEnable?: () => void,
   handleDelete?: () => void,
   handleSetHighlighted?: () => void,
 }
 
 export const ModelLarge = ({
   video, 
+  playerFullWidth = false,
   type = 'default', 
   handleModify, 
   handleDisable,
@@ -31,7 +34,8 @@ export const ModelLarge = ({
           <div className="model-large bg-dashboard-button-dark rounded-dashboard-button-separation-spacing overflow-hidden border">
             <div className="model-large__videoW relative w-full h-0 pb-[56.25%] bg-blackBerry z-0">
               <Video
-                video={video.video.data.attributes.url}
+                playerFullWidth
+                video={video.video}
                 className='absolute object-cover'
               />
             </div>
@@ -40,8 +44,8 @@ export const ModelLarge = ({
                 {type === 'dashboard'
                   ?
                   <>
-                    <div className="text-dashboard-text-title-white-high text-base font-medium">{video.video.data.attributes.title}</div>
-                    <div className="text-dashboard-text-description-base">{video.video.data.attributes.length}</div>
+                    <div className="text-dashboard-text-title-white-high text-base font-medium">{video.title}</div>
+                    <div className="text-dashboard-text-description-base">{video.length}</div>
                   </>
                   : 
                     <div className="">

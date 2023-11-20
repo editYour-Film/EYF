@@ -25,8 +25,12 @@ module.exports = {
         },
 
         'neutral': {
+          '01': '#B2B2B2',
           '02': '#777777'
         },
+
+        'dashboard-success-dark': tokens.dashboard_success_dark,
+        'dashboard-success': tokens.dashboard_success,
 
         // Backgrounds
         'dashboard-button-island-BlueBerry-default' : tokens.dashboard_button_island_BlueBerry_default,
@@ -172,6 +176,16 @@ module.exports = {
         'text': tokens.font_text,
         'title': tokens.font_title
       },
+      keyframes: {
+        'toast-in': {
+          '0%': { transform: 'translateY(-20px)', opacity: 0 },
+          '100%': { transform: 'translateY(0px)', opacity: 1 },
+        },
+        'toast-out': {
+          '0%': { transform: 'translateY(0px)', opacity: 1 },
+          '100%': { transform: 'translateY(-20px)', opacity: 0 },
+        }
+      },
       borderColor: ({theme}) => ({
         DEFAULT: theme('colors.borderWhite'),
 
@@ -191,10 +205,10 @@ module.exports = {
         '.perspective': {
           'perspective': '1000px',
         },
-        'bg-rose-sunset': {
+        '.bg-rose-sunset': {
           background: `linear-gradient(var(--linear-direction, 180deg), ${tokens.base_rose_sunset_blue} 38.45%, ${tokens.base_rose_sunset_violet} 93.75%);`
         },
-        'bg-border-component': {
+        '.bg-border-component': {
           background: `linear-gradient(var(--linear-direction, 180deg), ${tokens.base_Edy_soyMilk} 38.45%, ${tokens.base_Edy_soyMilk_250} 93.75%);`
         },
         '.shadow-large' : {
@@ -299,12 +313,21 @@ module.exports = {
             gap: 0
           }
         },
+        '.grid-month': {
+          gridTemplateColumns: 'repeat(7, max-content)',
+          rowGap: '12px',
+          columnGap: '0',
+        },
         '.no-widget': {
           '&::-webkit-calendar-picker-indicator': {
             display: 'none!important',
           }
         },
-
+        '.toaster' : {
+          '> div' : {
+            justifyContent: 'start !important',
+          }
+        },
 
         //v0
         '.dashboard-title': {

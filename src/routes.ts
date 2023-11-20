@@ -22,7 +22,8 @@ const getRoutesConnexion = (array: string[]) => {
 let routes = {
   HOME: "/",
   WHOWEARE: "/qui-sommes-nous",
-  CGUMENOTRS: "/cgu-monteurs",
+  CGU: "/cgu",
+  CGUEDITOR: "/cgu-monteurs",
   CGUCLIENTS: "/cgu-clients",
   ML: "/mentions-legales",
   PC: "/politique-de-cookies",
@@ -49,9 +50,20 @@ let routes = {
   DASHBOARD_EDITOR: "/dashboard/monteur/accueil",
   DASHBOARD_EDITOR_HOME: "/dashboard/monteur/accueil",
   DASHBOARD_EDITOR_SCHEDULE: "/dashboard/monteur/agenda",
-  DASHBOARD_EDITOR_MISSIONS: "/dashboard/monteur/missions",
-  DASHBOARD_EDITOR_HISTORY: "/dashboard/monteur/historique",
+  DASHBOARD_EDITOR_ORDERS: "/dashboard/monteur/commandes",
+  DASHBOARD_EDITOR_STUDIO: "/dashboard/monteur/studio",
+  DASHBOARD_EDITOR_DOCUMENTS: "/dashboard/monteur/documents",
   DASHBOARD_EDITOR_PROFIL: "/dashboard/monteur/profil",
+  DASHBOARD_EDITOR_SETTINGS: "/dashboard/monteur/settings",
+
+  DASHBOARD_CLIENT: '/dashboard/client/accueil',
+  DASHBOARD_CLIENT_HOME: '/dashboard/client/accueil',
+  DASHBOARD_CLIENT_PROFIL: '/dashboard/client/profil',
+  DASHBOARD_CLIENT_ORDERS: '/dashboard/client/orders',
+  DASHBOARD_CLIENT_STUDIO: '/dashboard/client/studio',
+  DASHBOARD_CLIENT_FILES: '/dashboard/client/files',
+  DASHBOARD_CLIENT_SETTINGS: '/dashboard/client/settings',
+
 };
 
 export default routes;

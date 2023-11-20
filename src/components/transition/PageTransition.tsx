@@ -122,11 +122,6 @@ export const PageTransition = ({
         </Transition>
       </SwitchTransition>
 
-      {/* Message Center */}
-      {/* <div className="message-center fixed top-0 left-0 w-full h-full flex justify-center items-start z-popup bg-black">
-        <MessageManager />
-      </div> */}
-
       {/* Transition Mask Element */}
       <div className="fixed w-full h-full top-0 left-0 perspective z-transition pointer-events-none">
         <div

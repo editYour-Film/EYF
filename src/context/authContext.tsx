@@ -1,5 +1,4 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import {
   getTempCodeFromLocalCookie,
   getTokenFromLocalCookie,
@@ -9,11 +8,7 @@ import {
   unsetToken,
 } from "../auth/auth";
 import useLocalStorage, { removeStorage } from "@/hooks/useLocalStorage";
-import {
-  SignedInUser,
-  SigninUser,
-  initSignedInUser,
-} from "@/components/model/signin";
+import { SignedInUser, initSignedInUser } from "@/components/model/signin";
 import router from "next/router";
 import routes from "@/routes";
 import { useStrapiPost } from "@/hooks/useStrapi";
@@ -25,6 +20,7 @@ export const AuthContext = createContext({
   isLoggedIn: false,
   isLoading: true,
   SignOut: () => {},
+  RefreshUserData: () => {},
 });
 
 export const AuthProvider: React.FC<any> = ({ children }: any) => {
@@ -37,21 +33,9 @@ export const AuthProvider: React.FC<any> = ({ children }: any) => {
     getTempCodeFromLocalCookie() ? (getTempCodeFromLocalCookie() as string) : ""
   );
 
-  const SignOut = (redirect = true) => {
-    unsetToken();
-    unsetTempCode();
-    removeStorage("user");
-    removeStorage("register_user");
-    if (redirect) router.push(routes.SIGNIN);
-  };
-
-  useEffect(() => {
-    if (!getTokenFromLocalCookie()) SignOut(false);
-  }, []);
-
-  // validate user
-  useEffect(() => {
+  const RefreshUserData = (redirect = false) => {
     setIsLoading(true);
+
     if (userCode && userCode.length > 0) {
       const checkUserByCode = async () => {
         return useStrapiPost(
@@ -72,17 +56,37 @@ export const AuthProvider: React.FC<any> = ({ children }: any) => {
               details: res.data.details,
               models: res.data.models,
             });
-            if (res.data.user.role.name === "editor")
-              router.push(routes.DASHBOARD_EDITOR_HOME);
-            else alert("dashboard client encore en developpment.");
-          } else SignOut();
 
+            if (redirect) {
+              if (res.data.user.role.name === "editor")
+                router.push(routes.DASHBOARD_EDITOR_HOME);
+              else router.push(routes.DASHBOARD_CLIENT_HOME);
+            }
+          } else SignOut();
           setIsLoading(false);
         })
-        .catch((error) => {
+        .catch(() => {
           SignOut();
+          setIsLoading(false);
         });
     }
+  };
+
+  const SignOut = (redirect = true) => {
+    unsetToken();
+    unsetTempCode();
+    removeStorage("user");
+    removeStorage("register_user");
+    if (redirect) router.push(routes.SIGNIN);
+  };
+
+  useEffect(() => {
+    if (!getTokenFromLocalCookie()) SignOut(false);
+  }, []);
+
+  // validate user
+  useEffect(() => {
+    RefreshUserData();
   }, [userCode]);
 
   return (
@@ -94,6 +98,7 @@ export const AuthProvider: React.FC<any> = ({ children }: any) => {
         isLoggedIn: Object.keys(userInfo.user).length > 0,
         isLoading,
         SignOut,
+        RefreshUserData,
       }}
     >
       {children}

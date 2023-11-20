@@ -8,23 +8,26 @@ import { Video } from "@/components/_shared/video/Video";
 import { Button } from "@/components/_shared/buttons/Button";
 import { IslandButton } from "@/components/_shared/buttons/IslandButton";
 import { DashBoardContext } from "../../_context/DashBoardContext";
-import { addToast, removeToast } from "@/store/slices/toastSlice";
-import { useDispatch } from "react-redux";
 import GreenCheck from "@/icons/check-green.svg";
-import { EditorContext } from "../_context/EditorContext";
 import {
   VisibilityType,
   WorkTimeLabelType,
   WorkTimeType,
 } from "../data/metaValues";
 import { useMediaQuery } from "@uidotdev/usehooks";
+import { toast } from "react-hot-toast";
 
 import Close from "@/icons/dashboard/x.svg";
+import { InfoMessage } from "@/components/_shared/UI/InfoMessage";
+import { MentionInteraction } from "@/components/_shared/buttons/MentionInteraction";
+import { inputErrors } from "@/const";
+import Error from "@/icons/x-circle.svg";
+import Play from "@/icons/player-play.svg";
+import Image from "next/image";
+import validator from "validator";
 
 export const VisibilityPan = () => {
   const context = useContext(AddModelContext);
-  const editorContext = useContext(EditorContext);
-
   const dashboardContext = useContext(DashBoardContext);
 
   const form = useRef<HTMLFormElement>(null);
@@ -86,38 +89,55 @@ export const VisibilityPan = () => {
   const [durationValue, setDurationValue] = useState<WorkTimeType | undefined>(
     undefined
   );
-  const [videoDuration, setVideoDuration] = useState<VideoDuration>();
   const [error, setError] = useState<boolean>(false);
   const [copywriteError, setCopyWriteError] = useState("");
 
+  const [imgUrl, setImgUrl] = useState<string | undefined>(undefined);
+  const [hideCover, setHideCover] = useState<boolean>(false);
+
   const lenis = useLenis();
-  const dispatch = useDispatch();
 
   const handleSubmit = async () => {
-    setTimeout(() => {
-      const updateRes = context.handleUpdateEditorVideo();
-      updateRes.then((res: StrapiResponse) => {
-        if (res.status === 200) {
-          context.resetData();
-          dashboardContext.setIsAddModelPannelOpen(false);
-          dashboardContext.closePanels();
-          lenis.scrollTo(0);
+    setCopyWriteError("");
 
-          dispatch(removeToast(editorContext.noModelMessageId));
+    let err = false;
+    if (
+      context.copywrite === undefined ||
+      validator.isEmpty(context.copywrite)
+    ) {
+      err = true;
+      setCopyWriteError(inputErrors.required);
+    }
+    if (context.copywrite && context.copywrite?.split(" ").length > 200) {
+      setCopyWriteError("Le text doit contenir 200 mots maximum");
+      err = true;
+    }
 
-          dispatch(
-            addToast({
-              id: Date.now(),
-              message: "Votre modèle a été ajouté avec succès.",
-              Icon: GreenCheck,
-              delay: 3000,
-            })
-          );
-        } else {
-          console.log("error occured");
-        }
-      });
-    }, 500);
+    if (!err) {
+      setTimeout(() => {
+        const updateRes = context.handleUpdateEditorVideo();
+        updateRes.then((res: StrapiResponse) => {
+          if (res.status === 200) {
+            context.resetData();
+            dashboardContext.setIsAddModelPannelOpen(false);
+            dashboardContext.closePanels();
+            lenis.scrollTo(0);
+
+            toast.custom(
+              <InfoMessage
+                message="Votre modèle a été ajouté avec succès."
+                Icon={GreenCheck}
+              />
+            );
+          } else
+            toast(inputErrors.general, {
+              icon: Error,
+              duration: 5000,
+              className: "bg-blackBerry",
+            });
+        });
+      }, 500);
+    }
   };
 
   useEffect(() => {
@@ -144,14 +164,12 @@ export const VisibilityPan = () => {
   }, [copywriteError]);
 
   useEffect(() => {
-    setVideoDuration(context.videoDuration);
-
     dashboardContext.setButtons(
       <Button
         type="primary"
         label="Confirmer"
         onClick={() => {
-          !error && handleSubmit();
+          handleSubmit();
         }}
         className="w-full"
       />
@@ -164,8 +182,15 @@ export const VisibilityPan = () => {
     };
   }, []);
 
+  useEffect(() => {
+    context.thumbnail &&
+      setImgUrl(URL.createObjectURL(context.thumbnail as File));
+  }, [context.thumbnail]);
+
+  const [playVideo, setPlayVideo] = useState(false);
+
   return (
-    <div className="visibility-pan bg-dashboard-background-content-area flex flex-col gap-dashboard-spacing-element-medium pt-[50px] pb-[150px]">
+    <div className="visibility-pan bg-dashboard-background-content-area flex flex-col gap-dashboard-spacing-element-medium pt-[50px] md:pt-0 pb-[150px] md:pb-0">
       {isMobile && (
         <IslandButton
           type="secondary"
@@ -180,10 +205,40 @@ export const VisibilityPan = () => {
         />
       )}
 
-      <div className="visibility-pan__video-w relative h-0 pb-[57.6%] rounded-2xl overflow-hidden border">
+      <div className="visibility-pan__video-w relative h-0 pb-[57.6%] rounded-t-2xl overflow-hidden border">
         <div className="absolute w-full h-full">
+          {imgUrl && (
+            <div
+              className={`absolute group top-0 left-0 w-full h-full flex justify-center items-center z-10 transition-opacity ${
+                playVideo ? "opacity-0 pointer-events-none" : "opacity-100"
+              }`}
+              onClick={() => {
+                setPlayVideo(true);
+              }}
+            >
+              <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center z-10 bg-blackBerry bg-opacity-20 transition-opacity opacity-0 group-hover:opacity-100 cursor-pointer">
+                <Play className="w-[50px] h-[50px] " />
+              </div>
+              <Image
+                src={imgUrl}
+                alt="cover de la vidéo"
+                fill
+                className={`object-cover`}
+              />
+            </div>
+          )}
           <Video
+            playerFullWidth
             video={context.strapiObject?.attributes.video.data.attributes}
+            className="h-full z-0"
+            onPlay={() => {
+              setHideCover(true);
+            }}
+            onPause={() => {
+              setHideCover(false);
+              setPlayVideo(false);
+            }}
+            trigger={playVideo}
           />
         </div>
       </div>
@@ -224,9 +279,9 @@ export const VisibilityPan = () => {
             bg="light"
             labelType="dashboard"
             value={context.copywrite}
-            maxlength={150}
+            maxlength={200}
             size="sm"
-            helpIconText="Help"
+            helpIconText="Maximum 200 mots"
             onChange={(e) => {
               context.setCopywrite(e.target.value);
             }}
@@ -252,28 +307,21 @@ export const VisibilityPan = () => {
           }}
         />
       </form>
-      <hr />
-      <div className="flex justify-center sm:justify-between items-center flex-wrap gap-8">
-        <div>
-          {error ? (
-            <span className="text-appleRed text-sm ">
-              Le formulaire contient des erreurs
-            </span>
-          ) : (
-            <span className="text-base-text text-sm ">
-              Vérifications terminées. Aucun problème détecté.
-            </span>
-          )}
+      <div className="flex justify-center w-full sm:justify-end items-center flex-wrap gap-8">
+        <div className="flex items-center gap-dashboard-button-separation-spacing">
+          <MentionInteraction onClick={() => context.abort()} className="h-max">
+            Annuler
+          </MentionInteraction>
+
+          <IslandButton
+            type="primary"
+            label="Suivant"
+            className={`w-max`}
+            onClick={() => {
+              handleSubmit();
+            }}
+          />
         </div>
-        <IslandButton
-          type="primary"
-          label="Suivant"
-          disabled={error}
-          className={`w-max`}
-          onClick={() => {
-            !error && handleSubmit();
-          }}
-        />
       </div>
     </div>
   );

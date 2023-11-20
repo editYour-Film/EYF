@@ -74,9 +74,7 @@ export const Player = ({isPlaying, onPlay, onPause, onTrackClick, duration = 0, 
         >
         </div>
         <div 
-         
           className="video__track relative w-full h-[4px]"
-
         >
           <div ref={trackButton} className="video__track-button absolute h-full z-10">
             <div className="relative top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[13px] h-[13px] rounded-full bg-dashboard-text-title-white-high"></div>
@@ -89,8 +87,8 @@ export const Player = ({isPlaying, onPlay, onPause, onTrackClick, duration = 0, 
         </div>
 
         <div className="video__timings w-full flex justify-between mt-[6px]">
-          {timingFromStart && <div>{timingFromStart.mmss}</div>}
-          {timingFromEnd && <div>-{timingFromEnd.mmss}</div>}
+          {timingFromStart && <div className="text-neutral-01 text-small">{timingFromStart.mmss}</div>}
+          {timingFromEnd && <div className="text-neutral-01 text-small">-{timingFromEnd.mmss}</div>}
         </div>
       </div>
       

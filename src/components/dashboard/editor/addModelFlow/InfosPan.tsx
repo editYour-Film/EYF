@@ -2,8 +2,7 @@ import { useContext, useEffect, useRef, useState } from "react";
 
 import useStrapi from "@/hooks/useStrapi";
 import Input from "@/components/_shared/form/Input";
-import { VideoDuration, getDuration } from "@/utils/Video";
-import slugify from "slugify";
+import { VideoDuration } from "@/utils/Video";
 import { AddModelContext } from "../_context/AddModelContext";
 import { InputVignet } from "@/components/_shared/form/InputVignet";
 import { Keyword } from "@/components/_shared/UI/Keyword";
@@ -12,23 +11,18 @@ import { Video } from "@/components/_shared/video/Video";
 import { DashBoardContext } from "../../_context/DashBoardContext";
 import { Button } from "@/components/_shared/buttons/Button";
 import { useMediaQuery } from "@uidotdev/usehooks";
-import { AddModel } from "../AddModel";
 import { FormatsType } from "../data/metaValues";
 
 import Close from "@/icons/dashboard/x.svg";
-import { AuthContext } from "@/context/authContext";
+import { video_tag } from "../_context/EditorContext";
 
 type InfosPanProps = {};
 
 export const InfosPan = ({}: InfosPanProps) => {
   const context = useContext(AddModelContext);
   const dashboardContext = useContext(DashBoardContext);
-  const authContext = useContext(AuthContext);
 
   const isMobile = useMediaQuery("(max-width: 768px)");
-
-  const [entry, setEntry] = useState<any>(null);
-  const [duration, setDuration] = useState<VideoDuration>();
 
   useEffect(() => {
     dashboardContext.setButtons(
@@ -36,9 +30,8 @@ export const InfosPan = ({}: InfosPanProps) => {
         type="primary"
         label="Continuer"
         className={`w-full`}
-        disabled={error}
         onClick={() => {
-          !error && handleSubmit();
+          context.handleSubmitInfoPan();
         }}
       />
     );
@@ -56,118 +49,9 @@ export const InfosPan = ({}: InfosPanProps) => {
     { value: "Carré" as FormatsType, label: "Carré" },
   ];
 
-  const highlightedOptions = [
-    {
-      value: true,
-      label: "oui",
-    },
-    {
-      value: false,
-      label: "non",
-    },
-  ];
-
-  const [formatValue, setFormatValue] = useState<FormatsType>(
-    formatOption[0].value
-  );
-  const [isHighlightedValue, setIsHighlightedValue] = useState(
-    highlightedOptions[0].value
-  );
-
-  const [titleValue, setTitleValue] = useState<string | undefined>(undefined);
-  const [titleError, setTitleError] = useState("");
-
-  const [descriptionValue, setDescriptionValue] = useState<string | undefined>(
-    undefined
-  );
-  const [descriptionError, setDescriptionError] = useState("");
-
-  const [defaultImage, setDefaultImage] = useState<string>("");
-  const [vignet, setVignet] = useState<File | undefined>(undefined);
-
-  const [tags, setTags] = useState<{ name: string; slug: string }[]>([]);
-  const [tagsError, setTagsError] = useState("");
-
-  const [error, setError] = useState(false);
-  const [visibilityPanAdded, setVisibilityPanAdded] = useState(false);
-
   useEffect(() => {
-    if (context.strapiObject) {
-      setEntry(context.strapiObject.attributes);
-
-      setIsHighlightedValue(
-        authContext.user.details.highlighted_video &&
-          authContext.user.details.highlighted_video.data &&
-          authContext.user.details.highlighted_video.data.id ===
-            context.strapiObject.id
-          ? highlightedOptions[0].value
-          : highlightedOptions[1].value
-      );
-      setFormatValue(
-        context.strapiObject.attributes.model ?? formatOption[0].value
-      );
-      setTitleValue(context.strapiObject.attributes.title ?? undefined);
-      setDescriptionValue(
-        context.strapiObject.attributes.description ?? undefined
-      );
-      setDefaultImage(
-        context.strapiObject.attributes.thumbnail.data
-          ? context.strapiObject.attributes.thumbnail.data.attributes.url
-          : undefined
-      );
-      setTags(
-        context.strapiObject.attributes.video_tags?.data
-          ? context.strapiObject.attributes.video_tags.data.map((tag: any) => {
-              return { name: tag.attributes.name, slug: tag.attributes.slug };
-            })
-          : []
-      );
-    }
-  }, [context.strapiObject]);
-
-  const handleSubmit = () => {
-    setDescriptionError("");
-    setTagsError("");
-
-    context.setUser_info(authContext.user.details.id);
-    context.setLength(
-      duration
-        ? duration?.min !== 0
-          ? duration?.min.toString() + " minutes"
-          : duration?.sec.toString() + " secondes"
-        : ""
-    );
-
-    if (isMobile) context.setCurrentStep(2);
-    else {
-      setVisibilityPanAdded(true);
-
-      dashboardContext.addPannel({
-        title: "Details",
-        panel: <AddModel step={2} />,
-      });
-    }
-  };
-
-  const handleAddTag = (e: any) => {
-    const _tag = {
-      name: e,
-      slug: slugify(e, { lower: true }),
-    };
-    context.setTags(context.tags ? [...context.tags, _tag] : [_tag]);
-  };
-
-  const handleRemoveTag = (e: any) => {
-    const _tags = tags.filter((tag) => {
-      return tag.slug !== slugify(e);
-    });
-    context.setTags(_tags);
-  };
-
-  useEffect(() => {
-    if (titleError || descriptionError || tagsError) setError(true);
-    else setError(false);
-  }, [titleError, descriptionError, tagsError]);
+    context.getCurrentStrapiObject();
+  }, []);
 
   return (
     <div className="infos-pan flex flex-col gap-dashboard-spacing-element-medium bg-dashboard-background-content-area pt-[50px] pb-[150px] md:py-0">
@@ -184,15 +68,22 @@ export const InfosPan = ({}: InfosPanProps) => {
           className="w-max self-end mr-dashboard-button-separation-spacing"
         />
       )}
-      <div className="info-pan__video-w relative rounded-t-2xl overflow-hidden border">
-        {entry && <Video video={entry.video.data.attributes} />}
-      </div>
+      {context.strapiObject && (
+        <>
+          <div className="info-pan__video-w relative rounded-t-2xl overflow-hidden border">
+            <Video
+              playerFullWidth
+              video={context.strapiObject.attributes.video.data.attributes}
+            />
+          </div>
 
-      <div className="info-pan__title flex items-baseline gap-2">
-        <div className="n27 text-title-medium text-dashboard-text-title-white-high uppercase font-medium">
-          {entry?.video.data.attributes.title}
-        </div>
-      </div>
+          <div className="info-pan__title flex items-baseline gap-2">
+            <div className="n27 text-title-medium text-dashboard-text-title-white-high uppercase font-medium">
+              {context.strapiObject.attributes.video.data.attributes.title}
+            </div>
+          </div>
+        </>
+      )}
 
       <form
         ref={form}
@@ -230,53 +121,64 @@ export const InfosPan = ({}: InfosPanProps) => {
               context.setTitle(e.target.value);
             }}
             className="bg-transparent"
+            error={context.titleError}
           />
-          {titleError && (
-            <div className="text-appleRed text-sm mt-2">{titleError}</div>
-          )}
         </div>
 
         <div>
           <Input
-            label="Présentez-vous à vos futurs clients..."
+            label="Décrivez votre modèle de montage…"
             type="textarea"
             labelType="dashboard"
-            helpIconText="Entrez la description"
+            helpIconText="150 mots maximum."
             bg="light"
             value={context.description}
             placeholder="Présentez votre vidéo à vos spectateurs..."
             onChange={(e) => {
               context.setDescription(e.target.value);
             }}
-            maxlength={100}
+            minlength={50}
+            maxlength={150}
             className="bg-transparent"
+            error={context.descriptionError}
           />
-          {descriptionError && (
-            <div className="text-appleRed text-sm mt-2">{descriptionError}</div>
-          )}
         </div>
 
         <KeyWords
           onChange={(e: any) => {
-            handleAddTag(e);
+            context.handleAddTag(e);
           }}
         />
 
-        <div className="infos-pan__tag-container flex flex-wrap gap-2">
-          {context.tags &&
-            context.tags.length > 0 &&
-            context.tags.map((tag: any, i: number) => {
-              return (
-                <Keyword
-                  key={i}
-                  icon="cross"
-                  text={tag.name}
-                  onClose={() => {
-                    handleRemoveTag(tag.slug);
-                  }}
-                />
-              );
-            })}
+        <div className="flex flex-col gap-1.5">
+          <div className="infos-pan__tag-container flex flex-wrap gap-2">
+            {context.tags &&
+              context.tags.length > 0 &&
+              context.tags.map((tag: video_tag, i: number) => {
+                return (
+                  <div
+                    key={i}
+                    className={
+                      "inline " +
+                      (tag.approved
+                        ? ""
+                        : "border border-dashed border-red-50 rounded-lg")
+                    }
+                  >
+                    <Keyword
+                      icon="cross"
+                      text={tag.name}
+                      onClose={() => {
+                        context.handleRemoveTag(tag.id);
+                      }}
+                    />
+                  </div>
+                );
+              })}
+          </div>
+          {context.tagsError && context.tagsError.length > 0 && (
+            <div className="text-appleRed">{context.tagsError}</div>
+          )}
         </div>
 
         <InputVignet
@@ -284,10 +186,24 @@ export const InfosPan = ({}: InfosPanProps) => {
           buttonLabel="Ajouter un fichier"
           title="Glissez-déposez le fichier que vous souhaitez publier."
           desc="Importez une image qui donne un aperçu du contenu de votre vidéo. Une bonne image se remarque et attire l'attention des spectateurs."
-          image={defaultImage}
+          image={
+            context.strapiObject
+              ? context.strapiObject.attributes.thumbnail.data
+                ? context.strapiObject.attributes.thumbnail.data.attributes.url
+                : undefined
+              : undefined
+          }
           onChange={(file) => {
             context.setThumbnail(file);
           }}
+          maxSize={1 * 1000 * 1000}
+          allowedMimeType={[
+            { mime: "image/png", name: "png" },
+            { mime: "image/jpeg", name: "jpeg" },
+            { mime: "image/jpg", name: "jpg" },
+            { mime: "image/svg+xml", name: "svg" },
+            { mime: "image/webp", name: "webp" },
+          ]}
         />
       </form>
 
@@ -296,9 +212,8 @@ export const InfosPan = ({}: InfosPanProps) => {
           type="primary"
           label="Confirmer"
           className={`w-max self-end`}
-          disabled={error || visibilityPanAdded}
           onClick={() => {
-            !error && handleSubmit();
+            context.handleSubmitInfoPan();
           }}
         />
       )}

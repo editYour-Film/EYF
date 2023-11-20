@@ -29,7 +29,7 @@ const SignIn: React.FC<layoutProps> = ({ previousPath }) => {
         <LayoutSignin>
           <HeaderSignin previousPath={previousPath} ctx={SignInContext} />
           <SignInPanSwitcher />
-          <FooterSignin height={"75px"} />
+          <FooterSignin />
         </LayoutSignin>
       </SignInContextProvider>
     </>

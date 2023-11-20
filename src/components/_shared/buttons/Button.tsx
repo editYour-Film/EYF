@@ -1,7 +1,8 @@
 type ButtonProps = {
-  type: "primary" | "secondary";
+  type: "primary" | "secondary" | "transparent";
   label: string;
   Icon?: any; //() => JSX.Element,
+  IconRight?: any;
   disabled?: boolean;
   className?: string;
   onClick: () => void;
@@ -11,6 +12,7 @@ export const Button: React.FC<ButtonProps> = ({
   type,
   label,
   Icon,
+  IconRight,
   disabled = false,
   className,
   onClick,
@@ -26,6 +28,9 @@ export const Button: React.FC<ButtonProps> = ({
     case "secondary":
       typeStyle = `bg-dashboard-button-white-default border-dashboard-button-dark-border hover:bg-dashboard-button-white-hover focus:bg-dashboard-button-white-hover`;
       break;
+    case "transparent":
+      typeStyle = ``;
+      break;     
   }
 
   return (
@@ -45,6 +50,12 @@ export const Button: React.FC<ButtonProps> = ({
       )}
 
       {label}
+
+      {IconRight && (
+        <IconRight
+          className={`${disabled ? "svg-color-dashboard-text-disabled" : ""}`}
+        />
+      )}
     </button>
   );
 };

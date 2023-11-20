@@ -45,7 +45,7 @@ export const LangAndSkillsPan = () => {
           <>
             <hr className="form-separator" />
 
-            <div>
+            <div className={`${isMobile ? 'w-screen' : 'sm:w-auto'}`}>
               <div
                 className={`flex ${
                   isMobile ? "justify-start" : "justify-center"
@@ -66,7 +66,6 @@ export const LangAndSkillsPan = () => {
                   }
                   selected={context.spokenLanguages}
                   onChange={(option) => {
-                    //if(context.langOptions && context.langOptions.filter(x=>x.id?.includes(option.concat(x.id))))
                     context.setSpokenLanguages(option);
                   }}
                   open

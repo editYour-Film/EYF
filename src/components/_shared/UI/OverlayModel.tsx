@@ -1,3 +1,4 @@
+import { lockDocumentScroll, unLockDocumentScroll } from "@/utils/utils"
 import { useLenis } from "@studio-freight/react-lenis"
 import { useMediaQuery, useWindowSize } from "@uidotdev/usehooks"
 import gsap from "gsap"
@@ -6,12 +7,14 @@ import { PropsWithChildren, useEffect, useRef, useState } from "react"
 type OverlayModelProps = {
   className?: string,
   toggle?: boolean,
+  onOpen?: () => void,
+  onOpened?: () => void,
   onClose?: () => void,
   onClosed?: () => void
 
 }
 
-export const OverlayModel = ({className, toggle, onClose, onClosed, children}: PropsWithChildren<OverlayModelProps>) => {
+export const OverlayModel = ({className, toggle, onOpen, onOpened, onClose, onClosed, children}: PropsWithChildren<OverlayModelProps>) => {
   const lenis = useLenis()
 
   const [isOpen, setIsOpen] = useState(true)
@@ -44,10 +47,11 @@ export const OverlayModel = ({className, toggle, onClose, onClosed, children}: P
           onStart: () => {
             setIsOpen(true)
             setIsTweening(true)
-
+            onOpen && onOpen()
           },
           onComplete: () => {
             setIsTweening(false)
+            onOpened && onOpened()
           }
         })
 
@@ -83,10 +87,7 @@ export const OverlayModel = ({className, toggle, onClose, onClosed, children}: P
         }
       })
 
-      tl.fromTo(container.current, {
-        y: 0,
-        x: 0
-      }, {
+      tl.to(container.current, {
         y: isMobile ? 0 : window.innerHeight * 1.1,
         x: isMobile ? window.innerWidth : 0,
         ease: 'power3.in',
@@ -127,11 +128,12 @@ export const OverlayModel = ({className, toggle, onClose, onClosed, children}: P
 
     onClose && onClose()
 
-    document.body.style.position = '';
-    document.body.style.top = '';
-    window.scrollTo(0, tempScroll.current);
+    unLockDocumentScroll(tempScroll.current)
 
     setIsTweening(true)
+
+    container.current && container.current.scrollTo({top:0, left:0, behavior: 'smooth'})
+
     ctx.current && ctx.current.close().then(() => {
       setIsTweening(false)
       setIsOpen(false)	
@@ -143,8 +145,7 @@ export const OverlayModel = ({className, toggle, onClose, onClosed, children}: P
     if(isTweening) return
 
     tempScroll.current = lenis.scroll
-    document.body.style.position = 'fixed';
-    document.body.style.top = `-${tempScroll.current}px`;
+    lockDocumentScroll(tempScroll.current)
 
     setIsTweening(true)
     ctx.current && ctx.current.open().then(() => {
@@ -166,7 +167,7 @@ export const OverlayModel = ({className, toggle, onClose, onClosed, children}: P
       <div 
         ref={container}
         data-lenis-prevent
-        className="relative w-full flex justify-center md:py-[100px] overflow-scroll z-10 no-scroll-bar pointer-events-none"
+        className={`relative w-full flex justify-center md:py-[100px] overflow-scroll z-10 no-scroll-bar pointer-events-none`}
       >
         <div 
           className={`overlay-model md:p-dashboard-button-separation-spacing relative max-w-[876px] md:w-[80%] xl:w-[60%] md:min-h-[100vh] bg-dashboard-background-content-area border-03 rounded-dashboard-button-square-radius shadow-large ${isOpen ? 'pointer-events-auto' : 'pointer-events-none'} ${className}`}

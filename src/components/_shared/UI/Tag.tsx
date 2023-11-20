@@ -39,7 +39,7 @@ export const Tag = forwardRef<HTMLDivElement, tagProps>(function Tag ({text, ico
   return (
     <div 
       ref={ref}
-      className={`${wFull ? 'w-full' : 'w-max'} ${sizeClass} group flex gap-3 items-center ${active ? 'block' : 'hidden'} ${bgColor} ${selected && selectedClass} ${className ?? ''}`}
+      className={`${wFull ? 'w-full' : 'w-max'} ${sizeClass} group relative flex gap-3 items-center ${active ? 'block' : 'hidden'} ${bgColor} ${selected && selectedClass} ${className ?? ''}`}
       onClick={ (e) => {
         switch (selected) {
           case false:
@@ -58,7 +58,7 @@ export const Tag = forwardRef<HTMLDivElement, tagProps>(function Tag ({text, ico
               e.stopPropagation()
               onClose && onClose() 
             }} 
-            className="scale-75 group-hover:svg-color-appleRed"
+            className="scale-75 group-hover:svg-color-appleRed cursor-pointer"
           />
           }
           {
@@ -72,7 +72,7 @@ export const Tag = forwardRef<HTMLDivElement, tagProps>(function Tag ({text, ico
           }
         </div>
       }
-      <span className={`transition-transform ${(icon || selected) ? 'translate-x-[30px]' : ''}`}>{text}</span>
+      <span className={`transition-transform pr-[30px] ${(icon || selected) ? 'translate-x-[30px]' : ''}`}>{text}</span>
     </div>
   )
 } )

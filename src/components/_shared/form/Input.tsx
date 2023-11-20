@@ -1,7 +1,8 @@
-import { ReactNode, useRef, useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { Help } from "./Help";
 import { EditButton } from "../UI/EditButton";
+import { ReactElement } from "react-markdown/lib/react-markdown";
 
 type inputProps = {
   type:
@@ -14,6 +15,7 @@ type inputProps = {
     | "radio"
     | "radioColumn"
     | "date"
+    | "select"
     | "radio-btn"
     | "switch";
   value?: string | boolean;
@@ -29,6 +31,7 @@ type inputProps = {
   className?: string;
   size?: "sm" | undefined;
   helper?: string;
+  helperTop?: string;
   helpIconText?: string;
   error?: string | ReactNode;
   bg?: "white" | "black" | "light" | "card" | "underlined" | 'none';
@@ -69,6 +72,7 @@ const Input = ({
   className = "",
   size,
   helper,
+  helperTop,
   helpIconText,
   error,
   bg = "white",
@@ -91,12 +95,18 @@ const Input = ({
   searchIcon
 }: inputProps) => {
   const [isPassword, setIsPassword] = useState(true);
+  
+  const [textValue, setTextValue] = useState<string | undefined>(undefined);
+  const [lengthError, setLengthError] = useState<string | undefined>(undefined)
 
+  const inputRef = useRef<any>(null)
   const dayRef = useRef<HTMLInputElement>(null);
   const monthRef = useRef<HTMLInputElement>(null);
   const yearRef = useRef<HTMLInputElement>(null);
 
   let bgOpacity = (bg === 'none' || noBg) ? 'bg-opacity-0 ' : 'bg-opacity-100 '
+
+  const textClass = 'text-dashboard-text-description-base hover:text-dashboard-text-title-white-high group-hover:text-dashboard-text-title-white-high focus-within:text-dashboard-text-title-white-high '
 
   const inputClass =
     "input-text w-full " +
@@ -114,7 +124,7 @@ const Input = ({
       : "") +
     (error ? "border-appleRed " : "") +
     (bg === "white" ? "border bg-white text-alpha-black-600 " : "") +
-    (bg === "light" ? "border bg-soyMilk-40 text-white text-opacity-70 " : "") +
+    (bg === "light" ? "border bg-soyMilk-40 " : "") +
     (bg === "black"
       ? "bg-darkgrey bg-opacity-50 text-white border border-0.5 "
       : "") +
@@ -129,6 +139,7 @@ const Input = ({
       ? " py-2 min-h-[40px] "
       : " p-dashboard-button-separation-spacing min-h-[52px] ") +
     (disabled === true ? "opacity-50 " : "") +
+    textClass +
     bgOpacity +
     className;
 
@@ -138,11 +149,36 @@ const Input = ({
   } else {
     labelClass =
       labelType === "dashboard"
-        ? "flex items-center justify-between mb-3 text-small text-dashboard-text-description-base"
-        : " flex flex-wrap justify-between items-center gap-3 mb-2 text-sm text-dashboard-text-description-base";
+        ? "flex items-center justify-between text-small text-dashboard-text-description-base"
+        : " flex flex-wrap justify-between items-center gap-3 text-sm text-dashboard-text-description-base";
   }
 
-  const helperClass = "text-sm text-dashboard-text-description-base-low mt-3 mb-8";
+  const helperClass = "text-base text-dashboard-text-description-base-low mt-dashboard-mention-padding-top-bottom mb-8";
+
+  const hiddenDiv = useRef<HTMLDivElement>()
+  
+  useEffect(() => {
+    if (type === 'textarea') {
+      hiddenDiv.current = document.createElement('div')
+      hiddenDiv.current.style.display = 'none';
+      hiddenDiv.current.style.whiteSpace = 'pre-wrap';
+      hiddenDiv.current.style.wordBreak = 'break-word';
+      hiddenDiv.current.style.lineHeight = '1.4';
+      hiddenDiv.current.style.padding = '0 8px'
+    }
+  }, [])
+
+  const resizeTextArea = (value: string | undefined) => {
+    if(hiddenDiv.current) {
+      inputRef.current.parentNode.appendChild(hiddenDiv.current);
+      hiddenDiv.current.innerHTML = value ? value + '<br style="line-height: 1.4;">' : '';
+      hiddenDiv.current.style.visibility = 'hidden';
+      hiddenDiv.current.style.display = 'block';
+      inputRef.current.style.height = hiddenDiv.current.offsetHeight + 'px';
+      hiddenDiv.current.style.visibility = 'visible';
+      hiddenDiv.current.style.display = 'none';
+    }
+  }
 
   switch (type) {
     case "text":
@@ -158,7 +194,14 @@ const Input = ({
           <div className={`relative flex flex-col items-end ${inputClass} focus-within:outline-blueBerry focus-within:outline`}>
             <input
               type="text"
-              onChange={onChange}
+              onChange={(e) => {
+                if ( maxlength ? e.target.value.trim().split(' ').length < maxlength : true) {
+                    setTextValue(e.target.value);
+                    onChange(e);
+                } else {
+                  setLengthError(`Le texte est limité à ${maxlength} mots`)
+                }
+              }}
               onBlur={onBlur}
               className={`bg-transparent w-full h-full ${
                 textSunset ? "text-linear-sunset" : ""
@@ -168,20 +211,22 @@ const Input = ({
               placeholder={placeholder}
               maxLength={maxlength}
               disabled={disabled}
+              onKeyDown={(e) => {onKeyDown && onKeyDown(e)}}
             />
           </div>
-
+{/* 
           {maxlength && (
             <div className="input__maxlength ml-auto mr-0 text-xs text-dashboard-text-description-base">{`${
-              (value as string).length
-            } / ${maxlength}`}</div>
-          )}
+              (value as string).split(' ').length
+            } / ${maxlength}max`}</div>
+          )} */}
           {minlength && (
             <div className="input__minlength ml-auto mr-0 text-xs text-dashboard-text-description-base">{`${
-              (value as string).length
-            } / ${minlength}`}</div>
+              (value as string).split(' ').length
+            } / ${minlength}min`}</div>
           )}
           {helper && <p className={helperClass}>{helper}</p>}
+          {lengthError && <p className="text-appleRed mt-1.5 ">{lengthError}</p>}
           {error && <p className="text-appleRed mt-1.5 ">{error}</p>}
         </div>
       );
@@ -197,36 +242,47 @@ const Input = ({
           )}
           {helper && <p className={helperClass}>{helper}</p>}
           <div
-            className={`relative flex flex-col grow items-end ${inputClass} focus-within:outline-blueBerry focus-within:outline`}
+            className={`relative grow items-end ${inputClass} focus-within:outline-blueBerry focus-within:outline`}
           >
             <textarea
-              onChange={onChange}
+              ref={inputRef}
+              onChange={(e) => {
+                if ( maxlength ? e.target.value.trim().split(' ').length < maxlength : true) {
+                    setTextValue(e.target.value);
+                    resizeTextArea(e.target.value)
+                    onChange(e);
+                } else {
+                  setLengthError(`Le texte est limité à ${maxlength} mots`)
+                }
+              }}
+
               onBlur={onBlur}
-              className="bg-transparent w-full h-full resize-none px-[8px]"
+              className="bg-transparent w-full h-full min-h-[100px] resize-none px-[8px] overflow-hidden leading-[1.4]"
               value={value as string}
               name={name}
               placeholder={placeholder}
-              maxLength={maxlength}
               disabled={disabled}
+              onKeyDown={(e) => {onKeyDown && onKeyDown(e)}}
             ></textarea>
           </div>
 
-          {maxlength && (
+          {/* {maxlength && (
             <div className="input__maxlength ml-auto mr-0 text-xs text-dashboard-text-description-base">{`${
-              (value as string).length
-            } / ${maxlength}`}</div>
-          )}
+              (value as string).split(' ').length
+            } / ${maxlength}max`}</div>
+          )} */}
           {minlength && (
-            <div className="input__minlength ml-auto mr-0 text-xs text-dashboard-text-description-base">{`Minimum ${minlength} caractères ${
-              (value as string).length
-            } / ${minlength}`}</div>
+            <div className="input__minlength ml-auto mr-0 text-xs text-dashboard-text-description-base">{`Minimum ${minlength} mots ${
+              (value as string).split(' ').length
+            } / ${minlength}min`}</div>
           )}
+          {lengthError && <p className="text-appleRed mt-1.5 ">{lengthError}</p>}
           {error && <p className="text-appleRed mt-1.5 ">{error}</p>}
         </div>
       );
     case "email":
       return (
-        <div className="w-full">
+        <div className="flex flex-col justify-stretch h-full gap-dashboard-button-separation-spacing">
           {label && (
             <label className={labelClass}>
               {label}
@@ -234,16 +290,17 @@ const Input = ({
               {helpIconText && <Help text={helpIconText} label={label} />}
             </label>
           )}
-          <div className="relative focus-within:outline-blueBerry focus-within:outline">
+          <div className="relative">
             <input
               type="text"
               onChange={onChange}
               onBlur={onBlur}
-              className={inputClass}
+              className={`${inputClass} focus-within:outline-blueBerry focus-within:outline"`}
               value={value as string}
               name={name}
               placeholder={placeholder}
               disabled={disabled}
+              onKeyDown={(e) => {onKeyDown && onKeyDown(e)}}
             />
           </div>
           {helper && <p className={helperClass}>{helper}</p>}
@@ -252,7 +309,7 @@ const Input = ({
       );
     case "password":
       return (
-        <div>
+        <div className="flex flex-col justify-stretch h-full gap-dashboard-button-separation-spacing">
           {label && (
             <label className={labelClass}>
               {label}
@@ -270,6 +327,7 @@ const Input = ({
               name={name}
               placeholder={placeholder}
               disabled={disabled}
+              onKeyDown={(e) => {onKeyDown && onKeyDown(e)}}
             />
             {isPassword ? (
               <Image
@@ -295,9 +353,55 @@ const Input = ({
           {error && <p className="text-appleRed mt-1.5 ">{error}</p>}
         </div>
       );
+    case "select":
+      return (
+        <div className="flex flex-col justify-stretch h-full gap-dashboard-button-separation-spacing">
+          <div>
+            {label && (
+              <label className={labelClass}>
+                {label}
+    
+                {helpIconText && <Help text={helpIconText} label={label} />}
+              </label>
+            )}
+            {helperTop && <p className={helperClass + 'mb-0'}>{helperTop}</p>}
+          </div>
+          <div className={`relative flex flex-col items-end`}>
+            <select
+              title={label}
+              onChange={onChange}
+              onBlur={onBlur}
+              className={`bg-transparent w-full h-full ${inputClass} focus-within:outline-blueBerry focus-within:outline pr-3 ${
+                textSunset ? "text-linear-sunset" : ""
+              }`}
+              value={value as string}
+              name={name}
+              disabled={disabled}
+            >
+              <option value="" disabled selected>{placeholder}</option>
+              {options.map((opt: ReactElement) => {
+                return opt
+              })}
+            </select>
+          </div>
+
+          {maxlength && (
+            <div className="input__maxlength ml-auto mr-0 text-xs text-dashboard-text-description-base">{`${
+              (value as string).length
+            } / ${maxlength}`}</div>
+          )}
+          {minlength && (
+            <div className="input__minlength ml-auto mr-0 text-xs text-dashboard-text-description-base">{`${
+              (value as string).length
+            } / ${minlength}`}</div>
+          )}
+          {helper && <p className={helperClass}>{helper}</p>}
+          {error && <p className="text-appleRed mt-1.5 ">{error}</p>}
+        </div>
+      );
     case "search":
       return (
-        <div>
+        <div className="flex flex-col justify-stretch h-full gap-dashboard-button-separation-spacing">
           {label && (
             <label className={labelClass}>
               {label}
@@ -306,7 +410,7 @@ const Input = ({
             </label>
           )}
           <div
-            className={`relative flex justify-end items-center ${inputClass}`}
+            className={`relative flex justify-end items-center ${inputClass} focus-within:outline-blueBerry focus-within:outline`}
           >
             {(!iconRight && searchIcon) && (
               <Image
@@ -356,9 +460,7 @@ const Input = ({
       );
     case "radio":
       return (
-        <div
-          tabIndex={-1}
-        >
+        <div className="flex flex-col justify-stretch h-full gap-dashboard-button-separation-spacing">
           {label && (
             <label className={labelClass}>
               {label}
@@ -402,15 +504,17 @@ const Input = ({
       );
     case "radioColumn":
       return (
-        <div>
-          {label && (
-            <label className={labelClass}>
-              {label}
+        <div className="flex flex-col justify-stretch h-full gap-dashboard-button-separation-spacing">
+          <div>
+            {label && (
+              <label className={labelClass}>
+                {label}
 
-              {helpIconText && <Help text={helpIconText} label={label} />}
-            </label>
-          )}
-          {helper && <p className={helperClass}>{helper}</p>}
+                {helpIconText && <Help text={helpIconText} label={label} />}
+              </label>
+            )}
+            {helper && <p className={helperClass}>{helper}</p>}
+          </div>
           <div className="flex flex-col flex-wrap gap-5 md:gap-10">
             {options?.map((x: any, i: number) => {
               return (
@@ -450,7 +554,7 @@ const Input = ({
       );
     case "radio-btn":
       return (
-        <div className="group">
+        <div className="group flex flex-col justify-stretch h-full gap-dashboard-button-separation-spacing">
           {label && (
             <label className="block opacity-70 font-bold text-lg mb-3">
               {label}
@@ -480,7 +584,7 @@ const Input = ({
       );
     case "date":
       return (
-        <div>
+        <div className="flex flex-col justify-stretch h-full gap-dashboard-button-separation-spacing">
           <div className="flex gap-0.5">
             <input
               type="number"
@@ -540,7 +644,7 @@ const Input = ({
       );
     case "switch":
       return (
-        <div>
+        <div className="flex flex-col justify-stretch h-full gap-dashboard-button-separation-spacing">
           {label && (
             <label className={labelClass}>
               {label}

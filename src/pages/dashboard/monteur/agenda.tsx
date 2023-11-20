@@ -1,40 +1,83 @@
 import { DashboardContainer } from "@/components/dashboard/shared/DashboardContainer";
-import { DashboardEditorSchedule } from "@/components/dashboard/editor/DashboardEditorSchedule";
-import { NewsletterSection } from "@/components/home/NewsletterSection";
-import { SideBar } from "@/components/dashboard/shared/SideBar";
-import Footer from "@/components/_shared/Footer";
 import LayoutDashBoard from "@/components/layouts/LayoutDashBoard";
 import Head from "next/head";
-import { useContext } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { AuthContext } from "@/context/authContext";
+import { FooterDashboard } from "@/components/dashboard/shared/FooterDashBoard";
+import { GradientCard } from "@/components/dashboard/shared/GradientCard";
+import { TopBar } from "@/components/dashboard/shared/TopBar";
+import { useMediaQuery } from "@uidotdev/usehooks";
+import { DashBoardContext } from "@/components/dashboard/_context/DashBoardContext";
+import { NotificationCenter } from "@/components/dashboard/shared/NotificationCenter";
+import { Month } from "@/components/dashboard/editor/agenda/Month";
+import { AgendaContext, AgendaContextProvider } from "@/components/dashboard/editor/_context/AgendaContext";
+import { monthNames } from "@/components/dashboard/editor/data/labels";
+import { AgendaMobile } from "@/components/dashboard/editor/agenda/AgendaMobile";
+import { ReactElement } from "react-markdown/lib/react-markdown";
 
 export default function DashBoardContentSchedule() {
-  const authContext = useContext(AuthContext);
   return (
     <>
       <Head>
-        <title>EditYour.Film</title>
+        <title>EditYour.Film Agenda</title>
         <meta name="description" content="" />
       </Head>
 
       <LayoutDashBoard>
-        {authContext.user.user.role && (
-          <div className="dashboard-content flex flex-col lg:flex-row justify-between gap-14">
-            <SideBar
-              className="lg:basis-2/12 lg:w-2/12"
-              type={authContext.user.user.role.name}
-            />
-
-            <div className="lg:basis-9/12 main_content">
-              <DashboardContainer>
-                <DashboardEditorSchedule />
-              </DashboardContainer>
-              <NewsletterSection />
-              <Footer />
-            </div>
-          </div>
-        )}
+          <Agenda />
       </LayoutDashBoard>
     </>
-  );
+  )
+}
+
+const Agenda = () => {
+  const dashboardContext = useContext(DashBoardContext)
+  const agendaContext = useContext(AgendaContext)
+
+  const isMobile = useMediaQuery('(max-width: 768px)');
+
+  const panels = useRef<{title: string, panel: ReactElement, month: Date, year: number}[]>([])
+
+  useEffect(() => {
+    const today = new Date()
+
+    for (let i = 0; i < 4; i++) {
+      const month = new Date()
+      month.setMonth(today.getMonth() + i)
+      
+      panels.current.push({
+        month,
+        title: monthNames[month.getMonth()],
+        panel: <Month key={i} id={month.getMonth()} year={month.getFullYear()}/>,
+        year: month.getFullYear()
+      })
+    }
+
+    dashboardContext.setPanels(panels.current)
+  }, [])
+
+  return (<>
+    <TopBar></TopBar>
+
+    <AgendaContextProvider>
+      <div className="flex flex-col gap-dashboard-spacing-element-medium main_content mt-[50px] md:mt-0 md:col-[2_/_3] row-[2_/_4]">
+        <div className="flex flex-col ">
+          <NotificationCenter className='relative z-0' />
+          {isMobile && <AgendaMobile panels={panels.current} />}
+
+          {!isMobile && <DashboardContainer className='relative z-10' />}
+
+          <div className="flex flex-col mt-[60px] gap-dashboard-spacing-element-medium">
+            <GradientCard
+              title="Merci à tous"
+              content={<><p>C'est grâce à votre engagement sur la plateforme que nous pouvons travailler tous ensemble à créer l'outil le plus adapté à nos besoins. Nous travaillons constamment sur des nouveautés passionnantes, et nous vous tiendrons vite au courant des évolutions à venir.</p><br/><p>Merci à vous, 
+              L'équipe d'editYour.film 📹</p></>}
+            />
+            
+            <FooterDashboard />
+          </div>
+        </div>
+      </div>
+    </AgendaContextProvider>
+  </>)
 }

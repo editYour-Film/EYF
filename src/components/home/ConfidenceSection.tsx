@@ -8,6 +8,7 @@ import PlayButton from "../../../public/icons/play.svg";
 import { AdvancedVideo } from "@cloudinary/react";
 import { CloudinaryVideo } from "@cloudinary/url-gen";
 import { Video } from "../model/videos";
+import { formatVideoDuration } from "@/utils/utils";
 
 type ConfidenceSectionProps = {
   videos: Video[];
@@ -131,12 +132,6 @@ const VideoVignet = ({ videoInfo }: videoVignetProps) => {
   const video = useRef<HTMLVideoElement>(null);
 
   const [isOpen, setIsOpen] = useState(false);
-
-  const formatVideoDuration = (duration: number) => {
-    var mzminutes = Math.floor(duration / 60);
-    var mzseconds = Math.floor(duration - mzminutes * 60);
-    return mzminutes + ":" + (mzseconds < 10 ? "0" + mzseconds : mzseconds);
-  };
 
   const handleClick = (videoRef: any) => {
     setIsOpen(!isOpen);
