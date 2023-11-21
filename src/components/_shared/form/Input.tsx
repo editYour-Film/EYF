@@ -4,6 +4,8 @@ import { Help } from "./Help";
 import { EditButton } from "../UI/EditButton";
 import { ReactElement } from "react-markdown/lib/react-markdown";
 
+export const helperClass = "text-base text-dashboard-text-description-base-low mt-dashboard-mention-padding-top-bottom mb-8";
+
 type inputProps = {
   type:
     | "text"
@@ -152,8 +154,6 @@ const Input = ({
         ? "flex items-center justify-between text-small text-dashboard-text-description-base"
         : " flex flex-wrap justify-between items-center gap-3 text-sm text-dashboard-text-description-base";
   }
-
-  const helperClass = "text-base text-dashboard-text-description-base-low mt-dashboard-mention-padding-top-bottom mb-8";
 
   const hiddenDiv = useRef<HTMLDivElement>()
   
