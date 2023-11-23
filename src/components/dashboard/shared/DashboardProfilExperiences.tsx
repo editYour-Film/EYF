@@ -162,7 +162,7 @@ export const InputsExperience = () => {
         <IslandButton
           type="primary"
           label="Enregistrer le profil"
-          onClick={() => context.saveProfil()}
+          onClick={() => context.saveProfil(false)}
         />
       </div>
     </>

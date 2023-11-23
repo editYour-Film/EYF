@@ -1,7 +1,4 @@
-import {
-  skillsInterface,
-  spokenLanguageInterface,
-} from "../dashboard/_context/ProfilContext";
+import { optionInterface } from "../_shared/form/DropdownV2";
 import { accountType } from "../signup/_context/signupContext";
 
 export const initSigninUser = {
@@ -34,8 +31,7 @@ export type RegisterUser = {
   editorDescription?: string;
   creatorPicture?: any;
   creatorPictureName?: string | undefined;
-  languages: spokenLanguageInterface[] | undefined;
-  skills: skillsInterface[] | undefined;
+  skills: optionInterface[] | undefined;
   joinNewsletter?: boolean;
   lang_spoken?: string;
 };

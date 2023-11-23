@@ -42,7 +42,7 @@ export const DashboardEditorHome = ({
       }`}
     >
       {authContext.isLoading ? (
-        <p>Loading...</p>
+        <p>Chargement...</p>
       ) : (
         <>
           {editorContext.highlightedVideo ? (

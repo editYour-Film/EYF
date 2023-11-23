@@ -68,7 +68,6 @@ export interface user_info {
   city: string;
   phone: string;
   bio: string;
-  languages: any;
   picture: any;
   skills: any;
   lang_used: string;

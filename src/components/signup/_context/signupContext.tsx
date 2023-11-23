@@ -1,7 +1,3 @@
-import {
-  skillsInterface,
-  spokenLanguageInterface,
-} from "@/components/dashboard/_context/ProfilContext";
 import { codeStateType } from "@/components/signin/_context/signinContext";
 import routes from "@/routes";
 import {
@@ -31,6 +27,7 @@ import { RegisterUser } from "@/components/model/signin";
 import { MentionInteraction } from "@/components/_shared/buttons/MentionInteraction";
 import { useRouter } from "next/router";
 import { AuthContext } from "@/context/authContext";
+import { optionInterface } from "@/components/_shared/form/DropdownV2";
 
 export type accountType = "editor" | "creator" | "both" | undefined;
 export type maxStepType = 5 | 6 | 7 | undefined;
@@ -59,8 +56,8 @@ export const userNameMessages = {
 };
 
 export const SignUpContext = createContext({
-  langOptions: [] as spokenLanguageInterface[] | undefined,
-  skillsOptions: [] as skillsInterface[] | undefined,
+  langOptions: [] as optionInterface[] | undefined,
+  skillsOptions: [] as optionInterface[] | undefined,
   isLoadingLangSkills: true,
 
   accountType: undefined as accountType,
@@ -120,11 +117,11 @@ export const SignUpContext = createContext({
   setCreatorPictureName: (payload: any) => {},
   creatorPictureOk: undefined as boolean | undefined,
 
-  spokenLanguages: undefined as spokenLanguageInterface[] | undefined,
-  setSpokenLanguages: (payload: spokenLanguageInterface[]) => {},
+  spokenLanguages: undefined as optionInterface[] | undefined,
+  setSpokenLanguages: (payload: optionInterface[]) => {},
 
-  skills: undefined as skillsInterface[] | undefined,
-  setSkills: (payload: skillsInterface[]) => {},
+  skills: undefined as optionInterface[] | undefined,
+  setSkills: (payload: optionInterface[]) => {},
 
   joinNewsletter: undefined as boolean | undefined,
   setJoinNewsletter: (payload: boolean) => {
@@ -160,7 +157,6 @@ const initRegisterUser = {
 
 export const SignUpContextProvider: React.FC<any> = (props) => {
   const router = useRouter();
-
   const authContext = useContext(AuthContext);
 
   const [registerUser, setRegisterUser] = useLocalStorage<RegisterUser>(
@@ -168,7 +164,9 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
     initRegisterUser
   );
 
-  const [skillsOptions, setSkillsOptions] = useState<skillsInterface[]>();
+  const [skillsOptions, setSkillsOptions] = useState<optionInterface[]>(
+    registerUser.skills
+  );
 
   const [isLoadingLangSkills, setIsLoadingLangSkills] = useState(true);
 
@@ -239,18 +237,10 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
   );
 
   const [spokenLanguages, setSpokenLanguages] = useState<
-    spokenLanguageInterface[] | undefined
-  >(
-    registerUser.languages
-      ? registerUser.languages
-      : languageObjects()
-      ? [languageObjects().find((x) => x.label === "Français")]
-      : undefined
-  );
+    optionInterface[] | undefined
+  >();
 
-  const [skills, setSkills] = useState<skillsInterface[] | undefined>(
-    registerUser.skills
-  );
+  const [skills, setSkills] = useState<optionInterface[] | undefined>();
 
   const [joinNewsletter, setJoinNewsletter] = useState<boolean | undefined>(
     registerUser.joinNewsletter
@@ -259,8 +249,9 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
   const [lastStepError, setLastStepError] = useState<string | undefined>();
 
   useMemo(async () => {
-    // get skills
+    // set skills
     let _skills: any = [];
+    setIsLoadingLangSkills(false);
     await useStrapiGet("video-softwares").then((res) => {
       if (res.status === 200) {
         res.data.data.map((x: any) => {
@@ -271,6 +262,7 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
         });
         setSkillsOptions(_skills);
       }
+      setIsLoadingLangSkills(true);
     });
   }, []);
 
@@ -341,15 +333,18 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
         ? JSON.stringify(creatorPicture)
         : undefined,*/
       //creatorPictureName: creatorPictureName,
-      languages: spokenLanguages
-        ? spokenLanguages.filter((element: any) => {
-            const isDuplicate = langUniqueIds.includes(element.id);
-            if (!isDuplicate) {
-              langUniqueIds.push(element.id);
-              return true;
-            }
-            return false;
-          })
+      lang_spoken: spokenLanguages
+        ? spokenLanguages
+            .filter((element: any) => {
+              const isDuplicate = langUniqueIds.includes(element.id);
+              if (!isDuplicate) {
+                langUniqueIds.push(element.id);
+                return true;
+              }
+              return false;
+            })
+            .map((x) => x.label)
+            .join(";")
         : undefined,
       skills: skills
         ? skills.filter((element: any) => {
@@ -522,38 +517,9 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
     handleCreatorPicturVerification();
   }, [creatorPicture]);
 
-  const handleSpokenLanguagesVerification = () => {
-    // Verify and format spoken languages
-  };
-
-  useEffect(() => {
-    handleSpokenLanguagesVerification();
-  }, [spokenLanguages]);
-
-  const handleSkillsVerification = () => {
-    // Verify and format spoken skills
-  };
-
-  useEffect(() => {
-    handleSkillsVerification();
-  }, [skills]);
-
-  const handleJoinNewsletterVerification = () => {
-    // Subscribe or unsubscribe to the newsletter
-  };
-
-  useEffect(() => {
-    handleJoinNewsletterVerification();
-  }, [joinNewsletter]);
-
   const handleGoToDashboard = async () => {
     if (container) {
       setLastStepError(undefined);
-
-      let _spokenLanguages: any[] = [];
-      spokenLanguages?.map((x) => {
-        _spokenLanguages.push(x.id);
-      });
 
       let _skills: any[] = [];
       skills?.map((x) => {
@@ -562,6 +528,7 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
 
       let imageId: number | undefined = undefined;
 
+      let langUniqueIds: number[] = [];
       const register = await useStrapiPost(
         "custom-register",
         {
@@ -570,7 +537,20 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
           f_name: f_name,
           l_name: l_name,
           description: editorDescription,
-          languages: _spokenLanguages,
+          lang_spoken:
+            spokenLanguages === undefined || spokenLanguages?.length === 0
+              ? "Français"
+              : spokenLanguages
+                  ?.filter((element: any) => {
+                    const isDuplicate = langUniqueIds.includes(element.id);
+                    if (!isDuplicate) {
+                      langUniqueIds.push(element.id);
+                      return true;
+                    }
+                    return false;
+                  })
+                  .map((x: any) => x.label)
+                  .join(";"),
           skills: _skills,
           picture: imageId,
           role: accountType === "editor" ? 4 : 3,
@@ -622,6 +602,8 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
               );
           }
           authContext.setUserCode(register.data.user.code);
+          if (accountType === "editor") router.push(routes.DASHBOARD_EDITOR);
+          else router.push(routes.SIGNIN);
         }
       } else setLastStepError(inputErrors.general);
     }

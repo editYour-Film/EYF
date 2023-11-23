@@ -5,7 +5,7 @@ import { InfoMessage } from "../_shared/UI/InfoMessage";
 import InfoIcon from "@/icons/info.svg";
 import { Button } from "../_shared/buttons/Button";
 import { SignUpContext } from "./_context/signupContext";
-import { Dropdown } from "../_shared/form/DropdownV2";
+import { Dropdown, optionInterface } from "../_shared/form/DropdownV2";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { ProgressDots } from "../_shared/UI/ProgressDots";
 
@@ -41,11 +41,11 @@ export const LangAndSkillsPan = () => {
           />
         </div>
 
-        {!context.isLoadingLangSkills && (
-          <>
-            <hr className="form-separator" />
+        <>
+          <hr className="form-separator" />
 
-            <div className={`${isMobile ? 'w-screen' : 'sm:w-auto'}`}>
+          {context.isLoadingLangSkills && (
+            <div className={`${isMobile ? "w-screen" : "sm:w-auto"}`}>
               <div
                 className={`flex ${
                   isMobile ? "justify-start" : "justify-center"
@@ -59,11 +59,15 @@ export const LangAndSkillsPan = () => {
                   title="Je parle"
                   label="Sélectionnez les langues que vous parlez"
                   mandatory={
-                    context.langOptions ? [context.langOptions[0]] : undefined
+                    context.langOptions
+                      ? ([
+                          context.langOptions.find(
+                            (x) => x.label === "Français"
+                          ),
+                        ] as optionInterface[])
+                      : undefined
                   }
-                  options={
-                    context.langOptions ? context.langOptions : undefined
-                  }
+                  options={context.langOptions}
                   selected={context.spokenLanguages}
                   onChange={(option) => {
                     context.setSpokenLanguages(option);
@@ -89,21 +93,20 @@ export const LangAndSkillsPan = () => {
                 />
               </div>
             </div>
+          )}
+          <hr className="form-separator" />
 
-            <hr className="form-separator" />
+          <Button
+            type="primary"
+            onClick={() => {
+              handleGoToNext();
+            }}
+            label="Continuer"
+            className="w-full"
+          />
 
-            <Button
-              type="primary"
-              onClick={() => {
-                handleGoToNext();
-              }}
-              label="Continuer"
-              className="w-full"
-            />
-
-            {context.dots && <ProgressDots dots={context.dots} />}
-          </>
-        )}
+          {context.dots && <ProgressDots dots={context.dots} />}
+        </>
       </SignInSignUpContainer>
     </div>
   );
