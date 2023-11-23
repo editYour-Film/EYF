@@ -37,4 +37,5 @@ export type RegisterUser = {
   languages: spokenLanguageInterface[] | undefined;
   skills: skillsInterface[] | undefined;
   joinNewsletter?: boolean;
+  lang_spoken?: string;
 };

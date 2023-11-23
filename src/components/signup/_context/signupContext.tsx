@@ -23,7 +23,7 @@ import { StepBubbleProps } from "@/components/_shared/buttons/StepBubble";
 import { ElementsIn } from "@/Animations/elementsIn";
 import { ElementsOut } from "@/Animations/elementsOut";
 import { useStrapiGet, useStrapiPost } from "@/hooks/useStrapi";
-import { inputErrors } from "@/const";
+import { inputErrors, languageObjects } from "@/const";
 import validator from "validator";
 import { getGoogleAuthEmailCookie } from "@/auth/auth";
 import useLocalStorage from "@/hooks/useLocalStorage";
@@ -155,6 +155,7 @@ const initRegisterUser = {
   languages: undefined,
   skills: undefined,
   joinNewsletter: true,
+  lang_spoken: undefined,
 };
 
 export const SignUpContextProvider: React.FC<any> = (props) => {
@@ -166,8 +167,6 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
     "register_user",
     initRegisterUser
   );
-
-  const [langOptions, setLangOptions] = useState<spokenLanguageInterface[]>();
 
   const [skillsOptions, setSkillsOptions] = useState<skillsInterface[]>();
 
@@ -244,8 +243,8 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
   >(
     registerUser.languages
       ? registerUser.languages
-      : langOptions
-      ? [langOptions[0]]
+      : languageObjects()
+      ? [languageObjects().find((x) => x.label === "Français")]
       : undefined
   );
 
@@ -260,26 +259,9 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
   const [lastStepError, setLastStepError] = useState<string | undefined>();
 
   useMemo(async () => {
-    setIsLoadingLangSkills(true);
-    // get languages
-    let _langOptions: any = [];
-
-    await useStrapiGet("languages").then((res) => {
-      if (res.status === 200) {
-        res.data.data.map((x: any) => {
-          _langOptions.push({
-            label: x.attributes.label,
-            id: x.id,
-            icon: "",
-          });
-        });
-        setLangOptions(_langOptions);
-      }
-    });
-
     // get skills
     let _skills: any = [];
-    await useStrapiGet("skills").then((res) => {
+    await useStrapiGet("video-softwares").then((res) => {
       if (res.status === 200) {
         res.data.data.map((x: any) => {
           _skills.push({
@@ -290,8 +272,6 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
         setSkillsOptions(_skills);
       }
     });
-
-    setIsLoadingLangSkills(false);
   }, []);
 
   useEffect(() => {
@@ -693,7 +673,7 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
   return (
     <SignUpContext.Provider
       value={{
-        langOptions,
+        langOptions: languageObjects(),
         skillsOptions,
         isLoadingLangSkills,
 

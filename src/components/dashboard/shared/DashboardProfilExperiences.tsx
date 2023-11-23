@@ -7,6 +7,7 @@ import { ReactElement, useContext, useEffect, useState } from "react";
 import { IslandButton } from "@/components/_shared/buttons/IslandButton";
 import { MentionInteraction } from "@/components/_shared/buttons/MentionInteraction";
 import { Select } from "@/components/_shared/form/Select";
+import { languageObjects } from "@/const";
 
 export const DashboardEditorProfilExperiences = () => {
   return (
@@ -76,23 +77,21 @@ export const InputsExperience = () => {
         label="Langue d'usage"
         onSelectOption={(val) => {
           if (context.langOptions) {
-            const lang = context.langOptions.find(
-              (el) => el.id === val
-            );
+            const lang = context.langOptions.find((el) => el.id === val);
             if (lang) context.handleAddUsedLang(lang);
           }
         }}
-        list={context.langOptions}
-        placeholder={context.usageLang?.label ?? "Sélectionnez votre langue d'usage"}
+        list={languageObjects()}
+        placeholder={
+          context.usageLang?.label ?? "Sélectionnez votre langue d'usage"
+        }
       />
 
       <Select
         label="Rechercher une langue"
         onSelectOption={(id) => {
           if (context.langOptions) {
-            const lang = context.langOptions.find(
-              (el) => el.id === id
-            );
+            const lang = context.langOptions.find((el) => el.id === id);
             if (lang) context.handleAddLang(lang);
           }
         }}
@@ -100,27 +99,26 @@ export const InputsExperience = () => {
         placeholder={"Sélectionnez les langues que vous parlez"}
       />
 
-      {context.spokenLanguages && context.spokenLanguages.length > 0 &&
+      {context.spokenLanguages && context.spokenLanguages.length > 0 && (
         <div key={Math.random()} className="flex gap-2 flex-wrap">
-          {
-            context.spokenLanguages.map((lang, i) => {
-              return (
-                <Tag
-                  bg="light"
-                  key={i}
-                  text={lang.label}
-                  onClose={() => {
-                    context.handleRemoveLang(lang);
-                  }}
-                  icon="cross"
-                />
-              );
-            })}
+          {context.spokenLanguages.map((lang, i) => {
+            return (
+              <Tag
+                bg="light"
+                key={i}
+                text={lang.label}
+                onClose={() => {
+                  context.handleRemoveLang(lang);
+                }}
+                icon="cross"
+              />
+            );
+          })}
         </div>
-      }
+      )}
 
       <div>
-        <Select 
+        <Select
           search
           placeholder="Sélectionnez ou ajoutez vos compétences"
           helperTop="Ajoutez jusqu’à 3 compétences maximum sur votre profil."
@@ -130,19 +128,16 @@ export const InputsExperience = () => {
             //TODO: Integration add a new tag from the val entered by the user
           }}
           onSelectOption={(val) => {
-            if (context.skillsOptions) {              
-              const skill = context.skillsOptions.find(
-                (el) => {
-                  return el.id === val
-                }
-              );
+            if (context.skillsOptions) {
+              const skill = context.skillsOptions.find((el) => {
+                return el.id === val;
+              });
               if (skill) context.handleAddSkill(skill);
             }
           }}
         />
-
       </div>
-      {(context.skills && context.skills.length > 0) &&
+      {context.skills && context.skills.length > 0 && (
         <div key={Math.random()} className="flex gap-2 flex-wrap">
           {context.skills.map((skill, i: number) => {
             return (
@@ -158,7 +153,7 @@ export const InputsExperience = () => {
             );
           })}
         </div>
-      }
+      )}
       <div className="flex items-center justify-end gap-dashboard-button-separation-spacing mt-auto md:mt-dashboard-spacing-element-medium mb-0">
         <MentionInteraction onClick={() => context.abort()} className="h-max">
           Annuler

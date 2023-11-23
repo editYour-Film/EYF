@@ -3,7 +3,7 @@ import { createContext, useContext, useMemo, useState } from "react";
 import { optionInterface } from "@/components/_shared/form/Dropdown";
 import { AuthContext } from "@/context/authContext";
 import { useStrapiGet, useStrapiPost, useStrapiPut } from "@/hooks/useStrapi";
-import { inputErrors, months } from "@/const";
+import { inputErrors, languageObjects, months } from "@/const";
 import toast from "react-hot-toast";
 import validator from "validator";
 import GreenCheck from "@/icons/check-green.svg";
@@ -62,7 +62,6 @@ export const EditorProfilContext = createContext({
   skillsOptions: [] as skillsInterface[] | undefined,
   skills: [] as skillsInterface[],
 
-  handleModelChange: (payload: any) => {},
   handleAddUsedLang: (payload: spokenLanguageInterface) => {},
   handleAddLang: (payload: spokenLanguageInterface) => {},
   handleRemoveLang: (payload: spokenLanguageInterface) => {},
@@ -136,8 +135,7 @@ export const EditorProfilContextProvider: React.FC<any> = (props) => {
       : undefined
   );
 
-  const [langOptions, setLangOptions] = useState<spokenLanguageInterface[]>();
-  const [usageLang, setUsageLang] = useState<spokenLanguageInterface>()
+  const [usageLang, setUsageLang] = useState<spokenLanguageInterface>();
   const [spokenLanguages, setSpokenLanguages] = useState<
     spokenLanguageInterface[]
   >(user.details.languages ? user.details.languages : []);
@@ -145,25 +143,9 @@ export const EditorProfilContextProvider: React.FC<any> = (props) => {
   const [skillsOptions, setSkillsOptions] = useState<skillsInterface[]>();
 
   useMemo(async () => {
-    // get languages
-    let _langOptions: any = [];
-
-    await useStrapiGet("languages").then((res) => {
-      if (res.status === 200) {
-        res.data.data.map((x: any) => {
-          _langOptions.push({
-            label: x.attributes.label,
-            id: x.id,
-            icon: "",
-          });
-        });
-        setLangOptions(_langOptions);
-      }
-    });
-
     // get skills
     let _skills: any = [];
-    await useStrapiGet("skills").then((res) => {
+    await useStrapiGet("video-softwares").then((res) => {
       if (res.status === 200) {
         res.data.data.map((x: any) => {
           _skills.push({
@@ -178,13 +160,10 @@ export const EditorProfilContextProvider: React.FC<any> = (props) => {
 
   const [skills, setSkills] = useState<skillsInterface[]>(
     user.details.skills ? user.details.skills : []
-  );  
-
-  const handleModelChange = () => {};
+  );
 
   const handleAddUsedLang = (lang: spokenLanguageInterface) => {
-    if (usageLang !== lang)
-      setUsageLang(lang);
+    if (usageLang !== lang) setUsageLang(lang);
   };
 
   const handleAddLang = (lang: spokenLanguageInterface) => {
@@ -307,8 +286,8 @@ export const EditorProfilContextProvider: React.FC<any> = (props) => {
       setUsernameError(inputErrors.invalid);
       isValid = false;
     }
-    if (desc.split(' ').length < 50) {
-      setDescError('La description doit faire 50 mots au minimum');
+    if (desc.split(" ").length < 50) {
+      setDescError("La description doit faire 50 mots au minimum");
       isValid = false;
     }
     if (!validator.isPostalCode(zipcode, "FR")) {
@@ -432,7 +411,7 @@ export const EditorProfilContextProvider: React.FC<any> = (props) => {
         year,
         setYear,
 
-        langOptions,
+        langOptions: languageObjects(),
         spokenLanguages,
         usageLang,
         handleAddUsedLang,
@@ -440,7 +419,6 @@ export const EditorProfilContextProvider: React.FC<any> = (props) => {
         skillsOptions,
         skills,
 
-        handleModelChange,
         handleAddLang,
         handleRemoveLang,
         handleAddSkill,

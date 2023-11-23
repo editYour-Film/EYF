@@ -71,6 +71,8 @@ export interface user_info {
   languages: any;
   picture: any;
   skills: any;
+  lang_used: string;
+  lang_spoken: string;
 }
 
 export const EditorContext = createContext({
