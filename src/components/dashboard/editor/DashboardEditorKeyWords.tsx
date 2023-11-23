@@ -32,7 +32,7 @@ export const DashboardEditorKeyWords = () => {
       </div>
 
       {authContext.isLoading ? (
-        <p>Loading...</p>
+        <p>Chargement...</p>
       ) : (
         <>
           {!authContext.user.models ||

@@ -25,40 +25,52 @@ export default function DashBoardContentProfile() {
       </Head>
 
       <LayoutDashBoard>
-      {authContext.user.user.role && <DashBoardPageProfil />}
+        {authContext.user.user.role && <DashBoardPageProfil />}
       </LayoutDashBoard>
     </>
   );
 }
 
 const DashBoardPageProfil = () => {
-  const dashboardContext = useContext(DashBoardContext)
-  const isMobile = useMediaQuery('(max-width:768px)')
+  const dashboardContext = useContext(DashBoardContext);
+  const authContext = useContext(AuthContext);
+
+  const isMobile = useMediaQuery("(max-width:768px)");
 
   useEffect(() => {
-    dashboardContext.setPanels([{
-      title: 'Informations - personnelles',
-      panel: <DashboardEditorProfil />
-    },
-    {
-      title: 'Expériences',
-      panel: <DashboardEditorProfilExperiences />
-    }])
-  }, [])
+    dashboardContext.setPanels([
+      {
+        title: "Informations - personnelles",
+        panel: <DashboardEditorProfil />,
+      },
+      {
+        title: "Expériences",
+        panel: <DashboardEditorProfilExperiences />,
+      },
+    ]);
+  }, []);
 
-  return (<>
-    <TopBar></TopBar>
+  return (
+    <>
+      <TopBar></TopBar>
 
-    <EditorProfilContextProvider>
-      <div className="flex flex-col gap-dashboard-spacing-element-medium main_content mt-[50px] md:mt-0 md:col-[2_/_3] row-[2_/_4]">
-        <div className="flex flex-col">
-          <NotificationCenter className='relative z-0' />
-          {isMobile && <ProfilMobile />}
-          {!isMobile && <DashboardContainer className='relative z-10' />}
+      <EditorProfilContextProvider>
+        <div className="flex flex-col gap-dashboard-spacing-element-medium main_content mt-[50px] md:mt-0 md:col-[2_/_3] row-[2_/_4]">
+          <div className="flex flex-col">
+            <NotificationCenter className="relative z-0" />
+            {authContext.isLoading ? (
+              <>Chargement...</>
+            ) : (
+              <>
+                {isMobile && <ProfilMobile />}
+                {!isMobile && <DashboardContainer className="relative z-10" />}
+              </>
+            )}
+          </div>
+
+          <FooterDashboard />
         </div>
-
-        <FooterDashboard />
-      </div>
-    </EditorProfilContextProvider>
-  </>)
-}
+      </EditorProfilContextProvider>
+    </>
+  );
+};

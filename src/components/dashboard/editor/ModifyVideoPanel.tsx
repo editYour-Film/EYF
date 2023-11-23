@@ -20,7 +20,7 @@ import Mouse from "@/icons/mouse.svg";
 import LinkIcon from "@/icons/link.svg";
 import Lock from "@/icons/lock.svg";
 
-import { Formats, Languages, Worktime, Visibility } from "./data/metaValues";
+import { Formats, Worktime, Visibility } from "./data/metaValues";
 import { DropBox } from "@/components/_shared/form/DropBox";
 
 import Close from "@/icons/dashboard/x.svg";
@@ -30,6 +30,7 @@ import { Keyword } from "@/components/_shared/UI/Keyword";
 import { AuthContext } from "@/context/authContext";
 import toast from "react-hot-toast";
 import GreenCheck from "@/icons/check-green.svg";
+import { languages } from "@/const";
 
 export const ModifyVideoPanel = () => {
   const editorContext = useContext(EditorContext);
@@ -366,7 +367,7 @@ export const ModifyVideoPanel = () => {
                         type="simple"
                         Icon={Headphones}
                         title="Langue"
-                        choices={Languages}
+                        choices={languages}
                         currentValue={editorContext.modelAudio}
                         onChange={(val) => {
                           if (val) {
@@ -767,7 +768,7 @@ export const ModifyVideoPanel = () => {
             type="simple"
             Icon={Headphones}
             title="Langue"
-            choices={Languages}
+            choices={languages}
             currentValue={editorContext.modelAudio}
             onChange={(val) => {
               if (val) {

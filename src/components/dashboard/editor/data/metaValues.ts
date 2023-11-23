@@ -12,11 +12,6 @@ export const Formats: modelType[] = [
   "Mobile",
 ];
 
-export type LanguagesType = "Français" | "Anglais" | "Italien" | "Espagnol";
-export const Languages: any[] = ["Français", "Anglais", "Italien", "Espagnol"];
-
-export type SoftwaresType = "After-effects" | "Davinci Resolve" | "Première";
-
 export type VisibilityType = "public" | "private" | "unrepertoried";
 export const Visibility: VisibilityType[] = [
   "public",
