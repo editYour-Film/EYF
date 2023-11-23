@@ -88,7 +88,7 @@ export const InputsExperience = () => {
       />
 
       <Select
-        label="Rechercher une langue"
+        label="Langues que vous parlez"
         onSelectOption={(id) => {
           if (context.langOptions) {
             const lang = context.langOptions.find((el) => el.id === id);
@@ -132,7 +132,8 @@ export const InputsExperience = () => {
               const skill = context.skillsOptions.find((el) => {
                 return el.id === val;
               });
-              if (skill) context.handleAddSkill(skill);
+              if (skill && context.skills && context.skills.length < 3)
+                context.handleAddSkill(skill);
             }
           }}
         />
