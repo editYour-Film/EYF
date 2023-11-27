@@ -37,6 +37,7 @@ module.exports = {
         'dashboard-button-island-disabled' : tokens.dashboard_button_island_disabled,
         'dashboard-button-island-hover' : tokens.dashboard_button_island_hover,
         'dashboard-button-white-default' : tokens.dashboard_button_white_default,
+        'dashboard-button-white-default-solid' : tokens.dashboard_button_white_default_solid,
         'dashboard-button-white-hover' : tokens.dashboard_button_white_hover,
 
         'dashboard-background-content-area' : tokens.dashboard_background_content_area,
@@ -52,6 +53,7 @@ module.exports = {
 
         // Icons
         'dashboard-icon-color-default': tokens.dashboard_icon_color_default,
+        
         //Article Category
         'edit': {
           DEFAULT: '#E3E178',
@@ -343,6 +345,12 @@ module.exports = {
           background: `radial-gradient(50% 50% at 50% 50%, #7977FF 0%, #78E3D2 90%);`,
           mixBlendMode: 'lighten',
           filter: 'blur(47px)',
+          opacity: 0.4
+        },
+        '.bg-radial-custom':{
+          background: `radial-gradient(50% 50% at 50% 50%, #7E5EFF 0%, rgba(126, 94, 255, 0.61) 100%)`,
+          mixBlendMode: 'lighten',
+          filter: 'blur(100px)',
           opacity: 0.4
         },
         '.player-bg-gradient': {

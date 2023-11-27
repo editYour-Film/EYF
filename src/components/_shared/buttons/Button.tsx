@@ -35,9 +35,7 @@ export const Button: React.FC<ButtonProps> = ({
 
   return (
     <button
-      className={`button ${baseStyle} ${typeStyle} ${
-        disabled ? disabledStyle : ""
-      } ${className ?? ""}`}
+      className={`button ${baseStyle} ${typeStyle} ${disabled ? disabledStyle : ""} ${className ?? ""} focus-visible:outline focus-visible:outline-blueBerry`}
       onClick={() => {
         onClick();
       }}

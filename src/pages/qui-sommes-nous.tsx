@@ -11,6 +11,8 @@ import { ArrowCards } from "@/components/whoweare/ArrowCards";
 import useStrapi from "@/hooks/useStrapi";
 import { useEffect } from "react";
 import { TitleReveal } from "@/components/whoweare/TitleReveal";
+import { setRouteName } from "@/store/slices/routesSlice";
+import { useDispatch } from "react-redux";
 
 {
   /* 
@@ -26,6 +28,7 @@ export async function getStaticProps() {
 }
 
 export default function WhoWeAre(/*{ data, dataFaqs }: any*/) {
+  const dispatch = useDispatch()
   const { data, mutate: getStrapi } = useStrapi(
     "about-me?" +
     "populate[head][populate]=*&" +
@@ -37,6 +40,8 @@ export default function WhoWeAre(/*{ data, dataFaqs }: any*/) {
   const { data: dataFaqs, mutate: getStrapiFaqs } = useStrapi("faqs", false);
 
   useEffect(() => {
+    dispatch(setRouteName({name: 'notre histoire'}))
+
     getStrapi();
     getStrapiFaqs();
   }, []);

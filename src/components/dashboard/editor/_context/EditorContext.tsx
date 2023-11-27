@@ -210,7 +210,6 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
 
   useEffect(() => {
     if (currentModelToModify) {
-      console.log("currentModelToModify", currentModelToModify);
       setModelDescription(currentModelToModify?.description);
       setModelTitle(currentModelToModify?.title);
       setModelFormat(currentModelToModify?.model);

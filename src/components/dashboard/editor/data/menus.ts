@@ -9,6 +9,37 @@ import mouse from "@/icons/mouse.svg";
 import folder from "@/icons/folder.svg";
 import settings from '@/icons/settings.svg'
 
+import news from '@/icons/news.svg'
+import play from '@/icons/play.svg'
+import book from '@/icons/book.svg'
+
+export const LANDING_MENU = [
+  {
+    icon: house,
+    label: "Accueil",
+    link: routes.HOME,
+  },
+  {
+    icon: book,
+    label: "catalogue",
+    link: routes.CATALOGUE,
+  },
+  {
+    icon: play,
+    label: "Notre histoire",
+    link: routes.WHOWEARE,
+  },
+  {
+    icon: news,
+    label: "Blog",
+    link: routes.BLOG,
+  },
+  {
+    icon: person,
+    label: "connexion",
+    link: routes.SIGNIN,
+  },
+]
 
 export const DASHBOARD_EDITOR_MENU = [
   {

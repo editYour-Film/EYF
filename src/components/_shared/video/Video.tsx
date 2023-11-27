@@ -12,6 +12,7 @@ type VideoProps = {
   onPlay?: () => void; 
   onPause?: () => void; 
   trigger?: boolean;
+  autoPlay?: boolean;
 };
 
 export const Video = forwardRef<HTMLVideoElement, VideoProps>(function Video(
@@ -26,6 +27,7 @@ export const Video = forwardRef<HTMLVideoElement, VideoProps>(function Video(
     onPlay,
     onPause,
     trigger,
+    autoPlay,
   },
   ref
 ) {
@@ -82,6 +84,7 @@ export const Video = forwardRef<HTMLVideoElement, VideoProps>(function Video(
         ref={videoEl}
         className={`video relative w-full h-full object-cover z-0`}
         controls={(defaultPlayer && !noPlayer)}
+        autoPlay={autoPlay}
         onClick={(e) => {
           e.preventDefault();
           handleClick();

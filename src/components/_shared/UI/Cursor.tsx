@@ -43,29 +43,34 @@ export const Cursor = () => {
   const muteIcon = useRef<HTMLDivElement>(null);
   const unmuteIcon = useRef<HTMLDivElement>(null);
 
+  const tl = useRef<GSAPTimeline>()
+
   const switchFn = (state: string, isLocked: boolean) => {
     if (!isLocked) {
       switch (state) {
         case "click":
-          handleClick();
+          tl.current && handleClick();
           break;
         case "watch":
-          handleWatch();
+          tl.current && handleWatch();
           break;
         case "pause":
-          handlePause();
+          tl.current && handlePause();
           break;
         case "regular":
-          handleRegular();
+          tl.current && handleRegular();
           break;
         case "swipe":
-          handleSwipe();
+          tl.current && handleSwipe();
           break;
         case "mute":
-          handleMute();
+          tl.current && handleMute();
           break;
         case "unmute":
-          handleUnmute();
+          tl.current && handleUnmute();
+          break;
+        case "read":
+          tl.current && handleRead();
           break;
       }
     }
@@ -76,9 +81,9 @@ export const Cursor = () => {
   }, [state, enabled]);
 
   const textAnim = (text: string) => {
-    const tl = gsap.timeline();
+    const childTl = gsap.timeline()
 
-    tl.call(
+    childTl.call(
       () => {
         setShowText(false);
       },
@@ -86,7 +91,7 @@ export const Cursor = () => {
       0
     );
 
-    tl.to(cursor.current, {
+    childTl.to(cursor.current, {
       scale: textScale,
       borderWidth: scaledBorder,
       duration: 0.6,
@@ -95,7 +100,7 @@ export const Cursor = () => {
       ease: "back.inOut",
     });
 
-    tl.call(
+    childTl.call(
       () => {
         setText(text);
       },
@@ -103,18 +108,24 @@ export const Cursor = () => {
       0.2
     );
 
-    tl.call(
+    childTl.call(
       () => {
         setShowText(true);
       },
       [],
       0.3
     );
+    
+    tl.current!.pause()
+    tl.current!.clear()
+    tl.current!.add(childTl)
+    tl.current!.play()
   };
 
   const iconAnim = (icon: string, inOut = "in") => {
-    const tl = gsap.timeline();
     let iconEl = null;
+
+    const childTl = gsap.timeline()
 
     switch (icon) {
       case "mute":
@@ -126,7 +137,7 @@ export const Cursor = () => {
     }
 
     if (inOut === "in") {
-      tl.to(cursor.current, {
+      childTl.to(cursor.current, {
         scale: textScale,
         borderWidth: scaledBorder,
         duration: 0.6,
@@ -135,7 +146,7 @@ export const Cursor = () => {
         ease: "back.inOut",
       });
 
-      tl.set(
+      childTl.set(
         icons.current!.children,
         {
           yPercent: 120,
@@ -143,7 +154,7 @@ export const Cursor = () => {
         0
       );
 
-      tl.to(
+      childTl.to(
         iconEl!.current,
         {
           yPercent: inOut === "in" ? 0 : 100,
@@ -152,7 +163,7 @@ export const Cursor = () => {
         0
       );
     } else {
-      tl.to(
+      childTl.to(
         icons.current!.children,
         {
           yPercent: 120,
@@ -160,16 +171,30 @@ export const Cursor = () => {
         0
       );
     }
+
+    tl.current!.pause()
+    tl.current!.clear()
+    tl.current!.add(childTl)
+    tl.current!.play()
+
+    return tl.current
   };
 
   const handleClick = () => {
-    gsap.to(cursor.current, {
+    const childTl = gsap.timeline()
+
+    childTl.to(cursor.current, {
       scale: 0.4,
       yPercent: 0,
       xPercent: 0,
       duration: 0.6,
       ease: "back.inOut",
     });
+
+    tl.current!.pause()
+    tl.current!.clear()
+    tl.current!.add(childTl)
+    tl.current!.play()
   };
 
   const handleWatch = () => {
@@ -181,8 +206,9 @@ export const Cursor = () => {
   };
 
   const handleSwipe = () => {
-    const tl = gsap.timeline();
-    tl.to(
+    const childTl = gsap.timeline()
+
+    childTl.to(
       shape.current,
       {
         scale: 3,
@@ -191,7 +217,7 @@ export const Cursor = () => {
       },
       0
     );
-    tl.to(
+    childTl.to(
       shape.current,
       {
         xPercent: -80,
@@ -200,26 +226,34 @@ export const Cursor = () => {
       },
       "-=0.2"
     );
-    tl.to(shape.current, {
+    childTl.to(shape.current, {
       xPercent: 120,
       duration: 0.6,
       ease: "power2.inOut",
     });
-    tl.to(shape.current, {
+    childTl.to(shape.current, {
       xPercent: 0,
       duration: 0.6,
       ease: "power2.inOut",
     });
-    tl.call(() => {
+    childTl.call(() => {
       dispatch(toRegular());
     });
+
+    tl.current!.pause()
+    tl.current!.clear()
+    tl.current!.add(childTl)
+    tl.current!.play()
   };
 
   const handleRegular = () => {
-    setShowText(false);
-    iconAnim("none", "out");
+    const childTl = gsap.timeline({
+      paused: true
+    })
 
-    gsap.to(cursor.current, {
+    setShowText(false);
+
+    childTl.to(cursor.current, {
       scale: regularScale,
       yPercent: 0,
       xPercent: 0,
@@ -229,6 +263,9 @@ export const Cursor = () => {
         setText("");
       },
     });
+
+    iconAnim("none", "out")
+    tl.current!.add(childTl.play(), 0)
   };
 
   const handleMute = () => {
@@ -239,6 +276,10 @@ export const Cursor = () => {
   const handleUnmute = () => {
     // textAnim('unmute')
     iconAnim("unmute");
+  };
+
+  const handleRead = () => {
+    textAnim("Lire");
   };
 
   const [cursor2Pos, setCursor2Pos] = useState<{ x: number; y: number }>({
@@ -287,29 +328,18 @@ export const Cursor = () => {
       });
     });
 
-    const onChangeStart = () => {
-      setLockAnim(true);
-      dispatch(toRegular());
-    }
-
-    const onChangeComplete = () => {
-      setTimeout(() => {
-        setLockAnim(false);
-      }, 1000);
-    }
-
-    router.events.on("routeChangeStart", onChangeStart);
-    router.events.on("routeChangeComplete", onChangeComplete);
-
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
 
       ctx.current?.revert();
-
-      router.events.off("routeChangeStart", onChangeStart);
-      router.events.off("routeChangeComplete", onChangeComplete);
     };
   }, [isCursorEnabled]);
+
+  useEffect(() => {
+    tl.current = gsap.timeline()
+
+    enabled && handleRegular()
+  }, [])
 
   if (enabled) {
     return (
@@ -346,7 +376,7 @@ export const Cursor = () => {
                 ref={unmuteIcon}
                 className="absolute top-0 lef-0 w-full h-full"
               >
-                <Unmute className="absolute top-0 left-0 w-full h-full gradient-svg-linear" />
+                <Unmute className="absolute hidden top-0 left-0 w-full h-full gradient-svg-linear" />
               </div>
             </div>
           </div>
