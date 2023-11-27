@@ -71,6 +71,7 @@ export const title_small = '16px';
 export const title_m = '22px';
 export const title_medium = '28px';
 export const title_large = '40px';
+export const title_large_lineHeight = '54px';
 
 // Fonts Family
 export const font_n27 = 'N27';

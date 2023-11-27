@@ -163,12 +163,12 @@ module.exports = {
 
         'title-small': [tokens.title_small, tokens.lineheight_title_small],
         'title-m': [tokens.title_m, '1.27'],
-        'title-medium': [tokens.title_medium, tokens.lineheight_title_medium],
+        // 'title-medium': [tokens.title_medium, tokens.lineheight_title_medium],
         'title-large': [tokens.title_large, tokens.lh_title_large],
 
         //v0
         'title': '40px',
-        'title-large': '60px',
+        // 'title-large': '60px',
         'base-lg': '22px',
       },
       fontFamily: {
@@ -260,6 +260,65 @@ module.exports = {
           'text-fill-color': 'transparent',
           'transform': 'translateZ(0)',
         },
+        '.text-base' : {
+          fontFamily: tokens.font_default.join(', '),
+          fontSize: tokens.text_base,
+          fontWeight: 500,
+          letterSpacing: '-0.208px',
+        },
+
+        '.text-base-light' : {
+          fontFamily: tokens.font_default.join(', '),
+          fontSize: tokens.text_base,
+          fontWeight: 400,
+          letterSpacing: '-0.208px',
+        },
+        
+        '.text-small' : {
+          fontFamily: tokens.font_default.join(', '),
+          fontSize: tokens.text_small,
+          fontWeight: 500,
+          letterSpacing: '-0.084px',
+        },
+
+        '.text-large' : {
+          fontFamily: tokens.font_default.join(', '),
+          fontSize: tokens.text_large,
+          fontWeight: 500,
+          letterSpacing: '-0.456px',
+        },
+
+        '.text-title-M' : {
+          fontFamily: tokens.font_title.join(', '),
+          fontSize: tokens.title_m,
+          fontWeight: 400,
+          lineHeight: '27.398px',
+          textTransform: 'uppercase',
+        },
+
+        '.text-title-large' : {
+          fontFamily: tokens.font_title.join(', '),
+          fontSize: tokens.title_large,
+          fontWeight: 500,
+          lineHeight: tokens.title_large_lineHeight,
+          textTransform: 'uppercase',
+          letterSpacing: '-0.48px',
+        },
+        '.text-title-medium' : {
+          fontFamily: tokens.font_title.join(', '),
+          fontSize: tokens.title_medium,
+          fontWeight: 500,
+          lineHeight: '97.85%',
+          textTransform: 'uppercase',
+        },
+        '.text-title-small' : {
+          fontFamily: tokens.font_title.join(', '),
+          fontSize: tokens.title_small,
+          fontWeight: 400,
+          lineHeight: '200%',
+          textTransform: 'uppercase',
+        },
+
         '.form-separator' : {
           display: 'none',
           '@media screen and (min-width: 640px)': {
