@@ -10,9 +10,7 @@ import EYFLogo from "../../../public/icons/logo.svg";
 import { Session } from "next-auth";
 import { useDispatch } from "react-redux";
 import { enableTransition } from "@/store/slices/transitionSlice";
-import { MessageType } from "../_shared/UI/InfoMessage";
-
-import TestIcon from "@/icons/checkbox-check.svg"
+import { closeMenu } from "@/store/slices/menuSlice";
 
 export const PageTransition = ({
   Component,
@@ -45,8 +43,9 @@ export const PageTransition = ({
   }, [])
 
   const onLeave = () => {
-    
     lenis.stop();
+
+    if(store.getState().menu.isOpen) dispatch(closeMenu())
 
     const inTl = gsap.timeline();
 
@@ -98,14 +97,8 @@ export const PageTransition = ({
       yPercent: -110,
       duration: 0.5,
       ease: "power2.in",
-    });
+    });  
   };
-
-  const [messages, setMessages] = useState<MessageType[]>([{
-    message: 'Test Message',
-    Icon: TestIcon,
-    id: 1
-  }])
 
   return (
     <>
@@ -116,9 +109,7 @@ export const PageTransition = ({
           onExit={() => {store.getState().transition.enabled && onLeave()}}
           onEnter={() => {store.getState().transition.enabled && onEnter()}}
         >
-          <div>
-            <Component {...pageProps} />
-          </div>
+          <Component {...pageProps} />
         </Transition>
       </SwitchTransition>
 

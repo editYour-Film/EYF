@@ -10,9 +10,12 @@ import { Title } from "@/components/_shared/Title";
 import { BlogArticle } from "@/components/blog/shared/BlogArticle";
 import { ContainerFullWidth } from "@/components/_shared/UI/Container";
 import { NewsletterSection } from "@/components/home/NewsletterSection";
+import { useDispatch } from "react-redux";
+import { setRouteName } from "@/store/slices/routesSlice";
 
 const BlogCategory = () => {
   const router = useRouter();
+  const dispatch = useDispatch();
   const { slug } = router.query;
 
   const { data, mutate: getStrapi } = useStrapi(
@@ -30,6 +33,7 @@ const BlogCategory = () => {
   const [currentCategory, setCurrentCategory] = useState<any>();
 
   useEffect(() => {
+    dispatch(setRouteName({name: 'blog'}))
     getCategories();
     getStrapi();
   }, []);

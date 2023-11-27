@@ -10,6 +10,10 @@ import { useSelector, useDispatch } from 'react-redux'
 import {RootState} from "@/store/store"
 import { setJoinBetaInvisible } from "@/store/slices/joinBetaSlice";
 import { enableCustomCursor } from "@/store/slices/cursorSlice";
+import { DashboardMenuMobile } from "../dashboard/shared/DashboardMenuMobile";
+import { LANDING_MENU } from "../dashboard/editor/data/menus";
+import { closeMenu } from "@/store/slices/menuSlice";
+import { IslandButton } from "../_shared/buttons/IslandButton";
 
 type LayoutMainProps = {
   children: React.ReactNode;
@@ -28,6 +32,8 @@ const LayoutMain = ({
   
   const joinBetaState = useSelector((state: RootState) => state.joinBeta.isVisible)
   const dispatch = useDispatch()
+
+  const isMenuOpen = useSelector((store: RootState) => store.menu.isOpen)
 
   useEffect(() => {
     dispatch(enableCustomCursor())
@@ -60,7 +66,7 @@ const LayoutMain = ({
             onClose={() => {dispatch(setJoinBetaInvisible())}}
           />
 
-          <main className="pt-24 md:pt-25 no-cursor">
+          <main className="md:pt-[146px] no-cursor">
             {topSectionBackground && (
               <>
                 <div className="top-section-bg1"></div>
@@ -71,6 +77,15 @@ const LayoutMain = ({
               {children}
             </div>
           </main>
+
+          <DashboardMenuMobile menu={LANDING_MENU} trigger={isMenuOpen} action={closeMenu}>
+            <IslandButton
+              type="primary"
+              label="Obtenir mon devis"
+              onClick={() => {}}
+            />
+          </DashboardMenuMobile>
+
           <Footer />
         </div>
     </>

@@ -23,6 +23,8 @@ import { getStrapiData } from "../components/_prerender/strapiApi";
 import useStrapi from "@/hooks/useStrapi";
 import { useEffect } from "react";
 import useMediaQuery from "@/hooks/useMediaQuery";
+import { setRouteName } from "@/store/slices/routesSlice";
+import { useDispatch } from "react-redux";
 
 /*export async function getStaticProps() {
   const data = await getStrapiData(
@@ -34,6 +36,8 @@ import useMediaQuery from "@/hooks/useMediaQuery";
 }*/
 
 export default function Home(/*{ seodata }: any*/) {
+  const dispatch = useDispatch()
+
   const { data, mutate: getStrapi } = useStrapi(
     "page-home?" +
       "populate[head][populate]=*&" +
@@ -58,6 +62,8 @@ export default function Home(/*{ seodata }: any*/) {
   );
 
   useEffect(() => {
+    dispatch(setRouteName({name: 'accueil'}))
+
     getStrapi();
     getStrapiFaq();
     getSeoData();

@@ -5,12 +5,15 @@ import { MoreArticles } from "@/components/blog/MoreArticles";
 import { NewsletterSection } from "@/components/home/NewsletterSection";
 import LayoutMain from "@/components/layouts/LayoutMain";
 import useStrapi from "@/hooks/useStrapi";
+import { setRouteName } from "@/store/slices/routesSlice";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 
 export default function BlogDetails() {
   const router = useRouter();
+  const dispatch = useDispatch();
   const { slug } = router.query;
 
   const { data, mutate: getStrapi } = useStrapi(
@@ -21,6 +24,7 @@ export default function BlogDetails() {
   const [article, setArticle] = useState<any>();
 
   useEffect(() => {
+    dispatch(setRouteName({name: 'blog'}))
     getStrapi();
   }, []);
 

@@ -10,6 +10,8 @@ import { useEffect } from "react";
 import { CategoriesList } from "@/components/blog/shared/CategoriesList";
 import { useRouter } from "next/router";
 import routes from "@/routes";
+import { setRouteName } from "@/store/slices/routesSlice";
+import { useDispatch } from "react-redux";
 
 /*export async function getStaticProps() {
   const data = await getStrapiData(
@@ -23,6 +25,7 @@ import routes from "@/routes";
 
 export default function Blog(/*{ data }: any*/) {
   const { push } = useRouter();
+  const dispatch = useDispatch();
 
   const { data, mutate: getStrapi } = useStrapi(
     "articles?populate[blog_category][populate]=*&populate[author][populate]=*&populate[image][populate]=*&populate[paragraphs][populate]=*",
@@ -35,6 +38,7 @@ export default function Blog(/*{ data }: any*/) {
   );
 
   useEffect(() => {
+    dispatch(setRouteName({name: 'blog'}))
     getCategories();
     getStrapi();
   }, []);

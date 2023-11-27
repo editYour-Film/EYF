@@ -4,10 +4,8 @@ import { Lenis, useLenis } from "@studio-freight/react-lenis";
 import Router from "next/router";
 import { getTokenFromLocalCookie } from "@/auth/auth";
 import routes from "@/routes";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { disableCustomCursor } from "@/store/slices/cursorSlice";
-import { DashBoardContextProvider } from "../dashboard/_context/DashBoardContext";
-import { EditorContextProvider } from "../dashboard/editor/_context/EditorContext";
 import { SideBar } from "../dashboard/shared/SideBar";
 import { DashboardMenuMobile } from "../dashboard/shared/DashboardMenuMobile";
 
@@ -18,7 +16,8 @@ import {
 
 import { ButtonsWrapper } from "../dashboard/shared/ButtonsWrapper";
 import { AuthContext } from "@/context/authContext";
-import { ClientContextProvider } from "../dashboard/client/_context/DashboardClientContext";
+import { closeDashboardMenu } from "@/store/slices/dashboardMenuSlice";
+import { RootState } from "@/store/store";
 
 type LayoutDashboardProps = {
   children: React.ReactNode;
@@ -32,6 +31,7 @@ const LayoutDashboard = ({ children }: LayoutDashboardProps) => {
   const authContext = useContext(AuthContext);
 
   const dispatch = useDispatch();
+  const isMenuOpen = useSelector((store : RootState) => store.dashboardMenu.isOpen)
 
   useEffect(() => {
     dispatch(disableCustomCursor());
@@ -53,12 +53,11 @@ const LayoutDashboard = ({ children }: LayoutDashboardProps) => {
   useEffect(() => {
     if (!getTokenFromLocalCookie()) Router.push(routes.SIGNIN);
   }, []);
-
+  
   return (
-    <>
-      {authContext.isLoggedIn && authContext.user && (
-        <Lenis root>
-          <div className="relative overflow-hidden md:overflow-visible bg-black min-h-screen flex flex-col justify-between gap-10">
+    <div>
+      {(authContext.isLoggedIn && authContext.user) &&
+          <div className="relative overflow-clip md:overflow-visible bg-black min-h-screen flex flex-col justify-between gap-10">
             <main className="md:pt-7">
               <div className="md:px-[30px] xl:px-[113px] md:mt-0 grid grid-dashboard relative z-20 ">
                 {children}
@@ -69,18 +68,17 @@ const LayoutDashboard = ({ children }: LayoutDashboardProps) => {
                 />
 
                 {authContext.user.user.role.name === "editor" ? (
-                  <DashboardMenuMobile menu={DASHBOARD_EDITOR_MENU} />
+                  <DashboardMenuMobile menu={DASHBOARD_EDITOR_MENU} trigger={isMenuOpen} action={closeDashboardMenu} />
                 ) : (
-                  <DashboardMenuMobile menu={DASHBOARD_CLIENT_MENU} />
+                  <DashboardMenuMobile menu={DASHBOARD_CLIENT_MENU} trigger={isMenuOpen} action={closeDashboardMenu} />
                 )}
 
                 <ButtonsWrapper />
               </div>
             </main>
           </div>
-        </Lenis>
-      )}
-    </>
+      }
+    </div>
   );
 };
 
