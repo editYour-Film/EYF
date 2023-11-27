@@ -28,6 +28,7 @@ export const dashboard_button_island_disabled = 'rgb(24, 21, 35)';
 export const dashboard_button_island_hover = 'rgb(39, 30, 74)';
 
 export const dashboard_button_white_default = base_Edy_soyMilk_100;
+export const dashboard_button_white_default_solid = 'rgb(25, 27, 28)';
 export const dashboard_button_white_hover = base_Edy_soyMilk_200;
 
 export const dashboard_background_content_area = 'rgb(14, 14, 15)';

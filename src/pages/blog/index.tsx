@@ -3,13 +3,12 @@ import LayoutMain from "@/components/layouts/LayoutMain";
 import { NewsletterSection } from "@/components/home/NewsletterSection";
 import { ArticleTrends } from "@/components/blog/ArticleTrends";
 import { ArticleRecent } from "@/components/blog/ArticleRecent";
-import { ContainerFullWidth } from "@/components/_shared/UI/Container";
-import { getStrapiData } from "../../components/_prerender/strapiApi";
 import useStrapi from "@/hooks/useStrapi";
 import { useEffect } from "react";
 import { CategoriesList } from "@/components/blog/shared/CategoriesList";
 import { useRouter } from "next/router";
 import routes from "@/routes";
+import { GradientCard } from "@/components/dashboard/shared/GradientCard";
 import { setRouteName } from "@/store/slices/routesSlice";
 import { useDispatch } from "react-redux";
 
@@ -51,9 +50,9 @@ export default function Blog(/*{ data }: any*/) {
       </Head>
 
       <LayoutMain activeNavItem="blog">
-        <div>
+        <div className="flex flex-col gap-dashboard-spacing-element-medium">
           {data && data.length > 0 && (
-            <ContainerFullWidth className="max-w-7xl mx-auto">
+            <div className="max-w-[1400px] xl:mx-[167px] 2xl:mx-auto flex flex-col gap-dashboard-spacing-element-medium">
               {categories &&
                 <CategoriesList 
                   categories={categories} 
@@ -61,17 +60,24 @@ export default function Blog(/*{ data }: any*/) {
                   onChange={(selectedCategories:any) => {
                     selectedCategories.length && push({pathname: routes.BLOG_CATEGORY, query: { slug: selectedCategories} });
                   }}
-                  className='mb-6 md:mb-12'
                 />
               }
+
               <ArticleTrends articles={data} />
               <ArticleRecent articles={data} />
-            </ContainerFullWidth>
-          )}
 
-          <ContainerFullWidth>
-            <NewsletterSection />
-          </ContainerFullWidth>
+              <GradientCard
+                title='PARRAINER UN AMI'
+                content='Bénéficiez d’avantages exclusifs en rejoignant la communauté des parrains editYour.Film dès aujourd’hui.'
+                hasCta 
+                type="email"
+                placeholder="Email" 
+                ctaLabel="Envoyer le lien de parrainage"
+                onClick={(email: string) => { }}
+                className="my-[70px]"
+              />
+            </div>
+          )}
         </div>
       </LayoutMain>
     </>

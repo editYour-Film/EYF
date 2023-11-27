@@ -1,7 +1,7 @@
 import { ReactNode, useRef } from "react";
 
 type IslandButtonProps = {
-  type: "primary" | "secondary" | "tertiary" | "danger" | "small" | "small-secondary";
+  type: "primary" | "secondary" | "tertiary" | "danger" | "small" | "small-secondary" | "small-solid";
   label?: string;
   Icon?: any; //() => JSX.Element,
   IconRight?: any; //() => JSX.Element,
@@ -71,6 +71,14 @@ export const IslandButton: React.FC<IslandButtonProps> = ({
           : "bg-dashboard-button-white-default border border-transparent"
       } text-small text-dashboard-text-description-base ${size} hover:bg-dashboard-button-white-hover hover:text-dashboard-text-title-white-high focus:bg-dashboard-button-white-hover focus:text-dashboard-text-title-white-high hover:border-dashboard-button-stroke-hover`;
       break;
+    case "small-solid":
+      iconSize = 'w-[20px] h-[20px]';
+      typeStyle = `${
+        disabled
+          ? "bg-background-dashboard-button-dark border"
+          : "bg-dashboard-button-white-default-solid border border-transparent"
+      } text-small text-dashboard-text-description-base ${size} hover:bg-dashboard-button-white-hover hover:text-dashboard-text-title-white-high focus:bg-dashboard-button-white-hover focus:text-dashboard-text-title-white-high hover:border-dashboard-button-stroke-hover`;
+      break;
     case "small-secondary":
       iconSize = 'w-[20px] h-[20px]';
       typeStyle = `bg-dashboard-button-dark border ${
@@ -84,9 +92,7 @@ export const IslandButton: React.FC<IslandButtonProps> = ({
   return (
     <button
       ref={buttonEl}
-      className={`button ${baseStyle} ${typeStyle} ${
-        disabled ? "pointer-events-none " + disabledStyle : ""
-      } ${className ?? ""}`}
+      className={`button ${baseStyle} ${typeStyle} ${disabled ? "pointer-events-none " + disabledStyle : ""} ${className ?? ""} ${type === 'primary' ? 'focus-visible:outline-soyMilk' : 'focus-visible:outline-blueBerry'}`}
       onClick={() => {
         buttonEl.current && buttonEl.current.blur()
         onClick();
@@ -94,9 +100,7 @@ export const IslandButton: React.FC<IslandButtonProps> = ({
       disabled={disabled}
     >
       <div
-        className={`button__inner flex justify-center items-center gap-dashboard-mention-padding-right-left ${
-          disabled ? "opacity-30" : ""
-        }`}
+        className={`button__inner flex justify-center items-center gap-dashboard-mention-padding-right-left ${disabled ? "opacity-30" : ""}`}
       >
         {Icon && <Icon className={`${iconSize} ${iconClass}`} />}
 

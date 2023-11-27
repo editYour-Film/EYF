@@ -49,7 +49,7 @@ const Footer = () => {
                 target="_blank"
                 rel="noopener"
               >
-                <FbIcon />
+                <FbIcon className={'w-[35px] h-[35px]'}/>
               </a>
 
               <a
@@ -57,7 +57,7 @@ const Footer = () => {
                 target="_blank"
                 rel="noopener"
               >
-                <InstaIcon />
+                <InstaIcon className={'w-[35px] h-[35px]'}/>
               </a>
 
               <a
@@ -65,7 +65,7 @@ const Footer = () => {
                 target="_blank"
                 rel="noopener"
               >
-                <LnkdnIcon />
+                <LnkdnIcon className={'w-[35px] h-[35px]'}/>
               </a>
 
               <a
@@ -74,7 +74,7 @@ const Footer = () => {
                 rel="noopener"
                 className="flex justify-center items-center w-[35px] h-[35px]"
               >
-                <TwtIcon />
+                <TwtIcon className={'w-[35px] h-[35px]'}/>
               </a>
             </div>
           </div>
