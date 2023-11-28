@@ -69,7 +69,7 @@ const Header = ({ activeNavItem = "" }: HeaderProps) => {
     <>
     <header
       className={
-        "sticky md:fixed mt-[60px] md:mt-0 top-0 left-0 px-4 w-full z-header transition-all duration-700 bg-black-transparent-light backdrop-blur-sm md:border-b " +
+        "sticky md:fixed mt-[60px] md:mt-0 top-0 left-0 px-4 w-full z-header transition-all duration-700 bg-black-transparent-light backdrop-blur-sm md:border-b-03 " +
         (!isMobileScreen
           ? isScrollUp === true
             ? "translate-y-0"
