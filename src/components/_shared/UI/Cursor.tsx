@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 import { gsap } from "gsap";
 import { toRegular } from "@/store/slices/cursorSlice";
-import { RootState } from "@/store/store";
+import store, { RootState } from "@/store/store";
 import { TextSplit } from "@/utils/TextSplit";
 import { useRouter } from "next/router";
 
@@ -30,7 +30,7 @@ export const Cursor = () => {
   const ctx = useRef<gsap.Context>();
 
   const regularScale = 0.4;
-  const textScale = 1.4;
+  const textScale = 1.1;
 
   const regularBorder = 3;
   const scaledBorder = 3 / (textScale / regularScale);
@@ -94,10 +94,10 @@ export const Cursor = () => {
     childTl.to(cursor.current, {
       scale: textScale,
       borderWidth: scaledBorder,
-      duration: 0.6,
-      yPercent: `-=${20}`,
-      xPercent: `-=${10}`,
-      ease: "back.inOut",
+      duration: 0.4,
+      yPercent: `-${50}`,
+      xPercent: `-${30}`,
+      ease: "power3.out",
     });
 
     childTl.call(
@@ -258,7 +258,7 @@ export const Cursor = () => {
       yPercent: 0,
       xPercent: 0,
       borderWidth: regularBorder,
-      ease: "back.inOut",
+      ease: "power3.out",
       onComplete: () => {
         setText("");
       },
@@ -269,12 +269,10 @@ export const Cursor = () => {
   };
 
   const handleMute = () => {
-    // textAnim('mute')
     iconAnim("mute");
   };
 
   const handleUnmute = () => {
-    // textAnim('unmute')
     iconAnim("unmute");
   };
 
@@ -310,10 +308,10 @@ export const Cursor = () => {
   useEffect(() => {
     gsap.set(cursor.current, {
       x:
-        lerp(posX.current, cursor2Pos?.x as number, 0.1) -
+        lerp(posX.current, cursor2Pos?.x as number, 0.99) -
         shape.current?.offsetWidth! / 2,
       y:
-        lerp(posY.current, cursor2Pos?.y as number, 0.1) -
+        lerp(posY.current, cursor2Pos?.y as number, 0.99) -
         shape.current?.offsetHeight! / 2,
     });
   }, [cursor2Pos]);
@@ -402,7 +400,7 @@ const CursorText = ({ text, active }: CursorTextProps) => {
     <div
       className={`${
         active ? "active" : ""
-      } anim-cursor relative z-10 flex w-full justify-center items-center h-max translate-y-[10%]`}
+      } text-small anim-cursor relative z-10 flex w-full justify-center items-center h-max translate-y-[10%]`}
     >
       <TextSplit input={text} type="word" />
     </div>
