@@ -50,7 +50,7 @@ const Button = forwardRef<HTMLButtonElement, buttonProps>(function Button({
       break;
   }
   const buttonClass =
-    `border ${borderRadiusSm ? 'rounded-lg' : 'rounded-full'} w-full ${sizeClass} text-white  px-5 flex items-center justify-center gap-2.5 transition-all duration-500`
+    `border ${borderRadiusSm ? 'rounded-lg' : 'rounded-full'} w-full ${sizeClass} text-white px-5 flex items-center justify-center gap-2.5 transition-all duration-500`
 
   const Icon = () => {
     switch (icon) {

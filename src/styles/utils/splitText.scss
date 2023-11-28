@@ -8,19 +8,28 @@
 }
 
 .split-word {
+  display: inline-flex;
   white-space: nowrap;
+  line-height: 1.3;
+  height: max-content;
 }
 
 .split-char {
   display: inline-block;
+  vertical-align: baseline;
+  // line-height: 1.3;
   overflow: hidden;
+}
+
+.split-white-space {
+  // line-height: 1.35;
 }
 
 .char-content {
   --delay: calc(var(--char-delay) * var(--split-char-i) + var(--word-delay) * var(--split-word-i) + var(--line-delay) * var(--split-line-i));
 
   display: inline-block;
-  line-height: 1.15;
+  line-height: 1;
 }
 
 .anim-title {

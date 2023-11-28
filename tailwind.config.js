@@ -133,7 +133,8 @@ module.exports = {
         'dashboard-spacing-element-medium': tokens.dashboard_spacing_element_medium,
         'DashboardPaddingNul': tokens.padding_DashboardPaddingNul,
         'dashboard-specific-radius' : tokens.dashboard_specific_radius,
-        'padding-medium': tokens.padding_medium
+        'padding-medium': tokens.padding_medium,
+        'navbar-h': '50px'
       },
       borderWidth: {
         DEFAULT: tokens.dashboard_border_width_button_default,
@@ -216,6 +217,9 @@ module.exports = {
         '.shadow-large' : {
           boxShadow: `0px 6px 24px 0px rgba(0, 0, 0, 0.65), 0px 4px 4px 0px rgba(0, 0, 0, 0.55), 0px 0px 44px 0px rgba(0, 0, 0, 0.32);`
         },
+        '.shadow-1' : {
+          boxShadow: `0px 1px 1px 0px rgba(0, 0, 0, 0.12), 0px 0px 4px 0px rgba(0, 0, 0, 0.12);`
+        },
         '.shadow-text' : {
           textShadow: '0px 4px 4px rgba(0, 0, 0, 0.45);'
         }
@@ -265,7 +269,7 @@ module.exports = {
         '.text-base' : {
           fontFamily: tokens.font_default.join(', '),
           fontSize: tokens.text_base,
-          fontWeight: 500,
+          fontWeight: 400,
           letterSpacing: '-0.208px',
         },
 
@@ -279,8 +283,9 @@ module.exports = {
         '.text-small' : {
           fontFamily: tokens.font_default.join(', '),
           fontSize: tokens.text_small,
-          fontWeight: 500,
+          fontWeight: 400,
           letterSpacing: '-0.084px',
+          lineHeight: 1.35
         },
 
         '.text-large' : {
@@ -301,7 +306,7 @@ module.exports = {
         '.text-title-large' : {
           fontFamily: tokens.font_title.join(', '),
           fontSize: tokens.title_large,
-          fontWeight: 500,
+          fontWeight: 400,
           lineHeight: tokens.title_large_lineHeight,
           textTransform: 'uppercase',
           letterSpacing: '-0.48px',
@@ -309,7 +314,7 @@ module.exports = {
         '.text-title-medium' : {
           fontFamily: tokens.font_title.join(', '),
           fontSize: tokens.title_medium,
-          fontWeight: 500,
+          fontWeight: 400,
           lineHeight: '97.85%',
           textTransform: 'uppercase',
         },

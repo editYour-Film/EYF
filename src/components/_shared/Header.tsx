@@ -9,10 +9,6 @@ import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setJoinBetaVisible } from "@/store/slices/joinBetaSlice";
 
-import FbIcon from "../../../public/icons/facebook.svg";
-import TwtIcon from "../../../public/icons/twitter-x.svg";
-import InstaIcon from "../../../public/icons/instagram.svg";
-import LnkdnIcon from "../../../public/icons/linkedin.svg";
 import Burger from '@/icons/burger.svg'
 
 import { useRouter } from "next/router";
@@ -20,8 +16,7 @@ import { IslandButton } from "./buttons/IslandButton";
 import { RootState } from "@/store/store";
 import { Menu } from "../dashboard/shared/Menu";
 import { LANDING_MENU } from "../dashboard/editor/data/menus";
-import { DashboardMenuMobile } from "../dashboard/shared/DashboardMenuMobile";
-import { closeMenu, openMenu } from "@/store/slices/menuSlice";
+import { openMenu } from "@/store/slices/menuSlice";
 
 type HeaderProps = {
   activeNavItem?: string;
@@ -33,7 +28,7 @@ const Header = ({ activeNavItem = "" }: HeaderProps) => {
   const isMobileScreen = useMediaQuery("(max-width: 768px)");
   const [isOpen, setIsOpen] = useState(false);
   const [isScrollUp, setIsScrollUp] = useState<undefined | boolean>(undefined);
-  const linkClass = "relative pb-1 ";
+  const linkClass = "text-small relative pb-1 focus-visible:outline-blueBerry ";
 
   const [isModalDisplayed, setIsModalDisplayed] = useState(false);
   const [waitingListType, setWaitingListType] = useState<"client" | "monteur">(
@@ -74,7 +69,7 @@ const Header = ({ activeNavItem = "" }: HeaderProps) => {
     <>
     <header
       className={
-        "sticky md:fixed mt-[60px] md:mt-0 top-0 left-0 px-4 w-full z-header transition-all duration-700 bg-black-transparent-light backdrop-blur-sm md:border-b " +
+        "sticky md:fixed mt-[60px] md:mt-0 top-0 left-0 px-4 w-full z-header transition-all duration-700 bg-black-transparent-light backdrop-blur-sm md:border-b-03 " +
         (!isMobileScreen
           ? isScrollUp === true
             ? "translate-y-0"
@@ -87,15 +82,16 @@ const Header = ({ activeNavItem = "" }: HeaderProps) => {
     >
       <ContainerFullWidth className="md:px-10">
         <div 
-          className="flex items-center flex-wrap py-2 md:py-[10px] justify-between"
+          className="flex items-center flex-wrap py-2 md:py-[10px] h-[50px] justify-between"
         >
-          <Link href={routes.HOME} className="cursor-pointer" scroll={false}>
+          <Link 
+            href={routes.HOME} className="cursor-pointer max-w-[125px] focus-visible:outline-blueBerry" scroll={false}>
             <Image
-              width={175}
-              height={40}
-              src="/icons/logo-horizontal-lg.svg"
+              width={125}
+              height={25}
+              src="/icons/logo-navbar.svg"
               alt=""
-              className="h-10 w-44 hidden lg:block"
+              className="hidden lg:block"
             />
             <Image
               width={35}
@@ -172,9 +168,11 @@ const Header = ({ activeNavItem = "" }: HeaderProps) => {
             />
 
             {/*<Link href={routes.QUOTE_STEP1}>*/}
-            <Button
-              variant="primary"
-              text="Rejoindre la beta"
+            <IslandButton
+              type="primary"
+              label="Rejoindre la beta"
+              className="max-w-[100%] sm:max-w-[280px] py-[5px] text-small"
+              enableTwist
               onClick={() => {
                 dispatch(setJoinBetaVisible());
                 setIsModalDisplayed(true);
@@ -274,10 +272,11 @@ const Header = ({ activeNavItem = "" }: HeaderProps) => {
                 transition: "opacity 1s ease-in-out 0.55s",
               }}
             >
-              <Button
-                variant="primary"
-                text="Rejoindre la beta"
-                className="max-w-[100%] sm:max-w-[280px]"
+              <IslandButton
+                type="primary"
+                label="Rejoindre la beta"
+                className="max-w-[100%] sm:max-w-[280px] py-[5px]"
+                enableTwist
                 onClick={() => {
                   dispatch(setJoinBetaVisible());
                   setIsModalDisplayed(true);
@@ -301,20 +300,21 @@ const ConnectionOptions = ({ onClientClick, onMonteurClick }: any) => {
 
   return (
     <div
-      className="relative"
+      className="relative h-max"
       onMouseEnter={() => setDisplayCnx(true)}
       onMouseLeave={() => setDisplayCnx(false)}
       onClick={() => {
-        onMonteurClick()
+        // onMonteurClick()
         // setDisplayCnx(!displayCnx)
       }}
     >
-      <Button
-        variant="secondary"
-        text="Connexion"
+      <IslandButton
+        type="tertiary"
+        label="Connexion"
         // icon="menu"
         // iconLeft
-        className={displayCnx ? "border-white" : ""}
+        onClick={() => {onMonteurClick()}}
+        className={`py-[5px] text-small`}
       />
       {/* <div
         className={

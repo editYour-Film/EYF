@@ -17,7 +17,7 @@ export const ArticleRecent = ({ articles }: ArticelTrendsProps) => {
         })}
       </div>
 
-      {articles.length - 1 > max &&
+      {articles.length > max &&
         <Button 
           type="primary"
           label="Voir plus d’articles"

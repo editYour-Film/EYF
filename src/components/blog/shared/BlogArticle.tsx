@@ -51,14 +51,14 @@ export const BlogArticle = ({
         onMouseLeave={() => { dispatch(toRegular())}}
       >
         <div className="flex flex-col w-full md:w-4/5 gap-dashboard-button-separation-spacing">
-          <p className="text-dashboard-text-description-base opacity-80 uppercase leading-none">
+          <p className="text-dashboard-text-description-base opacity-80 uppercase leading-none text-[12px]">
             {dayjs(article.attributes.updatedAt)
               .locale("fr")
               .format("DD MMMM YYYY")}
           </p>
 
           <div
-            className="text-title-medium text-dashboard-text-title-white-high md:text-dashboard-text-description-base transition-color duration-300 group-focus-visible:text-dashboard-text-title-white-high group-hover:text-dashboard-text-title-white-high"
+            className="text-title-m uppercase n27 text-dashboard-text-title-white-high transition-color duration-300 group-focus-visible:text-dashboard-text-title-white-high group-hover:text-dashboard-text-title-white-high"
           >
             {article.attributes.title}
           </div>

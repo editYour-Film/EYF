@@ -1,3 +1,4 @@
+import { TextSplit } from "@/utils/TextSplit";
 import { ReactNode, useRef } from "react";
 
 type IslandButtonProps = {
@@ -10,6 +11,7 @@ type IslandButtonProps = {
   onClick: (e?:any) => void;
   wmax?: boolean;
   iconColor?: string;
+  enableTwist?: boolean;
   id?: string;
   children?: ReactNode;
 };
@@ -24,13 +26,14 @@ export const IslandButton: React.FC<IslandButtonProps> = ({
   onClick,
   wmax = false,
   iconColor = 'soyMilk',
+  enableTwist,
   id,
   children,
 }) => {
   const buttonEl = useRef<HTMLButtonElement>(null)
   const baseStyle = `${
     wmax && "w-max"
-  } h-max font-medium rounded-full transition-colors duration-200`;
+  } h-max rounded-full transition-colors duration-200 shadow-1`;
 
   const size = `${
     type === "small" ? "px-dashboard-specific-radius py-dashboard-mention-padding-right-left " : "px-[20px] py-[10px]"
@@ -92,7 +95,7 @@ export const IslandButton: React.FC<IslandButtonProps> = ({
   return (
     <button
       ref={buttonEl}
-      className={`button ${baseStyle} ${typeStyle} ${disabled ? "pointer-events-none " + disabledStyle : ""} ${className ?? ""} ${type === 'primary' ? 'focus-visible:outline-soyMilk' : 'focus-visible:outline-blueBerry'}`}
+      className={`button ${enableTwist ? 'anim-cta' : ''} ${baseStyle} ${typeStyle} ${disabled ? "pointer-events-none " + disabledStyle : ""} ${className ?? ""} ${type === 'primary' ? 'focus-visible:outline-soyMilk' : 'focus-visible:outline-blueBerry'}`}
       onClick={() => {
         buttonEl.current && buttonEl.current.blur()
         onClick();
@@ -105,9 +108,11 @@ export const IslandButton: React.FC<IslandButtonProps> = ({
         {Icon && <Icon className={`${iconSize} ${iconClass}`} />}
 
         {label && 
-          <span className={`${type === "secondary" ? "text-linear-sunset" : ""}`}>
-            {label}
-          </span>
+          enableTwist 
+            ? <TextSplit input={label} type="word" noLH /> 
+            : <span className={`${type === "secondary" ? "inline-block text-linear-sunset" : ""}`}>
+                {label}
+              </span>
         }
 
         {IconRight && <IconRight className={`${iconSize} ${iconClass}`} />}

@@ -13,10 +13,11 @@ import store from "@/store/store"
 type CardArticle = {
   post: any,
   disableClick?: boolean,
-  className?: string
+  className?: string,
+  smallGap?: boolean,
 }
 
-export const CardArticle = ({post, disableClick, className}:CardArticle) => {
+export const CardArticle = ({post, disableClick, smallGap, className}:CardArticle) => {
   const { push } = useRouter()
   const category = post.blog_category.data.attributes.category
   const dispatch = useDispatch()
@@ -47,7 +48,7 @@ export const CardArticle = ({post, disableClick, className}:CardArticle) => {
 
   return (
     <div 
-      className={`dashboard-post group flex flex-col xl:flex-row justify-between gap-dashboard-spacing-element-medium xl:gap-auto px-[53px] py-[61px] bg-dashboard-button-dark border rounded-dashboard-button-square-radius shadow-large transition-color duration-200 hover:border-dashboard-button-stroke-hover cursor-pointer focus-visible:outline-blueBerry focus-within:outline-blueBerry ${className ?? ''}`}
+      className={`dashboard-post group flex flex-col xl:flex-row justify-between gap-dashboard-spacing-element-medium ${smallGap ? '' : 'xl:gap-[19%]'} px-[53px] py-[61px] bg-dashboard-button-dark border rounded-dashboard-button-square-radius shadow-large transition-color duration-200 hover:border-dashboard-button-stroke-hover cursor-pointer focus-visible:outline-blueBerry focus-within:outline-blueBerry ${className ?? ''}`}
       tabIndex={0}
 
       onClick={() => {
@@ -76,7 +77,7 @@ export const CardArticle = ({post, disableClick, className}:CardArticle) => {
         </div>
       </div>
 
-      <div className="dashboard-post__content basis-full grow-0 flex flex-col gap-padding-medium w-full xl:basis-[384px]">
+      <div className="dashboard-post__content basis-full grow flex flex-col gap-padding-medium w-full xl:basis-[384px]">
         <div className="max-w-[384px] text-title-m uppercase n27">{post.title}</div>
         <hr className="w-full border-05"/>
         <div className="max-w-[384px] text-dashboard-text-description-base md:text-dashboard-text-description-base-low text-base transition-color duration-200 group-hover:text-dashboard-text-description-base">{post.short_intro}</div>
