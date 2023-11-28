@@ -17,14 +17,14 @@ export const ArticleRecent = ({ articles }: ArticelTrendsProps) => {
         })}
       </div>
 
-      <Button 
-        type="primary"
-        label="Voir plus d’articles"
-        onClick={() => { setMax(max + 10)}}
-        className="w-[360px]"
-        disabled={articles.length < max}
-      />
-
+      {articles.length - 1 > max &&
+        <Button 
+          type="primary"
+          label="Voir plus d’articles"
+          onClick={() => { setMax(max + 10)}}
+          className="w-[360px]"
+        />
+      }
     </div>
   );
 };
