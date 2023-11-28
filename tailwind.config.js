@@ -306,7 +306,7 @@ module.exports = {
         '.text-title-large' : {
           fontFamily: tokens.font_title.join(', '),
           fontSize: tokens.title_large,
-          fontWeight: 500,
+          fontWeight: 400,
           lineHeight: tokens.title_large_lineHeight,
           textTransform: 'uppercase',
           letterSpacing: '-0.48px',
@@ -314,7 +314,7 @@ module.exports = {
         '.text-title-medium' : {
           fontFamily: tokens.font_title.join(', '),
           fontSize: tokens.title_medium,
-          fontWeight: 500,
+          fontWeight: 400,
           lineHeight: '97.85%',
           textTransform: 'uppercase',
         },
