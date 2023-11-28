@@ -35,12 +35,6 @@ html {
   }
 }
 
-.no-cursor {
-  * {
-    cursor: none !important;
-  }
-}
-
 .n27 {
   font-family: "N27", sans-serif;
 }
