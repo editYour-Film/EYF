@@ -16,26 +16,14 @@ export const useStrapi = (path: string, populate = true) => {
     );
 
     if (path.includes("articles")) {
-      if (process.env.NEXT_PUBLIC_ENV === "production")
-        return data.data
-          .filter((x: any) => x.attributes.production === true)
-          .sort((a: any, b: any) =>
-            b.attributes.release_date > a.attributes.release_date
-              ? 1
-              : a.attributes.release_date > b.attributes.release_date
-              ? -1
-              : 0
-          );
-      else
-        return data.data.sort((a: any, b: any) =>
-          b.attributes.release_date > a.attributes.release_date
-            ? 1
-            : a.attributes.release_date > b.attributes.release_date
-            ? -1
-            : 0
-        );
-    }
-    if (
+      return data.data.sort((a: any, b: any) =>
+        b.attributes.release_date > a.attributes.release_date
+          ? 1
+          : a.attributes.release_date > b.attributes.release_date
+          ? -1
+          : 0
+      );
+    } else if (
       path.includes("page-home") ||
       path.includes("about-me") ||
       path.includes("cgu-client") ||
@@ -44,16 +32,10 @@ export const useStrapi = (path: string, populate = true) => {
       path.includes("cookies-page") ||
       path.includes("politique-de-confidentialite") ||
       path.includes("newsletter-section")
-    ) {
+    )
       return data.data.attributes;
-    }
 
-    if (path.includes("blog-categories") || path.includes("video-tags"))
-      return data.data;
-
-    if (process.env.NEXT_PUBLIC_ENV === "production")
-      return data.data.filter((x: any) => x.attributes.production === true);
-    else return data.data;
+    return data.data;
   };
 
   return useMutation(getStrapiData);
@@ -69,7 +51,9 @@ export const useStrapiPost = async (
   body: any,
   auth: boolean = false,
   isMedia: boolean = false,
-  progressFunction: undefined | ((event: AxiosProgressEvent) => void) = undefined
+  progressFunction:
+    | undefined
+    | ((event: AxiosProgressEvent) => void) = undefined
 ) => {
   const token = getTokenFromLocalCookie();
   if (auth && !token)
@@ -93,7 +77,8 @@ export const useStrapiPost = async (
                 ? "multipart/form-data"
                 : "application/json",
             },
-      onUploadProgress: progressEvent => progressFunction && progressFunction(progressEvent)
+      onUploadProgress: (progressEvent) =>
+        progressFunction && progressFunction(progressEvent),
     })
     .then((response) => {
       return {
