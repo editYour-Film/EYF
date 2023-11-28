@@ -59,7 +59,7 @@ const MainArticle = ({ article }: MainArticleProps) => {
             
             <CategoryBadge className='opacity-50 transition-opacity duration-300 group-focus-visible:opacity-100 group-hover:opacity-80' category={article.attributes.blog_category.data.attributes.category} />
 
-            <p className="md:w-3/5 text-base text-center text-dashboard-text-description-base-low transition-color duration-300 group-focus-visible:text-dashboard-text-description-base group-hover:text-dashboard-text-description-base">
+            <p className="text-base text-center text-dashboard-text-description-base-low transition-color duration-300 group-focus-visible:text-dashboard-text-description-base group-hover:text-dashboard-text-description-base">
               {article.attributes.short_intro}
             </p>
           </div>
