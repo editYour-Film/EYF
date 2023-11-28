@@ -216,6 +216,9 @@ module.exports = {
         '.shadow-large' : {
           boxShadow: `0px 6px 24px 0px rgba(0, 0, 0, 0.65), 0px 4px 4px 0px rgba(0, 0, 0, 0.55), 0px 0px 44px 0px rgba(0, 0, 0, 0.32);`
         },
+        '.shadow-1' : {
+          boxShadow: `0px 1px 1px 0px rgba(0, 0, 0, 0.12), 0px 0px 4px 0px rgba(0, 0, 0, 0.12);`
+        },
         '.shadow-text' : {
           textShadow: '0px 4px 4px rgba(0, 0, 0, 0.45);'
         }
@@ -265,7 +268,7 @@ module.exports = {
         '.text-base' : {
           fontFamily: tokens.font_default.join(', '),
           fontSize: tokens.text_base,
-          fontWeight: 500,
+          fontWeight: 400,
           letterSpacing: '-0.208px',
         },
 
@@ -279,8 +282,9 @@ module.exports = {
         '.text-small' : {
           fontFamily: tokens.font_default.join(', '),
           fontSize: tokens.text_small,
-          fontWeight: 500,
+          fontWeight: 400,
           letterSpacing: '-0.084px',
+          lineHeight: 1.35
         },
 
         '.text-large' : {
