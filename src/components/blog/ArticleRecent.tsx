@@ -1,18 +1,30 @@
-import { H1 } from "../_shared/typography/H1";
-import { BlogArticle } from "./shared/BlogArticle";
+import { useState } from "react";
+import { CardArticle } from "../_shared/UI/CardArticle";
+import { Button } from "../_shared/buttons/Button";
 
 type ArticelTrendsProps = {
   articles: any;
 };
-export const ArticleRecent = ({ articles }: ArticelTrendsProps) => {  
+
+export const ArticleRecent = ({ articles }: ArticelTrendsProps) => { 
+  const [max, setMax] = useState(8) 
+
   return (
-    <div className="mt-5 md:mt-0 px-4 md:px-0">
-      <H1 className="hidden md:block my-10 md:mt-20">Articles récents</H1>
-      <div className="flex flex-col gap-5">
-        {articles.slice(6, 10).map((x: any, i:number) => {
-          return <BlogArticle key={i} display="horizontal" article={x} />;
+    <div className="flex flex-col w-full gap-dashboard-spacing-element-medium items-center bg-dashboard-background-content-area md:bg-transparent">
+      <div className="flex flex-col w-full gap-dashboard-spacing-element-medium">
+        {articles.slice(5, max).map((x: any, i:number) => {
+          return <CardArticle key={i} post={x.attributes} />;
         })}
       </div>
+
+      {articles.length - 1 > max &&
+        <Button 
+          type="primary"
+          label="Voir plus d’articles"
+          onClick={() => { setMax(max + 10)}}
+          className="w-[360px]"
+        />
+      }
     </div>
   );
 };

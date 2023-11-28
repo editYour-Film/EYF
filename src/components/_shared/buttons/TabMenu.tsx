@@ -23,7 +23,7 @@ export const TabMenu = ({label, Icon, IconRight, onClick, disabled, isMenu = fal
   }
   return (
     <button
-      className={`group w-full flex items-center justify-between text-dashboard-text-description-base ${regularCase ? '' : 'uppercase'} ${bgHover} gap-5 px-5 py-[10px] w-full rounded-dashboard-mention-radius  transition-colors duration-600 ${disabled ? 'pointer-events-none bg-dashboard-background-content-area text-dashboard-text-disabled' : ''} ${className ?? ''}`}
+      className={`group w-full flex items-center justify-between text-dashboard-text-description-base ${regularCase ? '' : 'uppercase'} ${bgHover} gap-5 px-5 py-[10px] w-full rounded-dashboard-mention-radius transition-colors duration-600 ${disabled ? 'pointer-events-none bg-dashboard-background-content-area text-dashboard-text-disabled' : ''} ${className ?? ''}`}
       onClick={() => {
         onClick && onClick()
       }}
@@ -35,7 +35,7 @@ export const TabMenu = ({label, Icon, IconRight, onClick, disabled, isMenu = fal
           />
         </div>
       }
-      <div className="w-max">{label}</div>
+      <div className="w-max text-title-m">{label}</div>
       {IconRight && 
           <div className="w-6 h-6 flex justify-center items-center">
             <IconRight 

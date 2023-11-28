@@ -4,6 +4,8 @@ import { joinBetaSlice } from '@/store/slices/joinBetaSlice'
 import { transitionSlice } from '@/store/slices/transitionSlice'
 import { NotificationSlice } from './slices/NotificationsSlice'
 import { dashboardMenuSlice } from './slices/dashboardMenuSlice'
+import { menuSlice } from './slices/menuSlice'
+import { routesSlices } from './slices/routesSlice'
 
 // config the store 
 const store= configureStore({
@@ -13,6 +15,8 @@ const store= configureStore({
     transition: transitionSlice.reducer,
     notification: NotificationSlice.reducer,
     dashboardMenu: dashboardMenuSlice.reducer,
+    menu: menuSlice.reducer,
+    routes: routesSlices.reducer
   }})
 
 // export default the store 

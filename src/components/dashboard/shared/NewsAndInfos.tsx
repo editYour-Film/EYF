@@ -5,7 +5,7 @@ import { IslandButton } from "@/components/_shared/buttons/IslandButton";
 import Icon from "@/icons/Icon Frame.svg";
 import routes from "@/routes";
 import { useRouter } from "next/router";
-import { DashBoardPost } from "./DashBoardPost";
+import { CardArticle } from "../../_shared/UI/CardArticle";
 import Image from "next/image";
 
 export const NewsAndInfos = () => {
@@ -55,7 +55,7 @@ export const NewsAndInfos = () => {
       <div className="news-infos__content flex flex-col gap-dashboard-spacing-element-medium">
         {(context.posts && context.posts.length > 0) && context.posts.map((post, i) => {
           return (
-            <DashBoardPost 
+            <CardArticle 
               key={i}
               post={post} 
             />

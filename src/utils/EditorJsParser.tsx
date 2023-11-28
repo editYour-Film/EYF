@@ -13,11 +13,28 @@ export const EditorJsParser = ({ JSONContent }: EditorJsParserProps) => {
         if (content)
           return content.blocks?.map((block: any, i: number) => {
             switch (block.type) {
+              case 'header':
+                switch (block.data.level) {
+                  case 1 :
+                    return <h1 className="mb-[36px]">{block.data.text}</h1>
+                  case 2 :
+                    return <h2 className="mb-[36px] text-title-medium leading-[120%] font-medium uppercase">{block.data.text}</h2>;
+                  case 3 :
+                    return <h3 className="mb-[36px] text-title-small leading-[120%] font-medium uppercase">{block.data.text}</h3>;
+                  case 4 :
+                    return <h4 className="mb-[36px]">{block.data.text}</h4>;
+                  case 5 :
+                    return <h5 className="mb-[36px]">{block.data.text}</h5>;
+                  case 6 :
+                    return <h6 className="mb-[36px]">{block.data.text}</h6>;
+                }
+                break;
+
               case "paragraph":
                 return (
                   <div className="editorjs" key={i}>
                     <p
-                      className="text-lg mb-4"
+                      className="text-base text-dashboard-text-description-base font-normal"
                       dangerouslySetInnerHTML={{ __html: block.data.text }}
                     ></p>
                   </div>
@@ -91,7 +108,7 @@ export const EditorJsParser = ({ JSONContent }: EditorJsParserProps) => {
 
               case "image":
                 return (
-                  <div className="mb-4 editorjs" key={i}>
+                  <div className="my-[36px] rounded-dashboard-button-separation-spacing overflow-hidden editorjs" key={i}>
                     <img
                       src={block.data.file.url}
                       width={block.data.file.width}
@@ -178,7 +195,6 @@ export const EditorJsParser = ({ JSONContent }: EditorJsParserProps) => {
                     })}
                   </ul>
                 );
-
               case "delimiter":
                 return <hr className="my-8" key={i} />;
             }

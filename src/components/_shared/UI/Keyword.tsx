@@ -5,6 +5,7 @@ import Image from 'next/image'
 type keywordProps = {
   text: string,
   icon?: string,
+  noCross?: boolean,
   onClick?: (e?:any) => void,
   onClose?: () => void,
   bg?: "primary" | "light",
@@ -13,13 +14,18 @@ type keywordProps = {
   active?: boolean,
   wFull?: boolean,
   size?: 'sm',
+  height?: boolean,
   selected?: boolean,
   noHover?: boolean,
 }
-export const Keyword = forwardRef<HTMLDivElement, keywordProps>(function Tag ({text, icon = '', onClick = null, onClose = null, selected, noHover, className, active = 'true', size, wFull}, ref) {
-  let hoverClass = 'hover:bg-dashboard-button-dark hover:border-dashboard-button-stroke-hover'
+export const Keyword = forwardRef<HTMLButtonElement, keywordProps>(function Tag ({text, icon = '', noCross, onClick = null, onClose = null, selected, noHover, className, active = 'true', size, height, wFull}, ref) {
+  let baseStyle = `text-dashboard-text-description-base text-base border`
 
-  let bgColor = `bg-dashboard-button-white-default border-dashboard-button-white-opacity-low border border-dashboard-button-white-default text-dashboard-text-description-base text-base ${!noHover ? hoverClass : ''}`;
+  let bgColor = `bg-dashboard-button-white-default border-transparent`;
+
+  let selectedClass = 'bg-dashboard-button-dark border-dashboard-button-stroke-default'
+
+  let hoverClass = `${!noHover ? 'hover:bg-dashboard-button-dark hover:border hover:border-dashboard-button-stroke-hover' : ''}`
 
   let sizeClass = 'p-dashboard-button-separation-spacing rounded-dashboard-button-separation-spacing'
   switch (size) {
@@ -28,12 +34,10 @@ export const Keyword = forwardRef<HTMLDivElement, keywordProps>(function Tag ({t
       break;
   }
 
-  let selectedClass = 'bg-dashboard-button-white-default'
-
   return (
-    <div 
+    <button
       ref={ref}
-      className={`${wFull ? 'w-full' : 'w-max'} ${sizeClass} group flex gap-3 items-center ${active ? 'block' : 'hidden'} ${bgColor} ${selected && selectedClass} ${className ?? ''}`}
+      className={`${baseStyle} ${hoverClass} ${wFull ? 'w-full' : 'w-max'} ${height ? `h-[36px] px-[16px] rounded-dashboard-button-square-radius` : sizeClass} group flex gap-3 items-center ${active ? 'block' : 'hidden'} ${selected ? selectedClass : bgColor} ${className ?? ''} focus-visible:outline-blueBerry`}
       onClick={ (e) => {
         switch (selected) {
           case false:
@@ -43,9 +47,9 @@ export const Keyword = forwardRef<HTMLDivElement, keywordProps>(function Tag ({t
             onClose && onClose()
             break;
         }
-       } }
+      }}
     >
-      {(icon || selected) && 
+      {(icon || selected && !noCross) && 
         <div className='rounded-full left-dashboard-mention-padding-right-left w-[22px] h-[22px] border border-white hover:border-appleRed overflow-hidden'>
           { (icon === 'cross' || selected) && <CloseIcon
             onClick={(e:MouseEvent) => { 
@@ -66,7 +70,7 @@ export const Keyword = forwardRef<HTMLDivElement, keywordProps>(function Tag ({t
           }
         </div>
       }
-      <span className={``}>{text}</span>
-    </div>
+      <div className={`w-max font-[400]`}>{text}</div>
+    </button>
   )
 } )

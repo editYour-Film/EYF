@@ -2,6 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: N27;
+  src: 
+    url('/fonts/n27/N27-Medium.woff') format("woff"),
+    url('/fonts/n27/N27-Medium.woff2') format("woff2"),
+    url('/fonts/n27/N27-Medium.otf') format("otf");
+  font-weight: 500;
+  font-display: swap;
+}
+
 /* hide input arrows  Chrome, Safari, Edge, Opera */
 input[type="number"] {
   -moz-appearance: textfield;

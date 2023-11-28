@@ -24,7 +24,7 @@ export const TopBar = ({children, className}:PropsWithChildren<TopBarProps>) => 
           <Toaster />
         </div>
       }
-      <div className={`topBar md:col-[2_/_3] row-[1_/_2] sticky md:relative top-0 left-0 w-full z-panel flex justify-center md:items-stretch md:justify-end flex-row gap-padding-medium py-dashboard-button-separation-spacing md:py-0 h-max bg-dashboard-button-dark bg-opacity-80 mt-[50px] md:mt-0 ${className}`}>
+      <div className={`topBar md:col-[2_/_3] row-[1_/_2] sticky md:relative top-0 left-0 w-full z-panel flex justify-center md:items-stretch md:justify-end flex-row gap-padding-medium py-dashboard-button-separation-spacing md:py-0 h-max bg-dashboard-button-dark bg-opacity-80 mt-[50px] md:mt-0 ${className} z-header`}>
         {!isMobile && 
           <div className="relative basis-full ml-0 mr-auto">
             <Toaster 

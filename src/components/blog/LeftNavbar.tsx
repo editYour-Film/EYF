@@ -20,10 +20,7 @@ const LeftNavbar = ({ article, percentage = 0 }: LeftNavbarProps) => {
   function scrollSmooth(id: string) {
     var element = document.getElementById(id)?.offsetTop;
     if (element) {
-      window.scrollTo({
-        top: element,
-        behavior: "smooth",
-      });
+      lenis.scrollTo(element);
     }
   }
 
@@ -42,7 +39,7 @@ const LeftNavbar = ({ article, percentage = 0 }: LeftNavbarProps) => {
         <H1 textSize="text-xl" className="mb-4" fake>
           Sommaire
         </H1>
-        <div className="flex gap-7 rtl">
+        <div className="flex gap-7">
           <div>
             <div className="overflow-hidden h-full w-1.5 rounded-full bg-gray-700">
               <div
@@ -54,13 +51,13 @@ const LeftNavbar = ({ article, percentage = 0 }: LeftNavbarProps) => {
           <div className="space-y-4">
             {article.paragraphs.map((x: any, i: any) => {
               return (
-                <span
-                  className="block cursor-pointer text-gray opacity-80"
+                <button
+                  className="block text-left cursor-pointer text-gray opacity-80 hover:opacity-100 focus-visible:outline-blueBerry"
                   key={i}
                   onClick={() => scrollSmooth("title-" + i)}
                 >
                   {x.title}
-                </span>
+                </button>
               );
             })}
           </div>
@@ -70,40 +67,43 @@ const LeftNavbar = ({ article, percentage = 0 }: LeftNavbarProps) => {
           <H1 textSize="text-xl" className="mb-4 mt-10">
             PARTAGER
           </H1>
-          <div className="flex flex-wrap footer__icons gap-1 sm:gap-2 md:gap-4 mt-5">
+          <div className="flex flex-wrap gap-1 sm:gap-2 md:gap-4 mt-5">
             <a
               href={`https://www.facebook.com/sharer/sharer.php?u=${currentUrl.current}`}
               target="_blank"
               rel="noopener"
+              className="focus-visible:outline-blueBerry"
             >
-              <FbIcon />
+              <FbIcon className="svg-color-dashboard-icon-color-default hover:svg-color-blueBerry w-[35px] h-[35px]"/>
             </a>
             <a
               href="https://www.instagram.com/edityour.film/"
               target="_blank"
               rel="noopener"
+              className="focus-visible:outline-blueBerry"
             >
-              <InstaIcon />
+              <InstaIcon className="svg-color-dashboard-icon-color-default hover:svg-color-blueBerry w-[35px] h-[35px]"/>
             </a>
             <a
               href={`https://www.linkedin.com/shareArticle?mini=true&url=${currentUrl.current}&source=editYour.film`}
               target="_blank"
               rel="noopener"
+              className="focus-visible:outline-blueBerry"
             >
-              <LnkdnIcon />
+              <LnkdnIcon className="svg-color-dashboard-icon-color-default hover:svg-color-blueBerry w-[35px] h-[35px]"/>
             </a>
             <a
               href={`http://twitter.com/share?&url=${currentUrl.current}&hashtags=editYourfilm`}
               target="_blank"
-              className="flex justify-center items-center w-[35px] h-[35px]"
+              className="flex justify-center items-center w-[35px] h-[35px] focus-visible:outline-blueBerry"
               rel="noopener"
             >
-              <TwtIcon />
+              <TwtIcon className="svg-color-dashboard-icon-color-default hover:svg-color-blueBerry w-[35px] h-[35px]"/>
             </a>
           </div>
         </div>
       </div>
-
+{/* 
       <div className="flex gap-x-4 items-center mt-6 sm:mt-10 mb-6 md:mb-0 bg-primary p-2.5 rounded-2xl">
         <img
           src={article.author.profile_picture.data.attributes.url}
@@ -117,7 +117,7 @@ const LeftNavbar = ({ article, percentage = 0 }: LeftNavbarProps) => {
             {dayjs(article.updatedAt).locale("fr").format("DD MMMM YYYY")}
           </p>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

@@ -9,7 +9,7 @@ export interface dashBoardPanelType {
   panel: any
 }
 
-export interface dashboardPostType {
+export interface CardArticleType {
   title: string,
   excerpt: string,
   category: string,
@@ -43,7 +43,7 @@ export const DashBoardContext = createContext({
   closeNotificationCenter: () => {},
   toggleNotificationCenter: () => {},
 
-  posts: [] as dashboardPostType[],
+  posts: [] as CardArticleType[],
   infoCardActive: false,
   infoCard: undefined as infoCardType | undefined,
 
@@ -84,7 +84,7 @@ export const DashBoardContextProvider = ({children}:PropsWithChildren) => {
     getStrapi();
   }, [])
 
-  let posts:dashboardPostType[] = [];
+  let posts:CardArticleType[] = [];
 
   if (data && data.attributes && data.attributes.news_info) {
     if (data.attributes.news_info.news_info_post) {

@@ -1,7 +1,6 @@
 import { DashboardContainer } from "@/components/dashboard/shared/DashboardContainer";
 import { DashboardEditorHome } from "@/components/dashboard/editor/DashboardEditorHome";
-import { NewsletterSection } from "@/components/home/NewsletterSection";
-import Footer from "@/components/_shared/Footer";
+
 import LayoutDashBoard from "@/components/layouts/LayoutDashBoard";
 import Head from "next/head";
 import { PropsWithChildren, useContext, useEffect, useState } from "react";
@@ -15,8 +14,6 @@ import { AddModelContextProvider } from "@/components/dashboard/editor/_context/
 import { GradientCard } from "@/components/dashboard/shared/GradientCard";
 import { FooterDashboard } from "@/components/dashboard/shared/FooterDashBoard";
 import { EditorContext } from "@/components/dashboard/editor/_context/EditorContext";
-import {toast} from 'react-hot-toast'
-import Clock from '@/icons/Clock.svg'
 
 export default function DashBoardContentHome() {
   return (
@@ -46,6 +43,8 @@ const DashBoardPageHome = ({ children }: PropsWithChildren) => {
         panel: <DashboardEditorHome />,
       },
     ]);
+
+    context.setActivePanel(0)
   }, []);
 
   return (<>
