@@ -74,7 +74,7 @@ const LeftNavbar = ({ article, percentage = 0 }: LeftNavbarProps) => {
               rel="noopener"
               className="focus-visible:outline-blueBerry"
             >
-              <FbIcon className="svg-color-dashboard-icon-color-default hover:svg-color-soyMilk w-[35px] h-[35px]"/>
+              <FbIcon className="svg-color-dashboard-icon-color-default hover:svg-color-blueBerry w-[35px] h-[35px]"/>
             </a>
             <a
               href="https://www.instagram.com/edityour.film/"
@@ -82,7 +82,7 @@ const LeftNavbar = ({ article, percentage = 0 }: LeftNavbarProps) => {
               rel="noopener"
               className="focus-visible:outline-blueBerry"
             >
-              <InstaIcon className="svg-color-dashboard-icon-color-default hover:svg-color-soyMilk w-[35px] h-[35px]"/>
+              <InstaIcon className="svg-color-dashboard-icon-color-default hover:svg-color-blueBerry w-[35px] h-[35px]"/>
             </a>
             <a
               href={`https://www.linkedin.com/shareArticle?mini=true&url=${currentUrl.current}&source=editYour.film`}
@@ -90,7 +90,7 @@ const LeftNavbar = ({ article, percentage = 0 }: LeftNavbarProps) => {
               rel="noopener"
               className="focus-visible:outline-blueBerry"
             >
-              <LnkdnIcon className="svg-color-dashboard-icon-color-default hover:svg-color-soyMilk w-[35px] h-[35px]"/>
+              <LnkdnIcon className="svg-color-dashboard-icon-color-default hover:svg-color-blueBerry w-[35px] h-[35px]"/>
             </a>
             <a
               href={`http://twitter.com/share?&url=${currentUrl.current}&hashtags=editYourfilm`}
@@ -98,7 +98,7 @@ const LeftNavbar = ({ article, percentage = 0 }: LeftNavbarProps) => {
               className="flex justify-center items-center w-[35px] h-[35px] focus-visible:outline-blueBerry"
               rel="noopener"
             >
-              <TwtIcon className="svg-color-dashboard-icon-color-default hover:svg-color-soyMilk w-[35px] h-[35px]"/>
+              <TwtIcon className="svg-color-dashboard-icon-color-default hover:svg-color-blueBerry w-[35px] h-[35px]"/>
             </a>
           </div>
         </div>
