@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/router";
 import routes from "@/routes";
 import { Keyword } from "@/components/_shared/UI/Keyword";
+import { Tag } from "@/components/_shared/buttons/Tag";
 
 type CategoriesListProps = {
   categories: any;
@@ -29,12 +30,10 @@ export const CategoriesList = ({
       className={`${className} categoriesListW p-[3px] overflow-scroll no-scroll-bar`}
     >
       <div className="categoriesList flex flex-row md:flex-wrap gap-2">
-        <Keyword 
+        <Tag
           text={'À la une'}
           onClick={() => {router.push(routes.BLOG)}}
           selected={window.location.pathname === routes.BLOG}
-          noCross
-          height
           className="w-max"
         />
         {categories &&
@@ -42,13 +41,11 @@ export const CategoriesList = ({
             const name = category.attributes.category
             if(name.toLowerCase() !== ('a la une' || 'à la une')) {
               return (
-                <Keyword 
+                <Tag 
                   key={category.id}
                   text={name}
                   onClick={() => { setSelected([name]); }}
                   selected={selected.includes(name)}
-                  noCross
-                  height
                   className="w-max"
                 />
               );
