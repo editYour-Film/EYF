@@ -133,7 +133,8 @@ module.exports = {
         'dashboard-spacing-element-medium': tokens.dashboard_spacing_element_medium,
         'DashboardPaddingNul': tokens.padding_DashboardPaddingNul,
         'dashboard-specific-radius' : tokens.dashboard_specific_radius,
-        'padding-medium': tokens.padding_medium
+        'padding-medium': tokens.padding_medium,
+        'navbar-h': '50px'
       },
       borderWidth: {
         DEFAULT: tokens.dashboard_border_width_button_default,

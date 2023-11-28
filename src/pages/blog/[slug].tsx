@@ -49,7 +49,7 @@ export default function BlogDetails() {
       <LayoutMain activeNavItem="blog">
         {article && (
           <>
-            <div className="max-w-[1400px] lg:mx-[100px] xl:mx-[167px] 2xl:mx-auto flex flex-col gap-dashboard-spacing-element-medium bg-blackBerry rounded-dashboard-button-separation-spacing">
+            <div className="max-w-[1400px] lg:mx-[100px] xl:mx-[167px] 2xl:mx-auto md:pt-[90px] flex flex-col gap-dashboard-spacing-element-medium bg-blackBerry rounded-dashboard-button-separation-spacing">
               <Article article={article.attributes} />
             </div>
           </>

@@ -66,7 +66,7 @@ const LayoutMain = ({
             onClose={() => {dispatch(setJoinBetaInvisible())}}
           />
 
-          <main className="md:pt-[146px] no-cursor">
+          <main className="md:pt-navbar-h">
             {topSectionBackground && (
               <>
                 <div className="top-section-bg1"></div>

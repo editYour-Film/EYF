@@ -50,7 +50,7 @@ export default function Blog(/*{ data }: any*/) {
       </Head>
 
       <LayoutMain activeNavItem="blog">
-        <div className="flex flex-col gap-dashboard-spacing-element-medium">
+        <div className="flex flex-col gap-dashboard-spacing-element-medium md:pt-dashboard-spacing-element-medium">
           {data && data.length > 0 && (
             <div className="max-w-[1400px] xl:mx-[167px] 2xl:mx-auto flex flex-col gap-dashboard-spacing-element-medium">
               {categories &&

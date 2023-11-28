@@ -77,7 +77,7 @@ const BlogCategory = () => {
       </Head>
 
       <LayoutMain activeNavItem="blog">
-        <div className="max-w-[1400px] lg:mx-[100px] xl:mx-[167px] 2xl:mx-auto  flex flex-col gap-dashboard-spacing-element-medium">
+        <div className="max-w-[1400px] lg:mx-[100px] xl:mx-[167px] 2xl:mx-auto  flex flex-col gap-dashboard-spacing-element-medium md:pt-dashboard-spacing-element-medium">
           <div className="pl-dashboard-mention-padding-right-left md:pl-0">
             {categories && (
               <CategoriesList
