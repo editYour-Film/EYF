@@ -117,13 +117,14 @@ const BlogCategory = () => {
           </div>
 
           <div className="flex justify-center">
-            <Button
+          {articles.length - 1 > maxArticles &&
+            <Button 
               type="primary"
               label="Voir plus d’articles"
               onClick={() => { setMaxArticles(maxArticles + 5) }}
-              disabled={maxArticles >= articles.length}
-              className="w-full md:w-[360px]"
+              className="w-[360px]"
             />
+          }
           </div>
         </div>
 
