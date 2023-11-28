@@ -216,6 +216,7 @@ export const MoreArticles = ({ articles, current }: any) => {
                 post={x.attributes}
                 disableClick={i !== currentSlide || isTweening || dragStart}
                 className="h-full"
+                smallGap
               />
             </div>
           );
