@@ -10,7 +10,7 @@ import folder from "@/icons/folder.svg";
 import settings from '@/icons/settings.svg'
 
 import news from '@/icons/news.svg'
-import play from '@/icons/play.svg'
+import play from '@/icons/play-stroke.svg'
 import book from '@/icons/book.svg'
 
 export const LANDING_MENU = [

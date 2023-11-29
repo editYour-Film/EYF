@@ -13,12 +13,13 @@ interface MenuItem {
 
 type MenuProps = {
   items: MenuItem[];
+  sidebar?: boolean;
 };
 
-export const Menu = ({ items }: MenuProps) => {
+export const Menu = ({ items, sidebar }: MenuProps) => {
   const dispatch = useDispatch();
   const router = useRouter();
-
+  
   return (
     <div className="sidebar__menu flex flex-col md:gap-dashboard-mention-padding-right-left w-full dashboard-button-dark">
       {items &&
@@ -35,6 +36,8 @@ export const Menu = ({ items }: MenuProps) => {
                   router.push(item.link, undefined, { scroll: false });
                 }}
                 isMenu
+                isSidebar={sidebar}
+                isActive={router.pathname === item.link}
                 disabled={item.disabled}
               />
               {i === items.length - 1 && <hr />}

@@ -12,6 +12,7 @@ import { MentionInteraction } from "@/components/_shared/buttons/MentionInteract
 import { AuthContext } from "@/context/authContext";
 import { DashBoardContext } from "../_context/DashBoardContext";
 import { GeneratedAvatar } from "@/components/_shared/badges/GeneratedAvatar";
+import { useRouter } from "next/router";
 
 type SideBarProps = {
   type: "editor" | "client";
@@ -59,7 +60,7 @@ const SideBarDesktop = ({ className, menu, user }: SidebarChildProps) => {
     <div
       className={`sidebar sticky top-[30px] w-full h-[calc(100vh-130px)] flex md:flex-col items-start gap-16 ${className}`}
     >
-      <Menu items={menu} />
+      <Menu sidebar items={menu} />
 
       <div className="sidebar__infos mt-auto mb-0">
         <div className="sidebar__profil flex flex-row gap-dashboard-mention-padding-right-left py-4">
