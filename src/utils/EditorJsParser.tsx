@@ -94,7 +94,7 @@ export const EditorJsParser = ({ JSONContent }: EditorJsParserProps) => {
                           {row.map((column: any, k: number) => {
                             return (
                               <td
-                                className="text-gray opacity-80 border-x text-lg py-2 px-2"
+                                className="text-dashboard-text-description-base opacity-80 border-x text-lg py-2 px-2"
                                 dangerouslySetInnerHTML={{ __html: column }}
                                 key={k}
                               />
@@ -115,7 +115,7 @@ export const EditorJsParser = ({ JSONContent }: EditorJsParserProps) => {
                       className="max-w-full"
                     />
                     <p
-                      className="text-gray opacity-80 text-sm mt-2"
+                      className="text-dashboard-text-description-base opacity-80 text-sm mt-2"
                       dangerouslySetInnerHTML={{
                         __html: block.data.caption,
                       }}
@@ -136,7 +136,7 @@ export const EditorJsParser = ({ JSONContent }: EditorJsParserProps) => {
                             alt=""
                           />
                           <p
-                            className="text-gray opacity-80 text-lg"
+                            className="text-dashboard-text-description-base opacity-80 text-lg"
                             dangerouslySetInnerHTML={{ __html: checklist.text }}
                           />
                         </div>
@@ -150,7 +150,7 @@ export const EditorJsParser = ({ JSONContent }: EditorJsParserProps) => {
                   <div className="mb-4 editorjs" key={i}>
                     {block.data.meta.title && (
                       <p
-                        className="text-gray opacity-80 text-xl font-medium"
+                        className="text-dashboard-text-description-base opacity-80 text-xl font-medium"
                         dangerouslySetInnerHTML={{
                           __html: block.data.meta.title,
                         }}
@@ -158,7 +158,7 @@ export const EditorJsParser = ({ JSONContent }: EditorJsParserProps) => {
                     )}
                     {block.data.meta.description && (
                       <p
-                        className="text-gray opacity-80 text-lg mt-2"
+                        className="text-dashboard-text-description-base opacity-80 text-lg mt-2"
                         dangerouslySetInnerHTML={{
                           __html: block.data.meta.description,
                         }}
@@ -184,7 +184,7 @@ export const EditorJsParser = ({ JSONContent }: EditorJsParserProps) => {
                     {block.data.items.map((item: any, j: number) => {
                       return (
                         <li
-                          className="text-gray opacity-80 text-lg ml-4"
+                          className="text-dashboard-text-description-base opacity-80 text-lg ml-4"
                           style={{ listStyle: "disc" }}
                           dangerouslySetInnerHTML={{
                             __html: item,

@@ -40,7 +40,6 @@ export const CardArticle = ({post, disableClick, smallGap, className}:CardArticl
     case 'television':
       bgColor = 'bg-television-dark'
       break;
-  
     default:
       bgColor = 'bg-edit-dark'
       break;
