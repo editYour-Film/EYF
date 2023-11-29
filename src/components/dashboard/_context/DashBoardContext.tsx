@@ -101,7 +101,7 @@ export const DashBoardContextProvider = ({children}:PropsWithChildren) => {
             title: post.title,
             excerpt: post.short_intro,
             category: post.blog_category.data.attributes.category,
-            author: post.author.name,
+            author: post.author,
             date: new Date(post.createdAt).toLocaleDateString('fr-FR', {
               year: 'numeric',
               month: 'long',
