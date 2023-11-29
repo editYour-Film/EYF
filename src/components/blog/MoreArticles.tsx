@@ -3,8 +3,12 @@ import { CardArticle } from "../_shared/UI/CardArticle";
 import { useMediaQuery, useWindowSize } from "@uidotdev/usehooks";
 import gsap from "gsap";
 import { Button } from "../_shared/buttons/Button";
+import store from "@/store/store";
+import { toArrowLeft, toArrowRight, toRead } from "@/store/slices/cursorSlice";
+import { useDispatch } from "react-redux";
 
 export const MoreArticles = ({ articles, current }: any) => {
+  const dispatch = useDispatch()
   const isMobile = useMediaQuery('(max-width: 768px)')
   const [maxArticles, setMaxArticles] = useState(1)
   const availableArticles = isMobile ? articles.filter((art:any) => art !== current).slice(0, maxArticles) : articles.filter((art:any) => art !== current)
@@ -26,7 +30,6 @@ export const MoreArticles = ({ articles, current }: any) => {
   const tl = useRef<GSAPTimeline>()
 
   useEffect(() => {
-    
     availableArticles.forEach((x:any) => { cardArticles.current.push(createRef())})
 
     getValues()
@@ -193,6 +196,12 @@ export const MoreArticles = ({ articles, current }: any) => {
     setCloserElementToFocus()
   }
 
+  const handleMouseOver = (i: number) => {
+      if (i === currentSlide - 1 && store.getState().cursor.value !== 'arrowLeft') dispatch(toArrowLeft())
+      else if (i === currentSlide + 1 && store.getState().cursor.value !== 'arrowRight') dispatch(toArrowRight())
+      if(i === currentSlide && store.getState().cursor.value !== 'read') dispatch(toRead())
+  }
+
   return (
     <div 
       className="pt-[109px] pb-[122px] mt-20 bg-primary overflow-hidden"
@@ -217,6 +226,7 @@ export const MoreArticles = ({ articles, current }: any) => {
                 disableClick={i !== currentSlide || isTweening || dragStart}
                 className="h-full"
                 smallGap
+                onMouseOver={() => { handleMouseOver(i)}}
               />
             </div>
           );

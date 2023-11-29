@@ -6,14 +6,16 @@ export const cursorSlice = createSlice({
   initialState: { 
     value: 'regular',
     lastState: ['regular'],
-    enabled: false
+    enabled: false,
+    locked: false,
+    currentText: '',
   },
   reducers: { 
     toClick: state => { 
       state.value = 'click'
       state.lastState = ['click', state.lastState[0]]
     }, 
-    toRegular: state => {       
+    toRegular: state => {
       state.value = 'regular' 
       state.lastState = ['regular', state.lastState[0]]
     },
@@ -37,9 +39,22 @@ export const cursorSlice = createSlice({
       state.value = 'mute' 
       state.lastState = ['mute', state.lastState[0]]
     },
+    toArrowLeft: state => { 
+      state.value = 'arrowLeft' 
+      state.lastState = ['mute', state.lastState[0]]
+    },
+    toArrowRight: state => { 
+      state.value = 'arrowRight' 
+      state.lastState = ['mute', state.lastState[0]]
+    },
     toRead: state => { 
       state.value = 'read' 
       state.lastState = ['read', state.lastState[0]]
+    },
+    cursorText: (state, action) => {
+      state.value = 'text'
+      state.lastState = ['text', state.lastState[0]]
+      state.currentText = action.payload
     },
     toLastState: (state, action) => {
       state.value = action.payload
@@ -63,8 +78,11 @@ export const {
   toPause,
   toUnmute,
   toMute,
+  toArrowLeft,
+  toArrowRight,
   toRead,
+  cursorText,
   toLastState,
   enableCustomCursor,
-  disableCustomCursor
+  disableCustomCursor,
 } = cursorSlice.actions

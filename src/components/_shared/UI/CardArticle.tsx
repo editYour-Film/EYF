@@ -15,9 +15,11 @@ type CardArticle = {
   disableClick?: boolean,
   className?: string,
   smallGap?: boolean,
+  onMouseOver?: () => void,
+  onMouseLeave?: () => void,
 }
 
-export const CardArticle = ({post, disableClick, smallGap, className}:CardArticle) => {
+export const CardArticle = ({post, disableClick, smallGap, onMouseOver, onMouseLeave, className}:CardArticle) => {
   const { push } = useRouter()  
   const category = post.blog_category && post.blog_category.data.attributes.category || post.category
   const dispatch = useDispatch()
@@ -49,12 +51,12 @@ export const CardArticle = ({post, disableClick, smallGap, className}:CardArticl
     <div 
       className={`dashboard-post group flex flex-col xl:flex-row justify-between gap-dashboard-spacing-element-medium ${smallGap ? '' : 'xl:gap-[19%]'} px-[53px] py-[61px] bg-dashboard-button-dark border rounded-dashboard-button-square-radius shadow-large transition-color duration-200 hover:border-dashboard-button-stroke-hover cursor-pointer focus-visible:outline-blueBerry focus-within:outline-blueBerry ${className ?? ''}`}
       tabIndex={0}
-
+      
       onClick={() => {
         !disableClick && push({ pathname: routes.BLOG_DETAIL, query: { slug: post.slug } });
       }}
-      onMouseOver={() => { !disableClick && store.getState().cursor.value !== 'read' && dispatch(toRead())}}
-      onMouseLeave={() => { !disableClick && dispatch(toRegular())}}
+      onMouseOver={() => { onMouseOver && onMouseOver()}}
+      onMouseLeave={() => { dispatch(toRegular())}}
     >
       
       <div className="shrink-0 dashboard-post__cover relative w-full xl:w-[294px] rounded-dashboard-button-separation-spacing  opacity-100 md:opacity-50 group-hover:opacity-100 group-focus-visible:opacity-100 group-focus-within:opacity-100 transition-opacity duration-200 overflow-hidden">
