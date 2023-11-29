@@ -47,7 +47,7 @@ export const Keyword = forwardRef<HTMLButtonElement, keywordProps>(function Tag 
       className={`${baseStyle} ${hoverClass} ${wFull ? 'w-full' : 'w-max'} ${height ? `h-[36px] px-[16px] rounded-dashboard-button-square-radius` : sizeClass} group flex gap-3 items-center ${active ? 'block' : 'hidden'} ${selected ? selectedClass : bgColor} ${className ?? ''} ${disabled ? disabledClass : ''} focus-visible:outline-blueBerry`}
       onClick={ (e) => {
         switch (selected) {
-          case false:
+          case false || undefined:
             onClick && onClick(e)
             break;
           case true:

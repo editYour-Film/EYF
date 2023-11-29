@@ -7,12 +7,13 @@ type DropBoxProps = {
   Icon: any;
   title?: string;
   placeholder?: string;
-  type: "simple" | "multiple" | "addNew" | "link" | "add";
+  type: "simple" | "multiple" | "addNew" | "link" | "add" | 'addRemove';
   choices?: string[];
   currentValue: any;
   toggle?: boolean;
   setToggle?: (payload: boolean) => void;
   onChange: (value: any) => void;
+  onDelete?: () => void;
   className?: string;
 };
 
@@ -26,6 +27,7 @@ export const DropBox = ({
   toggle,
   setToggle,
   onChange,
+  onDelete,
   className,
 }: DropBoxProps) => {
   const defaultLinkValue = "Ajoutez un lien";
@@ -128,7 +130,7 @@ export const DropBox = ({
         container.current &&
         !container.current.contains(e.target)
       ) {
-        if (type === "link" || type === "add")
+        if (type === "link" || type === "add" || type === "addRemove")
           e.target !== inputLink.current && setIsOpen(false);
         else setIsOpen(false);
       }
@@ -195,7 +197,7 @@ export const DropBox = ({
             {title}
           </div>
         )}
-        {(type === "link" || type === "add") && (
+        {(type === "link" || type === "add" || type === "addRemove") && (
           <input
             ref={inputLink}
             type="text"
@@ -264,6 +266,26 @@ export const DropBox = ({
           <DropBoxOption
             item="Ajouter"
             onClick={() => {
+              setIsOpen(false);
+            }}
+            noBullet
+          />
+        </div>
+      )}
+
+      {type === "addRemove" && (
+        <div className="py-dashboard-mention-padding-right-left md:py-dashboard-mention-padding-top-bottom">
+          <DropBoxOption
+            item="Ajouter"
+            onClick={() => {
+              setIsOpen(false);
+            }}
+            noBullet
+          />
+          <DropBoxOption
+            item="Supprimer"
+            onClick={() => {
+              onDelete && onDelete()
               setIsOpen(false);
             }}
             noBullet
