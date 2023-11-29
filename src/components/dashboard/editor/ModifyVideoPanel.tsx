@@ -1,4 +1,4 @@
-import { RefObject, useContext, useEffect, useRef, useState } from "react";
+import React, { RefObject, useContext, useEffect, useRef, useState } from "react";
 import {
   EditorContext,
   EditorVideo,
@@ -616,18 +616,11 @@ export const ModifyVideoPanel = () => {
                       editorContext.currentModelToModify.video_tags.map(
                         (tag: video_tag, i: number) => {
                           return (
-                            <div
+                            <React.Fragment
                               key={i}
-                              className={
-                                "inline max-w-min " +
-                                (tag.approved
-                                  ? ""
-                                  : "border border-dashed border-red-50 rounded-lg")
-                              }
                             >
                               <Keyword
                                 text={tag.name}
-                                icon="cross"
                                 className="relative w-ful shrink-0"
                                 onClose={() => {
                                   editorContext.setCurrentModelToModify(
@@ -646,8 +639,11 @@ export const ModifyVideoPanel = () => {
                                     true
                                   );
                                 }}
+                                
+                                isWaiting={!tag.approved}
+                                disabled={!tag.approved}
                               />
-                            </div>
+                            </React.Fragment>
                           );
                         }
                       )}

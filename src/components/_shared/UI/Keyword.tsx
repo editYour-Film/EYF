@@ -1,4 +1,6 @@
 import CloseIcon from '@/icons/dashboard/x.svg'
+import Clock from '@/icons/Clock.svg'
+
 import { forwardRef } from 'react';
 import Image from 'next/image'
 
@@ -17,8 +19,10 @@ type keywordProps = {
   height?: boolean,
   selected?: boolean,
   noHover?: boolean,
+  isWaiting?: boolean,
+  disabled?: boolean
 }
-export const Keyword = forwardRef<HTMLButtonElement, keywordProps>(function Tag ({text, icon = '', noCross, onClick = null, onClose = null, selected, noHover, className, active = 'true', size, height, wFull}, ref) {
+export const Keyword = forwardRef<HTMLButtonElement, keywordProps>(function Tag ({text, icon = '', noCross, onClick = null, onClose = null, selected, noHover, className, active = 'true', size, height, wFull, isWaiting, disabled}, ref) {
   let baseStyle = `text-dashboard-text-description-base text-base border`
 
   let bgColor = `bg-dashboard-button-white-default border-transparent`;
@@ -34,10 +38,13 @@ export const Keyword = forwardRef<HTMLButtonElement, keywordProps>(function Tag 
       break;
   }
 
+  let disabledClass = 'opacity-50'
+
   return (
     <button
       ref={ref}
-      className={`${baseStyle} ${hoverClass} ${wFull ? 'w-full' : 'w-max'} ${height ? `h-[36px] px-[16px] rounded-dashboard-button-square-radius` : sizeClass} group flex gap-3 items-center ${active ? 'block' : 'hidden'} ${selected ? selectedClass : bgColor} ${className ?? ''} focus-visible:outline-blueBerry`}
+      disabled={disabled}
+      className={`${baseStyle} ${hoverClass} ${wFull ? 'w-full' : 'w-max'} ${height ? `h-[36px] px-[16px] rounded-dashboard-button-square-radius` : sizeClass} group flex gap-3 items-center ${active ? 'block' : 'hidden'} ${selected ? selectedClass : bgColor} ${className ?? ''} ${disabled ? disabledClass : ''} focus-visible:outline-blueBerry`}
       onClick={ (e) => {
         switch (selected) {
           case false:
@@ -49,8 +56,8 @@ export const Keyword = forwardRef<HTMLButtonElement, keywordProps>(function Tag 
         }
       }}
     >
-      {(icon || selected && !noCross) && 
-        <div className='rounded-full left-dashboard-mention-padding-right-left w-[22px] h-[22px] border border-white hover:border-appleRed overflow-hidden'>
+      {(icon || isWaiting || selected && !noCross) && 
+        <div className={`rounded-full left-dashboard-mention-padding-right-left w-[22px] h-[22px] ${selected && !noCross ? 'border border-white hover:border-appleRed' : ''} overflow-hidden'`}>
           { (icon === 'cross' || selected) && <CloseIcon
             onClick={(e:MouseEvent) => { 
               e.stopPropagation()
@@ -59,6 +66,9 @@ export const Keyword = forwardRef<HTMLButtonElement, keywordProps>(function Tag 
             className="scale-75 hover:svg-color-appleRed cursor-pointer"
           />
           }
+
+          { isWaiting && <Clock /> }
+
           {
             (icon && icon !== 'cross' && !selected) &&
             <Image 

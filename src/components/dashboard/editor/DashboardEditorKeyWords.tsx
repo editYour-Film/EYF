@@ -1,3 +1,4 @@
+import React from "react";
 import { Keyword } from "@/components/_shared/UI/Keyword";
 import { IslandButton } from "@/components/_shared/buttons/IslandButton";
 import routes from "@/routes";
@@ -64,17 +65,16 @@ export const DashboardEditorKeyWords = () => {
                 authContext.user.models.map((x: any) => {
                   return x.video_tags.map((keyword: video_tag, i: number) => {
                     return (
-                      <div
+                      <React.Fragment
                         key={i}
-                        className={
-                          "inline max-w-min " +
-                          (keyword.approved
-                            ? ""
-                            : "border border-dashed border-red-50 rounded-lg")
-                        }
                       >
-                        <Keyword text={keyword.name} noHover />
-                      </div>
+                        <Keyword 
+                          text={keyword.name} 
+                          noHover 
+                          isWaiting={!keyword.approved}
+                          disabled={!keyword.approved}
+                        />
+                      </React.Fragment>
                     );
                   });
                 })}
