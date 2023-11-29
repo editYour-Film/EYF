@@ -25,7 +25,7 @@ export const CardArticle = ({post, disableClick, smallGap, onMouseOver, onMouseL
   const dispatch = useDispatch()
 
   let bgColor
-  switch (slugify(category.toLowerCase())) {
+  switch (slugify(String(category).toLowerCase())) {
     case 'montage':
       bgColor = 'bg-edit-dark'
       break;
