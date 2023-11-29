@@ -80,6 +80,7 @@ export const DashBoardContextProvider = ({children}:PropsWithChildren) => {
     "dashboard-monteur?" +
     "populate[add_model]=*&" +
     "populate[news_info][populate][news_info_post][populate]=*&" +
+    "populate[news_info][populate][articles][populate]=*&" +
     "populate[news_info][populate][info_card][populate]=*").then((res) => {      
       set_Data(res.data.data.attributes)
     })
@@ -91,22 +92,24 @@ export const DashBoardContextProvider = ({children}:PropsWithChildren) => {
   
   useEffect(() => {    
     if (_data && _data.news_info) {
-      if (_data.news_info.news_info_post) {        
-        const news_info_post = _data.news_info.news_info_post
-      
-        const _posts = news_info_post.map((post:any) => {
+      if (_data.news_info.articles.data) {
+        const articles = _data.news_info.articles.data
+
+        const _posts = articles.map((post:any) => {
+          post = post.attributes
+          console.log(post)
           return {
             title: post.title,
-            excerpt: post.excerpt,
-            category: post.category,
-            author: post.author,
-            date: new Date(post.date).toLocaleDateString('fr-FR', {
+            excerpt: post.short_intro,
+            category: post.blog_category.data.attributes.category,
+            author: post.author.name,
+            date: new Date(post.createdAt).toLocaleDateString('fr-FR', {
               year: 'numeric',
               month: 'long',
               day: 'numeric',
             }),
-            length: post.length,
-            link: post.link
+            length: post.minutes + " min"
+            // link: post.link
           }
         })
 
