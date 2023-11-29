@@ -79,7 +79,6 @@ export const DashBoardContextProvider = ({children}:PropsWithChildren) => {
     useStrapiGet(
     "dashboard-monteur?" +
     "populate[add_model]=*&" +
-    "populate[news_info][populate][news_info_post][populate]=*&" +
     "populate[news_info][populate][articles][populate]=*&" +
     "populate[news_info][populate][info_card][populate]=*").then((res) => {      
       set_Data(res.data.data.attributes)
