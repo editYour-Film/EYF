@@ -96,7 +96,6 @@ export const DashBoardContextProvider = ({children}:PropsWithChildren) => {
 
         const _posts = articles.map((post:any) => {
           post = post.attributes
-          console.log(post)
           return {
             title: post.title,
             excerpt: post.short_intro,
@@ -107,8 +106,8 @@ export const DashBoardContextProvider = ({children}:PropsWithChildren) => {
               month: 'long',
               day: 'numeric',
             }),
-            length: post.minutes + " min"
-            // link: post.link
+            length: post.minutes + " min",
+            link: post.slug
           }
         })
 
