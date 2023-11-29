@@ -31,7 +31,7 @@ export const ModelLarge = ({
   return (
     <>{video 
         ?
-          <div className="model-large bg-dashboard-button-dark rounded-dashboard-button-separation-spacing overflow-hidden border">
+          <div className="model-large bg-dashboard-button-dark rounded-dashboard-button-separation-spacing overflow-hidden border border-transparent">
             <div className="model-large__videoW relative w-full h-0 pb-[56.25%] bg-blackBerry z-0">
               <Video
                 playerFullWidth
