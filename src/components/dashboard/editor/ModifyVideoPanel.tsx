@@ -48,6 +48,7 @@ export const ModifyVideoPanel = () => {
   const [openWorktimeToolbox, setOpenWorktimeToolbox] = useState(false);
   const [openSoftwareToolbox, setOpenSoftwareToolbox] = useState(false);
   const [openTagToolbox, setOpenTagToolbox] = useState(false);
+  const [openIndividualTagToolbox, setOpenIndividualTagToolbox] = useState<boolean[]>(editorContext.currentModelToModify ? editorContext.currentModelToModify!.video_tags.map(() => false) : []);
 
   const contentEl = useRef<HTMLDivElement>(null);
   const titleEl = useRef<HTMLDivElement>(null);
@@ -622,7 +623,23 @@ export const ModifyVideoPanel = () => {
                               <Keyword
                                 text={tag.name}
                                 className="relative w-ful shrink-0"
-                                onClose={() => {
+                                onClick={() => {
+                                  setOpenIndividualTagToolbox(editorContext.currentModelToModify!.video_tags.map((el, j) => i === j ? true : false))
+                                }}
+                                
+                                isWaiting={!tag.approved}
+                              />
+
+                              <DropBox
+                                type="addRemove"
+                                placeholder="Nouveau Tag"
+                                Icon={Plus}
+                                currentValue={""}
+                                onChange={(val) => {
+                                  editorContext.setTagsError("");
+                                  if (val) editorContext.addTag(val);
+                                }}
+                                onDelete={() => {
                                   editorContext.setCurrentModelToModify(
                                     (previousState: EditorVideo) => ({
                                       ...previousState,
@@ -635,13 +652,15 @@ export const ModifyVideoPanel = () => {
                                     })
                                   );
 
-                                  editorContext.setCurrentModelHasBeenModified(
-                                    true
-                                  );
-                                }}
+                                  editorContext.setCurrentModelHasBeenModified(true)
                                 
-                                isWaiting={!tag.approved}
-                                disabled={!tag.approved}
+                                }}
+                                toggle={openIndividualTagToolbox[i]}
+                                setToggle={(val) => {
+                                  editorContext.setCurrentModelHasBeenModified(true);
+                                  setOpenIndividualTagToolbox(editorContext.currentModelToModify!.video_tags.map((el, j) => i === j ? val : false));
+                                }}
+                                className="hidden md:block md:absolute md:top-0 md:left-1/2"
                               />
                             </React.Fragment>
                           );

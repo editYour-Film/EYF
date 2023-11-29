@@ -28,8 +28,6 @@ export const TabMenu = ({label, Icon, IconRight, onClick, disabled, isMenu = fal
     default:
       break;
   }
-
-  console.log(isSidebar);
   
 
   let size = isSidebar ? 'p-[5px] text-title-M text-[18px] leading-none' : 'px-dashboard-button-separation-spacing py-[8px] text-title-M'
