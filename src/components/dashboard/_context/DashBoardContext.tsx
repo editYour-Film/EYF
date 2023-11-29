@@ -94,22 +94,7 @@ export const DashBoardContextProvider = ({children}:PropsWithChildren) => {
       if (_data.news_info.articles.data) {
         const articles = _data.news_info.articles.data
 
-        const _posts = articles.map((post:any) => {
-          post = post.attributes
-          return {
-            title: post.title,
-            excerpt: post.short_intro,
-            category: post.blog_category.data.attributes.category,
-            author: post.author,
-            date: new Date(post.createdAt).toLocaleDateString('fr-FR', {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-            }),
-            length: post.minutes + " min",
-            link: post.slug
-          }
-        })
+        const _posts = articles.map((post:any) => post.attributes)
 
         setPost(_posts)
         setInfoCardActive(_data?.news_info.info_card.isActive ? true : false)
