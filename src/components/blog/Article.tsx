@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import LeftNavbar from "./LeftNavbar";
 import Image from "next/image";
 import { EditorJsParser } from "@/utils/EditorJsParser";
@@ -13,6 +13,14 @@ export const Article = ({ article }: ArticleProps) => {
   const [elementsToCheck, setElementsToCheck] = useState<number>();
   const [progress, setProgress] = useState(0);
   const [displayedTitleId, setDisplayedTitleId] = useState(0);
+  const articleEl = useRef<HTMLDivElement>(null)
+
+  const [articleH, setArticleH] = useState(1); 
+
+  const [currentTitle, setCurrentTitle] = useState(0)
+  useEffect(() => {
+    articleEl.current && setArticleH(articleEl.current?.offsetHeight)
+  }, [article])
 
   useEffect(() => {
     const _elementsToCheck: string[] = [];
@@ -29,15 +37,18 @@ export const Article = ({ article }: ArticleProps) => {
     var elements = document.querySelectorAll("[id*='title-']");
     elements.forEach((element, index) => {
       var position = element.getBoundingClientRect();
-      if (position.top >= 0 && position.bottom <= window.innerHeight / 2) {
+      if (position.top >= 0 && position.bottom <= window.innerHeight * 0.66) {
+              
         _displayedTitleId = parseInt(element?.id.split("-")[1]);
         dataDisplayedIndex = index + 1;
+        setCurrentTitle(dataDisplayedIndex - 1)
       }
     });
 
     if (elementsToCheck) {
       setDisplayedTitleId(_displayedTitleId);
       setProgress((dataDisplayedIndex / elementsToCheck) * 100);
+
     }
   };
 
@@ -108,7 +119,9 @@ export const Article = ({ article }: ArticleProps) => {
         </div>
       </div>
 
-      <div className="article__content flex flex-row justify-between gap-[58px] py-dashboard-spacing-element-medium pl-[20px] pr-dashboard-mention-padding-right-left md:pl-[100px] md:pr-[62px]">
+      <div 
+        ref={articleEl}
+        className="article__content flex flex-row justify-between gap-[58px] py-dashboard-spacing-element-medium pl-[20px] pr-dashboard-mention-padding-right-left md:pl-[100px] md:pr-[62px]">
         <div className="w-full xl:w-[542px] xl:shrink-0">
           {article.paragraphs.map((x: any, i: any) => {
             return (
@@ -122,7 +135,7 @@ export const Article = ({ article }: ArticleProps) => {
           })}
         </div>
         <div className="hidden lg:block grow p-dashboard-spacing-element-medium">
-          <LeftNavbar percentage={progress} article={article} />
+          <LeftNavbar percentage={progress} article={article} articleHeight={articleH} currentTitle={currentTitle} />
         </div>
       </div>
     </div>

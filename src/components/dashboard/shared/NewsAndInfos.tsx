@@ -39,7 +39,7 @@ export const NewsAndInfos = () => {
             </div>
           </div>
 
-          <div className="w-full hidden md:block order-1 xl:order-2 xl:basis-1/2">
+          <div className="w-full hidden md:block order-1 xl:order-2 xl:basis-1/2 fullHd:basis-1/3">
             <div className="relative w-full h-0 pb-[88%]">
               <Image
                 src={context.infoCard?.img}

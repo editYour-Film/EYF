@@ -1,5 +1,5 @@
 import { AuthContext } from "@/context/authContext"
-import useStrapi from "@/hooks/useStrapi"
+import useStrapi, { useStrapiGet } from "@/hooks/useStrapi"
 import { getNotifications } from "@/store/slices/NotificationsSlice"
 import { PropsWithChildren, createContext, useContext, useEffect, useState } from "react"
 import { useDispatch } from "react-redux"
@@ -59,15 +59,9 @@ export const DashBoardContextProvider = ({children}:PropsWithChildren) => {
   const authContext = useContext(AuthContext)
   const dispatch = useDispatch()
   
-  const initials = authContext.user.details.f_name[0] + authContext.user.details.l_name[0]  
-  
-  const { data: data, mutate: getStrapi } = useStrapi(
-    "dashboard-monteur?" +
-    "populate[add_model]=*&" +
-    "populate[news_info][populate][news_info_post][populate]=*&" +
-    "populate[news_info][populate][info_card][populate]=*",
-    false
-  );
+  const initials = authContext.user.details.f_name[0] + authContext.user.details.l_name[0]
+
+  const [_data, set_Data] = useState<any>(null)
 
   const [panels, setPanels] = useState<dashBoardPanelType[] | undefined>(undefined)
   const [activePanel, setActivePanel] = useState(0)
@@ -81,39 +75,51 @@ export const DashBoardContextProvider = ({children}:PropsWithChildren) => {
   
   useEffect(() => {
     dispatch(getNotifications())
-    getStrapi();
+
+    useStrapiGet(
+    "dashboard-monteur?" +
+    "populate[add_model]=*&" +
+    "populate[news_info][populate][news_info_post][populate]=*&" +
+    "populate[news_info][populate][info_card][populate]=*").then((res) => {      
+      set_Data(res.data.data.attributes)
+    })
   }, [])
 
-  let posts:CardArticleType[] = [];
+  const [posts, setPost] = useState<CardArticleType[]>([]);
+  const [infoCardActive, setInfoCardActive] = useState(false)
+  const [infoCard, setInfoCard] = useState<infoCardType | undefined>(undefined) 
+  
+  useEffect(() => {    
+    if (_data && _data.news_info) {
+      if (_data.news_info.news_info_post) {        
+        const news_info_post = _data.news_info.news_info_post
+      
+        const _posts = news_info_post.map((post:any) => {
+          return {
+            title: post.title,
+            excerpt: post.excerpt,
+            category: post.category,
+            author: post.author,
+            date: new Date(post.date).toLocaleDateString('fr-FR', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            }),
+            length: post.length,
+            link: post.link
+          }
+        })
 
-  if (data && data.attributes && data.attributes.news_info) {
-    if (data.attributes.news_info.news_info_post) {
-      const news_info_post = data.attributes.news_info.news_info_post
-    
-      posts = news_info_post.map((post:any) => {
-        return {
-          title: post.title,
-          excerpt: post.excerpt,
-          category: post.category,
-          author: post.author,
-          date: new Date(post.date).toLocaleDateString('fr-FR', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-          }),
-          length: post.length,
-          link: post.link
-        }
-      })
+        setPost(_posts)
+        setInfoCardActive(_data?.news_info.info_card.isActive ? true : false)
+        setInfoCard({
+          title: `${ _data ? _data.news_info.info_card.title : 'Error' }`,
+          text: <div><p>{ _data ? _data.news_info.info_card.content : '' }</p></div>,
+          img: `${ _data ? _data.news_info.info_card.picture.data.attributes.url : '/img/img.png' }`,
+        })
+      }
     }
-  }
-
-  const infoCardActive = data?.attributes.news_info.info_card.isActive ? true : false
-  const infoCard:infoCardType = {
-    title: `${ data?.attributes ? data.attributes.news_info.info_card.title : 'Error' }`,
-    text: <div><p>{ data?.attributes ? data.attributes.news_info.info_card.content : '' }</p></div>,
-    img: `${ data?.attributes ? data.attributes.news_info.info_card.picture.data.attributes.url : '/img/img.png' }`,
-  }
+  }, [_data])
 
   const addPannel = (panel:dashBoardPanelType) => {
     if(panels) setPanels([...panels, panel])

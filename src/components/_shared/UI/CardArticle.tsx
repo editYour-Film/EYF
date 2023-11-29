@@ -18,8 +18,8 @@ type CardArticle = {
 }
 
 export const CardArticle = ({post, disableClick, smallGap, className}:CardArticle) => {
-  const { push } = useRouter()
-  const category = post.blog_category.data.attributes.category
+  const { push } = useRouter()  
+  const category = post.blog_category && post.blog_category.data.attributes.category || post.category
   const dispatch = useDispatch()
 
   let bgColor
@@ -40,7 +40,6 @@ export const CardArticle = ({post, disableClick, smallGap, className}:CardArticl
     case 'television':
       bgColor = 'bg-television-dark'
       break;
-  
     default:
       bgColor = 'bg-edit-dark'
       break;
@@ -80,7 +79,7 @@ export const CardArticle = ({post, disableClick, smallGap, className}:CardArticl
       <div className="dashboard-post__content basis-full grow flex flex-col gap-padding-medium w-full xl:basis-[384px]">
         <div className="max-w-[384px] text-title-m uppercase n27">{post.title}</div>
         <hr className="w-full border-05"/>
-        <div className="max-w-[384px] text-dashboard-text-description-base md:text-dashboard-text-description-base-low text-base transition-color duration-200 group-hover:text-dashboard-text-description-base">{post.short_intro}</div>
+        <div className="max-w-[384px] text-dashboard-text-description-base md:text-dashboard-text-description-base-low text-base transition-color duration-200 group-hover:text-dashboard-text-description-base">{post.short_intro || post.excerpt}</div>
         
         <IslandButton
           type="tertiary"
