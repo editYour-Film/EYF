@@ -59,10 +59,6 @@ const LeftNavbar = ({ article, percentage = 0, currentTitle, articleHeight}: Lef
   }, [article]);
 
   useEffect(() => {
-    console.log(currentTitle);
-  }, [currentTitle])
-
-  useEffect(() => {
     titles.current.forEach((title, i) => {
       if(i <= currentTitle) {
         title.current && title.current.classList.add('text-dashboard-text-title-white-high')

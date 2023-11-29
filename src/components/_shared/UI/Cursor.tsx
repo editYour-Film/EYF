@@ -10,12 +10,15 @@ import { useRouter } from "next/router";
 
 import Mute from "@/icons/mute.svg";
 import Unmute from "@/icons/unmute.svg";
+import ArrowLeft from "@/icons/arrow-left.svg";
+import ArrowRight from "@/icons/arrow-right.svg";
 
 export const Cursor = () => {
   const isCursorEnabled = useSelector((store: RootState) => store.cursor.enabled)
   const router = useRouter();
   const state = useSelector((state: RootState) => state.cursor.value);
   const enabled = useSelector((state: RootState) => state.cursor.enabled);
+  const locked = useSelector((state: RootState) => state.cursor.locked);
 
   const cursor = useRef<HTMLDivElement>(null);
   const cursor2 = useRef<HTMLDivElement>(null);
@@ -42,6 +45,8 @@ export const Cursor = () => {
   const icons = useRef<HTMLDivElement>(null);
   const muteIcon = useRef<HTMLDivElement>(null);
   const unmuteIcon = useRef<HTMLDivElement>(null);
+  const arrowLeft = useRef<HTMLDivElement>(null);
+  const arrowRight = useRef<HTMLDivElement>(null);
 
   const tl = useRef<GSAPTimeline>()
 
@@ -69,15 +74,24 @@ export const Cursor = () => {
         case "unmute":
           tl.current && handleUnmute();
           break;
+        case "arrowLeft":
+          tl.current && handleLeftArrow();
+          break;
+        case "arrowRight":
+          tl.current && handleRightArrow();
+          break;
         case "read":
           tl.current && handleRead();
+          break;
+        case "text":
+          tl.current && handleText(store.getState().cursor.currentText);
           break;
       }
     }
   };
 
   useEffect(() => {
-    enabled && switchFn(state, lockAnim);
+    enabled && !locked && switchFn(state, lockAnim);
   }, [state, enabled]);
 
   const textAnim = (text: string) => {
@@ -115,6 +129,8 @@ export const Cursor = () => {
       [],
       0.3
     );
+
+    iconAnim("none", "out")
     
     tl.current!.pause()
     tl.current!.clear()
@@ -133,6 +149,12 @@ export const Cursor = () => {
         break;
       case "unmute":
         iconEl = unmuteIcon;
+        break;
+      case "arrowLeft":
+        iconEl = arrowLeft;
+        break;
+      case "arrowRight":
+        iconEl = arrowRight;
         break;
     }
 
@@ -157,13 +179,14 @@ export const Cursor = () => {
       childTl.to(
         iconEl!.current,
         {
-          yPercent: inOut === "in" ? 0 : 100,
+          yPercent: inOut === "in" ? 0 : 120,
           ease: "power2.out",
         },
         0
       );
     } else {
-      childTl.to(
+      const hideTl = gsap.timeline()
+      hideTl.to(
         icons.current!.children,
         {
           yPercent: 120,
@@ -179,6 +202,10 @@ export const Cursor = () => {
 
     return tl.current
   };
+
+  const handleText = (text: string) => {
+    textAnim(text);
+  }
 
   const handleClick = () => {
     const childTl = gsap.timeline()
@@ -276,6 +303,14 @@ export const Cursor = () => {
     iconAnim("unmute");
   };
 
+  const handleLeftArrow = () => {
+    iconAnim("arrowLeft");
+  };
+
+  const handleRightArrow = () => {
+    iconAnim("arrowRight");
+  };
+
   const handleRead = () => {
     textAnim("Lire");
   };
@@ -362,19 +397,31 @@ export const Cursor = () => {
           >
             <div
               ref={icons}
-              className="absolute top-[25%] left-[25%] w-[50%] h-[50%] overflow-hidden"
+              className="absolute top-[25%] left-[25%] w-[30px] h-[30px] overflow-hidden"
             >
               <div
                 ref={muteIcon}
-                className="absolute top-0 lef-0 w-full h-full"
+                className="absolute top-0 left-0 w-full h-full"
               >
                 <Mute className="absolute top-0 left-0 w-full h-full gradient-svg-linear" />
               </div>
               <div
                 ref={unmuteIcon}
-                className="absolute top-0 lef-0 w-full h-full"
+                className="absolute top-0 left-0 w-full h-full"
               >
-                <Unmute className="absolute hidden top-0 left-0 w-full h-full gradient-svg-linear" />
+                <Unmute className="absolute top-0 left-0 w-full h-full gradient-svg-linear" />
+              </div>
+              <div
+                ref={arrowLeft}
+                className="absolute top-0 left-0 w-full h-full"
+              >
+                <ArrowLeft className="absolute top-0 left-0 w-full h-full" />
+              </div>
+              <div
+                ref={arrowRight}
+                className="absolute top-0 left-0 w-full h-full"
+              >
+                <ArrowRight className="absolute top-0 left-0 w-full h-full" />
               </div>
             </div>
           </div>
