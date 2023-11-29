@@ -97,9 +97,9 @@ export const Model = ({
 
   return (
     <div
-      className={`model group bg-dashboard-button-dark md:rounded-dashboard-button-square-radius overflow-hidden border ${
+      className={`model group bg-dashboard-button-dark md:rounded-dashboard-button-square-radius overflow-hidden border border-transparent ${
         active ? "hover:border-dashboard-button-stroke-hover" : ""
-      } focus-within:border-dashboard-button-focus-stroke focus-within:border-2`}
+      } focus-within:outline-blueBerry`}
       onMouseOver={() => {
         setHover(true)
       }}
