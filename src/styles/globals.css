@@ -35,6 +35,10 @@ html {
   }
 }
 
+*::selection {
+  @apply text-dashboard-text-title-white-high bg-blueBerry;
+}
+
 .n27 {
   font-family: "N27", sans-serif;
 }
