@@ -6,12 +6,13 @@ const nextConfig = {
     // unoptimized: true,
     domains: [
       "localhost",
-      "res.cloudinary.com",
       "s3.fr-par.scw.cloud",
       "1b48b31f-5be7-4ddd-a28d-1d70627c1cfe.pub.instances.scw.cloud",
-      "dev-edy.fr",
+      "4766ec8c-7b28-4c2a-86ea-2701e612e516.pub.instances.scw.cloud",
       "edityour.film",
       "edityourfilm.s3.fr-par.scw.cloud",
+      "edityourfilm-dev.s3.fr-par.scw.cloud",
+      "edityourfilm-prod.s3.fr-par.scw.cloud",
     ],
   },
   webpack: (config, options) => {
