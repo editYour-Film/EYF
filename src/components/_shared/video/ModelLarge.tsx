@@ -4,6 +4,7 @@ import { IslandButton } from "../buttons/IslandButton"
 
 import Trash from '@/icons/trash.svg'
 import { EditorVideo, modelType } from "@/components/dashboard/editor/_context/EditorContext"
+import { useEffect, useRef, useState } from "react"
 
 export type ModelsProps = {
   video: EditorVideo,
@@ -20,6 +21,7 @@ export type ModelsProps = {
 
 export const ModelLarge = ({
   video, 
+  thumbnail,
   playerFullWidth = false,
   type = 'default', 
   handleModify, 
@@ -27,16 +29,49 @@ export const ModelLarge = ({
   handleDelete, 
   handleSetHighlighted
 }: ModelsProps) => {
+  const [hover, setHover] = useState(false)
+  const videoRef = useRef<HTMLVideoElement>(null)
+
+  useEffect(() => {    
+    if (hover) {      
+      videoRef.current && videoRef.current.play()
+    } else {
+      if (videoRef.current) {
+        videoRef.current.pause()
+        setTimeout(() => { if (videoRef.current) videoRef.current.currentTime = 0 }, 500)
+      }
+    }
+  }, [hover])
   
   return (
     <>{video 
         ?
           <div className="model-large bg-dashboard-button-dark rounded-dashboard-button-separation-spacing overflow-hidden border border-transparent">
-            <div className="model-large__videoW relative w-full h-0 pb-[56.25%] bg-blackBerry z-0">
+            <div 
+              className="model-large__videoW group relative w-full h-0 pb-[56.25%] bg-blackBerry z-0"
+              onMouseOver={() => { 
+                videoRef.current?.muted
+                setHover(true) 
+              }}
+              onMouseLeave={() => { 
+                setHover(false) 
+              }}
+            >
+            {video.thumbnail ? (
+              <Image 
+                src={video.thumbnail.url} 
+                alt={video.thumbnail.alternativeText}
+                fill 
+                className="object-cover group-hover:opacity-0 pointer-events-none transition-opacity duration-500 z-10"
+                />
+            ) : (
+              <></>
+            )}
               <Video
+                ref={videoRef}
                 playerFullWidth
                 video={video.video}
-                className='absolute object-cover'
+                className='absolute object-cover z-0'
               />
             </div>
             <div className="model-large__content relative p-padding-medium border-t z-10">

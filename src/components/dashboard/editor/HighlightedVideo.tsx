@@ -5,7 +5,7 @@ import { ModelLarge } from "@/components/_shared/video/ModelLarge"
 
 export const HightlightedVideo = ({}) => {
   const editorContext = useContext(EditorContext)
-
+  
   if(editorContext.highlightedVideo) {
     return (
       <ModelLarge
