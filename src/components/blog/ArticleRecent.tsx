@@ -7,7 +7,14 @@ type ArticelTrendsProps = {
 };
 
 export const ArticleRecent = ({ articles }: ArticelTrendsProps) => { 
-  const [max, setMax] = useState(8) 
+  const [max, setMax] = useState(8)
+
+  articles.sort((a, b) => {
+    const dateA = new Date(a.attributes.createdAt);
+    const dateB = new Date(b.attributes.createdAt);
+  
+    return dateB.getTime() - dateA.getTime();
+  });
 
   return (
     <div className="flex flex-col w-full gap-dashboard-spacing-element-medium items-center bg-dashboard-background-content-area md:bg-transparent">

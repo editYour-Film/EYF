@@ -18,6 +18,13 @@ type ArticleTrendsProps = {
 export const ArticleTrends = ({ articles }: ArticleTrendsProps) => {
   const isMobileScreen = useMediaQuery("(max-width: 768px)");
 
+  articles.sort((a, b) => {
+    const dateA = new Date(a.publishedAt);
+    const dateB = new Date(b.publishedAt);
+  
+    return dateB.getTime() - dateA.getTime();
+  });
+
   return (
     <CardsContainer
       headingComp={<MainArticle article={articles[0]} />}
@@ -42,7 +49,7 @@ type MainArticleProps = {
 const MainArticle = ({ article }: MainArticleProps) => {
   const { push } = useRouter();
   const dispatch = useDispatch()
-  
+
   return (
     <button
       className="relative w-full group border border-dashboard-button-stroke-default bg-dashboard-button-dark pt-[64px] md:px-[64px] rounded-dashboard-button-square-radius cursor-pointer hover:border-dashboard-button-stroke-hover focus-within:outline focus-visible:outline focus-visible:outline-blueBerry focus-within:outline-blueBerry shadow-large transition-color duration-300 overflow-hidden"
