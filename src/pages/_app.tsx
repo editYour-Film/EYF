@@ -21,6 +21,7 @@ import { AuthContext, AuthProvider } from "@/context/authContext";
 import { DashBoardContextProvider } from "@/components/dashboard/_context/DashBoardContext";
 import { EditorContextProvider } from "@/components/dashboard/editor/_context/EditorContext";
 import { ClientContextProvider } from "@/components/dashboard/client/_context/DashboardClientContext";
+import { GlobalContextProvider } from "@/components/_context/GlobalContext";
 
 if (typeof window !== "undefined") {
   gsap.defaults({ ease: "none" });
@@ -44,9 +45,11 @@ export default function App(pageProps: AppProps) {
   return (
     <Provider store={store}>
       <AuthProvider>
-        <InstanciatedQueryClientProvider>
-          <Content pageProps={pageProps} />
-        </InstanciatedQueryClientProvider>
+        <GlobalContextProvider>
+          <InstanciatedQueryClientProvider>
+            <Content pageProps={pageProps} />
+          </InstanciatedQueryClientProvider>
+        </GlobalContextProvider>
       </AuthProvider>
     </Provider>
   );

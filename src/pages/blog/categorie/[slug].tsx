@@ -2,7 +2,7 @@ import Head from "next/head";
 import LayoutMain from "@/components/layouts/LayoutMain";
 
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import useStrapi from "@/hooks/useStrapi";
 
 import { CategoriesList } from "../../../components/blog/shared/CategoriesList";
@@ -12,10 +12,14 @@ import { CardArticle } from "@/components/_shared/UI/CardArticle";
 import { Button } from "@/components/_shared/buttons/Button";
 import { useDispatch } from "react-redux";
 import { setRouteName } from "@/store/slices/routesSlice";
+import { GradientCard } from "@/components/dashboard/shared/GradientCard";
+import { GlobalContext } from "@/components/_context/GlobalContext";
 
 const BlogCategory = () => {
   const router = useRouter();
   const dispatch = useDispatch();
+  const globalContext = useContext(GlobalContext)
+
   const [maxArticles, setMaxArticles] = useState(3)
   const [availableArticles, setAvailableArticles] = useState<any[]>([])
 
@@ -126,11 +130,17 @@ const BlogCategory = () => {
             />
           }
           </div>
+          <GradientCard
+            title='PARRAINER UN AMI'
+            content='Bénéficiez d’avantages exclusifs en rejoignant la communauté des parrains editYour.Film dès aujourd’hui.'
+            hasCta 
+            type="email"
+            placeholder="Email" 
+            ctaLabel="Envoyer le lien de parrainage"
+            onClick={(email: string) => { globalContext.sendSponsorLink(email)}}
+          />
         </div>
 
-        <ContainerFullWidth>
-          <NewsletterSection />
-        </ContainerFullWidth>
       </LayoutMain>
     </>
   );

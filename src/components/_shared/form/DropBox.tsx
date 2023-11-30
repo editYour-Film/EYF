@@ -130,9 +130,10 @@ export const DropBox = ({
         container.current &&
         !container.current.contains(e.target)
       ) {
-        if (type === "link" || type === "add" || type === "addRemove")
+        
+        if (type === "link" || type === "add")
           e.target !== inputLink.current && setIsOpen(false);
-        else setIsOpen(false);
+        else setIsOpen(false)
       }
     };
 
@@ -141,7 +142,7 @@ export const DropBox = ({
       setValue(currentValue);
       window.addEventListener("click", handleClickOutside);
     }
-    else {
+    else {      
       handleClose();
     }
 

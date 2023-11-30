@@ -14,7 +14,8 @@ import { AddModelContextProvider } from "@/components/dashboard/editor/_context/
 import { GradientCard } from "@/components/dashboard/shared/GradientCard";
 import { FooterDashboard } from "@/components/dashboard/shared/FooterDashBoard";
 import { EditorContext } from "@/components/dashboard/editor/_context/EditorContext";
-import { ModifyVideoPanel } from "@/components/dashboard/editor/ModifyVideoPanel";
+  import { ModifyVideoPanel } from "@/components/dashboard/editor/ModifyVideoPanel";
+import { GlobalContext } from "@/components/_context/GlobalContext";
 
 export default function DashBoardContentHome() {
   return (
@@ -34,6 +35,7 @@ export default function DashBoardContentHome() {
 const DashBoardPageHome = ({ children }: PropsWithChildren) => {
   const context = useContext(DashBoardContext);
   const editorContext = useContext(EditorContext);
+  const globalContext = useContext(GlobalContext);
 
   const isMobile = useMediaQuery("(max-width: 768px)");
 
@@ -94,7 +96,7 @@ const DashBoardPageHome = ({ children }: PropsWithChildren) => {
               type="email"
               placeholder="Email" 
               ctaLabel="Envoyer le lien de parrainage"
-              onClick={(email: string) => { context.sendSponsorLink(email)}}
+              onClick={(email: string) => { globalContext.sendSponsorLink(email)}}
             />
             <FooterDashboard />
           </div>

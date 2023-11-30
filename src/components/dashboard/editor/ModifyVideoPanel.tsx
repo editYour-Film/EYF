@@ -630,7 +630,7 @@ export const ModifyVideoPanel = () => {
                                 isWaiting={!tag.approved}
                               />
 
-                              <DropBox
+                              {!isMobile && <DropBox
                                 type="addRemove"
                                 placeholder="Nouveau Tag"
                                 Icon={Plus}
@@ -661,7 +661,7 @@ export const ModifyVideoPanel = () => {
                                   setOpenIndividualTagToolbox(editorContext.currentModelToModify!.video_tags.map((el, j) => i === j ? val : false));
                                 }}
                                 className="hidden md:block md:absolute md:top-0 md:left-1/2"
-                              />
+                              />}
                             </React.Fragment>
                           );
                         }
@@ -923,6 +923,50 @@ export const ModifyVideoPanel = () => {
             }}
             className="fixed bottom-0 h-max z-20 md:hidden md:absolute md:top-0 md:left-1/2"
           />
+
+          {editorContext.currentModelToModify && editorContext.currentModelToModify.video_tags &&
+            editorContext.currentModelToModify.video_tags.map(
+              (tag: video_tag, i: number) => {
+                return (
+                  <React.Fragment
+                    key={i}
+                  >
+                    <DropBox
+                      type="addRemove"
+                      placeholder="Nouveau Tag"
+                      Icon={Plus}
+                      currentValue={""}
+                      onChange={(val) => {
+                        editorContext.setTagsError("");
+                        if (val) editorContext.addTag(val);
+                      }}
+                      onDelete={() => {
+                        editorContext.setCurrentModelToModify(
+                          (previousState: EditorVideo) => ({
+                            ...previousState,
+                            video_tags:
+                              editorContext.currentModelToModify
+                                ? editorContext.currentModelToModify.video_tags?.filter(
+                                    (t: any) => t.name !== tag.name
+                                  )
+                                : undefined,
+                          })
+                        );
+
+                        editorContext.setCurrentModelHasBeenModified(true)
+                      
+                      }}
+                      toggle={openIndividualTagToolbox[i]}
+                      setToggle={(val) => {
+                        editorContext.setCurrentModelHasBeenModified(true);
+                        setOpenIndividualTagToolbox(editorContext.currentModelToModify!.video_tags.map((el, j) => i === j ? val : false));
+                      }}
+                      className="fixed bottom-0 h-max z-20 md:hidden md:absolute md:top-0 md:left-1/2"
+                    />
+                  </React.Fragment>
+                );
+              }
+            )}
         </>
       )}
     </div>

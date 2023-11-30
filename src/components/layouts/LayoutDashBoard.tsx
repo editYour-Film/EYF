@@ -18,6 +18,7 @@ import { ButtonsWrapper } from "../dashboard/shared/ButtonsWrapper";
 import { AuthContext } from "@/context/authContext";
 import { closeDashboardMenu } from "@/store/slices/dashboardMenuSlice";
 import { RootState } from "@/store/store";
+import { CustomToaster } from "../_shared/UI/CustomToaster";
 
 type LayoutDashboardProps = {
   children: React.ReactNode;
@@ -59,6 +60,10 @@ const LayoutDashboard = ({ children }: LayoutDashboardProps) => {
       {(authContext.isLoggedIn && authContext.user) &&
           <div className="relative overflow-clip md:overflow-visible bg-black min-h-screen flex flex-col justify-between gap-10">
             <main className="md:pt-7">
+              <div className="fixed pt-[10px] pl-[10px] md:left-0 md:pl-[343px] md:pt-0 xl:pl-[426px] w-full flex justify-center z-popup">
+                <CustomToaster />
+              </div>
+
               <div className="md:px-[30px] xl:px-[113px] md:mt-0 grid grid-dashboard relative z-20 ">
                 {children}
 

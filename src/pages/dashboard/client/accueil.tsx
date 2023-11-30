@@ -2,7 +2,7 @@ import { DashboardContainer } from "@/components/dashboard/shared/DashboardConta
 import { DashboardEditorHome } from "@/components/dashboard/editor/DashboardEditorHome";
 import LayoutDashBoard from "@/components/layouts/LayoutDashBoard";
 import Head from "next/head";
-import { PropsWithChildren, useContext, useEffect, useState } from "react";
+import { PropsWithChildren, useContext, useEffect } from "react";
 import { DashBoardContext } from "@/components/dashboard/_context/DashBoardContext";
 import { IslandButton } from "@/components/_shared/buttons/IslandButton";
 import { TopBar } from "@/components/dashboard/shared/TopBar";
@@ -10,7 +10,7 @@ import { NotificationCenter } from "@/components/dashboard/shared/NotificationCe
 import { AddModelContextProvider } from "@/components/dashboard/editor/_context/AddModelContext";
 import { FooterDashboard } from "@/components/dashboard/shared/FooterDashBoard";
 import { GradientCard } from "@/components/dashboard/shared/GradientCard";
-import { ModifyVideoPanel } from "@/components/dashboard/editor/ModifyVideoPanel";
+import { GlobalContext } from "@/components/_context/GlobalContext";
 
 export default function DashBoardContentHome() {
   return (
@@ -29,6 +29,7 @@ export default function DashBoardContentHome() {
 
 const DashBoardPageHome = ({ children }: PropsWithChildren) => {
   const context = useContext(DashBoardContext);
+  const globalContext = useContext(GlobalContext);
 
   useEffect(() => {
     context.setPanels([
@@ -68,7 +69,7 @@ const DashBoardPageHome = ({ children }: PropsWithChildren) => {
           type="email"
           placeholder="Email" 
           ctaLabel="Envoyer le lien de parrainage"
-          onClick={(email: string) => { context.sendSponsorLink(email)}}
+          onClick={(email: string) => { globalContext.sendSponsorLink(email)}}
         />
         <FooterDashboard />
       </div>

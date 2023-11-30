@@ -14,7 +14,7 @@ export const TitleSvgCard = ({type, title, text, img, className, hideImgMobile, 
     <div className={`dashboard-editor-cover__placeholder relative flex flex-col items-center xl:flex-row justify-center gap-[30px] border bg-black rounded-dashboard-button-square-radius lg:mb-0 overflow-hidden ${className} ${type !== 'imgBottomRight' ? 'px-[53px] py-[61px]' : ''}`}>
       <div className="absolute bg-pattern opacity-20 w-full h-full top-0 left-0"></div>
       
-      <div className={`text-center xl:text-left max-w-[500px] fullHd:max-w-[600px] z-10 ${type === 'imgBottomRight' ? 'px-[53px] py-[61px]' : ''}`}>
+      <div className={`text-center xl:text-left min-w-[350px] max-w-[500px] fullHd:max-w-[600px] z-10 ${type === 'imgBottomRight' ? 'px-[53px] py-[61px]' : ''}`}>
         <div className="n27 text-2xl font-medium">{title}</div>
         <div className="text-base-text mt-4">{text}</div>
       </div>

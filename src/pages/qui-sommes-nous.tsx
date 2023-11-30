@@ -9,10 +9,12 @@ import { HistorySection } from "@/components/whoweare/HistorySection";
 import { NewWaySection } from "@/components/whoweare/NewWaySection";
 import { ArrowCards } from "@/components/whoweare/ArrowCards";
 import useStrapi from "@/hooks/useStrapi";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { TitleReveal } from "@/components/whoweare/TitleReveal";
 import { setRouteName } from "@/store/slices/routesSlice";
 import { useDispatch } from "react-redux";
+import { GradientCard } from "@/components/dashboard/shared/GradientCard";
+import { GlobalContext } from "@/components/_context/GlobalContext";
 
 {
   /* 
@@ -29,6 +31,7 @@ export async function getStaticProps() {
 
 export default function WhoWeAre(/*{ data, dataFaqs }: any*/) {
   const dispatch = useDispatch()
+  const globalContext = useContext(GlobalContext)
   const { data, mutate: getStrapi } = useStrapi(
     "about-me?" +
     "populate[head][populate]=*&" +
@@ -69,7 +72,17 @@ export default function WhoWeAre(/*{ data, dataFaqs }: any*/) {
 
           <ContainerFullWidth>
             {dataFaqs && <FaqSection data={dataFaqs} filter="about-us" />}
-            <NewsletterSection />
+            <div className="max-w-[1400px] lg:mx-[100px] xl:mx-[167px] 2xl:mx-auto md:pt-[90px] flex flex-col gap-dashboard-spacing-element-medium">
+              <GradientCard
+                title='PARRAINER UN AMI'
+                content='Bénéficiez d’avantages exclusifs en rejoignant la communauté des parrains editYour.Film dès aujourd’hui.'
+                hasCta 
+                type="email"
+                placeholder="Email" 
+                ctaLabel="Envoyer le lien de parrainage"
+                onClick={(email: string) => { globalContext.sendSponsorLink(email)}}
+              />
+            </div>
           </ContainerFullWidth>
         </div>
       </LayoutMain>
