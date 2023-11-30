@@ -107,12 +107,13 @@ export const IslandButton: React.FC<IslandButtonProps> = ({
       >
         {Icon && <Icon className={`${iconSize} ${iconClass}`} />}
 
-        {label && 
-          enableTwist 
+        {label && enableTwist 
             ? <TextSplit input={label} type="word" noLH /> 
-            : <span className={`${type === "secondary" ? "inline-block text-linear-sunset" : ""}`}>
-                {label}
-              </span>
+            : label 
+              ? <span className={`${type === "secondary" ? "inline-block text-linear-sunset" : ""}`}>
+                  {label}
+                </span>
+              : <></>
         }
 
         {IconRight && <IconRight className={`${iconSize} ${iconClass}`} />}

@@ -14,6 +14,7 @@ import { AddModelContextProvider } from "@/components/dashboard/editor/_context/
 import { GradientCard } from "@/components/dashboard/shared/GradientCard";
 import { FooterDashboard } from "@/components/dashboard/shared/FooterDashBoard";
 import { EditorContext } from "@/components/dashboard/editor/_context/EditorContext";
+import { ModifyVideoPanel } from "@/components/dashboard/editor/ModifyVideoPanel";
 
 export default function DashBoardContentHome() {
   return (
@@ -99,6 +100,9 @@ const DashBoardPageHome = ({ children }: PropsWithChildren) => {
           </div>
 
         </div>
+
+        <ModifyVideoPanel />
+
       </AddModelContextProvider>
     </>
   );
