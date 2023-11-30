@@ -1,6 +1,4 @@
-import gsap from "gsap"
-import { ReactElement, forwardRef, useEffect, useRef } from "react"
-import { Renderable } from 'react-hot-toast'
+import { ReactElement, useRef } from "react"
 
 interface ComponentWithClassName  {
   className?: string
@@ -28,7 +26,7 @@ export const InfoMessage = ({Icon, type, message, wFull, small, bg, onClick, cla
       onClick={() => {
         onClick && onClick()
       }}
-      className={`flex items-center no-wrap gap-[10px] ${wFull ? 'w-full' : 'w-max'} max-w-[calc(100vw-32px)] ${bg === 'black' ? 'bg-dashboard-button-dark' : 'bg-soyMilk-100'} rounded-dashboard-button-square-radius ${sizeClass} ${className}`}>
+      className={`flex items-center no-wrap gap-[10px] ${wFull ? 'w-full' : 'w-max'} max-w-[calc(100vw-32px)] ${bg === 'black' ? 'bg-dashboard-button-dark' : 'bg-[#333435]'} rounded-dashboard-button-square-radius ${sizeClass} ${className}`}>
       <div className="w-[24px] h-[24px]">{Icon && <Icon className={`w-[24px] h-[24px] ${type === 'danger' ? 'svg-color-appleRed' : ''}`} />}</div>
       <div className="text-dashboard-text-description-base">{message}</div>
     </div>
