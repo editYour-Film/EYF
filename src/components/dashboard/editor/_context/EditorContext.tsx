@@ -486,11 +486,14 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
     });
   }, []);
 
+  const [firstMessage, setFirstMessage] = useState(false)
   useEffect(() => {
     if (
       authContext.user.models === undefined ||
-      authContext.user.models.length === 0
+      authContext.user.models.length === 0 && 
+      !firstMessage
     ) {
+      setFirstMessage(true)
       toast(
         `Bienvenue ${authContext.user.details.f_name}, devenez visible. Ajoutez votre premier modèle de montage.`,
         {
