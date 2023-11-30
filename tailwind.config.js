@@ -397,7 +397,10 @@ module.exports = {
         },
         '.toaster' : {
           '> div' : {
-            justifyContent: 'start !important',
+            justifyContent: 'center !important',
+            '@media screen and (min-width: 768px)': {
+              justifyContent: 'start !important',
+            }
           }
         },
 
