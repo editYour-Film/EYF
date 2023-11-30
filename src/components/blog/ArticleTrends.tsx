@@ -16,9 +16,7 @@ type ArticleTrendsProps = {
   articles: any;
 };
 export const ArticleTrends = ({ articles }: ArticleTrendsProps) => {
-  const isMobileScreen = useMediaQuery("(max-width: 768px)");
-
-  articles.sort((a, b) => {
+  articles.sort((a:any, b:any) => {
     const dateA = new Date(a.publishedAt);
     const dateB = new Date(b.publishedAt);
   

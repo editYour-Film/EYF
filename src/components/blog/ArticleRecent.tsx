@@ -9,7 +9,7 @@ type ArticelTrendsProps = {
 export const ArticleRecent = ({ articles }: ArticelTrendsProps) => { 
   const [max, setMax] = useState(8)
 
-  articles.sort((a, b) => {
+  articles.sort((a:any, b:any) => {
     const dateA = new Date(a.attributes.createdAt);
     const dateB = new Date(b.attributes.createdAt);
   
