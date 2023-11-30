@@ -20,7 +20,7 @@ export const TopBar = ({children, className}:PropsWithChildren<TopBarProps>) => 
   return (
     <>
       {isMobile && 
-        <div className="fixed top-0 left-0 w-full z-popup">
+        <div className="fixed top-0 left-0 w-full z-header">
           <Toaster />
         </div>
       }

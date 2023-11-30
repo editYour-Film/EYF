@@ -58,7 +58,7 @@ const SideBarDesktop = ({ className, menu, user }: SidebarChildProps) => {
   
   return (
     <div
-      className={`sidebar sticky top-[30px] w-full h-[calc(100vh-130px)] flex md:flex-col items-start gap-16 ${className}`}
+      className={`sidebar sticky top-[30px] w-full h-[calc(100vh-130px)] flex md:flex-col items-start gap-16 pt-[12px] ${className}`}
     >
       <Menu sidebar items={menu} />
 

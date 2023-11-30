@@ -80,8 +80,6 @@ export const DashboardEditorHome = ({
       )}
       <hr />
       <DashboardEditorKeyWords />
-
-      <ModifyVideoPanel />
     </div>
   );
 };

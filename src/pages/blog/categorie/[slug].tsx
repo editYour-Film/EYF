@@ -16,7 +16,7 @@ import { setRouteName } from "@/store/slices/routesSlice";
 const BlogCategory = () => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const [maxArticles, setMaxArticles] = useState(5)
+  const [maxArticles, setMaxArticles] = useState(3)
   const [availableArticles, setAvailableArticles] = useState<any[]>([])
 
   const { slug } = router.query;
@@ -117,7 +117,7 @@ const BlogCategory = () => {
           </div>
 
           <div className="flex justify-center">
-          {articles.length - 1 > maxArticles &&
+          {articles.length > maxArticles &&
             <Button 
               type="primary"
               label="Voir plus d’articles"
