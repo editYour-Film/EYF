@@ -16,7 +16,7 @@ export const CategoryBadge = ({category, className}:CategoryBadgeProps) => {
   const dispatch = useDispatch()
 
   let bgColor
-  switch (slugify(category.toLowerCase())) {  
+  switch (slugify(String(category).toLowerCase())) {  
     case 'partenariat':
       bgColor = 'bg-partnership'
       break;
