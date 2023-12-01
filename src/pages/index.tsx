@@ -36,7 +36,7 @@ import { useDispatch } from "react-redux";
 }*/
 
 export default function Home(/*{ seodata }: any*/) {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const { data, mutate: getStrapi } = useStrapi(
     "page-home?" +
@@ -62,7 +62,7 @@ export default function Home(/*{ seodata }: any*/) {
   );
 
   useEffect(() => {
-    dispatch(setRouteName({name: 'accueil'}))
+    dispatch(setRouteName({ name: "accueil" }));
 
     getStrapi();
     getStrapiFaq();
@@ -87,33 +87,41 @@ export default function Home(/*{ seodata }: any*/) {
               <PartnersSection />
             </ContainerFull>
 
-            <ContainerFullWidth>
-              <YourProfessionalVideoSection data={data.section1} />
-            </ContainerFullWidth>
+            {data.section1 && (
+              <ContainerFullWidth>
+                <YourProfessionalVideoSection data={data.section1} />
+              </ContainerFullWidth>
+            )}
 
-            <ConfidenceSection videos={videos} data={data.section2} />
+            {data.section2 && (
+              <ConfidenceSection videos={videos} data={data.section2} />
+            )}
 
             <div className="py-10 md:py-20">
               <hr className="absolute left-0 w-full" />
             </div>
 
             <ContainerFullWidth>
-              <StepsSection data={data.section3} />
-
+              {data.section3 &&
+                data.step1_media &&
+                data.step2_media &&
+                data.step3_media && <StepsSection data={data.section3} />}
               <YourVideoSection data={data.section4} />
 
-              <ComparativeSection data={data.comparison_section} />
+              {data.comparison_section && (
+                <ComparativeSection data={data.comparison_section} />
+              )}
 
               <CreatorToEditor />
 
-              {!isMobile && (
+              {!isMobile && data.marquee.line_1 && data.marquee.line_2 && (
                 <Marquee
                   firstLine={data.marquee.line_1}
                   secondLine={data.marquee.line_2}
                 />
               )}
 
-              <EditorSection data={data.section5} />
+              {data.section5 && <EditorSection data={data.section5} />}
 
               <WhySectionFilterProvider>
                 {/* <WhySection data={data.section6} /> */}

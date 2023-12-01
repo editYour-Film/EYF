@@ -179,13 +179,15 @@ export const EditorSection = ({ data }: EditorSectionProps) => {
                 <div
                   className={`absolute w-[130%] h-[130%] left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] z-10 bg-[#010304] opacity-[0.43]`}
                 ></div>
-                <ResponsiveImg
-                  isStatic
-                  className={`${cardLargeStyles.image} scale-125 object-cover`}
-                  data={data.large_card_img.data.attributes.url}
-                  alt={data.large_card_img.data.attributes.alternativeText}
-                  w={{ xs: 500, sm: 900, lg: 1100 }}
-                />
+                {data.large_card_img.data && (
+                  <ResponsiveImg
+                    isStatic
+                    className={`${cardLargeStyles.image} scale-125 object-cover`}
+                    data={data.large_card_img.data.attributes.url}
+                    alt={data.large_card_img.data.attributes.alternativeText}
+                    w={{ xs: 500, sm: 900, lg: 1100 }}
+                  />
+                )}
               </div>
 
               <div className="relative flex flex-col md:flex-row-reverse justify-between gap-16 z-20">
@@ -334,13 +336,15 @@ const Item = ({ title, text, img, i, delay, inView }: ItemProps) => {
             className={`absolute w-[130%] h-[130%] left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] z-10 bg-[#010304] opacity-[0.2]`}
           ></div>
 
-          <ResponsiveImg
-            isStatic
-            data={img.data.attributes.url}
-            w={{ xs: 300, sm: 400, md: 450, lg: 550 }}
-            alt={img.data.attributes.alternativeText}
-            className={`w-full h-full absolute object-cover`}
-          />
+          {img.data && (
+            <ResponsiveImg
+              isStatic
+              data={img.data.attributes.url}
+              w={{ xs: 300, sm: 400, md: 450, lg: 550 }}
+              alt={img.data.attributes.alternativeText}
+              className={`w-full h-full absolute object-cover`}
+            />
+          )}
         </div>
         <div className="absolute mb-5 w-full px-2 md:px-6 z-30 bottom-0">
           <div className={"flex gap-4 justify-between items-start"}>
