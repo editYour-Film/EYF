@@ -42,6 +42,7 @@ export const AuthProvider: React.FC<any> = ({ children }: any) => {
           "validate-user-by-code",
           {
             code: userCode,
+            noExpire: Object.keys(userInfo.user).length > 0,
           },
           false
         );
