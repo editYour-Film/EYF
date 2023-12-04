@@ -358,6 +358,24 @@ module.exports = {
           filter: 'blur(100px)',
           opacity: 0.4
         },
+        '.bg-radial-gradient-blueLight': {
+          background: `radial-gradient(50% 50% at 50% 50%, #4B68FF 0%, rgba(75, 93, 255, 0.00) 100%);`,
+          mixBlendMode: 'plus-lighter',
+          filter: 'blur(100px)',
+          opacity: 0.6
+        },
+        '.bg-radial-gradient-violetLight': {
+          background: `radial-gradient(65.91% 42.61% at 41.2% 58.31%, #4B7EFF 0%, #7E5EFF 100%);`,
+          mixBlendMode: 'plus-lighter',
+          filter: 'blur(100px)',
+          opacity: 0.5
+        },
+        '.bg-radial-gradient-pink': {
+          background: `radial-gradient(65.91% 42.61% at 41.2% 58.31%, #7E5EFF 0%, rgba(205, 3, 255, 0.60) 100%);`,
+          mixBlendMode: 'plus-lighter',
+          filter: 'blur(100px)',
+          opacity: 0.5
+        },
         '.player-bg-gradient': {
           background: `linear-gradient(to top, ${theme('colors')['dashboard-button-dark']} 0%, transparent 50%)`
         },
@@ -433,7 +451,7 @@ module.exports = {
           background: 'linear-gradient(180deg, rgba(1, 3, 4, 0.00) 0%, #010304 100%)',
         },
         '.gradient-white-transparent' : {
-          background: `linear-gradient(0deg, ${theme('colors.borderWhite')} 0%, rgba(252, 252, 252, 0.00) 100%)`,
+          background: `linear-gradient(var(--linear-orientation, 0deg), ${theme('colors.borderWhite')} 0%, rgba(252, 252, 252, 0.00) 100%)`,
         },
         '.gradient-faq': {
           backgroundImage: 'linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.6) 50%, rgba(0,0,0,0.65) 100%), url("/img/pattern.png")'
