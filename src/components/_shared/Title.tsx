@@ -16,19 +16,20 @@ type titleProps = {
   className?: string,
   arrow?: boolean,
   fake?: boolean,
+  isSunset?: boolean
 }
-export const Title = ({titleType, anim, fromRight, addDuration = '0s', charDelay = '0s', split, className, children, arrow = false, fake = false}: titleProps) => {
+export const Title = ({titleType, anim, fromRight, addDuration = '0s', charDelay = '0s', split, className, children, arrow = false, fake = false, isSunset}: titleProps) => {
   const el = useRef(null)
   let content = children
 
-  if(anim || split) { content = <TextSplit input={children as string} type="word"/> }
+  if(anim || split) { content = <TextSplit input={children as string} type="word" isSunset={isSunset}/> }
 
   const animClass = `anim-title ${fromRight && 'fromRight'}`
 
   const renderSwitch: any = (type: any) => {
     switch (titleType) {
       case 'mainh1':
-        return <h1 className={`${className ? className : ''} ${anim ? animClass : ''}`} style={{"--duration-var": addDuration, '--char-delay-add': charDelay} as React.CSSProperties}>{content}</h1>
+        return <h1 className={`${className ? className : ''} ${anim ? animClass : ''} ${isSunset ? 'text-linear-sunset' : ''}`} style={{"--duration-var": addDuration, '--char-delay-add': charDelay} as React.CSSProperties}>{content}</h1>
       case 'h1':
         return <H1 className={`${className ? className : ''} ${anim ? animClass : ''}`} fake={fake} style={{"--duration-var": addDuration, '--char-delay-add': charDelay} as React.CSSProperties}>{content}</H1>
       case 'h2':
@@ -36,9 +37,9 @@ export const Title = ({titleType, anim, fromRight, addDuration = '0s', charDelay
       case 'h3':
         return <H3 className={`${className ? className : ''} ${anim ? animClass : ''}`} fake={fake} style={{"--duration-var": addDuration, '--char-delay-add': charDelay} as React.CSSProperties}>{content}</H3>
       case 'h4':
-        return <h4 className={`${className ? className : ''} ${anim ? animClass : ''}`} style={{"--duration-var": addDuration, '--char-delay-add': charDelay} as React.CSSProperties}>{content}</h4>
+        return <h4 className={`${className ? className : ''} ${anim ? animClass : ''} ${isSunset ? 'text-linear-sunset' : ''}`} style={{"--duration-var": addDuration, '--char-delay-add': charDelay} as React.CSSProperties}>{content}</h4>
       case 'none':
-        return <div className={`${className ? className : ''} ${anim ? animClass : ''}`} style={{"--duration-var": addDuration, '--char-delay-add': charDelay} as React.CSSProperties}>{content}</div>
+        return <div className={`${className ? className : ''} ${anim ? animClass : ''} ${isSunset ? 'text-linear-sunset' : ''}`} style={{"--duration-var": addDuration, '--char-delay-add': charDelay} as React.CSSProperties}>{content}</div>
     }
   };
 

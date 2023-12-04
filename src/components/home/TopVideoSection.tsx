@@ -157,9 +157,6 @@ export const TopVideoSection = ({ data }: any) => {
       dispatch(toMute())
     }
   }  
-
-  console.log(data.video);
-  
   
   return (
     <div

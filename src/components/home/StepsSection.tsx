@@ -185,7 +185,7 @@ export const StepsSection = ({ data }: any) => {
   return (
     <div ref={stepW} className={`relative md:pt-16 ${isDesktop ? 'h-[330vh] fullHd:h-[280vh]' : 'overflow-hidden'} `}>
       <div className={`${isDesktop ? 'sticky top-[15vh] fullHd:top-[22vh] h-[80vh]' : ''}`}>
-        <div ref={buttonsW} className={`${isDesktop ? 'flex' : 'hidden'} ${styles.buttonsW} relative  w-full justify-center z-10`}>
+        <div ref={buttonsW} className={`${isDesktop ? 'flex' : 'hidden'} ${styles.buttonsW} relative w-full justify-center z-10`}>
           <div className="flex flex-row justify-space-between gap-5">
             <StepButton 
               isActive={buttonActive === 0 ? true : false} 
@@ -242,8 +242,8 @@ export const StepsSection = ({ data }: any) => {
           }
         </div>
 
-        <div className="relative top-section-bg1 opacity-70 top-5 z-0"></div>
-        <div className="absolute bg-top-section-2 opacity-70 left-0 w-[800px] h-[500px] -bottom-5 z-0"></div>
+        {/* <div className="relative top-section-bg1 opacity-70 top-5 z-0"></div>
+        <div className="absolute bg-top-section-2 opacity-70 left-0 w-[800px] h-[500px] -bottom-5 z-0"></div> */}
 
       </div>
     </div>
@@ -267,8 +267,13 @@ const Step = forwardRef(function Step({media, title, sectionTitle, content, side
   const isDesktop = useMediaQuery("(min-width: 1024px)");
 
   return (
-    <div ref={ref as React.LegacyRef<HTMLDivElement>} className={`${className && className} ${isDesktop ? 'absolute top-0' : ''} w-full mt-10 first:mt-0 sm:first:mt-6`}>
-    <div className={`content flex flex-col ${side === 'right' ? 'md:flex-row-reverse' : 'md:flex-row'} md:w-[90vw] lg:h-[70vh] fullHd:h-[50vh] border rounded-[24px] overflow-hidden gap-4 md:gap-16 lg:gap-40 justify-between md:justify-center lg:justify-between items-center max-w-6xl mx-auto py-5 px-5 md:px-[72px] fullHd:px-[100px] md:py-16 bg-black`}>
+    <div 
+      ref={ref as React.LegacyRef<HTMLDivElement>} 
+      className={`${className && className} ${isDesktop ? 'absolute top-0' : ''} w-full mt-10 first:mt-0 sm:first:mt-6`}
+    >
+    <div 
+      className={`content flex flex-col ${side === 'right' ? 'md:flex-row-reverse' : 'md:flex-row'} md:w-[90vw] lg:h-[70vh] fullHd:h-[50vh] border rounded-[24px] overflow-hidden gap-4 md:gap-16 lg:gap-40 justify-between md:justify-center lg:justify-between items-center max-w-6xl mx-auto py-5 px-5 md:px-[72px] fullHd:px-[100px] md:py-16 bg-black`}
+    >
       <div className="md:w-1/3 fullHd:w-1/2 md:max-w-md">
         <H2 arrow fake>{sectionTitle}</H2>
         <Title titleType="h2" anim={isDesktop} className="mt-6 max-w-sm" fake addDuration={'0.4s'}>{title}</Title>

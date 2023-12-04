@@ -4,9 +4,10 @@ type textSplitProps = {
   input: string;
   type?: "line" | "word" | "char";
   noLH?: boolean;
+  isSunset?: boolean;
 };
 
-export const TextSplit = ({ input, type, noLH }: textSplitProps) => {
+export const TextSplit = ({ input, type, noLH, isSunset}: textSplitProps) => {
   const [words, setWords] = useState<{ content: string; charStart: number }[]>(
     []
   );
@@ -43,6 +44,7 @@ export const TextSplit = ({ input, type, noLH }: textSplitProps) => {
           i={i}
           wordsNb={words.length}
           charStart={word.charStart}
+          isSunset={isSunset}
         />
       ))}
     </span>
@@ -54,9 +56,10 @@ type WordProps = {
   i: number;
   wordsNb: number;
   charStart: number;
+  isSunset?: boolean;
 };
 
-const Word = ({ chars, i, wordsNb, charStart }: WordProps) => {
+const Word = ({ chars, i, wordsNb, charStart, isSunset }: WordProps) => {
   const charsArray = chars.replace(/\s+/g, "").split("");
   const el = useRef<HTMLSpanElement>(null);
   const [lineNb, setLineNb] = useState(0);
@@ -86,7 +89,7 @@ const Word = ({ chars, i, wordsNb, charStart }: WordProps) => {
         }
       >
         {charsArray.map((char, i) => (
-          <Char key={i} char={char} i={i} charStart={charStart} />
+          <Char key={i} char={char} i={i} charStart={charStart} isSunset={isSunset}/>
         ))}
       </span>
       {i !== wordsNb - 1 && <WhiteSpace />}
@@ -98,11 +101,12 @@ type CharProps = {
   char: string;
   i: number;
   charStart: number;
+  isSunset?: boolean;
 };
-const Char = ({ char, i, charStart }: CharProps) => {
+const Char = ({ char, i, charStart, isSunset }: CharProps) => {
   return (
     <span
-      className="split-char"
+      className={`split-char`}
       data-split-char-index={i + charStart}
       data-split-char
       style={
@@ -111,7 +115,7 @@ const Char = ({ char, i, charStart }: CharProps) => {
         } as React.CSSProperties
       }
     >
-      <span className="char-content" split-content={char}>
+      <span className={`char-content ${isSunset ? 'text-linear-sunset' : ''}`} split-content={char}>
         {char}
       </span>
     </span>
