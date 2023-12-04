@@ -28,9 +28,9 @@ export const Title = ({titleType, anim, fromRight, addDuration = '0s', charDelay
   const renderSwitch: any = (type: any) => {
     switch (titleType) {
       case 'mainh1':
-        return <h1 className={`${className ? className : ''} ${anim ? animClass : ''} n27 uppercase text-[40px] md:text-[50px] leading-[110%]`} style={{"--duration-var": addDuration, '--char-delay-add': charDelay} as React.CSSProperties}>{content}</h1>
+        return <h1 className={`${className ? className : ''} ${anim ? animClass : ''}`} style={{"--duration-var": addDuration, '--char-delay-add': charDelay} as React.CSSProperties}>{content}</h1>
       case 'h1':
-        return <H1 className={`${className ? className : ''} ${anim ? animClass : ''} text-[40px] font-medium leading-[110%]`} fake={fake} style={{"--duration-var": addDuration, '--char-delay-add': charDelay} as React.CSSProperties}>{content}</H1>
+        return <H1 className={`${className ? className : ''} ${anim ? animClass : ''}`} fake={fake} style={{"--duration-var": addDuration, '--char-delay-add': charDelay} as React.CSSProperties}>{content}</H1>
       case 'h2':
         return <H2 className={`${className ? className : ''} ${anim ? animClass : ''}`} arrow={arrow} fake={fake} style={{"--duration-var": addDuration, '--char-delay-add': charDelay} as React.CSSProperties}>{content}</H2>
       case 'h3':

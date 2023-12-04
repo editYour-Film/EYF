@@ -2,7 +2,6 @@ import { TypographyProps } from "./H3";
 
 export const H1: React.FC<TypographyProps> = ({
   children,
-  textSize = "text-[40px]",
   className = "",
   id = "",
   fake = false,
@@ -10,11 +9,11 @@ export const H1: React.FC<TypographyProps> = ({
 }) => {
   return (
     !fake ?
-      <h1 className={"n27 uppercase " + className + " " + textSize} id={id} style={style}>
+      <h1 className={"n27 uppercase " + className} id={id} style={style}>
         {children}
       </h1>
     :
-      <div className={"n27 uppercase " + className + " " + textSize} id={id} style={style}>
+      <div className={"n27 uppercase " + className} id={id} style={style}>
         {children}
       </div>
   );

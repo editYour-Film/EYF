@@ -1,21 +1,13 @@
 import styles from '@/styles/components/VideoSlider.module.scss';
 import { useEffect, useState, useRef, createRef, useMemo } from 'react';
 import gsap from 'gsap';
-import { Title } from '../_shared/Title';
 import { useSwipeable } from 'react-swipeable';
 import { useDispatch } from 'react-redux'
 import { toWatch, toRegular, toPause} from "@/store/slices/cursorSlice"
 import {videoInterface} from './ConfidenceSection'
 
-import { streamingProfile } from "@cloudinary/url-gen/actions/transcode";
-import { CloudinaryVideo } from "@cloudinary/url-gen/assets/CloudinaryVideo";
-import { format } from "@cloudinary/url-gen/actions/delivery";
-import { auto } from "@cloudinary/url-gen/qualifiers/format";
-import {AdvancedVideo} from '@cloudinary/react';
-
 interface slideInterface {
   el: HTMLDivElement,
-  titleEl: HTMLDivElement,
   editorEl: HTMLDivElement,
   spanEl: HTMLDivElement,
   videoEl?: HTMLVideoElement,
@@ -38,7 +30,6 @@ export const VideoSlider = ({videos}: VideoSliderPros) => {
 
   const moveOffset = useRef(0)
   const videoCardsWrapper = useRef<any>()
-  const titleWrapper = useRef<any>()
 
   const dispatch = useDispatch()
 
@@ -61,32 +52,16 @@ export const VideoSlider = ({videos}: VideoSliderPros) => {
 
   const slides = useRef<any>([])
 
-  const [cldVideos, setCldVideos] = useState<CloudinaryVideo[]>()
-
   useEffect(() => {
     const cb = () => { handleResize() }
 
     window.addEventListener('resize', cb)
 
-    const _cldVideos:CloudinaryVideo[] = [] 
-    videos.forEach(vid => {
-      _cldVideos.push(
-        new CloudinaryVideo(vid.publicId, {
-          cloudName: process.env.NEXT_PUBLIC_CLOUDINARY_NAME,
-          apiKey: process.env.NEXT_PUBLIC_CLOUDINARY_KEY,
-          apiSecret: process.env.NEXT_PUBLIC_CLOUDINARY_SECRET
-        })
-        .delivery(format(auto()))
-      )
-    });
-
-    setCldVideos(_cldVideos)
-
     videosWRef.current?.forEach((el:any, i:number) => {  
       const slide: slideInterface = {
         el: el?.current,
-        titleEl: titlesRef.current[i].current,
         editorEl: editorsRef.current[i].current,
+        videoEl: videosRef.current[i].current,
         spanEl: spanRef.current[i].current,
         i,
         position: i !== videosWRef.current.length - 1 && i !== videosWRef.current.length - 2 
@@ -100,16 +75,11 @@ export const VideoSlider = ({videos}: VideoSliderPros) => {
     })
 
     return () => {
+      slides.current = []
       window.removeEventListener('resize', cb)
       ctx && ctx.revert()
     };
   }, [])
-
-  useEffect(() => {
-    cldVideos?.forEach((video, i) => {      
-      slides.current[i].videoEl = videosRef.current[i].current
-    })    
-  }, [cldVideos])
 
   useEffect(() => {  
     offset.current = videosWRef.current ? videosWRef.current[0].current.offsetWidth : 0
@@ -138,13 +108,38 @@ export const VideoSlider = ({videos}: VideoSliderPros) => {
         
         if (ref.i === currentIndex) {
           filter && tl.to(filter, {
-            opacity: 0.5
-          }, 0.2)
+            opacity: 0.5,
+            ease: 'expo.out',
+            duration: 1
+          }, 0)
         } else {
           filter && tl.to(filter, {
-            opacity: 1
+            opacity: 1,
+            ease: 'expo.out',
+            duration: 1
           }, 0)
         }
+
+        if (ref.i === currentIndex) {
+          spanRef.current[i] && tl.to(spanRef.current[i].current, {
+            scaleY: 1,
+            opacity: 1,
+            duration: 0.3,
+          }, 0)
+        } else if (Math.abs(i - currentIndex) < 2) {
+          spanRef.current[i] && tl.to(spanRef.current[i].current, {
+            scaleY: 1 - 0.15,
+            opacity: 0.5,
+            duration: 0.3,
+          }, 0)
+        } else {
+          spanRef.current[i] && tl.to(spanRef.current[i].current, {
+            scaleY: 1 - 0.36,
+            opacity: 0.3,
+            duration: 0.3,
+          }, 0)
+        }
+        
 
         if (ref.el) {
           if(ref.position === -2 && direction.current === 1) {
@@ -158,48 +153,30 @@ export const VideoSlider = ({videos}: VideoSliderPros) => {
           } else {
             tl.to(ref.el, {
               x: offset.current * ref.position,
-              duration: 0.8,
-              ease: "power2.inOut"
-            }, 0)
-          }
-  
-          if(i === currentIndex) {
-            tl.to(ref.el, {
-              scale: 1.0,
-              ease: "power3.out"
-            }, 0.5)
-            tl.to(ref.spanEl, {
-              opacity: 1
-            }, 0)
-          } else {
-            tl.to(ref.el, {
-              scale: 0.90
-            }, 0)
-            tl.to(ref.spanEl, {
-              opacity: 0.4
+              duration: 1,
+              ease: "expo.out"
             }, 0)
           }
         }
 
-
-        const titleDuration = 0.5;
-        if(i === currentIndex) {
-          (ref.titleEl.querySelectorAll('.char-content') && ref.editorEl.querySelectorAll('.char-content')) && tl.fromTo([ref.titleEl.querySelectorAll('.char-content'), ref.editorEl.querySelectorAll('.char-content')], {
-            yPercent: 120,
-          },{
-            yPercent: 0,
-            stagger: 0.01,
-            ease:'power2.out',
-            duration: titleDuration
-          }, titleDuration)
-        } else {
-          (ref.titleEl.querySelectorAll('.char-content') && ref.editorEl.querySelectorAll('.char-content')) && tl.to([ref.titleEl.querySelectorAll('.char-content'), ref.editorEl.querySelectorAll('.char-content')], {
-            yPercent: -100,
-            stagger: 0.01,
-            ease:'power.in',
-            duration: titleDuration
-          }, 0)
-        }
+        // const titleDuration = 0.4;
+        // if(i === currentIndex) {
+        //   (ref.titleEl.querySelectorAll('.char-content') && ref.editorEl.querySelectorAll('.char-content')) && tl.fromTo([ref.titleEl.querySelectorAll('.char-content'), ref.editorEl.querySelectorAll('.char-content')], {
+        //     yPercent: 120,
+        //   },{
+        //     yPercent: 0,
+        //     stagger: 0.01,
+        //     ease:'power2.out',
+        //     duration: titleDuration
+        //   }, titleDuration)
+        // } else {
+        //   (ref.titleEl.querySelectorAll('.char-content') && ref.editorEl.querySelectorAll('.char-content')) && tl.to([ref.titleEl.querySelectorAll('.char-content'), ref.editorEl.querySelectorAll('.char-content')], {
+        //     yPercent: -120,
+        //     stagger: 0.01,
+        //     ease:'power.in',
+        //     duration: titleDuration
+        //   }, 0)
+        // }
         
       });
     })
@@ -214,13 +191,13 @@ export const VideoSlider = ({videos}: VideoSliderPros) => {
           x: offset.current * ref.position + moveOffset.current
         })
 
-        setTimeout(() => {
-          if(i !== currentIndex) {                    
-            (ref.titleEl.querySelectorAll('.char-content') && ref.editorEl.querySelectorAll('.char-content')) && gsap.set([ref.titleEl.querySelectorAll('.char-content'), ref.editorEl.querySelectorAll('.char-content')], {
-              yPercent: -100
-            })
-          }
-        }, 100)
+        // setTimeout(() => {
+        //   if(i !== currentIndex) {                    
+        //     (ref.titleEl.querySelectorAll('.char-content') && ref.editorEl.querySelectorAll('.char-content')) && gsap.set([ref.titleEl.querySelectorAll('.char-content'), ref.editorEl.querySelectorAll('.char-content')], {
+        //       yPercent: -100
+        //     })
+        //   }
+        // }, 100)
 
       });
     })
@@ -368,7 +345,7 @@ export const VideoSlider = ({videos}: VideoSliderPros) => {
         {videos?.map((video, i) => {          
           return (
             <div key={i} ref={videosWRef.current[i]} className={`${styles.videoW} relative md:absolute w-[75vw] h-[38vw] lg:w-[57vw] lg:h-[29vw] flex-shrink-0 px-1 md:px-2 lg:px-4 origin-bottom`}>
-              <div className="rounded-xl w-full h-full overflow-hidden">
+              <div className="rounded-dashboard-button-square-radius w-full h-full overflow-hidden">
                 <div className={`${styles.filter} filter absolute w-full h-full text-blue text-lg z-10 flex justify-center items-center pointer-events-none`}></div>
                 <video 
                   ref={videosRef.current[i]} 
@@ -391,89 +368,42 @@ export const VideoSlider = ({videos}: VideoSliderPros) => {
                   >
                   <source src={video.path} type="video/mp4" />
                 </video>
-                
-                {/* {videos?.length && <video 
-                  ref={videosRef.current[i]}
-                  className="w-full h-full object-cover pointer-events-auto"
-                  data-position = {slides.current[i]?.position}
-                  onClick={() => {
-                    handleVideoClick(videosRef.current[i].current, i)
-                  }}
-                  onMouseOver={() => {
-                    handleMouseEnter(videosRef.current[i].current, i)
-                  }}
-                  onMouseLeave={() => {
-                    handleMouseLeave(videosRef.current[i].current, i)
-                  }}
-                  onTimeUpdate = {() => {
-                    handleTimeUpdate(videosRef.current[i].current, i)
-                  }}
-                  onPlay={ () => { setIsPlaying(true) }}
-                  onPause={() => { setIsPlaying(false)}}
-                >
-                  <source src=''/>
-                </video>} */}
-
               </div>
             </div>
           )
         })}
       </div>
 
-      <div className={`hidden md:block w-[75vw] lg:w-[57vw] px-1 md:px-2 lg:px-4 n27 text-xl uppercase font-light mt-4`}>
-        <div className="w-full flex flex-col gap-5 md:flex-row justify-between h-4">
-          <div ref={titleWrapper} className='relative w-9/12'>
-          {videos?.map((video, i) => {
-            return (
-              <div ref={titlesRef.current[i]} key={i} className={`${currentIndex === i ? 'active' : ''} absolute top-0 left-0`}>
-                <Title titleType='none' split>{video.title}</Title>
-              </div>
-            )
-          })}
-          </div>
-          <div className="relative text-primary-middle">
-            {videos?.map((video, i) => {
-              return (
-                <div ref={editorsRef.current[i]} key={i} className={`${currentIndex === i ? 'active' : ''} absolute top-0 md:right-0`}>
-                  <Title titleType='none' split>{video.madeBy}</Title>
-                </div>
-              )
-            })}
-          </div>
-        </div>
-
-        <div className="hidden w-full md:flex flex-row justify-between items-center mt-10 md:mt-5">
+      <div className="w-[75vw] lg:w-[57vw] px-1 md:px-2 lg:px-4 mt-dashboard-spacing-element-medium flex flex-row justify-between items-center text-soyMilk-500 text-[17px] font-light">
           <div>{currentIndex + 1 < 10 ? "0" + (currentIndex + 1) : (currentIndex + 1)}</div>
-          <div
+          {/* <div
             className='cursor-pointer opacity-60 hover:opacity-100 transition-opacity'
             onClick={() => {
               handlePrev()
             }}
 
-          > {'<'} </div>
-          <div className='w-4/6 h-[15px] flex flex-row justify-between'>
+          > {'<'} </div> */}
+          <div className='w-4/6 h-[25px] flex flex-row justify-center'>
             {videos?.map((video, i) => {
               return (
               <div 
                 key={i} 
                 ref={spanRef.current[i]} 
-                className={`w-[10px] h-full border-l-2 border-white mx-3 cursor-pointer`}
+                className={`w-[1px] h-full border-l-2 border-dashboard-button-stroke-hover opacity-10 mx-[6px] cursor-pointer`}
                 onClick={() => {
                   handleVideoClick(videosRef.current[i].current, i)
                 }}
                 ></div>)
             })}
           </div>
-          <div
+          {/* <div
             className='cursor-pointer opacity-60 hover:opacity-100 transition-opacity'
             onClick={() => {
               handleNext()
             }}
-          > {'>'} </div>
+          > {'>'} </div> */}
           <div>{videos?.length < 10 ? "0" + (videos?.length) : (videos?.length)}</div>
         </div>
-
-      </div>
     </div>
   )
 }
