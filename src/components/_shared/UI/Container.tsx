@@ -5,7 +5,7 @@ export interface ContainerProps {
 
 const Container: React.FC<ContainerProps> = ({ children, className = "" }) => {
   return (
-    <div className={"px-5 md:px-0 max-w-6xl mx-auto relative " + className}>
+    <div className={"md:px-[50px] xl:px-[167px] w-full max-w-[1600px] mx-auto relative " + className}>
       {children}
     </div>
   );

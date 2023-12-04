@@ -1,4 +1,4 @@
-import { ReactNode } from "react"
+import { ReactNode, forwardRef } from "react"
 
 type SimpleCardProps = {
   children?: ReactNode,
@@ -6,10 +6,13 @@ type SimpleCardProps = {
   className?: string
 }
 
-export const SimpleCard = ({children, paddingMobileSmall, className}:SimpleCardProps) => {
+export const SimpleCard = forwardRef<HTMLDivElement, SimpleCardProps>(function SimpleCard({children, paddingMobileSmall, className}, ref) {
   return (
-    <div className={`card-simple ${paddingMobileSmall ? 'px-dashboard-specific-radius sm:px-dashboard-spacing-element-medium py-dashboard-spacing-element-medium' : 'p-dashboard-spacing-element-medium'} border bg-dashboard-button-dark shadow-large rounded-dashboard-button-square-radius ${className}`}>
+    <div 
+      ref={ref}
+      className={`card-simple ${paddingMobileSmall ? 'px-dashboard-specific-radius sm:px-dashboard-spacing-element-medium py-dashboard-spacing-element-medium' : 'p-dashboard-spacing-element-medium'} border-03 bg-dashboard-button-dark shadow-large rounded-dashboard-button-square-radius ${className}`}
+    >
       {children}
     </div>
   )
-}
+})
