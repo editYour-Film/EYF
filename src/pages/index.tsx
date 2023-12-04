@@ -112,13 +112,24 @@ export default function Home(/*{ seodata }: any*/) {
               <ConfidenceSection videos={videos} data={data.section2} />
             )}
 
-            <Container>
-              <YourVideoSection data={data.section4} />
+            <div>
+              <Container>
+                <YourVideoSection data={data.section4} />
+              </Container>
 
-              {data.comparison_section && (
-                <ComparativeSection data={data.comparison_section} />
-              )}
-            </Container>
+              <div className="relative h-0">
+                <div className="absolute top-0 right-0 bg-radial-gradient-pink w-[600px] h-[400px] translate-x-[33%]"></div>
+              </div>
+
+              <Container>
+                <div className="relative w-full">
+                  {data.comparison_section && (
+                    <ComparativeSection data={data.comparison_section} />
+                  )}
+                </div>
+              </Container>
+            </div>
+
 
             <CreatorToEditor />
 
