@@ -7,6 +7,10 @@ import { useEffect, useRef, createRef } from "react";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
+import { CardsContainer } from "../_shared/UI/CardsContainer";
+import { SimpleCard } from "../_shared/UI/CardSimple";
+import { IslandButton } from "../_shared/buttons/IslandButton";
+import routes from "@/routes";
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -60,75 +64,93 @@ export const YourProfessionalVideoSection = ({ data }: any) => {
   }, [inView])
 
   return (
-    <div
-      ref={ref}
-      className={`mt-20 sm:mt-40 mx-auto pb-32 border-b border-borderWhite z-0 ${inView ? " inView" : ""}`}
-    >
-      <div className="bg-pattern-linear-top absolute bottom-0 left-0 w-full h-[130%] -z-10"></div>
-      <div className="max-w-6xl sm:h-[410px] mx-auto flex flex-col sm:flex-row gap-9 sm:items-center sm:justify-between mt-10 md:mt-20 perspective">
-        <div 
-          ref={cards.current[0]}
-          className="flex flex-col items-center sm:h-full bg-cards w-full relative pt-10 px-7 rounded-3xl">
-          <div className="relative w-full h-full max-w-[400px]">
-            <p className="relative n27 text-center text-xl text-ebebeb z-20">
-              {data.card1_title}
-            </p>
-            <p className="relative text-center font-medium text-violet max-w-md text-2xl z-20">
-              {data.card1_text}
-            </p>
-            <div className="mt-8 sm:mt-4 sm:absolute sm:bottom-0 w-full h-[250px] rounded-t-[15px] overflow-hidden">
-              <Image
-                src={data.card1_img.data.attributes.url}
-                alt=""
-                height={250}
-                width={450}
-                className="relative h-full z-20 object-cover"
-              />
+    <CardsContainer
+      headingComp={
+        <SimpleCard>
+          <div className="flex flex-col items-center gap-dashboard-spacing-element-medium">
+            <div className="flex flex-col items-center gap-dashboard-specific-radius">
+              <div className="text-dashboard-text-description-base text-title-medium">Chaque jours, des nouveaux modèles de montage disponibles</div>
+              <div className="text-dashboard-text-description-base-low text-base">Quand vos idées rencontrent nos talents. Choisissez le modèle de montage qui correspond le mieux à votre projet et composez vous-même le devis de votre vidéo.</div>
             </div>
+            <IslandButton 
+              type="primary"
+              label={'Ouvrir le catalogue'}
+              href={routes.CATALOGUE}
+              enableTwist
+            />
           </div>
-          <div className="absolute w-full h-[150px] gradient-to-top-black-transparent z-20 bottom-0"></div>
-
+        </SimpleCard>
+      }
+    >
+      <SimpleCard
+        className="relative overflow-hidden flex flex-col justify-between gap-[56px]"
+      >
+        <div className="lg:w-2/3">
+          <div className="text-dashboard-text-description-base-low text-title-small">Plus Rapide</div>
+          <div className="text-dashboard-text-description-base text-medium">Commandez aujourd’hui, votre montage démarre demain</div>
         </div>
-        <div 
-          ref={cards.current[1]}
-          className="relative flex flex-col items-center sm:h-full bg-cards w-full pt-10 px-7 rounded-3xl">
-            <div className="relative w-full h-full max-w-[400px]">
-              <p className="relative n27 text-center text-xl text-ebebeb z-20">
-                {data.card2_title}
-              </p>
-              <p className="relative text-center font-medium text-violet max-w-md text-2xl z-20">
-                {data.card2_text}
-              </p>
 
-              <div className="relative flex flex-row justify-between w-full z-20 mt-12">
-                <div className="flex flex-row justify-between items-center border rounded-full z-10 bg-010304">
-                  <div className="flex justify-center items-center rounded-full bg-white text-black w-[24px] h-[24px] n27 font-bold">1</div>
-                  <div className="text-alphaWhite px-3 text-sm">Durée du film</div>
-                </div>
-                <div className="flex flex-row justify-between items-center border rounded-full z-10 bg-010304">
-                  <div className="flex justify-center items-center rounded-full bg-white text-black w-[24px] h-[24px] n27 font-bold">2</div>
-                  <div className="text-alphaWhite px-3 text-sm">Modèle</div>
-                </div>
-                <div className="flex flex-row justify-between items-center border rounded-full z-10 bg-010304">
-                  <div className="flex justify-center items-center rounded-full bg-violet text-white w-[24px] h-[24px] n27 font-bold">3</div>
-                  <div className="text-alphaWhite px-3 text-sm">Fichiers</div>
-                </div>
-                <div className="absolute w-full h-[1px] bg-white opacity-30 z-0 top-1/2 -translate-y-1/2"></div>
-              </div>
+        <div className="relative w-full">
+          <Image
+            src={data.card1_img.data.attributes.url}
+            alt=""
+            width={data.card1_img.data.attributes.width}
+            height={data.card1_img.data.attributes.height}
+            className="relative z-20 object-cover"
+          />
+        </div>
+      </SimpleCard>
 
-              <div className="mt-8 sm:mt-4 sm:absolute bottom-0 w-full h-[170px] overflow-hidden rounded-t-[20px]">
-                <Image
-                  src={data.card2_img.data.attributes.url}
-                  alt=""
-                  height={250}
-                  width={400}
-                  className="relative z-20 w-full h-auto object-cover"
-                />
-              </div>
+      <SimpleCard
+        className="relative overflow-hidden flex flex-col justify-between gap-[56px]"
+      >
+        <div className="lg:w-2/3">
+          <div className="text-dashboard-text-description-base-low text-title-small">Plus Simple</div>
+          <div className="text-dashboard-text-description-base text-medium">Ajustez le devis de votre vidéo selon votre budget et vos besoins</div>
+        </div>
+
+        <div>
+          <div className="relative flex flex-row justify-between w-full z-20">
+            <div className="flex flex-row justify-between items-center border rounded-full z-10 bg-010304">
+              <div className="flex justify-center items-center rounded-full bg-white text-black w-[24px] h-[24px] n27 font-bold">1</div>
+              <div className="text-alphaWhite px-3 text-sm">Modèle</div>
             </div>
-            <div className="absolute w-full h-[150px] gradient-to-top-black-transparent z-20 bottom-0"></div>
+            <div className="flex flex-row justify-between items-center border rounded-full z-10 bg-010304">
+              <div className="flex justify-center items-center rounded-full bg-white text-black w-[24px] h-[24px] n27 font-bold">2</div>
+              <div className="text-alphaWhite px-3 text-sm">Durée du film</div>
+            </div>
+            <div className="flex flex-row justify-between items-center border rounded-full z-10 bg-010304">
+              <div className="flex justify-center items-center rounded-full bg-violet text-white w-[24px] h-[24px] n27 font-bold">3</div>
+              <div className="text-alphaWhite px-3 text-sm"> 12 Fichiers</div>
+            </div>
+            <div className="absolute w-full h-[1px] bg-white opacity-30 z-0 top-1/2 -translate-y-1/2"></div>
+          </div>
+
+          <div className="mt-8 sm:mt-8 w-full overflow-hidden rounded-t-[20px]">
+            <Image
+              src={data.card2_img.data.attributes.url}
+              alt=""
+              width={data.card1_img.data.attributes.width}
+              height={data.card1_img.data.attributes.height}
+              className="relative z-20 w-full h-auto object-cover"
+            />
+          </div>
         </div>
-      </div>
-    </div>
+      </SimpleCard>
+    </CardsContainer>
+
+    // <div
+    //   ref={ref}
+    //   className={`mt-20 sm:mt-40 mx-auto pb-32 border-b border-borderWhite z-0 ${inView ? " inView" : ""}`}
+    // >
+    //   <div className="bg-pattern-linear-top absolute bottom-0 left-0 w-full h-[130%] -z-10"></div>
+    //   <div className="max-w-6xl sm:h-[410px] mx-auto flex flex-col sm:flex-row gap-9 sm:items-center sm:justify-between mt-10 md:mt-20 perspective">
+
+    //       <div className="absolute w-full h-[150px] gradient-to-top-black-transparent z-20 bottom-0"></div>
+
+    //     </div>
+
+    //   </div>
+    // </div>
   );
 };
