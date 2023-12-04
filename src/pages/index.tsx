@@ -15,7 +15,7 @@ import { Marquee } from "@/components/home/Marquee";
 import { ComparativeSection } from "@/components/home/ComparativeSection";
 import { CreatorToEditor } from "@/components/home/CreatorToEditor";
 import { videos } from "../components/data/videos";
-import {
+import Container, {
   ContainerFullWidth,
   ContainerFull,
 } from "@/components/_shared/UI/Container";
@@ -66,7 +66,7 @@ export default function Home(/*{ seodata }: any*/) {
 
     getStrapi();
     getStrapiFaq();
-    getSeoData();
+    getSeoData();        
   }, []);
 
   const isMobile = useMediaQuery("(max-width: 768px)");
@@ -81,56 +81,53 @@ export default function Home(/*{ seodata }: any*/) {
 
       <LayoutMain activeNavItem="home">
         {data && dataFaqs && (
-          <div>
-            <ContainerFull>
-              <TopVideoSection data={{ ...data.top_video, ...data.head }} />
-              <PartnersSection />
-            </ContainerFull>
+          <div className="flex flex-col gap-[100px]">
+            {data.top_video && data.head &&
+              <ContainerFull>
+                <TopVideoSection data={{ ...data.top_video, ...data.head }} />
+              </ContainerFull>
+            }
 
+            <Container>
+              <PartnersSection />
+            </Container>
+            
             {data.section1 && (
-              <ContainerFullWidth>
-                <YourProfessionalVideoSection data={data.section1} />
-              </ContainerFullWidth>
+            <Container>
+              <YourProfessionalVideoSection data={data.section1} />
+            </Container>
             )}
+
+            <Container>
+
+            { data.section3 &&
+              // data.step1_media &&
+              // data.step2_media &&
+              // data.step3_media &&
+                <StepsSection data={data.section3} />
+            }
+            </Container>
 
             {data.section2 && (
               <ConfidenceSection videos={videos} data={data.section2} />
             )}
 
-            <div className="py-10 md:py-20">
-              <hr className="absolute left-0 w-full" />
-            </div>
-
-            <ContainerFullWidth>
-              {data.section3 &&
-                data.step1_media &&
-                data.step2_media &&
-                data.step3_media && <StepsSection data={data.section3} />}
+            <Container>
               <YourVideoSection data={data.section4} />
 
               {data.comparison_section && (
                 <ComparativeSection data={data.comparison_section} />
               )}
+            </Container>
 
-              <CreatorToEditor />
+            <CreatorToEditor />
 
-              {!isMobile && data.marquee.line_1 && data.marquee.line_2 && (
-                <Marquee
-                  firstLine={data.marquee.line_1}
-                  secondLine={data.marquee.line_2}
-                />
-              )}
+            {data.section5 && <EditorSection data={data.section5} />}
 
-              {data.section5 && <EditorSection data={data.section5} />}
+            {dataFaqs && <FaqSection data={dataFaqs} />}
 
-              <WhySectionFilterProvider>
-                {/* <WhySection data={data.section6} /> */}
-              </WhySectionFilterProvider>
+            <NewsletterSection />
 
-              {dataFaqs && <FaqSection data={dataFaqs} />}
-
-              <NewsletterSection />
-            </ContainerFullWidth>
           </div>
         )}
       </LayoutMain>
