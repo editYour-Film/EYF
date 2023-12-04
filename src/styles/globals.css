@@ -12,6 +12,16 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: N27;
+  src: 
+    url('/fonts/n27/N27-Light.woff') format("woff"),
+    url('/fonts/n27/N27-Light.woff2') format("woff2"),
+    url('/fonts/n27/N27-Light.otf') format("otf");
+  font-weight: 300;
+  font-display: swap;
+}
+
 /* hide input arrows  Chrome, Safari, Edge, Opera */
 input[type="number"] {
   -moz-appearance: textfield;
