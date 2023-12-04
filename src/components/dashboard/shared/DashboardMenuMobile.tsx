@@ -1,4 +1,3 @@
-"use client";
 import Close from '@/icons/x-circle.svg'
 import Insta from '@/icons/instagram.svg'
 import Linkedin from '@/icons/linkedin.svg'
@@ -26,7 +25,7 @@ export const DashboardMenuMobile = ({ className, menu, trigger, action, children
   const [isTweening, setIsTweening] = useState(false)
 
   const ctx = useRef<gsap.Context>()
-  const wSize = useWindowSize()
+  const wSize = typeof window === 'undefined' ? useWindowSize() : undefined
 
   const setGsapContext = () => {
     const context = gsap.context((self) => {
