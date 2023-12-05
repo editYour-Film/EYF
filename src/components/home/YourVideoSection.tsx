@@ -5,38 +5,54 @@ import Image from "next/image";
 import { useDispatch } from "react-redux";
 import { setJoinBetaVisible } from "@/store/slices/joinBetaSlice";
 import { ResponsiveImg } from "../_shared/ResponsiveImg";
+import { Video } from "../_shared/video/Video";
+import { IslandButton } from "../_shared/buttons/IslandButton";
 
 export const YourVideoSection = ({ data }: any) => {
   const dispatch = useDispatch();
 
   if (data)
     return (
-      <div className="relative border-b mt-14 md:mt-56 w-full mx-auto">
-        <div className="flex flex-col items-center justify-center gap-12 md:gap-18 lg:gap-24 fullHd:gap-52 pt-8 md:py-28 relative z-20">
+      <div className="relative">
+        <div className="flex flex-col items-center justify-center gap-12 md:gap-18 lg:gap-24 fullHd:gap-52 md:py-20 relative z-20">
           
           <div className="flex flex-col items-center gap-dashboard-spacing-element-medium text-center max-w-[600px]">
             <H1 fake className="text-title-medium">
               {data.title}
             </H1>
             <p className="text-base text-dashboard-text-description-base max-w-[80%]">{data.text}</p>
-            <Button
-              variant="primary"
+            <IslandButton
+              type="primary"
               className="max-w-max"
-              text="Commencer"
+              label="Commencer"
+              enableTwist
               onClick={() => {
                 dispatch(setJoinBetaVisible());
               }}
             />
           </div>
           
-          <div className="relative">
-            <Image 
-              src={data.img.data.attributes.url}
-              alt={data.img.data.attributes.alternativeText}
-              width={data.img.data.attributes.width}
-              height={data.img.data.attributes.height}
-              className="object-contain top-0"
-            />
+          <div className="relative border rounded-dashboard-button-square-radius overflow-hidden">
+            {
+              data.media && data.media.data.attributes.mime.split('/')[0] === 'video' 
+              ?
+                <Video
+                  video={data.media.data.attributes}
+                  autoPlay
+                  muted
+                  noPlayer
+                  trigger={true}
+                />
+              :
+                <Image 
+                  src={data.media.data.attributes.url}
+                  alt={data.media.data.attributes.alternativeText}
+                  width={data.media.data.attributes.width}
+                  height={data.media.data.attributes.height}
+                  className="object-contain top-0"
+                />
+            }
+
           </div>
 
         </div>
