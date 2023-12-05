@@ -47,6 +47,7 @@ export const EditorSection = ({ data }: EditorSectionProps) => {
 
   useEffect(() => {
     if (isMobile) return;
+    let trigger1:globalThis.ScrollTrigger
 
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
@@ -56,46 +57,49 @@ export const EditorSection = ({ data }: EditorSectionProps) => {
         },
       });
 
-      tl.fromTo(
-        largeCard.current!,
-        {
-          rotateX: "10deg",
-          y: 50,
-        },
-        {
-          rotateX: "0deg",
-          y: 0,
-        },
-        0
-      );
+      if(!isMobile) {
+        tl.fromTo(
+          largeCard.current!,
+          {
+            rotateX: "10deg",
+            y: 50,
+          },
+          {
+            rotateX: "0deg",
+            y: 0,
+          },
+          0
+        );
+  
+        tl.fromTo(
+          largeCardInner.current!,
+          {
+            y: 50,
+          },
+          {
+            y: 0,
+          },
+          0
+        );
+      }
 
-      tl.fromTo(
-        largeCardInner.current!,
-        {
-          y: 50,
-        },
-        {
-          y: 0,
-        },
-        0
-      );
-
-      const trigger1 = ScrollTrigger.create({
+      trigger1 = ScrollTrigger.create({
         trigger: largeCard.current,
         start: `top bottom`,
         end: `center center`,
         id: "step1",
 
         onUpdate: (self) => {
-          tl.progress(self.progress);
+          !isMobile && tl.progress(self.progress);
         },
       });
     });
 
     return () => {
       ctx.revert();
+      trigger1 && trigger1.kill()
     };
-  }, [inviewMain]);
+  }, [inviewMain, isMobile]);
 
   const handleMouseMove = (e: React.MouseEvent<Element, MouseEvent>) => {
     gradient.current &&
@@ -109,28 +113,27 @@ export const EditorSection = ({ data }: EditorSectionProps) => {
   return (
     <div
       ref={main}
-      className={`editorSection relative mx-auto ${
-        inviewMain ? "inView" : ""
-      } mt-16 sm:mt-0 border sm:border-none rounded-[20px] sm:rounded-none overflow-hidden bg-background-card sm:bg-transparent`}
+      className={`editorSection relative mx-auto ${inviewMain ? "inView" : ""}`}
       onMouseMove={(e) => {
         handleMouseMove(e);
       }}
     >
-      <div className="relative max-w-7xl mx-auto z-20">
-        <H2 arrow className="md:hidden px-4 w-max mt-10 md:mt-20" fake>
-          {" "}
-          {data.section_title}{" "}
-        </H2>
-        {/* <Title titleType="h1" anim className="mt-8 text-center max-w-xl mx-auto" fake>{data.title}</Title> */}
+      <div className="relative mx-auto z-20">
+        <div className="flex flex-col max-w-[660px] pl-[20px]">
+          <H2 className="text-dashboard-text-description-base-low text-title-small" fake>
+            {data.section_title ?? 'MONTEUR.SE.S'}
+          </H2>
+          <Title titleType="h1" anim className="text-title-large font-medium text-dashboard-text-title-white-high mt-6" fake>{data.title}</Title>
+          <p className="mt-9 text-base text-dashboard-text-description-base">Vous êtes disponibles quelques jours en attendant ton prochain montage ? editYour.Film vous propose d’occuper 1, 2 jusqu’à 5 jours d’inactivité par le montage d’une vidéo à destination des réseaux sociaux, des plateformes ou de la TV.</p>
+        </div>
+
+        <div className="absolute left-1/2 -translate-x-1/2 w-full h-[600px] bg-[rgba(47,35,80,0.36)] blur-[100px]"></div>
 
         <div className="editorSection__cardsWrapper relative perspective">
           <div
             ref={cardsRef}
-            className={`hidden relative md:flex items-start justify-between flex-col md:flex-row gap-4 mt-12 md:mt-32 max-w-5xl mx-auto z-10 perspective`}
+            className={`relative flex items-start justify-between flex-row md:flex-row gap-4 w-full overflow-scroll md:overflow-visible mt-12 md:mt-32 px-3 md:px-0 pb-dashboard-spacing-element-medium md:pb-0 z-10 perspective`}
           >
-            {/* {videos.slice(0, 3).map((x, i) => {
-              return <Item key={i} bg={x.thumbnail} />;
-            })}*/}
             <Item
               title={data.card1_title}
               text={data.card1_text}
@@ -159,12 +162,8 @@ export const EditorSection = ({ data }: EditorSectionProps) => {
 
           <div
             ref={largeCard}
-            className={`relative ${cardLargeStyles.editorcardLarge} md:border rounded-3xl bg-cover bg-center bg-no-repeat mt-4 max-w-5xl mx-auto z-10 overflow-hidden perspective origin-center`}
-            style={
-              {
-                "--item-delay": 40 / 100,
-              } as React.CSSProperties
-            }
+            className={`relative ${cardLargeStyles.editorcardLarge} md:border rounded-dashboard-button-square-radius mt-dashboard-spacing-element-medium md:mt-4 bg-dashboard-background-content-area md:bg-transparent border pt-dashboard-spacing-element-medium z-10 overflow-hidden perspective origin-center`}
+            style={{"--item-delay": 40 / 100} as React.CSSProperties}
           >
             <div
               ref={largeCardInner}
@@ -177,12 +176,12 @@ export const EditorSection = ({ data }: EditorSectionProps) => {
                   className={`absolute w-[130%] h-[130%] left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] z-10 ${cardLargeStyles.filter}`}
                 ></div>
                 <div
-                  className={`absolute w-[130%] h-[130%] left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] z-10 bg-[#010304] opacity-[0.43]`}
+                  className={`absolute w-[150%] h-[150%] left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] z-10 bg-[#010304] opacity-[0.43]`}
                 ></div>
                 {data.large_card_img.data && (
                   <ResponsiveImg
                     isStatic
-                    className={`${cardLargeStyles.image} scale-125 object-cover`}
+                    className={`${cardLargeStyles.image} scale-150 object-cover`}
                     data={data.large_card_img.data.attributes.url}
                     alt={data.large_card_img.data.attributes.alternativeText}
                     w={{ xs: 500, sm: 900, lg: 1100 }}
@@ -190,12 +189,12 @@ export const EditorSection = ({ data }: EditorSectionProps) => {
                 )}
               </div>
 
-              <div className="relative flex flex-col md:flex-row-reverse justify-between gap-16 z-20">
-                <div className="md:basis-[55%] px-4">
-                  <H1 textSize="text-2xl md:text-3xl" fake>
+              <div className="relative flex flex-col md:flex-row-reverse justify-between gap-dashboard-spacing-element-medium z-20">
+                <div className="md:basis-[55%] px-4 flex flex-col justify-center items-center md:items-start text-center md:text-left">
+                  <H1 className="text-title-medium text-dashboard-text-title-white-high font-medium" fake>
                     {data.large_card_title}
                   </H1>
-                  <p className="text-xl text-base-text my-5 max-w-xs">
+                  <p className="text-base text-dashboard-text-description-base my-5 max-w-xs">
                     {data.large_card_content}
                   </p>
                   <div className="flex flex-wrap gap-2.5">
@@ -252,6 +251,11 @@ const Item = ({ title, text, img, i, delay, inView }: ItemProps) => {
   const isMobile = useMediaQuery("(max-width: 768px)");
 
   useEffect(() => {
+    if(isMobile) setIsDisplayed(true)
+    else setIsDisplayed(false)
+  }, [isMobile])
+
+  useEffect(() => {
     if (isMobile) return;
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
@@ -306,13 +310,13 @@ const Item = ({ title, text, img, i, delay, inView }: ItemProps) => {
       ref={card}
       className={`${cardStyles.editorcard} ${
         isDisplayed ? cardStyles.active : " "
-      } relative hidden before:content-[''] before:display-block before:pointer-events-none basis-1/4 shrink-0 grow before:pb-[100%] border rounded-3xl overflow-hidden md:flex items-end cursor-pointer`}
+      } relative basis-11/12 md:basis-1/4 shrink-0 grow flex items-end w-screen h-[80vh] md:w-auto md:h-auto before:content-[''] before:display-block before:pointer-events-none before:pb-[100%] border rounded-dashboard-button-square-radius overflow-hidden cursor-pointer`}
       onMouseLeave={() => {
         dispatch(toRegular());
-        setIsDisplayed(false);
+        !isMobile && setIsDisplayed(false);
       }}
       onClick={() => {
-        setIsDisplayed(!isDisplayed);
+        !isMobile && setIsDisplayed(!isDisplayed);
       }}
       onMouseEnter={() => {
         dispatch(toClick());
@@ -323,7 +327,7 @@ const Item = ({ title, text, img, i, delay, inView }: ItemProps) => {
         <div
           className={
             cardStyles.monFiltre +
-            " monFiltre absolute w-[130%] h-[130%] left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] bg-black z-20 "
+            " monFiltre hidden md:block absolute w-[130%] h-[130%] left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] bg-black z-20 "
           }
         ></div>
         <div
@@ -346,13 +350,13 @@ const Item = ({ title, text, img, i, delay, inView }: ItemProps) => {
             />
           )}
         </div>
-        <div className="absolute mb-5 w-full px-2 md:px-6 z-30 bottom-0">
+        <div className="absolute mb-5 w-full px-[20px] py-[20px] md:px-6 z-30 bottom-0">
           <div className={"flex gap-4 justify-between items-start"}>
-            <p className="text-xl">{title}</p>
+            <p className="font-title text-[18px] text-dashboard-text-title-white-high uppercase">{title}</p>
             <div
               className={
                 cardStyles.icon +
-                " rounded-full p-2 cursor-pointer transition-all duration-300 "
+                " hidden md:block rounded-full p-2 cursor-pointer transition-all duration-300 "
               }
             >
               <div className="w-2">
@@ -366,7 +370,7 @@ const Item = ({ title, text, img, i, delay, inView }: ItemProps) => {
               (isDisplayed ? "max-h-40" : "max-h-0")
             }
           >
-            <p className="mt-5 text-base-text">{text}</p>
+            <p className="mt-5 text-dashboard-text-description-base">{text}</p>
           </div>
         </div>
       </div>

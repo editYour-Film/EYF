@@ -1,17 +1,24 @@
 import { TextSplit } from "@/utils/TextSplit";
-import { ReactNode, useRef } from "react";
+import { PropsWithChildren, ReactNode, useEffect, useRef } from "react";
+
+import Light from '@/img/svg/buttonLight.svg'
+import gsap from "gsap";
+import { useWindowSize } from "@uidotdev/usehooks";
+
+import Link from 'next/link'
 
 type IslandButtonProps = {
-  type: "primary" | "secondary" | "tertiary" | "danger" | "small" | "small-secondary" | "small-solid";
+  type: "main" | "primary" | "secondary" | "tertiary" | "danger" | "small" | "small-secondary" | "small-solid";
   label?: string;
   Icon?: any; //() => JSX.Element,
   IconRight?: any; //() => JSX.Element,
   disabled?: boolean;
   className?: string;
-  onClick: (e?:any) => void;
+  onClick?: (e?:any) => void;
   wmax?: boolean;
   iconColor?: string;
   enableTwist?: boolean;
+  href?: string;
   id?: string;
   children?: ReactNode;
 };
@@ -27,17 +34,27 @@ export const IslandButton: React.FC<IslandButtonProps> = ({
   wmax = false,
   iconColor = 'soyMilk',
   enableTwist,
+  href,
   id,
   children,
 }) => {
   const buttonEl = useRef<HTMLButtonElement>(null)
+  const mainLight = useRef<HTMLDivElement>(null)
+
+  const wSize = typeof window !== 'undefined' ? useWindowSize() : undefined
+
   const baseStyle = `${
     wmax && "w-max"
   } h-max rounded-full transition-colors duration-200 shadow-1`;
 
-  const size = `${
-    type === "small" ? "px-dashboard-specific-radius py-dashboard-mention-padding-right-left " : "px-[20px] py-[10px]"
-  }`;
+  let size
+  if(type === "small") {
+    size = "px-dashboard-specific-radius py-dashboard-mention-padding-right-left "
+  } else if (type === 'main') {
+    size = "px-[30px] py-[15px]"
+  } else {
+    size = "px-[20px] py-[10px]"
+  }
 
   let typeStyle;
   let disabledStyle;
@@ -45,6 +62,14 @@ export const IslandButton: React.FC<IslandButtonProps> = ({
 
   let iconSize = 'w-[24px] h-[24px]';
   switch (type) {
+    case "main":
+      typeStyle = `${
+        disabled
+          ? "bg-dashboard-button-island-disabled"
+          : "bg-dashboard-button-island-BlueBerry-default"
+      } ${size} border hover:border-dashboard-button-stroke-hover`;
+      disabledStyle = ``;
+      break;
     case "primary":
       typeStyle = `${
         disabled
@@ -92,32 +117,137 @@ export const IslandButton: React.FC<IslandButtonProps> = ({
       break;
   }
 
-  return (
-    <button
-      ref={buttonEl}
-      className={`button ${enableTwist ? 'anim-cta' : ''} ${baseStyle} ${typeStyle} ${disabled ? "pointer-events-none " + disabledStyle : ""} ${className ?? ""} ${type === 'primary' ? 'focus-visible:outline-soyMilk' : 'focus-visible:outline-blueBerry'}`}
-      onClick={() => {
-        buttonEl.current && buttonEl.current.blur()
-        onClick();
-      }}
-      disabled={disabled}
-    >
-      <div
-        className={`button__inner flex justify-center items-center gap-dashboard-mention-padding-right-left ${disabled ? "opacity-30" : ""}`}
+  const startOffsetX = useRef<number | undefined>(0)
+  const startOffsetY = useRef<number | undefined>(0)
+
+  const setVars = () => {
+    setTimeout(() => {
+      const bcr = buttonEl.current && buttonEl.current.getBoundingClientRect()
+      startOffsetX.current = bcr?.x
+      startOffsetY.current = bcr?.y
+
+      gsap.set(mainLight.current, {
+        x: buttonEl.current?.offsetWidth ? buttonEl.current?.offsetWidth / 2 : 0,
+        xPercent: -50,
+        scaleX: 1
+      })
+    }, 100)  
+  }
+
+  useEffect(() => {
+    setVars()
+  }, [])
+
+  useEffect(() => {
+    setVars()
+  }, [wSize])
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    const moveX = startOffsetX.current ? e.clientX - startOffsetX.current : 0
+    const buttonWidth = buttonEl.current?.offsetWidth ?? 0
+    
+    const borderRatio = Math.abs(moveX - buttonWidth / 2) / (buttonWidth / 2)
+        
+    gsap.to(mainLight.current, {
+      x: moveX,
+      scaleX: 1 - 0.5 * borderRatio
+    })
+  }
+
+  const handleMouseLeave = () => {
+    gsap.to(mainLight.current, {
+      x: buttonEl.current?.offsetWidth ? buttonEl.current?.offsetWidth / 2 : 0,
+      xPercent: -50,
+      scaleX: 1
+    })
+  }
+
+  if (type === 'main') {
+    return (
+      <ConditionnalLink
+        condition={href}
       >
-        {Icon && <Icon className={`${iconSize} ${iconClass}`} />}
+        <div className={`relative group ${className ?? ""}`}>
+          <button
+          ref={buttonEl}
+          className={`button relative ${enableTwist ? 'anim-cta' : ''} ${baseStyle} ${typeStyle} ${disabled ? "pointer-events-none " + disabledStyle : ""} focus-visible:outline-soyMilk text-soyMilk font-medium z-10`}
+          onClick={() => {
+            buttonEl.current && buttonEl.current.blur()
+            onClick && onClick();
+          }}
+          disabled={disabled}
+          onMouseMove={(e:React.MouseEvent) => { type === 'main' && handleMouseMove(e)}}
+          onMouseLeave={() => { handleMouseLeave()}}
+          >
+            <div
+              className={`button__inner flex justify-center items-center gap-dashboard-mention-padding-right-left ${disabled ? "opacity-30" : ""}`}
+            >
+              {Icon && <Icon className={`${iconSize} ${iconClass}`} />}
+      
+              {label && enableTwist 
+                  ? <TextSplit input={label} type="word" noLH /> 
+                  : label 
+                    ? <span>
+                        {label}
+                      </span>
+                    : <></>
+              }
+      
+              {IconRight && <IconRight className={`${iconSize} ${iconClass}`} />}
+            </div>
+          </button>
 
-        {label && enableTwist 
-            ? <TextSplit input={label} type="word" noLH /> 
-            : label 
-              ? <span className={`${type === "secondary" ? "inline-block text-linear-sunset" : ""}`}>
-                  {label}
-                </span>
-              : <></>
-        }
-
-        {IconRight && <IconRight className={`${iconSize} ${iconClass}`} />}
-      </div>
-    </button>
-  );
+          <div 
+            ref={mainLight}
+            aria-hidden
+            className="button__main-deco absolute w-[180%] pointer-events-none top-1/2 -translate-y-1/2 z-0 transition-opacity duration-700 opacity-70 group-hover:opacity-100"
+          >
+            <Light className="w-full h-full overflow-visible" />
+          </div>
+        </div>
+      </ConditionnalLink>      
+    );
+  } else {
+    return (
+      <ConditionnalLink
+        condition={href}
+      >
+        <button
+          ref={buttonEl}
+          className={`button ${enableTwist ? 'anim-cta' : ''} ${baseStyle} ${typeStyle} ${disabled ? "pointer-events-none " + disabledStyle : ""} ${className ?? ""} ${type === 'primary' ? 'focus-visible:outline-soyMilk' : 'focus-visible:outline-blueBerry'} z-10`}
+          onClick={() => {
+            buttonEl.current && buttonEl.current.blur()
+            onClick && onClick();
+          }}
+          disabled={disabled}
+        >
+          <div
+            className={`button__inner flex justify-center items-center gap-dashboard-mention-padding-right-left ${disabled ? "opacity-30" : ""}`}
+          >
+            {Icon && <Icon className={`${iconSize} ${iconClass}`} />}
+    
+            {label && enableTwist 
+                ? <TextSplit input={label} type="word" noLH /> 
+                : label 
+                  ? <span className={`${type === "secondary" ? "inline-block text-linear-sunset" : ""}`}>
+                      {label}
+                    </span>
+                  : <></>
+            }
+    
+            {IconRight && <IconRight className={`${iconSize} ${iconClass}`} />}
+          </div>
+        </button>
+      </ConditionnalLink>
+    );
+  }
 };
+
+type ConditionnalLinkProps = {
+  condition: string | undefined;
+}
+
+const ConditionnalLink = ({condition, children}:PropsWithChildren<ConditionnalLinkProps>) => {  
+  if(condition) return  <Link href={condition} > {children} </Link>
+  else return <>{children}</>
+}

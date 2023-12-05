@@ -77,7 +77,6 @@ export const ArrowCards = ({data}: ArrowCardsProps) => {
             start: 'top-=100 bottom',
             end: 'center center',
             id: 'cards',
-            // markers: true,
             onUpdate: (self) => {
               tlCards.progress(self.progress)
             }

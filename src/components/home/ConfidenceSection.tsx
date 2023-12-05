@@ -59,31 +59,17 @@ export const ConfidenceSection = ({ videos, data }: ConfidenceSectionProps) => {
   }, [data]);
 
   return (
-    <div ref={ref} className={`md:pb-20 ${inView ? " inView" : ""}`}>
-      <div className="mt-32 flex flex-col items-center text-center md:pb-16 px-5 md:px-0">
-        {isMobile ? (
-          <span className="text-violet text-[22px] font-medium md:text-xl flex items-start gap-5">
-            {data.section_title}
-          </span>
-        ) : (
-          <H2 arrow className="text-[22px] md:text-[22px] font-medium" fake>
-            {data.section_title}
-          </H2>
-        )}
-        <Title titleType="h1" anim className="mt-7 leading-[110%]" fake>
+    <div ref={ref} className={`${inView ? " inView" : ""}`}>
+      <div className="flex flex-col items-center text-center px-5 md:px-0">
+        <span className="text-title-small text-dashboard-text-description-base-low mb-dashboard-spacing-element-medium leading-none">
+          {data.section_title}
+        </span>
+        <Title titleType="h1" anim className="text-title-medium" fake>
           {data.title1}
-        </Title>
-        <Title
-          titleType="h1"
-          anim
-          className="mt-2 opacity-50 mb-6 text-[32px] leading-[110%]"
-          fake
-        >
-          {data.title2}
         </Title>
       </div>
       {vids.length && (
-        <div className="mt-14">
+        <div className="mt-dashboard-spacing-element-medium">
           {isMobile ? (
             <VideoGrid videos={vids} />
           ) : (

@@ -12,7 +12,7 @@ return arrow ? (
     <Wrapper
       type = {fake ? 'none' : 'h2'}
       className={
-        "text-violet text-lg md:text-xl flex items-start gap-5 font-medium " + className
+        "text-violet text-lg md:text-xl flex items-start gap-5 " + className
       }
       style={style}
     >
@@ -26,7 +26,7 @@ return arrow ? (
       {children}
     </Wrapper>
   ) : (
-    <Wrapper type={fake ? 'none' : 'h2'} className={"text-[40px] font-medium leading-[110%] " + className} style={style}>{children}</Wrapper>
+    <Wrapper type={fake ? 'none' : 'h2'} className={"text-[40px] leading-[110%] " + className} style={style}>{children}</Wrapper>
   );
 };
 
@@ -37,5 +37,5 @@ type WrapperProps = {
   style: any
 }
 
-const Wrapper = ({type, className, children, style}: WrapperProps) => type === 'h2' ? <div className={className} style={style}>{children}</div> : <div className={className} style={style}>{children}</div>
+const Wrapper = ({type, className, children, style}: WrapperProps) => <div className={className} style={style}>{children}</div>
 

@@ -1,12 +1,11 @@
 import { useRef, useState, useEffect } from "react";
-import { lerp, clamp, map } from "@/utils/Math";
+import { lerp} from "@/utils/Math";
 import { useSelector, useDispatch } from "react-redux";
 
 import { gsap } from "gsap";
 import { toRegular } from "@/store/slices/cursorSlice";
 import store, { RootState } from "@/store/store";
 import { TextSplit } from "@/utils/TextSplit";
-import { useRouter } from "next/router";
 
 import Mute from "@/icons/mute.svg";
 import Unmute from "@/icons/unmute.svg";
@@ -15,7 +14,6 @@ import ArrowRight from "@/icons/arrow-right.svg";
 
 export const Cursor = () => {
   const isCursorEnabled = useSelector((store: RootState) => store.cursor.enabled)
-  const router = useRouter();
   const state = useSelector((state: RootState) => state.cursor.value);
   const enabled = useSelector((state: RootState) => state.cursor.enabled);
   const locked = useSelector((state: RootState) => state.cursor.locked);
@@ -25,7 +23,7 @@ export const Cursor = () => {
 
   const shape = useRef<HTMLDivElement>(null);
 
-  const [lockAnim, setLockAnim] = useState(false);
+  const [lockAnim] = useState(false);
   const dispatch = useDispatch();
 
   const posX = useRef(0);
@@ -403,13 +401,13 @@ export const Cursor = () => {
                 ref={muteIcon}
                 className="absolute top-0 left-0 w-full h-full"
               >
-                <Mute className="absolute top-0 left-0 w-full h-full gradient-svg-linear" />
+                <Mute className="absolute top-0 left-0 w-full h-full svg-color-blueBerry" />
               </div>
               <div
                 ref={unmuteIcon}
                 className="absolute top-0 left-0 w-full h-full"
               >
-                <Unmute className="absolute top-0 left-0 w-full h-full gradient-svg-linear" />
+                <Unmute className="absolute top-0 left-0 w-full h-full svg-color-blueBerry" />
               </div>
               <div
                 ref={arrowLeft}

@@ -5,7 +5,8 @@ import { transitionSlice } from '@/store/slices/transitionSlice'
 import { NotificationSlice } from './slices/NotificationsSlice'
 import { dashboardMenuSlice } from './slices/dashboardMenuSlice'
 import { menuSlice } from './slices/menuSlice'
-import { routesSlices } from './slices/routesSlice'
+import { navbarSlice } from './slices/navbarSlice'
+import { routesSlice } from './slices/routesSlice'
 
 // config the store 
 const store= configureStore({
@@ -16,7 +17,8 @@ const store= configureStore({
     notification: NotificationSlice.reducer,
     dashboardMenu: dashboardMenuSlice.reducer,
     menu: menuSlice.reducer,
-    routes: routesSlices.reducer
+    navbar: navbarSlice.reducer,
+    routes: routesSlice.reducer
   }})
 
 // export default the store 

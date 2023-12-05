@@ -3,70 +3,218 @@ import { useInView } from "react-intersection-observer";
 import { Title } from "../_shared/Title";
 import Cross from "@/icons/comparison-cross.svg";
 import Check from "@/icons/comparison-check.svg";
-import { useEffect, useRef } from "react";
+import { RefObject, createRef, forwardRef, useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
+import { map } from "@/utils/Math";
+import { IslandButton } from "../_shared/buttons/IslandButton";
+import routes from "@/routes";
+import { useWindowSize } from "@uidotdev/usehooks";
 
 type ComparativeSectionProps = {
   data: any;
 };
 
-export const ComparativeSection = ({ data }: ComparativeSectionProps) => {
-  const { ref: section, inView } = useInView({
+export const ComparativeSection = ({ data }: ComparativeSectionProps) => {  
+  const section = useRef<HTMLDivElement>(null)
+  const wrapper = useRef<HTMLDivElement>(null)
+  const cardsWrapper = useRef<HTMLDivElement>(null)
+  const cards = useRef<RefObject<HTMLDivElement>[]>(data.comparison_cards.map(() => createRef()))
+
+  const [currentCard, setCurrentCard] = useState(0)
+
+  const { ref: inViewSectionRef, inView } = useInView({
     triggerOnce: true,
-    threshold: 0.15,
+    threshold: 0,
   });
+
+  const ww = useWindowSize()
+  const isMobile = useMediaQuery('(max-width:1024px)')
+
+  useEffect(() => {
+    inViewSectionRef(section.current)
+  }, [])
+
+  useEffect(() => {
+    const tl = gsap.timeline()
+    if(ww.width && ww.width <= 1024) {
+      tl.to(cardsWrapper.current, {
+        opacity: 0,
+        duration: 0.2
+      })
+      tl.set([cards.current[0].current, cards.current[1].current], {
+        x: -(cards.current[0].current!.offsetWidth + 64)* currentCard
+      })
+      tl.to(cardsWrapper.current, {
+        opacity: 1,
+        duration: 0.2
+      })
+    }
+
+  }, [currentCard, ww])
+
+  useEffect(() => {
+    const amort = 50
+    const offsetTop = (window.innerHeight - wrapper.current!.offsetHeight) / 2
+
+    let tl:GSAPTimeline, st:globalThis.ScrollTrigger, st2:globalThis.ScrollTrigger
+    
+    if(ww.width && ww.width > 1024) {
+      gsap.set([cards.current[0].current, cards.current[1].current], {
+        x: 0
+      })
+
+      tl = gsap.timeline({
+        paused: true
+      })
+  
+      tl.fromTo(cardsWrapper.current, {
+        y: 0
+      },{
+        y: (cards.current[0].current!.offsetHeight + 100 ) * -1, 
+        ease: 'power2.inOut'
+      })
+  
+      gsap.set(wrapper.current, {
+        top: offsetTop,
+        y: amort
+      })
+  
+      st = ScrollTrigger.create({
+        trigger: section.current,
+        start: `top top`,
+        end: `top+=${(section.current && wrapper.current) ? section.current.offsetHeight - wrapper.current?.offsetHeight - offsetTop : 0} top`,
+        onUpdate: (self) => {        
+          tl.progress(self.progress) 
+        },
+      });
+
+      st2 = ScrollTrigger.create({
+        trigger: section.current,
+        start: `top-=${offsetTop} top`,
+        end: `top+=${(section.current && wrapper.current) ? section.current.offsetHeight - wrapper.current?.offsetHeight - offsetTop : 0} top`,
+        onUpdate: (self) => {
+          let y
+          if(self.progress < 0.15) {
+            y = amort * map(0, 0.15, 1, 0, self.progress)
+          } else if (self.progress > 0.85) {
+            y = -amort * map(0.85, 1, 0, 1, self.progress)
+          }
+          
+          gsap.set(wrapper.current, {
+            y: y
+          })
+        },
+      });
+    }
+
+    return () => {
+      tl && tl.progress(0)
+      st && st.kill()
+      st2 && st2.kill()
+      gsap.set(wrapper.current, {
+        y: 0
+      })
+    }
+  }, [inView, ww])
+
 
   return (
     <div
       ref={section}
-      className={`relative comparative-section pt-44 w-full overflow-hidden ${
+      className={`relative comparative-section w-full lg:h-[200vh] ${
         inView ? " inView" : ""
       }`}
     >
-      <div className="comparative-section__title flex flex-col items-center text-center px-4 mx-auto md:max-w-2xl">
-        <H2 arrow fake>
-          {data.classic_content.suptitle}
-        </H2>
-        <Title titleType="h1" anim className="mt-4 md:mt-6" fake>
-          {data.classic_content.title}
-        </Title>
-        <p className="text-lg text-base-text">{data.classic_content.content}</p>
-      </div>
 
-      <div className="comparative-section__cards relative flex flex-col md:flex-row items-center md:items-stretch w-full justify-center gap-16 md:gap-8 lg:gap-16 mt-40 perspective z-10">
-        {data.comparison_cards &&
-          data.comparison_cards.map((card: any, i: number) => {
-            return (
-              <Card
-                key={card.id}
-                title={card.title}
-                subTitle={card.subTitle}
-                type={card.type}
-                details={card.text_list}
-                delay={i === 0 ? 0 : 50}
+      <div 
+      ref={wrapper}
+      className="lg:sticky lg:h-[90vh] flex flex-col lg:flex-row justify-center lg:px-dashboard-spacing-element-medium py-[64px] gap-dashboard-spacing-element-medium lg:gap-[128px] lg:border-03 rounded-dashboard-button-square-radius lg:bg-dashboard-background-content-area lg:shadow-large z-10 overflow-hidden">
+        <div className="comparative-section__title sticky max-w-[450px] top-0 flex flex-col gap-6 px-dashboard-mention-padding-right-left lg:px-0">
+          <div className="flex flex-col gap-dashboard-spacing-element-medium">
+            <div className="text-title-small text-dashboard-text-description-base-low leading-none">
+              {data.classic_content.suptitle}
+            </div>
+            <Title titleType="h1" anim className="text-title-medium text-dashboard-text-title-white-high leading-none" fake>
+              {data.classic_content.title}
+            </Title>
+            <p className="text-lg text-dashboard-text-description-base">{data.classic_content.content}</p>
+          </div>
+
+          <IslandButton 
+            type="primary"
+            enableTwist
+            label="Créer mon compte"
+            href={routes.SIGNIN}
+          />
+        </div>
+
+        <div className="shrink-0 basis-[50%] flex flex-col gap-dashboard-spacing-element-medium lg:block">
+          <div 
+            ref={cardsWrapper}
+            className="comparative-section__cards relative w-full max-w-[100vw] flex flex-row lg:flex-col items-start lg:items-center justify-start gap-16 lg:gap-[100px] perspective z-10 bg-dashboard-background-content-area lg:bg-none overflow-hidden"
+          >
+            {data.comparison_cards &&
+              data.comparison_cards.map((card: any, i: number) => {
+                return (
+                  <Card
+                    ref={cards.current[i]}
+                    key={card.id}
+                    title={card.title}
+                    supTitle={card.suptitle}
+                    type={card.type}
+                    details={card.text_list}
+                    delay={i === 0 ? 0 : 50}
+                  />
+                );
+              })}
+          </div>
+          
+          {isMobile && 
+            <div className="flex w-full gap-[13px]">
+              <IslandButton 
+                type="tertiary"
+                label="Vos difficultés"
+                onClick={() => {
+                  setCurrentCard(0)
+                }}
+                disabled={currentCard === 0}
+                className="basis-5/12"
               />
-            );
-          })}
+              <IslandButton 
+                type="tertiary"
+                label="Notre solution"
+                onClick={() => {
+                  setCurrentCard(1)
+                }}
+                disabled={currentCard === 1}
+                className="basis-7/12"
+              />
+            </div>
+          }
+        </div>
+
       </div>
 
-      <div className="bg-signin absolute w-[1200px] h-[600px] top-0 right-0 translate-x-1/2 opacity-20 z-0 pointer-events-none"></div>
+      <div className="relative w-full overflow-hidden">
+        <div className="bg-signin absolute w-[1200px] h-[600px] top-0 right-0 translate-x-1/2 opacity-20 pointer-events-none z-0"></div>
+      </div>
     </div>
   );
 };
 
 type CardProps = {
   title: string,
-  subTitle: string,
+  supTitle: string,
   type: 'pro' | 'cons',
   details?: [{id:number, entry: string}],
   delay: number
 }
 
-const Card = ({type, details, title, subTitle, delay}:CardProps) => {  
+const Card = forwardRef<HTMLDivElement, CardProps>(function Card({type, details, title, supTitle, delay}, ref) {  
   const chart = useRef<HTMLDivElement>(null)
-  const card = useRef<HTMLDivElement>(null)
+  const card = (ref as RefObject<HTMLDivElement>) ?? useRef<HTMLDivElement>()
 
   const linesH = "150";
   const isMobile = useMediaQuery("(max-width: 768px)");
@@ -77,12 +225,11 @@ const Card = ({type, details, title, subTitle, delay}:CardProps) => {
 
   const { ref: inViewChartRef, inView: inViewChart } = useInView({
     triggerOnce: true,
-    threshold: 0.15,
+    threshold: 0,
   });
 
   useEffect(() => {
     inViewChartRef(chart.current);
-    inViewCard(card.current);
   }, [inViewChartRef, inViewCard]);
 
   useEffect(() => {
@@ -160,33 +307,34 @@ const Card = ({type, details, title, subTitle, delay}:CardProps) => {
 
   return (
     <div
-      ref={card}
-      className="comparative-card relative bg-cards p-10 pb-0 rounded-3xl basis-[45%] max-w-[430px] z-20"
+      ref={ref}
+      className="comparative-card relative shrink-0 w-full basis-full lg:bg-dashboard-button-dark p-10 pb-0 rounded-dashboard-button-square-radius lg:border-03 shadow-large lg:max-w-[430px] z-20"
     >
       <div className="comparative-card__inner h-full relative z-20 flex flex-col items-center">
-        {title && (
-          <div className="comparative-card__title text-base-lg font-medium text-violet text-center">
-            {title}
-          </div>
-        )}
-        {subTitle && (
-          <div className="comparative-card__subTitle n27  text-sm text-ebebeb text-opacity-80 text-center">
-            {subTitle}
+        {supTitle && (
+          <div className="comparative-card__title text-title-small text-dashboard-text-description-base-low text-center leading-none mb-dashboard-button-separation-spacing">
+            {supTitle}
           </div>
         )}
 
-        <div className="comparative-card__details flex flex-col gap-10 mt-10">
+        {title && (
+          <div className="comparative-card__title text-title-medium text-dashboard-text-description-base text-center">
+            {title}
+          </div>
+        )}
+
+        <div className="comparative-card__details flex flex-col gap-padding-medium lg:gap-10 mt-dashboard-spacing-element-medium">
           {details &&
             details.map((detail, i) => {
               return (
                 <div
                   key={i}
-                  className="comparative-detail flex gap-3 items-center"
+                  className="comparative-detail flex flex-row lg:flex-col gap-3 items-center"
                 >
                   <div className="shrink-0">
                     {type === "cons" ? <Cross /> : <Check />}
                   </div>
-                  <div className="text-base-text text-base">{detail.entry}</div>
+                  <div className="lg:text-center text-dashboard-text-description-base text-base">{detail.entry}</div>
                 </div>
               );
             })}
@@ -205,9 +353,9 @@ const Card = ({type, details, title, subTitle, delay}:CardProps) => {
           <div
             className={`comparative-line gradient-chart basis-1/3 h-full rounded-xl`}
           ></div>
-          <div className="absolute gradient-to-top-black-transparent w-full h-[60%] bottom-0 left-0 z-10"></div>
         </div>
       </div>
+      <div className="absolute gradient-to-top-black-transparent w-full h-[20%] bottom-0 left-0 z-20"></div>
     </div>
-  );
-};
+  )}
+) 

@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 // create a slice 
-export const routesSlices = createSlice({ 
+export const routesSlice = createSlice({ 
   name: "routes", 
   initialState: { routeName: 'accueil' }, 
   reducers: { 
@@ -10,4 +10,4 @@ export const routesSlices = createSlice({
 })
 
 // export the action
-export const {setRouteName} = routesSlices.actions
+export const {setRouteName} = routesSlice.actions

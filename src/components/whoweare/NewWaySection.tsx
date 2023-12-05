@@ -53,7 +53,6 @@ export const NewWaySection = ({data}:any) => {
         trigger: section.current,
         start: 'top bottom',
         end: 'bottom top',
-        // markers: true,
         onUpdate: (self) => {
           self.progress > 0.1 && setInView(true)
           
