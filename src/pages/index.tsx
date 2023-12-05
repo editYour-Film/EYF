@@ -44,13 +44,14 @@ export default function Home(/*{ seodata }: any*/) {
   const { data, mutate: getStrapi } = useStrapi(
     "page-home?" +
       "populate[head][populate]=*&" +
-      "populate[top_video][populate]=*&" +
+      "populate[top_video][populate][video][populate]=*&" +
+      "populate[top_video][populate][editor_video][populate]=*&" +
       "populate[section1][populate]=*&" +
       "populate[section2][populate]=videos.video&" +
       "populate[section3][populate]=*&" +
       "populate[section4][populate]=*&" +
       "populate[marquee][populate]=*&" +
-      "populate[section5][populate]=*&" +
+      "populate[section5][populate]=*&" + 
       "populate[section6][populate]=*&" +
       "populate[comparison_section][populate][classic_content][populate]=*&" +
       "populate[comparison_section][populate][comparison_cards][populate]=*&" +

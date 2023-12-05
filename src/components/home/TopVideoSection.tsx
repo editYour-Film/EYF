@@ -13,22 +13,32 @@ import { IslandButton } from "../_shared/buttons/IslandButton";
 gsap.registerPlugin(ScrollTrigger);
 
 export const TopVideoSection = ({ data }: any) => {
+  const dispatch = useDispatch()
   const isMobileScreen = useMediaQuery("(max-width: 768px)");
-  const isTabletScreen = useMediaQuery(
-    "(min-width: 768px) && (max-width: 1024px)"
-  );
+  const isTabletScreen = useMediaQuery("(min-width: 768px) && (max-width: 1024px)");
   const isDesktop = useMediaQuery("(min-width: 1024px)");
-  const isModel = false
+
+  const [inView, setInView] = useState<boolean>(false);
+  const [isVideoStart, setIsVideoStart] = useState(true);
+  const [isVideoMute, setIsVideoMute] = useState(true);
 
   const main = useRef<any>();
-  const [inView, setInView] = useState<boolean>(false);
-
+  const vidRef = useRef<any>();
   const title = useRef<any>();
   const sticky = useRef<any>();
   const videoW = useRef<any>();
   const gradientW = useRef<any>();
+  const media = useRef<any>()
+  const [isModel, setIsModel] = useState(false)
 
-  const dispatch = useDispatch()
+  useEffect(() => {
+    if(data.editor_video && data.editor_video.data) {
+      setIsModel(true)
+      media.current = data.editor_video.data.attributes.video.data
+    } else if (data.video && data.video.data) {
+      media.current = data.video.data
+    }    
+  }, [data])
 
   useEffect(() => {
     if (isDesktop) {
@@ -128,11 +138,6 @@ export const TopVideoSection = ({ data }: any) => {
     }
   }, [isMobileScreen, isTabletScreen, isDesktop])
 
-  const [isVideoStart, setIsVideoStart] = useState(true);
-  const [isVideoMute, setIsVideoMute] = useState(true);
-
-  const vidRef = useRef<any>();
-
   const handleMuteVideo = () => {
     if (vidRef && vidRef !== null && vidRef?.current) {
       vidRef.current.muted = !isVideoMute;
@@ -156,7 +161,7 @@ export const TopVideoSection = ({ data }: any) => {
     } else {
       dispatch(toMute())
     }
-  }  
+  }
   
   return (
     <div
@@ -186,9 +191,7 @@ export const TopVideoSection = ({ data }: any) => {
             }}
           />
 
-          <div className="absolute top-[60%] left-[50%] -translate-x-1/2 -translate-y-1/2 bg-radial-gradient-blueLight rounded-full w-full lg:w-[400px] h-[400px]">
-
-          </div>
+          <div className="absolute top-[60%] left-[50%] -translate-x-1/2 -translate-y-1/2 bg-radial-gradient-blueLight rounded-full w-full lg:w-[400px] h-[400px]"></div>
         </div>
       </div>
 
@@ -204,6 +207,7 @@ export const TopVideoSection = ({ data }: any) => {
 
       <div className="mt-24 lg:absolute lg:h-full lg:w-full lg:top-0 lg:left-0 lg:mt-0 pointer-events-none">
         <div ref={sticky} className={`sticky w-full perpsective-1`}>
+        {media.current && 
           <div
             ref={videoW}
             className="relative w-full h-[100vw] sm:h-auto md:w-[80%] xl:w-full xl:max-w-5xl 2xl:max-w-6xl mx-auto mt-64 overflow-hidden"
@@ -225,7 +229,7 @@ export const TopVideoSection = ({ data }: any) => {
                       className="absolute top-[15px] right-[15px] z-10"
                     />
                 }
-                {data.video && <video 
+                <video 
                     className="relative w-full h-full sm:h-auto object-cover pointer-events-none md:pointer-events-auto"
                     autoPlay={true}
                     loop
@@ -244,12 +248,12 @@ export const TopVideoSection = ({ data }: any) => {
                       handleClick()
                     }}
                   >
-                    <source src={data.video?.data.attributes?.url} />
+                    <source src={media.current.attributes?.url} />
                   </video>
-                  }
               </div>
             </div>
           </div>
+          }
         </div>
       </div>
     </div>
