@@ -127,7 +127,7 @@ export const IslandButton: React.FC<IslandButtonProps> = ({
       startOffsetY.current = bcr?.y
 
       gsap.set(mainLight.current, {
-        x: buttonEl.current?.offsetWidth / 2,
+        x: buttonEl.current?.offsetWidth ? buttonEl.current?.offsetWidth / 2 : 0,
         xPercent: -50,
         scaleX: 1
       })
@@ -143,8 +143,8 @@ export const IslandButton: React.FC<IslandButtonProps> = ({
   }, [wSize])
 
   const handleMouseMove = (e: React.MouseEvent) => {
-    const moveX = e.clientX - startOffsetX.current
-    const buttonWidth = buttonEl.current?.offsetWidth
+    const moveX = startOffsetX.current ? e.clientX - startOffsetX.current : 0
+    const buttonWidth = buttonEl.current?.offsetWidth ?? 0
     
     const borderRatio = Math.abs(moveX - buttonWidth / 2) / (buttonWidth / 2)
         
@@ -156,7 +156,7 @@ export const IslandButton: React.FC<IslandButtonProps> = ({
 
   const handleMouseLeave = () => {
     gsap.to(mainLight.current, {
-      x: buttonEl.current?.offsetWidth / 2,
+      x: buttonEl.current?.offsetWidth ? buttonEl.current?.offsetWidth / 2 : 0,
       xPercent: -50,
       scaleX: 1
     })

@@ -44,7 +44,7 @@ export const ComparativeSection = ({ data }: ComparativeSectionProps) => {
         duration: 0.2
       })
       tl.set([cards.current[0].current, cards.current[1].current], {
-        x: -(cards.current[0].current.offsetWidth + 64)* currentCard
+        x: -(cards.current[0].current!.offsetWidth + 64)* currentCard
       })
       tl.to(cardsWrapper.current, {
         opacity: 1,
@@ -56,7 +56,7 @@ export const ComparativeSection = ({ data }: ComparativeSectionProps) => {
 
   useEffect(() => {
     const amort = 50
-    const offsetTop = (window.innerHeight - wrapper.current?.offsetHeight) / 2
+    const offsetTop = (window.innerHeight - wrapper.current!.offsetHeight) / 2
 
     let tl:GSAPTimeline, st:globalThis.ScrollTrigger, st2:globalThis.ScrollTrigger
     
@@ -72,7 +72,7 @@ export const ComparativeSection = ({ data }: ComparativeSectionProps) => {
       tl.fromTo(cardsWrapper.current, {
         y: 0
       },{
-        y: (cards.current[0].current?.offsetHeight + 100 ) * -1, 
+        y: (cards.current[0].current!.offsetHeight + 100 ) * -1, 
         ease: 'power2.inOut'
       })
   
@@ -214,7 +214,7 @@ type CardProps = {
 
 const Card = forwardRef<HTMLDivElement, CardProps>(function Card({type, details, title, supTitle, delay}, ref) {  
   const chart = useRef<HTMLDivElement>(null)
-  const card = ref ?? useRef<HTMLDivElement>()
+  const card = (ref as RefObject<HTMLDivElement>) ?? useRef<HTMLDivElement>()
 
   const linesH = "150";
   const isMobile = useMediaQuery("(max-width: 768px)");
