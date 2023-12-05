@@ -44,12 +44,7 @@ const Header = ({ activeNavItem = "" }: HeaderProps) => {
   const [lastScrollTop, setLastScrollTop] = useState(0);
 
   useEffect(() => {
-    console.log(isMobileScreen);
-    
     const handleScroll = function () {
-      console.log('scrolled');
-      console.log(lastScrollTop);
-      
       let st = window.pageYOffset || document.documentElement.scrollTop;
       if (st < lastScrollTop) {
         if (st <= 80) dispatch(closeNavbar());
@@ -85,24 +80,24 @@ const Header = ({ activeNavItem = "" }: HeaderProps) => {
     >
       <ContainerFullWidth className="md:px-10">
         <div 
-          className="flex items-center flex-wrap py-2 md:py-[10px] h-[50px] justify-between"
+          className="flex items-center py-2 md:py-[10px] h-[50px] justify-between"
         >
           <Link 
-            href={routes.HOME} className="cursor-pointer max-w-[125px] focus-visible:outline-blueBerry" scroll={false}>
+            href={routes.HOME} className="cursor-pointer basis-full md:basis-auto flex justify-center shrink focus-visible:outline-blueBerry" scroll={false}>
             <Image
               width={125}
               height={25}
               src="/icons/logo-navbar.svg"
               alt=""
-              className="hidden lg:block"
+              className="lg:block max-w-[125px]"
             />
-            <Image
+            {/* <Image
               width={35}
               height={35}
               src="/icons/logo.svg"
               alt=""
               className="lg:hidden"
-            />
+            /> */}
           </Link>
 
           <nav className="hidden md:flex gap-6 xl:ml-28">
@@ -185,7 +180,7 @@ const Header = ({ activeNavItem = "" }: HeaderProps) => {
           </div>
 
           <div className="md:hidden flex flex-row items-center gap-dashboard-button-separation-spacing">
-            <div className="text-dashboard-text-description-base text-title-m uppercase">{routeName}</div>
+            {routeName !== 'accueil' && <div className="text-dashboard-text-description-base text-title-m uppercase">{routeName}</div>}
             {!isOpen && (
               <IslandButton
                 type="secondary"
@@ -292,7 +287,6 @@ const Header = ({ activeNavItem = "" }: HeaderProps) => {
       </div>
     </div>
     </>
-    
   );
 };
 
