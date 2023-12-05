@@ -7,14 +7,14 @@ import { useInView } from 'react-intersection-observer';
 import { useWindowSize } from '@uidotdev/usehooks';
 
 type CreatorToEditorProps = {
-
+  data: any
 }
 
-export const CreatorToEditor = ({}:CreatorToEditorProps) => {
+export const CreatorToEditor = ({data}:CreatorToEditorProps) => {
   const { ref: sectionInView, inView: inViewSection } = useInView({
     triggerOnce: true,
   });
-
+  
   const ww = useWindowSize()
 
   const pans = useRef<HTMLDivElement>(null)
@@ -146,13 +146,15 @@ export const CreatorToEditor = ({}:CreatorToEditorProps) => {
       <div className='lg:h-screen w-full lg:sticky top-0 perspective overflow-hidden'>
         <div className="creator-to-editor__firstImg relative w-full z-0 mb-[80px] lg:mb-0">
           <div className='relative w-full h-screen lg:h-0 lg:pb-[62%] overflow-hidden'>
-            <Image 
-              ref={img1}
-              src='/img/home/creator.jpg'
-              alt='creator'
-              className='absolute top-0 left-0 width-full h-full object-cover'
-              fill
-            />
+            {data.image.data && 
+              <Image 
+                ref={img1}
+                src={data.image.data.attributes.formats.large.url}
+                alt={data.image.data.attributes.alternativeText}
+                className='absolute top-0 left-0 width-full h-full object-cover'
+                fill
+              />
+            }
           </div>
         </div>
 
@@ -163,10 +165,10 @@ export const CreatorToEditor = ({}:CreatorToEditorProps) => {
           >
             <div className='flex flex-col basis-1/2 max-w-[450px] grow-0 text-title-large font-medium px-10 lg:px-0'>
               <div>
-                <Title titleType='none' anim={ww.width && ww.width > 1024 ? true : false} charDelay={'0.03s'} className='text-dashboard-text-title-white-high'>Imaginé pour les</Title>
+                <Title titleType='none' anim={ww.width && ww.width > 1024 ? true : false} charDelay={'0.03s'} className='text-dashboard-text-title-white-high'>{data.text1_line1}</Title>
               </div>
               <div>
-                <Title titleType='none' anim={ww.width && ww.width > 1024 ? true : false} charDelay={'0.03s'} className='text-linear-sunset' isSunset>créateur.ices de contenus</Title>
+                <Title titleType='none' anim={ww.width && ww.width > 1024 ? true : false} charDelay={'0.03s'} className='text-linear-sunset' isSunset>{data.text1_line2}</Title>
               </div>
             </div>
 
@@ -197,10 +199,10 @@ export const CreatorToEditor = ({}:CreatorToEditorProps) => {
               >
                 <div className='lg:order-1 w-[390px] flex flex-col text-title-large font-medium px-10 lg:px-0'>
                   <div>
-                    <Title titleType='none' anim={ww.width && ww.width > 1024 ? true : false} charDelay={'0.03s'} className='text-dashboard-text-title-white-high'>Et pensé pour les</Title>
+                    <Title titleType='none' anim={ww.width && ww.width > 1024 ? true : false} charDelay={'0.03s'} className='text-dashboard-text-title-white-high'>{data.text2_line1}</Title>
                   </div>
                   <div className='text-linear-sunset'>
-                    <Title titleType='none' anim={ww.width && ww.width > 1024 ? true : false} charDelay={'0.03s'} isSunset>monteurs.se.s</Title>
+                    <Title titleType='none' anim={ww.width && ww.width > 1024 ? true : false} charDelay={'0.03s'} isSunset>{data.text1_line2}</Title>
                   </div>
                 </div>
 

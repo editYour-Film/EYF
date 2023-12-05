@@ -55,6 +55,7 @@ export default function Home(/*{ seodata }: any*/) {
       "populate[section6][populate]=*&" +
       "populate[comparison_section][populate][classic_content][populate]=*&" +
       "populate[comparison_section][populate][comparison_cards][populate]=*&" +
+      "populate[transition_mockup][populate]=*&" +
       "populate[section2][populate]=videos.thumbnail",
     false
   );
@@ -134,8 +135,10 @@ export default function Home(/*{ seodata }: any*/) {
               </Container>
             </div>
 
+            {data.transition_mockup &&
+              <CreatorToEditor data={data.transition_mockup}/>
+            }
 
-            <CreatorToEditor />
 
             {data.section5 && 
               <Container>
