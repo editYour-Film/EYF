@@ -29,11 +29,12 @@ export const FaqSection = ({ filter, data }: FaqSectionProps) => {
   }, [filteredData])
   
   return (
-    <div className="bg-primary md:px-24 mt-16 md:mt-32 gradient-faq border-b md:pt-28">
-      <div className="max-w-5xl mx-auto bg-[#0E0E0F] rounded-t-[24px] py-16 px-4 md:pl-16 md:pr-8 pr-3 border-t border-x">
+    <div className="bg-primary gradient-faq md:pt-28">
+      <div className="absolute top-0 left-0 w-full h-full gradient-faq z-0"></div>
+      <div className="relative mx-auto bg-dashboard-background-content-area rounded-t-[24px] py-16 px-4 md:pl-16 md:pr-8 pr-3 border-t border-x z-10">
         <div className="flex flex-col xl:flex-row gap-10 xl:gap-20">
-          <div>
-            <H1 className="text-violet font-medium md:mt-8 leading-[110%]" fake>VOS QUESTIONS FRÉQUENTES</H1>
+          <div className="basis-1/3 shrink-0">
+            <H1 className="text-violet font-medium text-title md:mt-8 leading-[110%]" fake>VOS QUESTIONS FRÉQUENTES</H1>
             <div className={`${filter === 'about-us' ? 'hidden' : 'flex'} faq__toggler relative flex-row justify-between bg-darkgrey rounded-full mt-6 n27`}>
               <div 
                 className={`${type === 'creator' ? 'opacity-100' : 'opacity-50'} z-10 basis-[50%] shrink-0 text-center cursor-pointer py-2`}
@@ -53,7 +54,7 @@ export const FaqSection = ({ filter, data }: FaqSectionProps) => {
             </div>
           </div>
 
-          <div className="divide-y w-full md:min-w-2xl">
+          <div className="basis-2/4 divide-y w-full md:min-w-2xl">
             {filteredData?.map((x: any) => {
                 return (
                   <FaqItem
