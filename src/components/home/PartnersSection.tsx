@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export const PartnersSection = () => {
   return (
-    <div className="mt-24 md:mt-32"> 
+    <div className=""> 
       <div className="text-dashboard-text-description-base-low text-title-small w-full text-center">Nos partenaires</div>
       <div className="flex flex-wrap gap-4 md:gap-dashboard-spacing-element-medium justify-center items-stretch max-w-7xl mx-auto mt-5">
         <div className="p-dashboard-spacing-element-medium rounded-dashboard-button-square-radius flex justify-center items-center border">

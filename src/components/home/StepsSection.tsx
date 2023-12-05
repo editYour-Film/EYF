@@ -49,7 +49,7 @@ export const StepsSection = ({ data }: any) => {
 
   const [medias, setMedias] = useState<{video:string}[]>()
 
-  useEffect(() => {    
+  useEffect(() => {
     stepW(wrapper.current)
     setMedias([
       {
@@ -60,7 +60,9 @@ export const StepsSection = ({ data }: any) => {
         video: '/video/home/step3.webm',
       },
     ])
-
+  }, [])
+  
+  useEffect(() => {    
     const handleScroll = () => {
       const gbcr = wrapper.current?.getBoundingClientRect()
       
@@ -71,11 +73,10 @@ export const StepsSection = ({ data }: any) => {
           !store.getState().navbar.isOpen && dispatch(openNavbar())
         }
   
-        if(gbcr.top + wrapper.current?.offsetHeight < 0 && !store.getState().navbar.isOpen) {
+        if(gbcr.top + wrapper.current!.offsetHeight < 0 && !store.getState().navbar.isOpen) {
           dispatch(openNavbar())
         }
       }
-
     }
 
     isMobile && window.addEventListener('scroll', handleScroll, false)
