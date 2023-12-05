@@ -65,7 +65,7 @@ export const CreatorToEditor = ({}:CreatorToEditorProps) => {
             rotateX: 5
           },{
             yPercent: 0,
-            y: -60,
+            // y: -60,
             rotateX: 0,
             ease: 'power2.out'
           })
@@ -156,7 +156,7 @@ export const CreatorToEditor = ({}:CreatorToEditorProps) => {
           </div>
         </div>
 
-        <div ref={pans} className="creator-to-editor__content lg:absolute top-0 flex flex-col gap-[180px] lg:gap-0 lg:flex-row w-full rounded-t-[12px] h-[calc(100%+60px)] overflow-hidden z-10">
+        <div ref={pans} className="creator-to-editor__content lg:absolute top-0 flex flex-col gap-[180px] lg:gap-0 lg:flex-row w-full rounded-t-[12px] h-[calc(100%)] overflow-hidden z-10">
           <div 
             ref={creatorPan} 
             className={`creator-to-editor__creator-pan relative flex flex-col lg:flex-row lg:pl-[167px] fullHd:px-[167px] justify-start lg:justify-between gap-[84px] lg:gap-dashboard-spacing-element-medium lg:items-center h-full w-full basis-full shrink-0 z-0 bg-black ${showTitle1 ? 'inView' : ''}`}
@@ -190,10 +190,10 @@ export const CreatorToEditor = ({}:CreatorToEditorProps) => {
             </div>
           </div>
 
-          <div ref={editorPan} className={`creator-to-editor__editor-pan lg:absolute bottom-0 left-[calc(100%+60px)] lg:h-screen w-[calc(100%+60px)] basis-full shrink-0 z-10 overflow-hidden ${showTitle2 ? 'inView' : ''} bg-blackBerry`}>
+          <div ref={editorPan} className={`creator-to-editor__editor-pan lg:absolute top-0 bottom-0 left-[calc(100%+60px)] lg:h-screen w-[calc(100%)] basis-full shrink-0 z-10 overflow-hidden ${showTitle2 ? 'inView' : ''} bg-blackBerry`}>
             <div ref={editorPanInner} className='lg:absolute top-0 left-0 w-full lg:h-full'>
               <div 
-                className='lg:absolute top-0 left-0 w-full h-full rounded-l-[60px] lg:pr-[167px] fullHd:pl-[227px] fullHd:pr-[167px] flex flex-col lg:flex-row justify-between lg:items-center gap-[84px] lg:gap-dashboard-spacing-element-medium z-10 '
+                className='lg:absolute top-0 left-0 w-full h-full rounded-l-[60px] lg:pr-[167px] fullHd:px-[167px] flex flex-col lg:flex-row justify-between lg:items-center gap-[84px] lg:gap-dashboard-spacing-element-medium z-10 '
               >
                 <div className='lg:order-1 w-[390px] flex flex-col text-title-large font-medium px-10 lg:px-0'>
                   <div>
