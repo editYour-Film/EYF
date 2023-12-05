@@ -54,7 +54,7 @@ const LayoutMain = ({
 
   return (
     <>
-        <div className="bg-black min-h-screen flex flex-col justify-between gap-10 no-cursor">
+        <div className="bg-black min-h-screen flex flex-col justify-between gap-10 no-cursor w-full overflow-clip">
           {quoteNavbar ? (
             <HeaderQuote step={2} />
           ) : (

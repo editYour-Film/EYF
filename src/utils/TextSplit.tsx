@@ -44,6 +44,7 @@ export const TextSplit = ({ input, type, noLH, isSunset}: textSplitProps) => {
           i={i}
           wordsNb={words.length}
           charStart={word.charStart}
+          noLH={noLH} 
           isSunset={isSunset}
         />
       ))}
@@ -56,10 +57,11 @@ type WordProps = {
   i: number;
   wordsNb: number;
   charStart: number;
+  noLH?: boolean;
   isSunset?: boolean;
 };
 
-const Word = ({ chars, i, wordsNb, charStart, isSunset }: WordProps) => {
+const Word = ({ chars, i, wordsNb, charStart,noLH, isSunset }: WordProps) => {
   const charsArray = chars.replace(/\s+/g, "").split("");
   const el = useRef<HTMLSpanElement>(null);
   const [lineNb, setLineNb] = useState(0);
@@ -77,7 +79,7 @@ const Word = ({ chars, i, wordsNb, charStart, isSunset }: WordProps) => {
     <>
       <span
         ref={el}
-        className="split-word"
+        className={`split-word ${noLH && "leading-none"}`}
         data-split-word-index={i}
         data-split-word
         data-split-line-index={lineNb}
@@ -89,7 +91,7 @@ const Word = ({ chars, i, wordsNb, charStart, isSunset }: WordProps) => {
         }
       >
         {charsArray.map((char, i) => (
-          <Char key={i} char={char} i={i} charStart={charStart} isSunset={isSunset}/>
+          <Char key={i} char={char} i={i} charStart={charStart} noLH={noLH} isSunset={isSunset}/>
         ))}
       </span>
       {i !== wordsNb - 1 && <WhiteSpace />}
@@ -101,12 +103,13 @@ type CharProps = {
   char: string;
   i: number;
   charStart: number;
+  noLH?: boolean;
   isSunset?: boolean;
 };
-const Char = ({ char, i, charStart, isSunset }: CharProps) => {
+const Char = ({ char, i, charStart, noLH, isSunset }: CharProps) => {
   return (
     <span
-      className={`split-char`}
+      className={`split-char ${noLH && "leading-none"}`}
       data-split-char-index={i + charStart}
       data-split-char
       style={
@@ -115,7 +118,7 @@ const Char = ({ char, i, charStart, isSunset }: CharProps) => {
         } as React.CSSProperties
       }
     >
-      <span className={`char-content ${isSunset ? 'text-linear-sunset' : ''}`} split-content={char}>
+      <span className={`char-content ${isSunset ? 'text-linear-sunset' : ''} ${noLH ? 'leading-none' : ''}`} split-content={char}>
         {char}
       </span>
     </span>

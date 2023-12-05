@@ -85,7 +85,6 @@ export const ComparativeSection = ({ data }: ComparativeSectionProps) => {
         trigger: section.current,
         start: `top top`,
         end: `top+=${(section.current && wrapper.current) ? section.current.offsetHeight - wrapper.current?.offsetHeight - offsetTop : 0} top`,
-        markers: true,
         onUpdate: (self) => {        
           tl.progress(self.progress) 
         },
@@ -95,7 +94,6 @@ export const ComparativeSection = ({ data }: ComparativeSectionProps) => {
         trigger: section.current,
         start: `top-=${offsetTop} top`,
         end: `top+=${(section.current && wrapper.current) ? section.current.offsetHeight - wrapper.current?.offsetHeight - offsetTop : 0} top`,
-        // markers: true,
         onUpdate: (self) => {
           let y
           if(self.progress < 0.15) {

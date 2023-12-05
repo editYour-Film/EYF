@@ -17,6 +17,7 @@ import { RootState } from "@/store/store";
 import { Menu } from "../dashboard/shared/Menu";
 import { LANDING_MENU } from "../dashboard/editor/data/menus";
 import { openMenu } from "@/store/slices/menuSlice";
+import { closeNavbar, openNavbar } from "@/store/slices/navbarSlice";
 
 type HeaderProps = {
   activeNavItem?: string;
@@ -27,41 +28,47 @@ const Header = ({ activeNavItem = "" }: HeaderProps) => {
 
   const isMobileScreen = useMediaQuery("(max-width: 768px)");
   const [isOpen, setIsOpen] = useState(false);
-  const [isScrollUp, setIsScrollUp] = useState<undefined | boolean>(undefined);
-  const linkClass = "text-small relative pb-1 focus-visible:outline-blueBerry ";
+  const isScrollUp = useSelector((store:RootState) => store.navbar.isOpen);;
 
   const [isModalDisplayed, setIsModalDisplayed] = useState(false);
-  const [waitingListType, setWaitingListType] = useState<"client" | "monteur">(
-    "client"
-  );
+  const [waitingListType, setWaitingListType] = useState<"client" | "monteur">("client");
 
   const routeName = useSelector((store: RootState) => store.routes.routeName)
+
+  const linkClass = "text-small relative pb-1 focus-visible:outline-blueBerry ";
 
   useEffect(() => {
     !isMobileScreen && setIsOpen(false);
   }, [isMobileScreen]);
 
+  const [lastScrollTop, setLastScrollTop] = useState(0);
+
   useEffect(() => {
-    var lastScrollTop = 0;
+    console.log(isMobileScreen);
+    
+    const handleScroll = function () {
+      console.log('scrolled');
+      console.log(lastScrollTop);
+      
+      let st = window.pageYOffset || document.documentElement.scrollTop;
+      if (st < lastScrollTop) {
+        if (st <= 80) dispatch(closeNavbar());
+        else dispatch(openNavbar());
+      } else {
+        if (st <= 80) dispatch(closeNavbar());
+        else dispatch(closeNavbar());
+      }
+      setLastScrollTop(st <= 0 ? 0 : st);
+    }
 
     if (!isMobileScreen) {
-      document.addEventListener(
-        "scroll",
-        function () {
-          var st = window.pageYOffset || document.documentElement.scrollTop;
-          if (st < lastScrollTop) {
-            if (st <= 80) setIsScrollUp(undefined);
-            else setIsScrollUp(true);
-          } else {
-            if (st <= 80) setIsScrollUp(undefined);
-            else setIsScrollUp(false);
-          }
-          lastScrollTop = st <= 0 ? 0 : st;
-        },
-        false
-      );
-    } else setIsScrollUp(false);
-  }, []);
+      document.addEventListener("scroll", handleScroll, false);
+    } else dispatch(openNavbar());
+
+    return () => {
+      document.removeEventListener( "scroll", handleScroll, false);
+    }
+  }, [isMobileScreen, lastScrollTop]);
 
   const transitionMobile = `transform 0.5s ${isOpen ? "ease-out" : "ease-in"}`;
 
@@ -70,13 +77,9 @@ const Header = ({ activeNavItem = "" }: HeaderProps) => {
     <header
       className={
         "sticky md:fixed mt-[60px] md:mt-0 top-0 left-0 px-4 w-full z-header transition-all duration-700 bg-black-transparent-light backdrop-blur-sm md:border-b-03 " +
-        (!isMobileScreen
-          ? isScrollUp === true
+         (isScrollUp === true
             ? "translate-y-0"
-            : isScrollUp === false
-            ? "-translate-y-20"
-            : ""
-          : "top-0") +
+            : "-translate-y-20") +
         (isMobileScreen ? " py-2 " : "")
       }
     >

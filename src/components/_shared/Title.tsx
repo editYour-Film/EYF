@@ -16,13 +16,14 @@ type titleProps = {
   className?: string,
   arrow?: boolean,
   fake?: boolean,
-  isSunset?: boolean
+  isSunset?: boolean,
+  noLH?: boolean,
 }
-export const Title = ({titleType, anim, fromRight, addDuration = '0s', charDelay = '0s', split, className, children, arrow = false, fake = false, isSunset}: titleProps) => {
+export const Title = ({titleType, anim, fromRight, addDuration = '0s', charDelay = '0s', split, className, children, arrow = false, fake = false, isSunset, noLH}: titleProps) => {
   const el = useRef(null)
   let content = children
 
-  if(anim || split) { content = <TextSplit input={children as string} type="word" isSunset={isSunset}/> }
+  if(anim || split) { content = <TextSplit input={children as string} type="word" noLH={noLH} isSunset={isSunset}/> }
 
   const animClass = `anim-title ${fromRight && 'fromRight'}`
 

@@ -76,7 +76,6 @@ export const CreatorToEditor = ({}:CreatorToEditorProps) => {
           start: 'top top',
           end: `top+=${window.innerHeight} top`,
           id: 'triggerPan',
-          markers: true,
           onUpdate: (self) => {
             if (self.progress > 0.3) inViewSection && setShowTitle1(true)
             else setShowTitle1(false)
