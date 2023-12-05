@@ -21,10 +21,12 @@ import Container, {
 } from "@/components/_shared/UI/Container";
 import { getStrapiData } from "../components/_prerender/strapiApi";
 import useStrapi from "@/hooks/useStrapi";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { setRouteName } from "@/store/slices/routesSlice";
 import { useDispatch } from "react-redux";
+import { GradientCard } from "@/components/dashboard/shared/GradientCard";
+import { GlobalContext } from "@/components/_context/GlobalContext";
 
 /*export async function getStaticProps() {
   const data = await getStrapiData(
@@ -37,6 +39,7 @@ import { useDispatch } from "react-redux";
 
 export default function Home(/*{ seodata }: any*/) {
   const dispatch = useDispatch();
+  const globalContext = useContext(GlobalContext)
 
   const { data, mutate: getStrapi } = useStrapi(
     "page-home?" +
@@ -117,7 +120,9 @@ export default function Home(/*{ seodata }: any*/) {
                 <YourVideoSection data={data.section4} />
               </Container>
 
-              <div className="absolute right-0 bg-radial-gradient-pink w-[600px] h-[400px] translate-x-[33%]"></div>
+              <hr className="pb-[100px]"/>
+
+              <div className="hidden md:block absolute right-0 bg-radial-gradient-pink w-[600px] h-[400px] translate-x-[33%]"></div>
 
               <Container>
                 <div className="relative w-full">
@@ -131,11 +136,29 @@ export default function Home(/*{ seodata }: any*/) {
 
             <CreatorToEditor />
 
-            {data.section5 && <EditorSection data={data.section5} />}
+            {data.section5 && 
+              <Container>
+                <EditorSection data={data.section5} />
+              </Container>
+            }
 
-            {dataFaqs && <FaqSection data={dataFaqs} />}
+            {dataFaqs && 
+              <Container>
+                <FaqSection data={dataFaqs} />
+              </Container>
+            }
 
-            <NewsletterSection />
+            <Container>
+              <GradientCard
+                title='PARRAINER UN AMI'
+                content='Bénéficiez d’avantages exclusifs en rejoignant la communauté des parrains editYour.Film dès aujourd’hui.'
+                hasCta 
+                type="email"
+                placeholder="Email" 
+                ctaLabel="Envoyer le lien de parrainage"
+                onClick={(email: string) => { globalContext.sendSponsorLink(email)}}
+              />
+            </Container>
 
           </div>
         )}

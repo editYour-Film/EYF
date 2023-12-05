@@ -19,7 +19,7 @@ export const GradientCard = ({title, content, hasCta = false, type = 'text', pla
   const [error, setError] = useState<string | undefined>(undefined)
 
   return (
-    <div className={`gradient-card relative px-dashboard-mention-padding-right-left py-[53px] lg:p-[53px] rounded-dashboard-button-square-radius overflow-hidden border border-dashboard-button-stroke-hover ${className ?? ''}`}>
+    <div className={`gradient-card relative px-dashboard-mention-padding-right-left py-[53px] lg:pt-[101px] lg:pb-[61px] lg:px-[53px] rounded-dashboard-button-square-radius overflow-hidden border border-dashboard-button-stroke-hover ${className ?? ''}`}>
       <div className="gradient-card__content relative flex flex-col z-10">
         <div className="lg:basis-5/6 lg:w-5/6">
           <div className="lg:w-2/3 text-dashboard-button-dark text-[55px] n27 font-medium uppercase">{title}</div>
