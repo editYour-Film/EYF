@@ -11,6 +11,7 @@ import { map } from "@/utils/Math";
 import { IslandButton } from "../_shared/buttons/IslandButton";
 import routes from "@/routes";
 import { useWindowSize } from "@uidotdev/usehooks";
+import { ClassicContent } from "../_shared/UI/ClassicContent";
 
 type ComparativeSectionProps = {
   data: any;
@@ -132,21 +133,16 @@ export const ComparativeSection = ({ data }: ComparativeSectionProps) => {
       ref={wrapper}
       className="lg:sticky lg:h-[90vh] flex flex-col lg:flex-row justify-center lg:px-dashboard-spacing-element-medium py-[64px] gap-dashboard-spacing-element-medium lg:gap-[128px] lg:border-03 rounded-dashboard-button-square-radius lg:bg-dashboard-background-content-area lg:shadow-large z-10 overflow-hidden">
         <div className="comparative-section__title sticky max-w-[450px] top-0 flex flex-col gap-6 px-dashboard-mention-padding-right-left lg:px-0">
-          <div className="flex flex-col gap-dashboard-spacing-element-medium">
-            <div className="text-title-small text-dashboard-text-description-base-low leading-none">
-              {data.classic_content.suptitle}
-            </div>
-            <Title titleType="h1" anim className="text-title-medium text-dashboard-text-title-white-high leading-none" fake>
-              {data.classic_content.title}
-            </Title>
-            <p className="text-lg text-dashboard-text-description-base">{data.classic_content.content}</p>
-          </div>
-
-          <IslandButton 
-            type="primary"
-            enableTwist
-            label="Créer mon compte"
-            href={routes.SIGNIN}
+          <ClassicContent 
+            className="perspective"
+            suptitle={data.classic_content.suptitle}
+            title={data.classic_content.title}
+            titleType="h2"
+            titleClassName="text-title-medium"
+            paragraph={data.classic_content.content}
+            cta="Créer mon compte"
+            ctaType="primary"
+            ctaHref={routes.SIGNIN}
           />
         </div>
 
@@ -219,9 +215,9 @@ const Card = forwardRef<HTMLDivElement, CardProps>(function Card({type, details,
   const linesH = "150";
   const isMobile = useMediaQuery("(max-width: 768px)");
 
-  const { ref: inViewCard, inView } = useInView({
-    triggerOnce: true,
-  });
+  // const { ref: inViewCard, inView } = useInView({
+  //   triggerOnce: true,
+  // });
 
   const { ref: inViewChartRef, inView: inViewChart } = useInView({
     triggerOnce: true,
@@ -230,46 +226,7 @@ const Card = forwardRef<HTMLDivElement, CardProps>(function Card({type, details,
 
   useEffect(() => {
     inViewChartRef(chart.current);
-  }, [inViewChartRef, inViewCard]);
-
-  useEffect(() => {
-    if (isMobile) return;
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline({
-        paused: true,
-        defaults: {
-          ease: "power2.out",
-        },
-      });
-
-      tl.fromTo(
-        card.current!,
-        {
-          rotateX: "10deg",
-          y: 50 + delay,
-        },
-        {
-          rotateX: "0deg",
-          y: 0,
-        },
-        0
-      );
-
-      const trigger1 = ScrollTrigger.create({
-        trigger: card.current,
-        start: `top+=${delay} bottom`,
-        end: `top+=${300} center`,
-        id: "comparativeCard",
-        onUpdate: (self) => {
-          tl.progress(self.progress);
-        },
-      });
-    });
-
-    return () => {
-      ctx.revert();
-    };
-  }, [inView]);
+  }, [inViewChartRef]);
 
   useEffect(() => {
     const step = 20;

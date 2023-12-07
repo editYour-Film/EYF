@@ -3,7 +3,7 @@ import Link from "next/link";
 import Button from "../_shared/form/Button";
 import { H1 } from "../_shared/typography/H1";
 import { H2 } from "../_shared/typography/H2";
-import { Title } from "../_shared/Title";
+// import { Title } from "../_shared/Title";
 import Image from "next/image";
 import { ResponsiveImg } from "../_shared/ResponsiveImg";
 import { useEffect, useState, useRef } from "react";
@@ -19,6 +19,8 @@ import { Cross } from "../_shared/icons/cross";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import useMediaQuery from "@/hooks/useMediaQuery";
+import { Title } from "../_shared/typography/TitleAnim";
+import { ClassicContent } from "../_shared/UI/ClassicContent";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -120,11 +122,28 @@ export const EditorSection = ({ data }: EditorSectionProps) => {
     >
       <div className="relative mx-auto z-20">
         <div className="flex flex-col max-w-[660px] pl-[20px]">
-          <H2 className="text-dashboard-text-description-base-low text-title-small" fake>
+          {/* <div
+            className="text-dashboard-text-description-base-low text-title-small"
+          >
             {data.section_title ?? 'MONTEUR.SE.S'}
-          </H2>
-          <Title titleType="h1" anim className="text-title-large font-medium text-dashboard-text-title-white-high mt-6" fake>{data.title}</Title>
-          <p className="mt-9 text-base text-dashboard-text-description-base">Vous êtes disponibles quelques jours en attendant ton prochain montage ? editYour.Film vous propose d’occuper 1, 2 jusqu’à 5 jours d’inactivité par le montage d’une vidéo à destination des réseaux sociaux, des plateformes ou de la TV.</p>
+          </div>
+          <Title
+            type="h2"
+            text={data.title}
+            className="text-title-large font-medium text-dashboard-text-title-white-high mt-6"
+          />
+          <p
+            className="mt-9 text-base text-dashboard-text-description-base">
+              Vous êtes disponibles quelques jours en attendant ton prochain montage ? editYour.Film vous propose d’occuper 1, 2 jusqu’à 5 jours d’inactivité par le montage d’une vidéo à destination des réseaux sociaux, des plateformes ou de la TV.
+          </p> */}
+
+          <ClassicContent
+            suptitle={data.section_title ?? 'MONTEUR.SE.S'}
+            title={data.title}
+            titleType="h2"
+            titleClassName="text-title-large font-medium text-dashboard-text-title-white-high mt-6 "
+            paragraph="Vous êtes disponibles quelques jours en attendant ton prochain montage ? editYour.Film vous propose d’occuper 1, 2 jusqu’à 5 jours d’inactivité par le montage d’une vidéo à destination des réseaux sociaux, des plateformes ou de la TV."
+          />
         </div>
 
         <div className="absolute left-1/2 -translate-x-1/2 w-full h-[600px] bg-[rgba(47,35,80,0.36)] blur-[100px]"></div>

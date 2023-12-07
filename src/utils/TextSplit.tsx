@@ -1,13 +1,14 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, forwardRef } from "react";
 
 type textSplitProps = {
   input: string;
   type?: "line" | "word" | "char";
   noLH?: boolean;
   isSunset?: boolean;
+  onSplitted?: () => void;
 };
 
-export const TextSplit = ({ input, type, noLH, isSunset}: textSplitProps) => {
+export const TextSplit = forwardRef<HTMLSpanElement, textSplitProps>(function TextSplit({ input, type, noLH, isSunset, onSplitted}, ref) {
   const [words, setWords] = useState<{ content: string; charStart: number }[]>(
     []
   );
@@ -28,6 +29,7 @@ export const TextSplit = ({ input, type, noLH, isSunset}: textSplitProps) => {
 
       charIndex += _words[i].length;
     }
+    
     setWords(wordsVal);
   };
 
@@ -35,8 +37,14 @@ export const TextSplit = ({ input, type, noLH, isSunset}: textSplitProps) => {
     splitInput();    
   }, [input]);
 
+  useEffect(() => {
+    (words.length !== 0 && onSplitted ) && onSplitted()
+  }, [words])
+
   return (
-    <span className={`split-content ${noLH && "leading-none"}`}>
+    <span 
+      ref={ref}
+      className={`split-content ${noLH ? "leading-none" : ''}`}>
       {words.map((word, i) => (
         <Word
           key={i}
@@ -50,7 +58,7 @@ export const TextSplit = ({ input, type, noLH, isSunset}: textSplitProps) => {
       ))}
     </span>
   );
-};
+})
 
 type WordProps = {
   chars: string;
@@ -106,6 +114,7 @@ type CharProps = {
   noLH?: boolean;
   isSunset?: boolean;
 };
+
 const Char = ({ char, i, charStart, noLH, isSunset }: CharProps) => {
   return (
     <span

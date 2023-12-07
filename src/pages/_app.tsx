@@ -1,5 +1,5 @@
 import "@/styles/globals.css";
-import "@/styles/strapi.css";
+// import "@/styles/strapi.css";
 import "@/styles/animated-border.css";
 import "@/styles/utils/splitText.scss";
 import "@/styles/components/Footer.scss";

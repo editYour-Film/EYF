@@ -1,6 +1,6 @@
 import { H2 } from "../_shared/typography/H2";
 import { useInView } from "react-intersection-observer";
-import { Title } from "../_shared/Title";
+// import { Title } from "../_shared/Title";
 import { VideoSlider } from "./VideoSlider";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { useRef, createRef, useEffect, useState, forwardRef } from "react";
@@ -9,6 +9,8 @@ import { AdvancedVideo } from "@cloudinary/react";
 import { CloudinaryVideo } from "@cloudinary/url-gen";
 import { Video } from "../model/videos";
 import { formatVideoDuration } from "@/utils/utils";
+import { Title } from "../_shared/typography/TitleAnim";
+import { ClassicContent } from "../_shared/UI/ClassicContent";
 
 type ConfidenceSectionProps = {
   videos: Video[];
@@ -60,14 +62,13 @@ export const ConfidenceSection = ({ videos, data }: ConfidenceSectionProps) => {
 
   return (
     <div ref={ref} className={`${inView ? " inView" : ""}`}>
-      <div className="flex flex-col items-center text-center px-5 md:px-0">
-        <span className="text-title-small text-dashboard-text-description-base-low mb-dashboard-spacing-element-medium leading-none">
-          {data.section_title}
-        </span>
-        <Title titleType="h1" anim className="text-title-medium" fake>
-          {data.title1}
-        </Title>
-      </div>
+      <ClassicContent 
+        className="flex flex-col items-center text-center px-5 md:px-0"
+        suptitle={data.section_title}
+        title={data.title1}
+        titleClassName="text-title-medium font-medium"
+        titleType="h2"
+      />
       {vids.length && (
         <div className="mt-dashboard-spacing-element-medium">
           {isMobile ? (
