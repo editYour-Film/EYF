@@ -109,7 +109,6 @@ export const appearBottomTitle = ({title}:appearBottomTitleArgs) => {
     trigger: title,
     start: `top+=${window.innerHeight * 0.2} bottom`,
     end: `top+=${window.innerHeight * 0.2 + 500} bottom`,
-    markers: true,
     id: 'title',
 
     onUpdate: (self) => {
@@ -212,7 +211,6 @@ export const appearBottomClassicContent = ({wrapper, suptitle, title, parapgraph
     trigger: wrapper,
     start: `top+=${window.innerHeight * 0.2} bottom`,
     end: `top+=${window.innerHeight * 0.2 + 500} bottom`,
-    markers: true,
     id: 'classic-content',
 
     onUpdate: (self) => {
