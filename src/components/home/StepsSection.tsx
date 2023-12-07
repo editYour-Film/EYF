@@ -9,10 +9,8 @@ import { useLenis } from "@studio-freight/react-lenis";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { useDispatch } from 'react-redux'
 import { toClick, toRegular} from "@/store/slices/cursorSlice"
-import { Cloudinary, CloudinaryImage, CloudinaryVideo } from "@cloudinary/url-gen";
 import { closeNavbar, openNavbar } from "@/store/slices/navbarSlice";
 import store from "@/store/store";
-import { TitleAnim } from "../_shared/typography/TitleAnim";
 
 gsap.registerPlugin(ScrollTrigger)
 
