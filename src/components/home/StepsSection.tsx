@@ -12,6 +12,7 @@ import { toClick, toRegular} from "@/store/slices/cursorSlice"
 import { Cloudinary, CloudinaryImage, CloudinaryVideo } from "@cloudinary/url-gen";
 import { closeNavbar, openNavbar } from "@/store/slices/navbarSlice";
 import store from "@/store/store";
+import { TitleAnim } from "../_shared/typography/TitleAnim";
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -311,11 +312,16 @@ const Step = forwardRef(function Step({media, title, sectionTitle, content, side
       className={`${className && className} ${isDesktop ? 'absolute top-0' : ''} w-full mt-10 first:mt-0 sm:first:mt-6 ${isActive ? '' : 'pointer-events-none'}`}
     >
     <div 
-      className={`content flex flex-col ${side === 'right' ? 'md:flex-row-reverse' : 'md:flex-row'} fullHd:h-[50vh] border rounded-[24px] overflow-hidden gap-4 md:gap-16 lg:gap-40 justify-between md:justify-center lg:justify-between items-center max-w-6xl mx-auto py-5 px-5 md:px-[72px] fullHd:px-[100px] md:py-16 bg-black`}
+      className={`content flex flex-col ${side === 'right' ? 'md:flex-row-reverse' : 'md:flex-row'} fullHd:h-[50vh] border rounded-dashboard-button-square-radius overflow-hidden gap-4 md:gap-16 lg:gap-40 justify-between md:justify-center lg:justify-between items-center max-w-6xl mx-auto py-5 px-5 md:px-[72px] fullHd:px-[100px] md:py-16 bg-black`}
     >
       <div className="md:w-6/12 fullHd:w-1/2 md:max-w-md">
         <H2 arrow fake className="text-base">{sectionTitle}</H2>
         <Title titleType="h2" anim={isDesktop} className="mt-6 text-title-medium" noLH fake addDuration={'0.4s'}>{title}</Title>
+        {/* <TitleAnim 
+          type="h2"
+          text={title}
+          className="mt-6 text-title-medium"
+        /> */}
         <p className="text-xl text-base-text mt-9">
           {content}
         </p>

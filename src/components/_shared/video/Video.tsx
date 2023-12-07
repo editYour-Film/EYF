@@ -14,6 +14,7 @@ type VideoProps = {
   trigger?: boolean;
   autoPlay?: boolean;
   muted?: boolean;
+  loop?: boolean;
 };
 
 export const Video = forwardRef<HTMLVideoElement, VideoProps>(function Video(
@@ -30,6 +31,7 @@ export const Video = forwardRef<HTMLVideoElement, VideoProps>(function Video(
     trigger,
     autoPlay,
     muted,
+    loop
   },
   ref
 ) {
@@ -54,11 +56,9 @@ export const Video = forwardRef<HTMLVideoElement, VideoProps>(function Video(
 
   const handleClick = () => {
     if (isPlaying) {
-      // videoEl.current && videoEl.current.pause();
       handlePause()
     } else {
       handlePlay()
-      // videoEl.current && videoEl.current.play();
     }
   };
 
@@ -67,14 +67,12 @@ export const Video = forwardRef<HTMLVideoElement, VideoProps>(function Video(
   };
 
   useEffect(() => {  
-    if (trigger) {
-      // videoEl.current && videoEl.current.pause();
+    if (trigger || autoPlay) {
       handlePlay()
     } else {
       handlePause()
-      // videoEl.current && videoEl.current.play();
     }
-  }, [trigger])
+  }, [trigger, autoPlay])
 
   return (
     <div
@@ -88,6 +86,7 @@ export const Video = forwardRef<HTMLVideoElement, VideoProps>(function Video(
         controls={(defaultPlayer && !noPlayer)}
         autoPlay={autoPlay}
         muted={muted}
+        loop={loop}
         onClick={(e) => {
           e.preventDefault();
           handleClick();

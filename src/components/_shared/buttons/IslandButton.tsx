@@ -1,5 +1,5 @@
 import { TextSplit } from "@/utils/TextSplit";
-import { PropsWithChildren, ReactNode, useEffect, useRef } from "react";
+import { PropsWithChildren, ReactNode, RefObject, forwardRef, useEffect, useRef } from "react";
 
 import Light from '@/img/svg/buttonLight.svg'
 import gsap from "gsap";
@@ -7,7 +7,7 @@ import { useWindowSize } from "@uidotdev/usehooks";
 
 import Link from 'next/link'
 
-type IslandButtonProps = {
+export type IslandButtonProps = {
   type: "main" | "primary" | "secondary" | "tertiary" | "danger" | "small" | "small-secondary" | "small-solid";
   label?: string;
   Icon?: any; //() => JSX.Element,
@@ -23,7 +23,7 @@ type IslandButtonProps = {
   children?: ReactNode;
 };
 
-export const IslandButton: React.FC<IslandButtonProps> = ({
+export const IslandButton = forwardRef<HTMLButtonElement, PropsWithChildren<IslandButtonProps>>(function IslandButton({
   type,
   label,
   Icon,
@@ -37,8 +37,8 @@ export const IslandButton: React.FC<IslandButtonProps> = ({
   href,
   id,
   children,
-}) => {
-  const buttonEl = useRef<HTMLButtonElement>(null)
+}, ref) {
+  const buttonEl = (ref as RefObject<HTMLButtonElement>) ?? useRef<HTMLButtonElement>(null)
   const mainLight = useRef<HTMLDivElement>(null)
 
   const wSize = typeof window !== 'undefined' ? useWindowSize() : undefined
@@ -241,7 +241,7 @@ export const IslandButton: React.FC<IslandButtonProps> = ({
       </ConditionnalLink>
     );
   }
-};
+});
 
 type ConditionnalLinkProps = {
   condition: string | undefined;
