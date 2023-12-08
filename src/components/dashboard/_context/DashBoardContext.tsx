@@ -3,6 +3,7 @@ import useStrapi, { useStrapiGet } from "@/hooks/useStrapi"
 import { getNotifications } from "@/store/slices/NotificationsSlice"
 import { PropsWithChildren, createContext, useContext, useEffect, useState } from "react"
 import { useDispatch } from "react-redux"
+import { DashboardEditorHome } from "../editor/DashboardEditorHome"
 
 export interface dashBoardPanelType {
   title: string
@@ -32,6 +33,8 @@ export const DashBoardContext = createContext({
   closePanels: () => {},
   activePanel: 0,
   setActivePanel: (payload: number) => {},
+
+  initEditorPanels: [] as {title: string, panel: React.JSX.Element}[],
 
   isAddModelPannelOpen: false,
   setIsAddModelPannelOpen: (payload: boolean) => {},
@@ -66,6 +69,20 @@ export const DashBoardContextProvider = ({children}:PropsWithChildren) => {
 
   const [isAddModelPannelOpen, setIsAddModelPannelOpen] = useState(false)
 
+  const initEditorPanels = [
+    {
+      title: "Accueil - Modèles",
+      panel: <DashboardEditorHome />,
+    },
+  ]
+
+  useEffect(() => {
+    if(!isAddModelPannelOpen) {
+      setPanels(initEditorPanels)
+      setActivePanel(0)
+    }
+  }, [isAddModelPannelOpen])
+
   const [notificationCenterAnimated, setNotificationCenterAnimated] = useState(false)
   const [notificationCenterOpen, setNotificationCenterOpen] = useState(false)
 
@@ -87,7 +104,7 @@ export const DashBoardContextProvider = ({children}:PropsWithChildren) => {
   const [infoCardActive, setInfoCardActive] = useState(false)
   const [infoCard, setInfoCard] = useState<infoCardType | undefined>(undefined) 
   
-  useEffect(() => {    
+  useEffect(() => { 
     if (_data && _data.news_info) {
       if (_data.news_info.articles.data) {
         const articles = _data.news_info.articles.data
@@ -142,6 +159,8 @@ export const DashBoardContextProvider = ({children}:PropsWithChildren) => {
 
         isAddModelPannelOpen,
         setIsAddModelPannelOpen,
+
+        initEditorPanels,
 
         notificationCenterOpen,
         notificationCenterAnimated,

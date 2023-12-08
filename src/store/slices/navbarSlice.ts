@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 // create a slice 
 export const navbarSlice = createSlice({ 
   name: "navbar", 
-  initialState: { isOpen: false }, 
+  initialState: { isOpen: true }, 
   reducers: { 
     openNavbar: state => { state.isOpen = true },
     closeNavbar: state => { state.isOpen = false },

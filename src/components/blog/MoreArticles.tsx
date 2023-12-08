@@ -1,11 +1,12 @@
 import { MouseEvent, RefObject, createRef, useEffect, useRef, useState } from "react";
 import { CardArticle } from "../_shared/UI/CardArticle";
-import { useMediaQuery, useWindowSize } from "@uidotdev/usehooks";
+import { useWindowSize } from "@uidotdev/usehooks";
 import gsap from "gsap";
 import { Button } from "../_shared/buttons/Button";
 import store from "@/store/store";
 import { toArrowLeft, toArrowRight, toRead } from "@/store/slices/cursorSlice";
 import { useDispatch } from "react-redux";
+import useMediaQuery from "@/hooks/useMediaQuery";
 
 export const MoreArticles = ({ articles, current }: any) => {
   const dispatch = useDispatch()

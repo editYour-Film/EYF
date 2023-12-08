@@ -1,20 +1,35 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Keyword } from "@/components/_shared/UI/Keyword";
 import { IslandButton } from "@/components/_shared/buttons/IslandButton";
 import routes from "@/routes";
 import { useRouter } from "next/router";
 import { useContext } from "react";
-import { useMediaQuery } from "@uidotdev/usehooks";
 import { InfoMessage } from "@/components/_shared/UI/InfoMessage";
 
 import Eye from "@/icons/eye.svg";
 import { AuthContext } from "@/context/authContext";
 import { video_tag } from "./_context/EditorContext";
+import useMediaQuery from "@/hooks/useMediaQuery";
 
 export const DashboardEditorKeyWords = () => {
   const isMobile = useMediaQuery("(max-width: 768px)");
   const router = useRouter();
   const authContext = useContext(AuthContext);
+
+  const [keywords, setKeywords] = useState<any[]>([])
+
+  useEffect(() => {
+    if(authContext.user.models) {
+      let _keywords:any[] = []
+      authContext.user.models.forEach((x: any) => {
+         x.video_tags.forEach((keyword: video_tag, i: number) => {
+          keyword && _keywords.push(keyword)
+        });
+      })
+      
+      setKeywords([...new Map(_keywords.map(v => [v.id, v])).values()])
+    }
+  }, [])
 
   return (
     <div className="dashboard-editor-keywords flex flex-col gap-dashboard-spacing-element-medium px-dashboard-mention-padding-right-left md:px-0 w-full">
@@ -61,23 +76,20 @@ export const DashboardEditorKeyWords = () => {
           ) : (
             <div className="db-editor__tags flex flex-wrap w-full gap-3">
               {/* display list of keywords associated with the current user */}
-              {authContext.user.models &&
-                authContext.user.models.map((x: any) => {
-                  return x.video_tags.map((keyword: video_tag, i: number) => {
-                    return (
-                      <React.Fragment
-                        key={i}
-                      >
-                        <Keyword 
-                          text={keyword.name} 
-                          noHover 
-                          isWaiting={!keyword.approved}
-                          disabled={!keyword.approved}
-                        />
-                      </React.Fragment>
-                    );
-                  });
-                })}
+              {keywords.map((keyword, i) => {
+                  return (
+                    <React.Fragment
+                      key={i}
+                    >
+                      <Keyword 
+                        text={keyword.name} 
+                        noHover 
+                        isWaiting={!keyword.approved}
+                        disabled={!keyword.approved}
+                      />
+                    </React.Fragment>
+                  );
+              })}
             </div>
           )}
         </>

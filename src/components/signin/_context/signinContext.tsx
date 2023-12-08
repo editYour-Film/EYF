@@ -183,6 +183,8 @@ export const SignInContextProvider: React.FC<any> = (props) => {
     if (authContext.user.user && authContext.user.user.role)
       if (authContext.user.user.role.name === "editor")
         push(routes.DASHBOARD_EDITOR);
+      else if (authContext.user.user.role.name === "client")
+        push(routes.DASHBOARD_CLIENT)
   }, []);
 
   useEffect(() => {

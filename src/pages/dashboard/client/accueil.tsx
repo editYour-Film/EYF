@@ -1,5 +1,4 @@
 import { DashboardContainer } from "@/components/dashboard/shared/DashboardContainer";
-import { DashboardEditorHome } from "@/components/dashboard/editor/DashboardEditorHome";
 import LayoutDashBoard from "@/components/layouts/LayoutDashBoard";
 import Head from "next/head";
 import { PropsWithChildren, useContext, useEffect } from "react";
@@ -11,6 +10,9 @@ import { AddModelContextProvider } from "@/components/dashboard/editor/_context/
 import { FooterDashboard } from "@/components/dashboard/shared/FooterDashBoard";
 import { GradientCard } from "@/components/dashboard/shared/GradientCard";
 import { GlobalContext } from "@/components/_context/GlobalContext";
+import { DashboardCreatorHome } from "@/components/dashboard/creator/DashboardCreatorHome";
+import { ModifyVideoPanel } from "@/components/dashboard/editor/ModifyVideoPanel";
+import { ClientContext } from "@/components/dashboard/client/_context/DashboardClientContext";
 
 export default function DashBoardContentHome() {
   return (
@@ -29,13 +31,14 @@ export default function DashBoardContentHome() {
 
 const DashBoardPageHome = ({ children }: PropsWithChildren) => {
   const context = useContext(DashBoardContext);
+  const clientContext = useContext(ClientContext);
   const globalContext = useContext(GlobalContext);
 
   useEffect(() => {
     context.setPanels([
       {
         title: "Accueil - Modèles",
-        panel: <DashboardEditorHome />,
+        panel: <DashboardCreatorHome />,
       },
     ]);
   }, []);
@@ -62,6 +65,7 @@ const DashBoardPageHome = ({ children }: PropsWithChildren) => {
 
           <DashboardContainer className="relative z-10" />
         </div>
+
         <GradientCard 
           title='PARRAINER UN AMI'
           content='Bénéficiez d’avantages exclusifs en rejoignant la communauté des parrains editYour.Film dès aujourd’hui.'
@@ -70,10 +74,14 @@ const DashBoardPageHome = ({ children }: PropsWithChildren) => {
           placeholder="Email" 
           ctaLabel="Envoyer le lien de parrainage"
           onClick={(email: string) => { globalContext.sendSponsorLink(email)}}
+          className="mt-dashboard-spacing-element-medium lg:mt-[70px]"
         />
+
         <FooterDashboard />
       </div>
 
+      <ModifyVideoPanel context={clientContext} type="creator" />
+      
     </AddModelContextProvider>
   </>
   );

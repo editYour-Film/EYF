@@ -53,8 +53,12 @@ const Header = ({ activeNavItem = "" }: HeaderProps) => {
         if (st <= 80) dispatch(closeNavbar());
         else dispatch(closeNavbar());
       }
+
+      if(st <= 200) dispatch(openNavbar())
+
       setLastScrollTop(st <= 0 ? 0 : st);
     }
+
 
     if (!isMobileScreen) {
       document.addEventListener("scroll", handleScroll, false);

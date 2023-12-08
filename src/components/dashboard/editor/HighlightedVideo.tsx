@@ -10,7 +10,7 @@ export const HightlightedVideo = ({}) => {
     return (
       <ModelLarge
         video={editorContext.highlightedVideo}
-        type="dashboard"
+        type="editor"
   
         handleModify={() => { editorContext.handleModifyVideo(editorContext.highlightedVideo?.id) }}
         handleSetHighlighted={() => { editorContext.storeHighlightedVideo(editorContext.highlightedVideo?.id) }}

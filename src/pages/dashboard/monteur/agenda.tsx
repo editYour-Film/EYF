@@ -6,7 +6,7 @@ import { AuthContext } from "@/context/authContext";
 import { FooterDashboard } from "@/components/dashboard/shared/FooterDashBoard";
 import { GradientCard } from "@/components/dashboard/shared/GradientCard";
 import { TopBar } from "@/components/dashboard/shared/TopBar";
-import { useMediaQuery } from "@uidotdev/usehooks";
+import useMediaQuery from "@/hooks/useMediaQuery";
 import { DashBoardContext } from "@/components/dashboard/_context/DashBoardContext";
 import { NotificationCenter } from "@/components/dashboard/shared/NotificationCenter";
 import { Month } from "@/components/dashboard/editor/agenda/Month";

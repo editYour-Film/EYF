@@ -37,14 +37,14 @@ export interface EditorVideo {
   audio?: string;
   model: modelType;
   resources: any;
-  user_info: user_info;
+  user_info: any;
   visibility: VisibilityType;
   copywrite: string;
   worktime: WorkTimeType;
   is_highlighted: boolean;
   description: string;
-  video_tags: video_tag[];
-  video_softwares?: video_softwares[];
+  video_tags: any;
+  video_softwares?: any;
   approved?: boolean;
 }
 
@@ -96,6 +96,7 @@ export const EditorContext = createContext({
   currentModelHasBeenModified: false,
   setCurrentModelHasBeenModified: (payload: boolean) => {},
 
+  models: [] as any[],
   modelDescription: undefined as string | undefined,
   setModelDescription: (payload: string) => {},
   modelVisibility: undefined as VisibilityType | undefined,
@@ -121,8 +122,8 @@ export const EditorContext = createContext({
 
   tagsOptionsArrayString: undefined as string[] | undefined,
   tagsOptions: undefined as video_tag[] | undefined,
-  tags: [] as video_tag[] | undefined,
-  setTags: (payload: video_tag[] | undefined) => {},
+  tags: {data: []} as {data: video_tag[]} | undefined,
+  setTags: (payload: {data: video_tag[]} | undefined) => {},
   tagsArrayString: [] as string[] | undefined,
   setTagsArrayString: (payload: string[] | undefined) => {},
   tagsError: undefined as string | undefined,
@@ -140,7 +141,7 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
   const dashboardContext = useContext(DashBoardContext);
 
   const [noModelMessageId] = useState(Date.now());
-
+  const [models, setModels] = useState<any[]>([]);
   const [highlightedVideo, setHighlightedVideo] = useState<
     EditorVideo | undefined
   >(undefined);
@@ -182,7 +183,7 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
   const [tagsOptionsArrayString, setTagsOptionsArrayString] = useState<
     string[] | undefined
   >(undefined);
-  const [tags, setTags] = useState<video_tag[] | undefined>(undefined);
+  const [tags, setTags] = useState<{data:any[]} | undefined>(undefined);
   const [tagsArrayString, setTagsArrayString] = useState<string[] | undefined>(
     undefined
   );
@@ -193,10 +194,10 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
   const [currentModelHasBeenModified, setCurrentModelHasBeenModified] =
     useState(false);
 
-  const handleModifyVideo = async (videoId?: number) => {
+  const handleModifyVideo = async (videoId?: number) => {    
     setShowModifyPanel(true);
-
-    const currentModel: EditorVideo = authContext.user.models.find(
+    
+    const currentModel: EditorVideo = models.find(
       (x: any) => x.id === videoId
     );
 
@@ -222,15 +223,16 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
 
       setModelSoftware(currentModelToModify.video_softwares);
       let _arrayStringSoftware: string[] = [];
-      currentModelToModify.video_softwares?.map((x) => {
-        _arrayStringSoftware.push(x.label);
+      
+      currentModelToModify.video_softwares?.data.map((x:any) => {        
+        _arrayStringSoftware.push(x.attributes.label);
       });
       setModelSoftwareArrayString(_arrayStringSoftware);
 
       setTags(currentModelToModify?.video_tags);
       let _arrayStringTags: string[] = [];
-      currentModelToModify.video_tags?.map((x) => {
-        _arrayStringTags.push(x.name);
+      currentModelToModify.video_tags?.data.map((x:any) => {
+        _arrayStringTags.push(x.attributes.name);
       });
       setTagsArrayString(_arrayStringTags);
     }
@@ -252,7 +254,7 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
 
   const updateCurrentModel = async () => {
     const id = currentModelToModify?.id;
-
+    
     const res = await useStrapiPut(
       `editor-videos/${id}`,
       {
@@ -270,8 +272,8 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
               : (currentModelToModify?.worktime as string) === "Très compliqué"
               ? "high"
               : currentModelToModify?.worktime,
-          video_softwares: currentModelToModify?.video_softwares,
-          video_tags: currentModelToModify?.video_tags,
+          video_softwares: currentModelToModify?.video_softwares.data,
+          video_tags: currentModelToModify?.video_tags.data,
         },
       },
       false
@@ -279,6 +281,7 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
     if (res.status === 200) {
       hideModifyPanel();
       authContext.RefreshUserData();
+      fetchUserModels()
       toast("Modèle modifié avec succés", {
         icon: GreenCheck,
         duration: 5000,
@@ -321,6 +324,7 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
 
     if (res.status === 200) {
       authContext.RefreshUserData();
+      fetchUserModels()
       toast("Modèle retiré avec succés.", {
         icon: GreenCheck,
         duration: 5000,
@@ -342,6 +346,7 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
 
     if (res.status === 200) {
       authContext.RefreshUserData();
+      fetchUserModels()
       toast("Modèle publié avec succés.", {
         icon: GreenCheck,
         duration: 5000,
@@ -356,6 +361,7 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
       false /*true*/
     );
     if (deleteVideo.status === 200) {
+      fetchUserModels()
       toast("Modèle supprimé avec succés.", {
         icon: GreenCheck,
         duration: 5000,
@@ -365,7 +371,7 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
     }
   };
 
-  const addTag = async (tagName: string) => {
+  const addTag = async (tagName: string) => {    
     if (tagName.includes(" ")) {
       setTagsError("Les mots clés ne doivent pas contenir d'espaces.");
       return;
@@ -375,11 +381,11 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
       (x) => x.name.toLowerCase() === tagName.toLowerCase()
     );
 
-    if (tags === undefined || tags.length < 6) {
-      let _currentTags = currentModelToModify?.video_tags
-        ? [...currentModelToModify?.video_tags]
+    if (tags === undefined || tags.data.length < 6) {      
+      let _currentTags = currentModelToModify?.video_tags.data
+        ? [...currentModelToModify?.video_tags.data]
         : [];
-
+      
       // if found in tags options
       if (foundTag) {
         // if doesn't exist in current tag list then add it
@@ -388,13 +394,16 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
             (x) => x.name.toLowerCase() === tagName.toLowerCase()
           )
         ) {
+
           _currentTags.push(foundTag);
           setCurrentModelToModify((previousState: any) => ({
             ...previousState,
-            video_tags: _currentTags,
+            video_tags: {
+              data: _currentTags
+            },
           }));
         }
-      } else {
+      } else {        
         // add it to DB
         await useStrapiPost("video-tags", {
           data: {
@@ -405,15 +414,12 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
         }).then((res) => {
           if (res.status === 200) {
             // add to current list
-            _currentTags.push({
-              id: res.data.data.id,
-              name: res.data.data.attributes.name,
-              slug: res.data.data.attributes.slug,
-              approved: res.data.data.attributes.approved,
-            });
+            _currentTags.push(res.data.data);
             setCurrentModelToModify((previousState: any) => ({
               ...previousState,
-              video_tags: _currentTags,
+              video_tags: {
+                data: _currentTags,
+              }
             }));
           }
         });
@@ -456,10 +462,7 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
       if (res.status === 200) {
         res.data.data.map((x: any) => {
           _softwaresArrayString.push(x.attributes.label);
-          _softwares.push({
-            id: x.id,
-            label: x.attributes.label,
-          });
+          _softwares.push(x);
         });
         setModelSoftwareOptionsArrayString(_softwaresArrayString);
         setModelSoftwareOptions(_softwares);
@@ -505,14 +508,25 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
     } else {
       if (authContext.user.models.length === 1) {
         !authContext.user.models[0].is_highlighted &&
-          storeHighlightedVideo(authContext.user.models[0].id);
+          storeHighlightedVideo(models[0].id);
       }
     }
 
     setHighlightedVideo(
-      authContext.user.models.find((e: any) => e.is_highlighted === true)
+     models.find((e: any) => e.is_highlighted === true)
     );
   }, [authContext.user]);
+
+  const fetchUserModels = () => {
+    // TODO: Integration Get the models of the user
+    useStrapiGet(`user-infos/${authContext.user.details.id}?[populate][editor_videos][populate]=*`).then((res) => {            
+      setModels(res.data.data.attributes.editor_videos.data.map((model:any) => {return {id:model.id, ...model.attributes}}))
+    })
+  };
+
+  useEffect(() => {
+    fetchUserModels();
+  }, []);
 
   return (
     <EditorContext.Provider
@@ -537,6 +551,8 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
         updateCurrentModel,
         currentModelHasBeenModified,
         setCurrentModelHasBeenModified,
+
+        models,
 
         modelDescription,
         setModelDescription,
@@ -586,3 +602,5 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
     </EditorContext.Provider>
   );
 };
+
+export type EditorContextType = typeof EditorContext extends React.Context<infer U> ? U : never

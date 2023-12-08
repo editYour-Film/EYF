@@ -10,7 +10,7 @@ import { IslandButton } from "@/components/_shared/buttons/IslandButton";
 import { Video } from "@/components/_shared/video/Video";
 import { DashBoardContext } from "../../_context/DashBoardContext";
 import { Button } from "@/components/_shared/buttons/Button";
-import { useMediaQuery } from "@uidotdev/usehooks";
+import useMediaQuery from "@/hooks/useMediaQuery";
 import { FormatsType } from "../data/metaValues";
 
 import Close from "@/icons/dashboard/x.svg";
