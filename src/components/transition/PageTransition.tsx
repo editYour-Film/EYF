@@ -11,6 +11,7 @@ import { Session } from "next-auth";
 import { useDispatch } from "react-redux";
 import { enableTransition } from "@/store/slices/transitionSlice";
 import { closeMenu } from "@/store/slices/menuSlice";
+import { CustomToaster } from "../_shared/UI/CustomToaster";
 
 export const PageTransition = ({
   Component,
@@ -112,6 +113,10 @@ export const PageTransition = ({
           <Component {...pageProps} />
         </Transition>
       </SwitchTransition>
+
+      <div className="fixed h-full top-0 pt-[10px] pl-[10px] md:left-0 md:pl-[343px] xl:pl-[426px] w-full flex justify-center z-popup pointer-events-none">
+        <CustomToaster />
+      </div>
 
       {/* Transition Mask Element */}
       <div className="fixed w-full h-full top-0 left-0 perspective z-transition pointer-events-none">
