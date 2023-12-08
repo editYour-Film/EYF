@@ -1,6 +1,8 @@
+import useMediaQuery from "@/hooks/useMediaQuery"
 import { lockDocumentScroll, unLockDocumentScroll } from "@/utils/utils"
 import { useLenis } from "@studio-freight/react-lenis"
-import { useMediaQuery, useWindowSize } from "@uidotdev/usehooks"
+import { useWindowSize } from "@uidotdev/usehooks"
+
 import gsap from "gsap"
 import { PropsWithChildren, useEffect, useRef, useState } from "react"
 
