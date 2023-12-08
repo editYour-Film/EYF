@@ -39,7 +39,7 @@ export const Video = forwardRef<HTMLVideoElement, VideoProps>(function Video(
   const createdRef = useRef<HTMLVideoElement>(null);
   const videoEl = (ref as RefObject<HTMLVideoElement>) ?? createdRef;
   const [currentTime, setCurrentTime] = useState<number | undefined>(0);
-
+    
   const handlePause = () => {
     onPause && onPause()
     videoEl.current && videoEl.current.pause();

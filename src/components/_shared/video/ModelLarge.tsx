@@ -11,12 +11,14 @@ export type ModelsProps = {
   playerFullWidth?: boolean,
   thumbnail?: string,
   model?: modelType,
-  type?: 'default' | 'dashboard'
+  type?: 'default' | 'editor' | 'creator',
+
   handleModify?: () => void,
   handleDisable?: () => void,
   handleEnable?: () => void,
   handleDelete?: () => void,
   handleSetHighlighted?: () => void,
+  handleOpenDetail?: () => void,
 }
 
 export const ModelLarge = ({
@@ -76,7 +78,7 @@ export const ModelLarge = ({
             </div>
             <div className="model-large__content relative p-padding-medium border-t z-10">
               <div className="model-large__infos w-full flex flex-row justify-between">
-                {type === 'dashboard'
+                {type !== 'default'
                   ?
                   <>
                     <div className="text-dashboard-text-title-white-high text-base font-medium">{video.title}</div>
