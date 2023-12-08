@@ -291,6 +291,19 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
   };
 
   const storeHighlightedVideo = async (videoId?: number) => {
+    //TODO: Integration Remove precedent higlhted video
+    if(highlightedVideo) {
+      const resRemoveHigh = await useStrapiPut(
+        `editor-videos/${highlightedVideo.id}`,
+        {
+          data: {
+            is_highlighted: false,
+          },
+        },
+        false
+      );
+    }
+
     const res = await useStrapiPut(
       `editor-videos/${videoId}`,
       {
@@ -303,6 +316,8 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
 
     if (res.status === 200) {
       authContext.RefreshUserData();
+      fetchUserModels();
+      
       toast("Modèle mis en avant", {
         icon: GreenCheck,
         duration: 5000,
@@ -492,8 +507,8 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
   const [firstMessage, setFirstMessage] = useState(false)
   useEffect(() => {
     if (
-      authContext.user.models === undefined ||
-      authContext.user.models.length === 0 && 
+      models === undefined ||
+      models.length === 0 && 
       !firstMessage
     ) {
       setFirstMessage(true)
@@ -506,16 +521,14 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
         }
       );
     } else {
-      if (authContext.user.models.length === 1) {
-        !authContext.user.models[0].is_highlighted &&
+      if (models.length === 1) {
+        !models[0].is_highlighted &&
           storeHighlightedVideo(models[0].id);
       }
     }
 
-    setHighlightedVideo(
-     models.find((e: any) => e.is_highlighted === true)
-    );
-  }, [authContext.user]);
+    setHighlightedVideo(models.find((e: any) => e.is_highlighted === true));
+  }, [models]);
 
   const fetchUserModels = () => {
     // TODO: Integration Get the models of the user
