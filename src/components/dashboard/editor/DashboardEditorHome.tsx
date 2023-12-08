@@ -6,7 +6,6 @@ import { AddModelContext as _AddModelContext } from "./_context/AddModelContext"
 import { NewsAndInfos } from "../shared/NewsAndInfos";
 import { EditorContext } from "./_context/EditorContext";
 import { HightlightedVideo } from "./HighlightedVideo";
-import { ModifyVideoPanel } from "./ModifyVideoPanel";
 import { TitleSvgCard } from "../shared/TitleSvgCard";
 import { IslandButton } from "@/components/_shared/buttons/IslandButton";
 import { DashBoardContext } from "../_context/DashBoardContext";
@@ -68,7 +67,8 @@ export const DashboardEditorHome = ({
           )}
 
           <hr />
-          <DashboardEditorModels models={authContext.user.models} />
+          <DashboardEditorModels models={editorContext.models} />
+
           {(dashboardContext.infoCardActive ||
             (dashboardContext.posts && dashboardContext.posts.length > 0)) && (
             <>

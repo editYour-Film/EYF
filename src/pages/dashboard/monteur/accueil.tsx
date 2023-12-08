@@ -9,7 +9,7 @@ import { AddModel } from "@/components/dashboard/editor/AddModel";
 import { IslandButton } from "@/components/_shared/buttons/IslandButton";
 import { TopBar } from "@/components/dashboard/shared/TopBar";
 import { NotificationCenter } from "@/components/dashboard/shared/NotificationCenter";
-import { useMediaQuery } from "@uidotdev/usehooks";
+import useMediaQuery from "@/hooks/useMediaQuery";
 import { AddModelContextProvider } from "@/components/dashboard/editor/_context/AddModelContext";
 import { GradientCard } from "@/components/dashboard/shared/GradientCard";
 import { FooterDashboard } from "@/components/dashboard/shared/FooterDashBoard";
@@ -40,12 +40,7 @@ const DashBoardPageHome = ({ children }: PropsWithChildren) => {
   const isMobile = useMediaQuery("(max-width: 768px)");
 
   useEffect(() => {
-    context.setPanels([
-      {
-        title: "Accueil - Modèles",
-        panel: <DashboardEditorHome />,
-      },
-    ]);
+    context.setPanels(context.initEditorPanels);
 
     context.setActivePanel(0)
   }, []);
@@ -103,7 +98,7 @@ const DashBoardPageHome = ({ children }: PropsWithChildren) => {
 
         </div>
 
-        <ModifyVideoPanel />
+        <ModifyVideoPanel context={editorContext} type='editor' />
 
       </AddModelContextProvider>
     </>

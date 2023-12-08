@@ -16,7 +16,7 @@ import { AddModelContext } from "../_context/AddModelContext";
 
 import { Button } from "@/components/_shared/buttons/Button";
 import { IslandButton } from "@/components/_shared/buttons/IslandButton";
-import { useMediaQuery } from "@uidotdev/usehooks";
+import useMediaQuery from "@/hooks/useMediaQuery";
 import { DashBoardContext } from "../../_context/DashBoardContext";
 import gsap from "gsap";
 

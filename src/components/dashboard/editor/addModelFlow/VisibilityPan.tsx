@@ -14,7 +14,7 @@ import {
   WorkTimeLabelType,
   WorkTimeType,
 } from "../data/metaValues";
-import { useMediaQuery } from "@uidotdev/usehooks";
+import useMediaQuery from "@/hooks/useMediaQuery";
 import { toast } from "react-hot-toast";
 
 import Close from "@/icons/dashboard/x.svg";

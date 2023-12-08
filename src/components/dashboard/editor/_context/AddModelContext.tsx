@@ -16,7 +16,7 @@ import { formatVideoDuration } from "@/utils/utils";
 import validator from "validator";
 import { inputErrors } from "@/const";
 import { AddModel } from "../AddModel";
-import { useMediaQuery } from "@uidotdev/usehooks";
+import useMediaQuery from "@/hooks/useMediaQuery";
 import slugify from "slugify";
 
 export const AddModelContext = createContext({

@@ -9,7 +9,6 @@ import { Video } from "@/components/_shared/video/Video";
 import { IslandButton } from "@/components/_shared/buttons/IslandButton";
 import Trash from "@/icons/trash.svg";
 import Resize from "@/icons/resize.svg";
-import { useMediaQuery } from "@uidotdev/usehooks";
 import { ProfilPicture } from "../shared/ProfilPicture";
 import Input from "@/components/_shared/form/Input";
 
@@ -31,12 +30,18 @@ import { AuthContext } from "@/context/authContext";
 import toast from "react-hot-toast";
 import GreenCheck from "@/icons/check-green.svg";
 import { languages } from "@/const";
+import useMediaQuery from "@/hooks/useMediaQuery";
 
-export const ModifyVideoPanel = () => {
-  const editorContext = useContext(EditorContext);
+type ModifyVideoPanelProps = {
+  type: 'editor' | 'creator',
+  context: any
+}
+
+export const ModifyVideoPanel = ({context, type}: ModifyVideoPanelProps) => {  
   const authContext = useContext(AuthContext);
 
   const isMobile = useMediaQuery("(max-width: 768px)");
+  const [isEditor] = useState(type === 'editor');
 
   const [descriptionEnabled, setDescriptionEnabled] = useState(false);
   const [titleEnabled, setTitleEnabled] = useState(false);
@@ -47,37 +52,38 @@ export const ModifyVideoPanel = () => {
   const [openLinkToolbox, setOpenLinkToolbox] = useState(false);
   const [openWorktimeToolbox, setOpenWorktimeToolbox] = useState(false);
   const [openSoftwareToolbox, setOpenSoftwareToolbox] = useState(false);
-  const [openTagToolbox, setOpenTagToolbox] = useState(false);
-  const [openIndividualTagToolbox, setOpenIndividualTagToolbox] = useState<boolean[]>(editorContext.currentModelToModify ? editorContext.currentModelToModify!.video_tags.map(() => false) : []);
+  const [openTagToolbox, setOpenTagToolbox] = useState(false);  
+  const [openIndividualTagToolbox, setOpenIndividualTagToolbox] = useState<boolean[]>(context.currentModelToModify ? context.currentModelToModify!.video_tags.data.map(() => false) : []);
 
   const contentEl = useRef<HTMLDivElement>(null);
-  const titleEl = useRef<HTMLDivElement>(null);
+  const titleEl = useRef<HTMLDivElement>(null);  
 
   const titleContent = (
     <div
       ref={titleEl}
       onClick={() => {
-        !descriptionEnabled && setTitleEnabled(true);
+        isEditor && !titleEnabled && setTitleEnabled(true);
       }}
       className="w-full"
     >
       <div
         className={`${
           titleEnabled ? "hidden" : ""
-        } text-dashboard-text-description-base hover:text-dashboard-text-title-white-high cursor-pointer`}
+        } text-dashboard-text-description-base ${isEditor ? 'hover:text-dashboard-text-title-white-high cursor-pointer' : ''}`}
       >
-        {editorContext.modelTitle}
+        {context.modelTitle}
       </div>
-      <Input
+
+      {isEditor && <Input
         className={`w-full ${titleEnabled ? "" : "hidden"}`}
         type="textarea"
         bg="black"
-        value={editorContext.modelTitle}
+        value={context.modelTitle}
         onChange={(val) => {
           if (val) {
-            editorContext.setModelTitle(val.target.value);
-            editorContext.setCurrentModelHasBeenModified(true);
-            editorContext.setCurrentModelToModify(
+            context.setModelTitle(val.target.value);
+            context.setCurrentModelHasBeenModified(true);
+            context.setCurrentModelToModify(
               (previousState: EditorVideo) => ({
                 ...previousState,
                 title: val.target.value,
@@ -85,7 +91,7 @@ export const ModifyVideoPanel = () => {
             );
           }
         }}
-      />
+      />}
     </div>
   );
 
@@ -93,45 +99,101 @@ export const ModifyVideoPanel = () => {
     <div
       ref={contentEl}
       onClick={() => {
-        !descriptionEnabled && setDescriptionEnabled(true);
+        isEditor && !descriptionEnabled && setDescriptionEnabled(true);
       }}
       className="relative"
     >
       <div
         className={`min-h-[100px] px-[20px] py-[12px] leading-[1.4] ${
           descriptionEnabled ? "opacity-0 pointer-events-none" : ""
-        } text-dashboard-text-description-base hover:text-dashboard-text-title-white-high cursor-pointer`}
+        } text-dashboard-text-description-base ${isEditor ? 'hover:text-dashboard-text-title-white-high cursor-pointer' : ''}`}
       >
-        {editorContext.modelDescription && editorContext.modelDescription.length
-          ? editorContext.modelDescription
-          : "Entrez une description pour votre vidéo"}
+        {context.modelDescription && context.modelDescription.length
+          ? context.modelDescription
+          : isEditor ? "Entrez une description pour votre vidéo" : ''}
       </div>
-      <div
-        className={`absolute top-0 h-full w-full ${
-          descriptionEnabled ? "" : "hidden"
-        }`}
-      >
-        <Input
-          type="textarea"
-          bg="black"
-          value={editorContext.modelDescription}
-          onChange={(val) => {
-            if (val) {
-              editorContext.setModelDescription(val.target.value);
-              editorContext.setCurrentModelHasBeenModified(true);
-              editorContext.setCurrentModelToModify(
-                (previousState: EditorVideo) => ({
-                  ...previousState,
-                  description: val.target.value,
-                })
-              );
-            }
-          }}
-          className="min-h-[auto]"
-        />
-      </div>
+      
+      {isEditor && 
+        <div
+          className={`absolute top-0 h-full w-full ${
+            descriptionEnabled ? "" : "hidden"
+          }`}
+        >
+          <Input
+            type="textarea"
+            bg="black"
+            value={context.modelDescription}
+            onChange={(val) => {
+              if (val) {
+                context.setModelDescription(val.target.value);
+                context.setCurrentModelHasBeenModified(true);
+                context.setCurrentModelToModify(
+                  (previousState: EditorVideo) => ({
+                    ...previousState,
+                    description: val.target.value,
+                  })
+                );
+              }
+            }}
+            className="min-h-[auto]"
+          />
+        </div>
+      }
     </div>
   );
+
+  const tags = (tag: video_tag, i: number) => {    
+    if(!isEditor && !tag.approved) return <></>
+    return (
+      <React.Fragment
+        key={i}
+      >
+        <Keyword
+          text={tag.name}
+          className="relative w-ful shrink-0"
+          onClick={() => {
+            isEditor && setOpenIndividualTagToolbox(context.currentModelToModify!.video_tags.data.map((el:any, j:number) => i === j ? true : false))
+          }}
+          isWaiting={!tag.approved}
+        />
+  
+        {!isMobile && isEditor && <DropBox
+          type="addRemove"
+          placeholder="Nouveau Tag"
+          Icon={Plus}
+          currentValue={""}
+          onChange={(val) => {
+            context.setTagsError("");
+            if (val) context.addTag(val);
+          }}
+          onDelete={() => {
+            context.setCurrentModelToModify(
+              (previousState: EditorVideo) => ({
+                ...previousState,
+                video_tags:
+                {
+                  data: context.currentModelToModify
+                    ? context.currentModelToModify.video_tags?.data.filter(
+                        (t: any) => t.name !== tag.name
+                      )
+                    : undefined,
+                }
+              })
+            );
+  
+            context.setCurrentModelHasBeenModified(true)
+          
+          }}
+          toggle={openIndividualTagToolbox[i]}
+          setToggle={(val) => {
+            context.setCurrentModelHasBeenModified(true);
+            setOpenIndividualTagToolbox(context.currentModelToModify!.video_tags.data.map((el:any, j: number) => i === j ? val : false));
+          }}
+          className="hidden md:block md:absolute md:top-0 md:left-1/2"
+        />}
+      </React.Fragment>
+    );
+  }
 
   useEffect(() => {
     const handleClickOutsideRef = (
@@ -149,40 +211,45 @@ export const ModifyVideoPanel = () => {
       handleClickOutsideRef(e, titleEl, setTitleEnabled);
     };
 
-    if (editorContext.showModifyPanel) {
+    if (context.showModifyPanel || context.showDetailPanel) {
       window.addEventListener("click", disableInteractiveInputs);
     }
 
     return () => {
       window.removeEventListener("click", disableInteractiveInputs);
     };
-  }, [editorContext.showModifyPanel]);
-
+    
+  }, [context.showModifyPanel, context.showDetailPanel]);
+    
   return (
     <div className="modify-video fixed flex justify-center top-0 left-0 w-full h-full z-popup pointer-events-none">
       <OverlayModel
         className="min-h-screen h-max"
-        toggle={editorContext.showModifyPanel}
+        toggle={context.showModifyPanel || context.showDetailPanel}
         onOpened={() => {
-          editorContext.setCurrentModelHasBeenModified(false);
+          isEditor && context.setCurrentModelHasBeenModified(false);
         }}
         onClose={() => {
-          editorContext.hideModifyPanel();
-          editorContext.setCurrentModelHasBeenModified(false);
+          if(isEditor) {
+            context.hideModifyPanel();
+            isEditor && context.setCurrentModelHasBeenModified(false);
+          } else {
+            context.hideDetailsPanel();
+          }
         }}
         onClosed={() => {
-          editorContext.setCurrentModelToModify(undefined);
+          isEditor ? context.setCurrentModelToModify(undefined) : context.setCurrentDetailModel(undefined);
         }}
       >
         <div className="modify-video__inner min-h-full p-dashboard-button-separation-spacing md:p-0 bg-dashboard-button-dark md:border-03 md:rounded-dashboard-button-separation-spacing grid grid-modify-video pb-[50px]">
-          {editorContext.currentModelToModify && (
+          {(context.currentModelToModify || context.currentDetailModel) && (
             <>
               {isMobile && (
                 <IslandButton
                   type="tertiary"
                   Icon={Close}
                   onClick={() => {
-                    editorContext.hideModifyPanel();
+                    isEditor ? context.hideModifyPanel() : context.hideDetailsPanel();
                   }}
                   iconColor="appleRed"
                   className="ml-auto mr-0 w-max"
@@ -191,7 +258,7 @@ export const ModifyVideoPanel = () => {
 
               <div className="relative md:col-[main-start_/_main-end] row-[5_/_6] md:row-[1_/_2] h-0 pb-[56.25%] md:rounded-dashboard-button-separation-spacing overflow-hidden">
                 <Video
-                  video={editorContext.currentModelToModify.video}
+                  video={isEditor ? context.currentModelToModify.video.data.attributes : context.currentDetailModel.video.data.attributes}
                   className="absolute"
                 />
               </div>
@@ -201,32 +268,43 @@ export const ModifyVideoPanel = () => {
                   type={"small"}
                   Icon={Trash}
                   onClick={() => {
-                    editorContext.currentModelToModify &&
-                      editorContext.handleDeleteVideo(
-                        editorContext.currentModelToModify.id
-                      );
+                    if(isEditor) {
+                      context.currentModelToModify && context.handleDeleteVideo(context.currentModelToModify.id);
+                    } else {
+                      context.currentDetailModel && context.removeFromPicked(context.currentDetailModel.id);
+                    }
                   }}
                 />
 
-                <IslandButton
+                {isEditor && <IslandButton
                   type={"small"}
                   label="Retirer"
                   onClick={() => {
-                    editorContext.currentModelToModify &&
-                      editorContext.handleDisableVideo(
-                        editorContext.currentModelToModify.id
+                    context.currentModelToModify &&
+                      context.handleDisableVideo(
+                        context.currentModelToModify.id
                       );
                   }}
-                />
+                />}
+
+                {!isEditor && <IslandButton
+                  type={"small"}
+                  label="Ajouter à un devis"
+                  onClick={() => {
+                    context.currentDetailModel &&
+                      console.log('Ajouter un devis')
+                  }}
+                />}
 
                 <IslandButton
                   type={"small"}
                   Icon={LinkIcon}
-                  label="Lien"
+                  label={isEditor ? "Lien" : "Partager"}
                   onClick={() => {
-                    if (editorContext.currentModelToModify) {
+                    if (context.currentModelToModify || context.currentDetailModel) {                      
+                      const link = isEditor ? context.currentModelToModify?.video.data.attributes.url : context.currentDetailModel?.video.data.attributes.url
                       navigator.clipboard.writeText(
-                        editorContext.currentModelToModify?.video.url
+                        link
                       );
                       toast("Et hop dans le presse-papier", {
                         icon: GreenCheck,
@@ -237,22 +315,22 @@ export const ModifyVideoPanel = () => {
                   }}
                 />
 
-                <IslandButton
+                {isEditor && <IslandButton
                   type={"small"}
                   label="Mettre en avant ce model"
                   onClick={() => {
-                    editorContext.currentModelToModify &&
-                      editorContext.storeHighlightedVideo(
-                        editorContext.currentModelToModify.id
+                    context.currentModelToModify &&
+                      context.storeHighlightedVideo(
+                        context.currentModelToModify.id
                       );
                   }}
-                />
+                />}
 
                 <IslandButton
                   type={"small"}
                   Icon={Resize}
                   onClick={() => {
-                    editorContext.hideModifyPanel();
+                    isEditor ? context.hideModifyPanel() : context.hideDetailsPanel();
                   }}
                   className="ml-auto mr-0"
                 />
@@ -264,28 +342,30 @@ export const ModifyVideoPanel = () => {
                     <ToolboxButton
                       Icon={Frame}
                       label={
-                        editorContext.modelFormat
-                          ? editorContext.modelFormat.length > 20
-                            ? editorContext.modelFormat.slice(0, 16) + "..."
-                            : editorContext.modelFormat
+                        context.modelFormat
+                          ? context.modelFormat.length > 20
+                            ? context.modelFormat.slice(0, 16) + "..."
+                            : context.modelFormat
                           : "Ajoutez le format de la vidéo"
                       }
                       onClick={() => {
-                        editorContext.setCurrentModelHasBeenModified(false);
+                        context.setCurrentModelHasBeenModified(false);
                         setOpenFrameToolbox(!openFrameToolbox);
                       }}
+                      isEditor={isEditor}
                     />
-                    {!isMobile && (
+
+                    {!isMobile && isEditor && (
                       <DropBox
                         type="simple"
                         Icon={Frame}
                         title="Format"
                         choices={Formats}
-                        currentValue={editorContext.modelFormat}
+                        currentValue={context.modelFormat}
                         onChange={(val) => {
                           if (val) {
-                            editorContext.setModelFormat(val);
-                            editorContext.setCurrentModelToModify(
+                            context.setModelFormat(val);
+                            context.setCurrentModelToModify(
                               (previousState: EditorVideo) => ({
                                 ...previousState,
                                 model: val,
@@ -302,78 +382,83 @@ export const ModifyVideoPanel = () => {
                     )}
                   </div>
 
-                  <div className="relative">
-                    <ToolboxButton
-                      Icon={Lock}
-                      label={
-                        editorContext.modelVisibility
-                          ? editorContext.modelVisibility.length > 20
-                            ? editorContext.modelVisibility.slice(0, 16) + "..."
-                            : editorContext.modelVisibility
-                          : "Définir la visibilité"
-                      }
-                      onClick={() => {
-                        editorContext.setCurrentModelHasBeenModified(false);
-                        setOpenVisibilityToolbox(!openVisibilityToolbox);
-                      }}
-                    />
-
-                    {!isMobile && (
-                      <DropBox
-                        type="simple"
+                  {
+                    isEditor &&
+                    <div className="relative">
+                      <ToolboxButton
                         Icon={Lock}
-                        title="Visibilité"
-                        choices={Visibility}
-                        currentValue={editorContext.modelVisibility}
-                        onChange={(val) => {
-                          if (val) {
-                            editorContext.setModelVisibility(val);
-                            editorContext.setCurrentModelToModify(
-                              (previousState: EditorVideo) => ({
-                                ...previousState,
-                                visibility: val,
-                              })
-                            );
-
-                            val;
-                          }
+                        label={
+                          context.modelVisibility
+                            ? context.modelVisibility.length > 20
+                              ? context.modelVisibility.slice(0, 16) + "..."
+                              : context.modelVisibility
+                            : "Définir la visibilité"
+                        }
+                        onClick={() => {
+                          context.setCurrentModelHasBeenModified(false);
+                          setOpenVisibilityToolbox(!openVisibilityToolbox);
                         }}
-                        toggle={openVisibilityToolbox}
-                        setToggle={(val) => {
-                          setOpenVisibilityToolbox(val);
-                        }}
-                        className="hidden md:block absolute top-0 left-1/2"
+                        isEditor={isEditor}
                       />
-                    )}
-                  </div>
+
+                      {!isMobile && isEditor && (
+                        <DropBox
+                          type="simple"
+                          Icon={Lock}
+                          title="Visibilité"
+                          choices={Visibility}
+                          currentValue={context.modelVisibility}
+                          onChange={(val) => {
+                            if (val) {
+                              context.setModelVisibility(val);
+                              context.setCurrentModelToModify(
+                                (previousState: EditorVideo) => ({
+                                  ...previousState,
+                                  visibility: val,
+                                })
+                              );
+
+                              val;
+                            }
+                          }}
+                          toggle={openVisibilityToolbox}
+                          setToggle={(val) => {
+                            setOpenVisibilityToolbox(val);
+                          }}
+                          className="hidden md:block absolute top-0 left-1/2"
+                        />
+                      )}
+                    </div>
+                  }
 
                   <div className="relative">
                     <ToolboxButton
                       Icon={Headphones}
                       label={
-                        editorContext.modelAudio
-                          ? editorContext.modelAudio.length > 20
-                            ? editorContext.modelAudio.slice(0, 16) + "..."
-                            : editorContext.modelAudio
+                        context.modelAudio
+                          ? context.modelAudio.length > 20
+                            ? context.modelAudio.slice(0, 16) + "..."
+                            : context.modelAudio
                           : "Ajoutez la langue de la vidéo"
                       }
                       onClick={() => {
-                        editorContext.setCurrentModelHasBeenModified(false);
+                        context.setCurrentModelHasBeenModified(false);
                         setOpenLangToolbox(!openLangToolbox);
                       }}
+                      isEditor={isEditor}
                     />
 
-                    {!isMobile && (
+                    {!isMobile && isEditor && (
                       <DropBox
                         type="simple"
                         Icon={Headphones}
                         title="Langue"
                         choices={languages}
-                        currentValue={editorContext.modelAudio}
+                        currentValue={context.modelAudio}
                         onChange={(val) => {
                           if (val) {
-                            editorContext.setModelAudio(val);
-                            editorContext.setCurrentModelToModify(
+                            context.setModelAudio(val);
+                            context.setCurrentModelToModify(
                               (previousState: EditorVideo) => ({
                                 ...previousState,
                                 audio: val,
@@ -394,37 +479,38 @@ export const ModifyVideoPanel = () => {
                     <ToolboxButton
                       Icon={Barchart}
                       label={
-                        editorContext.modelWorkTime
-                          ? editorContext.modelWorkTime === "base" ||
-                            editorContext.modelWorkTime === "Basique"
+                        context.modelWorkTime
+                          ? context.modelWorkTime === "base" ||
+                            context.modelWorkTime === "Basique"
                             ? "Basique"
-                            : editorContext.modelWorkTime === "medium" ||
-                              editorContext.modelWorkTime === "Moyen"
+                            : context.modelWorkTime === "medium" ||
+                              context.modelWorkTime === "Moyen"
                             ? "Moyen"
-                            : (editorContext.modelWorkTime === "high" ||
-                                editorContext.modelWorkTime ===
+                            : (context.modelWorkTime === "high" ||
+                                context.modelWorkTime ===
                                   "Très compliqué") &&
                               "Très compliqué"
                           : "Ajoutez le format de la vidéo"
                       }
                       onClick={() => {
-                        editorContext.setCurrentModelHasBeenModified(false);
+                        context.setCurrentModelHasBeenModified(false);
                         setOpenWorktimeToolbox(!openWorktimeToolbox);
                       }}
+                      isEditor={isEditor}
                     />
 
-                    {!isMobile && (
+                    {!isMobile && isEditor && (
                       <DropBox
                         type="simple"
                         Icon={Barchart}
                         title="Difficulté"
                         choices={Worktime}
-                        currentValue={editorContext.modelWorkTime}
+                        currentValue={context.modelWorkTime}
                         onChange={(val) => {
                           if (val) {
-                            editorContext.setModelWorkTime(val);
+                            context.setModelWorkTime(val);
 
-                            editorContext.setCurrentModelToModify(
+                            context.setCurrentModelToModify(
                               (previousState: EditorVideo) => ({
                                 ...previousState,
                                 worktime: val,
@@ -445,46 +531,49 @@ export const ModifyVideoPanel = () => {
                     <ToolboxButton
                       Icon={Mouse}
                       label={
-                        editorContext.modelSoftwareArrayString &&
-                        editorContext.modelSoftwareArrayString.length > 0
-                          ? editorContext.modelSoftwareArrayString.join(", ")
+                        context.modelSoftwareArrayString &&
+                        context.modelSoftwareArrayString.length > 0
+                          ? context.modelSoftwareArrayString.join(", ")
                               .length > 20
-                            ? editorContext.modelSoftwareArrayString
+                            ? context.modelSoftwareArrayString
                                 .join(", ")
                                 .slice(0, 16) + "..."
-                            : editorContext.modelSoftwareArrayString.join(", ")
+                            : context.modelSoftwareArrayString.join(", ")
                           : "Ajoutez un logiciel"
                       }
                       onClick={() => {
-                        editorContext.setCurrentModelHasBeenModified(false);
+                        context.setCurrentModelHasBeenModified(false);
                         setOpenSoftwareToolbox(!openSoftwareToolbox);
                       }}
+                      isEditor={isEditor}
                     />
 
-                    {!isMobile && (
+                    {!isMobile && isEditor && (
                       <>
                         <DropBox
                           type="multiple"
                           Icon={Mouse}
                           title="Logiciels"
                           choices={
-                            editorContext.modelSoftwareOptionsArrayString
+                            context.modelSoftwareOptionsArrayString
                           }
-                          currentValue={editorContext.modelSoftwareArrayString}
+                          currentValue={context.modelSoftwareArrayString}
                           onChange={(val) => {
                             if (val) {
-                              editorContext.setModelSoftwareArrayString(val);
-
+                              context.setModelSoftwareArrayString(val);
+                              
                               let _video_softwares: any[] = [];
-                              editorContext.modelSoftwareOptions?.map((x) => {
-                                if (val?.includes(x.label))
+                              context.modelSoftwareOptions?.map((x:any) => {
+                                if (val?.includes(x.attributes.label))                                
                                   _video_softwares.push(x);
-                              });
+                              });                              
 
-                              editorContext.setCurrentModelToModify(
+                              context.setCurrentModelToModify(
                                 (previousState: EditorVideo) => ({
                                   ...previousState,
-                                  video_softwares: _video_softwares,
+                                  video_softwares: {
+                                    data: _video_softwares
+                                  },
                                 })
                               );
                             }
@@ -504,27 +593,28 @@ export const ModifyVideoPanel = () => {
                       Icon={LinkIcon}
                       label={
                         <span className="text-blueBerry">
-                          {editorContext.outLink
-                            ? editorContext.outLink.length > 20
-                              ? editorContext.outLink.slice(0, 16) + "..."
-                              : editorContext.outLink
+                          {context.outLink
+                            ? context.outLink.length > 20
+                              ? context.outLink.slice(0, 16) + "..."
+                              : context.outLink
                             : "Ajoutez un Lien"}
                         </span>
                       }
                       onClick={() => {
-                        editorContext.setCurrentModelHasBeenModified(false);
+                        context.setCurrentModelHasBeenModified(false);
                         setOpenLinkToolbox(!openLinkToolbox);
                       }}
+                      isEditor={isEditor}
                     />
-                    {!isMobile && (
+                    {!isMobile && isEditor && (
                       <DropBox
                         type="link"
                         placeholder="Entrez un nouveau lien..."
                         Icon={LinkIcon}
-                        currentValue={editorContext.outLink}
+                        currentValue={context.outLink}
                         onChange={(val) => {
                           if (val) {
-                            editorContext.setOutLink(val);
+                            context.setOutLink(val);
                           }
                         }}
                         toggle={openLinkToolbox}
@@ -539,133 +629,67 @@ export const ModifyVideoPanel = () => {
                 <div>
                   <div className="modify-video__tags relative w-full flex flex-row md:flex-col gap-dashboard-mention-padding-right-left pr-dashboard-mention-padding-right-left py-dashboard-mention-padding-right-left overflow-scroll md:overflow-visible">
                     <div className="flex shrink-0 gap-[10px] pr-[20px] md:w-full items-center justify-between">
-                      <div className="text-dashboard-text-description-base-low">
-                        Mots-clés
-                      </div>
 
-                      <div
-                        onClick={() => {
-                          editorContext.setCurrentModelHasBeenModified(false);
-                          editorContext.setNewTag("");
-                          setOpenTagToolbox(!openLinkToolbox);
-                        }}
-                        className="w-[25px] h-[25px] rounded-full p-1 bg-dashboard-button-dark border hover:border-dashboard-button-stroke-hover cursor-pointer"
-                      >
-                        <Plus />
-                      </div>
+                      {
+                        (isEditor || (context.currentDetailModel.video_tags && context.currentDetailModel.video_tags.data.length > 0)) &&
+                        <>
+                          <div className="text-dashboard-text-description-base-low">
+                            Mots-clés
+                          </div>
+
+                          {isEditor && 
+                            <div
+                              onClick={() => {
+                                context.setCurrentModelHasBeenModified(false);
+                                context.setNewTag("");
+                                setOpenTagToolbox(!openLinkToolbox);
+                              }}
+                              className="w-[25px] h-[25px] rounded-full p-1 bg-dashboard-button-dark border hover:border-dashboard-button-stroke-hover cursor-pointer"
+                            >
+                              <Plus />
+                            </div>
+                          }
+                        </>
+                      }
                     </div>
 
-                    {editorContext.tagsError && (
+                    {context.tagsError && (
                       <div className="text-appleRed">
-                        {editorContext.tagsError}
+                        {context.tagsError}
                       </div>
                     )}
 
-                    {!isMobile && (
-                      /* <DropBox
-                        type="multiple"
-                        Icon={Plus}
-                        title="Nouveau Tag"
-                        choices={editorContext.tagsOptionsArrayString}
-                        currentValue={editorContext.tagsArrayString}
-                        onChange={(val) => {
-                          editorContext.setTagsError("");
-                          if (val) {
-                            editorContext.setTagsArrayString(val);
-
-                            let _tags: any[] = [];
-                            editorContext.tagsOptions?.map((x) => {
-                              if (val?.includes(x.name)) _tags.push(x);
-                            });
-
-                            if (_tags.length <= 6)
-                              editorContext.setCurrentModelToModify(
-                                (previousState: EditorVideo) => ({
-                                  ...previousState,
-                                  video_tags: _tags,
-                                })
-                              );
-                            else editorContext.setTagsError("6 tags maximum");
-                          }
-                        }}
-                        toggle={openTagToolbox}
-                        setToggle={(val) => {
-                          setOpenTagToolbox(val);
-                        }}
-                        className="hidden md:block absolute top-0 left-1/2"
-                      />*/
-
+                    {!isMobile && isEditor && (
                       <DropBox
                         type="add"
                         placeholder="Nouveau Tag"
                         Icon={Plus}
                         currentValue={""}
                         onChange={(val) => {
-                          editorContext.setTagsError("");
-                          if (val) editorContext.addTag(val);
+                          context.setTagsError("");
+                          if (val) context.addTag(val);
                         }}
                         toggle={openTagToolbox}
                         setToggle={(val) => {
-                          editorContext.setCurrentModelHasBeenModified(true);
+                          context.setCurrentModelHasBeenModified(true);
                           setOpenTagToolbox(val);
                         }}
                         className="hidden md:block md:absolute md:top-0 md:left-1/2"
                       />
                     )}
 
-                    {editorContext.currentModelToModify.video_tags &&
-                      editorContext.currentModelToModify.video_tags.map(
-                        (tag: video_tag, i: number) => {
-                          return (
-                            <React.Fragment
-                              key={i}
-                            >
-                              <Keyword
-                                text={tag.name}
-                                className="relative w-ful shrink-0"
-                                onClick={() => {
-                                  setOpenIndividualTagToolbox(editorContext.currentModelToModify!.video_tags.map((el, j) => i === j ? true : false))
-                                }}
-                                
-                                isWaiting={!tag.approved}
-                              />
+                    {isEditor && context.currentModelToModify.video_tags &&
+                      context.currentModelToModify.video_tags.data.map(
+                        (tag: any, i: number) => tags(tag.attributes, i)
+                      )
+                    }
 
-                              {!isMobile && <DropBox
-                                type="addRemove"
-                                placeholder="Nouveau Tag"
-                                Icon={Plus}
-                                currentValue={""}
-                                onChange={(val) => {
-                                  editorContext.setTagsError("");
-                                  if (val) editorContext.addTag(val);
-                                }}
-                                onDelete={() => {
-                                  editorContext.setCurrentModelToModify(
-                                    (previousState: EditorVideo) => ({
-                                      ...previousState,
-                                      video_tags:
-                                        editorContext.currentModelToModify
-                                          ? editorContext.currentModelToModify.video_tags?.filter(
-                                              (t: any) => t.name !== tag.name
-                                            )
-                                          : undefined,
-                                    })
-                                  );
-
-                                  editorContext.setCurrentModelHasBeenModified(true)
-                                
-                                }}
-                                toggle={openIndividualTagToolbox[i]}
-                                setToggle={(val) => {
-                                  editorContext.setCurrentModelHasBeenModified(true);
-                                  setOpenIndividualTagToolbox(editorContext.currentModelToModify!.video_tags.map((el, j) => i === j ? val : false));
-                                }}
-                                className="hidden md:block md:absolute md:top-0 md:left-1/2"
-                              />}
-                            </React.Fragment>
-                          );
-                        }
-                      )}
+                    {!isEditor && context.currentDetailModel.video_tags &&
+                      context.currentDetailModel.video_tags.data.map(
+                        (tag: any, i: number) => {
+                          return tags(tag.attributes, i)}
+                      )
+                    }
                   </div>
                 </div>
               </div>
@@ -673,15 +697,15 @@ export const ModifyVideoPanel = () => {
               <div className="modify-video__headline md:col-[content-start_/_content-end] row-[2_/_3] md:row-[3_/_4] align-self-auto md:py-dashboard-spacing-element-medium md:pl-dashboard-spacing-element-medium flex flex-col gap-dashboard-spacing-element-medium">
                 <div className="flex gap-dashboard-button-separation-spacing">
                   <div className="shrink-0">
-                    <ProfilPicture user={authContext.user.details} />
+                    <ProfilPicture user={isEditor ? context.currentModelToModify.user_info.data.attributes : context.currentDetailModel.user_info.data.attributes} />
                   </div>
                   <div className="flex flex-col">
                     <div className="w-full text-title-medium n27 uppercase leading-none">
                       {titleContent}
                     </div>
                     <div className="text-dashboard-text-description-base-low text-base">
-                      Par {authContext.user.details.f_name}{" "}
-                      {authContext.user.details.l_name}
+                      Par {isEditor ? authContext.user.details.f_name : context.currentDetailModel.user_info.data.attributes.f_name}{" "}
+                      {isEditor ? authContext.user.details.l_name : context.currentDetailModel.user_info.data.attributes.l_name}{" "}
                     </div>
                   </div>
                 </div>
@@ -698,25 +722,27 @@ export const ModifyVideoPanel = () => {
           )}
 
           <div className="row-[7_/_8] md:row-[4_/_5] md:col-[content-start_/_content-end] flex flex-col gap-[39px] pb-[39px]">
-            <IslandButton
-              disabled={!editorContext.currentModelHasBeenModified}
-              type="primary"
-              label="Enregistrer"
-              onClick={() => {
-                editorContext.updateCurrentModel();
-              }}
-              className="relative w-max ml-auto mr-0 place-self-end"
-            />
+            {isEditor && 
+              <IslandButton
+                disabled={!context.currentModelHasBeenModified}
+                type="primary"
+                label="Enregistrer"
+                onClick={() => {
+                  context.updateCurrentModel();
+                }}
+                className="relative w-max ml-auto mr-0 place-self-end"
+              />
+            }
 
-            {isMobile && (
+            {isMobile && isEditor && (
               <IslandButton
                 type="small"
                 Icon={Trash}
                 label="Supprimer le modèle"
                 onClick={() => {
-                  editorContext.currentModelToModify &&
-                    editorContext.handleDeleteVideo(
-                      editorContext.currentModelToModify.id
+                  context.currentModelToModify &&
+                    context.handleDeleteVideo(
+                      context.currentModelToModify.id
                     );
                 }}
                 className="relative w-max ml-auto mr-0 place-self-end"
@@ -727,25 +753,25 @@ export const ModifyVideoPanel = () => {
       </OverlayModel>
 
       {/* Dropboxs for mobile */}
-      {isMobile && (
+      {isMobile && isEditor && (
         <>
           <DropBox
             type="simple"
             Icon={Frame}
             title="Format"
             choices={Formats}
-            currentValue={editorContext.modelFormat}
+            currentValue={context.modelFormat}
             onChange={(val) => {
               if (val) {
-                editorContext.setModelFormat(val);
-                editorContext.setCurrentModelToModify(
+                context.setModelFormat(val);
+                context.setCurrentModelToModify(
                   (previousState: EditorVideo) => ({
                     ...previousState,
                     model: val,
                   })
                 );
               }
-              editorContext.setCurrentModelHasBeenModified(true);
+              context.setCurrentModelHasBeenModified(true);
             }}
             toggle={openFrameToolbox}
             setToggle={(val) => {
@@ -759,18 +785,18 @@ export const ModifyVideoPanel = () => {
             Icon={Lock}
             title="Visibilité"
             choices={Visibility}
-            currentValue={editorContext.modelVisibility}
+            currentValue={context.modelVisibility}
             onChange={(val) => {
               if (val) {
-                editorContext.setModelVisibility(val);
-                editorContext.setCurrentModelToModify(
+                context.setModelVisibility(val);
+                context.setCurrentModelToModify(
                   (previousState: EditorVideo) => ({
                     ...previousState,
                     visibility: val,
                   })
                 );
               }
-              editorContext.setCurrentModelHasBeenModified(true);
+              context.setCurrentModelHasBeenModified(true);
             }}
             toggle={openVisibilityToolbox}
             setToggle={(val) => {
@@ -784,18 +810,18 @@ export const ModifyVideoPanel = () => {
             Icon={Headphones}
             title="Langue"
             choices={languages}
-            currentValue={editorContext.modelAudio}
+            currentValue={context.modelAudio}
             onChange={(val) => {
               if (val) {
-                editorContext.setModelAudio(val);
-                editorContext.setCurrentModelToModify(
+                context.setModelAudio(val);
+                context.setCurrentModelToModify(
                   (previousState: EditorVideo) => ({
                     ...previousState,
                     audio: val,
                   })
                 );
               }
-              editorContext.setCurrentModelHasBeenModified(true);
+              context.setCurrentModelHasBeenModified(true);
             }}
             toggle={openLangToolbox}
             setToggle={(val) => {
@@ -809,18 +835,18 @@ export const ModifyVideoPanel = () => {
             Icon={Barchart}
             title="Difficulté"
             choices={Worktime}
-            currentValue={editorContext.modelWorkTime}
+            currentValue={context.modelWorkTime}
             onChange={(val) => {
               if (val) {
-                editorContext.setModelWorkTime(val);
-                editorContext.setCurrentModelToModify(
+                context.setModelWorkTime(val);
+                context.setCurrentModelToModify(
                   (previousState: EditorVideo) => ({
                     ...previousState,
                     worktime: val,
                   })
                 );
               }
-              editorContext.setCurrentModelHasBeenModified(true);
+              context.setCurrentModelHasBeenModified(true);
             }}
             toggle={openWorktimeToolbox}
             setToggle={(val) => {
@@ -833,24 +859,27 @@ export const ModifyVideoPanel = () => {
             type="multiple"
             Icon={Mouse}
             title="Logiciels"
-            choices={editorContext.modelSoftwareOptionsArrayString}
-            currentValue={editorContext.modelSoftwareArrayString}
+            choices={context.modelSoftwareOptionsArrayString}
+            currentValue={context.modelSoftwareArrayString}
             onChange={(val) => {
               if (val) {
-                editorContext.setModelSoftware(val);
-
+                context.setModelSoftwareArrayString(val);
+                
                 let _video_softwares: any[] = [];
-                editorContext.modelSoftwareOptions?.map((x) => {
-                  if (val?.includes(x.label)) _video_softwares.push(x);
+                context.modelSoftwareOptions?.map((x:any) => {
+                  if (val?.includes(x.attributes.label))                                
+                    _video_softwares.push(x);
                 });
-                editorContext.setCurrentModelToModify(
+                
+                context.setCurrentModelToModify(
                   (previousState: EditorVideo) => ({
                     ...previousState,
-                    video_softwares: _video_softwares,
+                    video_softwares: {
+                      data: _video_softwares
+                    },
                   })
                 );
               }
-              editorContext.setCurrentModelHasBeenModified(true);
             }}
             toggle={openSoftwareToolbox}
             setToggle={(val) => {
@@ -863,12 +892,12 @@ export const ModifyVideoPanel = () => {
             type="link"
             placeholder="Entrez un nouveau lien..."
             Icon={LinkIcon}
-            currentValue={editorContext.outLink}
+            currentValue={context.outLink}
             onChange={(val) => {
               if (val) {
-                editorContext.setOutLink(val);
+                context.setOutLink(val);
               }
-              editorContext.setCurrentModelHasBeenModified(true);
+              context.setCurrentModelHasBeenModified(true);
             }}
             toggle={openLinkToolbox}
             setToggle={(val) => {
@@ -877,55 +906,25 @@ export const ModifyVideoPanel = () => {
             className="fixed bottom-0 h-max z-20 md:hidden md:absolute md:top-0 md:left-1/2"
           />
 
-          {/*<DropBox
-            type="multiple"
-            Icon={Plus}
-            title="Nouveau Tag"
-            choices={editorContext.tagsOptionsArrayString}
-            currentValue={editorContext.tagsArrayString}
-            onChange={(val) => {
-              if (val) {
-                editorContext.setTagsArrayString(val);
-
-                let _tags: any[] = [];
-                editorContext.tagsOptions?.map((x) => {
-                  if (val?.includes(x.name)) _tags.push(x);
-                });
-                editorContext.setCurrentModelToModify(
-                  (previousState: EditorVideo) => ({
-                    ...previousState,
-                    video_tags: _tags,
-                  })
-                );
-              }
-              editorContext.setCurrentModelHasBeenModified(true);
-            }}
-            toggle={openTagToolbox}
-            setToggle={(val) => {
-              setOpenTagToolbox(val);
-            }}
-            className="fixed bottom-0 h-max z-20 md:hidden md:absolute md:top-0 md:left-1/2"
-          />*/}
-
           <DropBox
             type="add"
             placeholder="Nouveau Tag"
             Icon={Plus}
             currentValue={""}
             onChange={(val) => {
-              editorContext.setTagsError("");
-              if (val) editorContext.addTag(val);
+              context.setTagsError("");
+              if (val) context.addTag(val);
             }}
             toggle={openTagToolbox}
             setToggle={(val) => {
-              editorContext.setCurrentModelHasBeenModified(true);
+              context.setCurrentModelHasBeenModified(true);
               setOpenTagToolbox(val);
             }}
             className="fixed bottom-0 h-max z-20 md:hidden md:absolute md:top-0 md:left-1/2"
           />
 
-          {editorContext.currentModelToModify && editorContext.currentModelToModify.video_tags &&
-            editorContext.currentModelToModify.video_tags.map(
+          {context.currentModelToModify && context.currentModelToModify.video_tags &&
+            context.currentModelToModify.video_tags.data.map(
               (tag: video_tag, i: number) => {
                 return (
                   <React.Fragment
@@ -937,29 +936,29 @@ export const ModifyVideoPanel = () => {
                       Icon={Plus}
                       currentValue={""}
                       onChange={(val) => {
-                        editorContext.setTagsError("");
-                        if (val) editorContext.addTag(val);
+                        context.setTagsError("");
+                        if (val) context.addTag(val);
                       }}
                       onDelete={() => {
-                        editorContext.setCurrentModelToModify(
+                        context.setCurrentModelToModify(
                           (previousState: EditorVideo) => ({
                             ...previousState,
                             video_tags:
-                              editorContext.currentModelToModify
-                                ? editorContext.currentModelToModify.video_tags?.filter(
+                              context.currentModelToModify
+                                ? context.currentModelToModify.video_tags.data?.filter(
                                     (t: any) => t.name !== tag.name
                                   )
                                 : undefined,
                           })
                         );
 
-                        editorContext.setCurrentModelHasBeenModified(true)
+                        context.setCurrentModelHasBeenModified(true)
                       
                       }}
                       toggle={openIndividualTagToolbox[i]}
                       setToggle={(val) => {
-                        editorContext.setCurrentModelHasBeenModified(true);
-                        setOpenIndividualTagToolbox(editorContext.currentModelToModify!.video_tags.map((el, j) => i === j ? val : false));
+                        context.setCurrentModelHasBeenModified(true);
+                        setOpenIndividualTagToolbox(context.currentModelToModify!.video_tags.data.map((el:any, j:number) => i === j ? val : false));
                       }}
                       className="fixed bottom-0 h-max z-20 md:hidden md:absolute md:top-0 md:left-1/2"
                     />
@@ -977,14 +976,16 @@ type ToolboxButtonProps = {
   Icon: any;
   label?: any;
   onClick: () => void;
+  isEditor?: boolean;
 };
-const ToolboxButton = ({ Icon, label, onClick }: ToolboxButtonProps) => {
+const ToolboxButton = ({ Icon, label, onClick, isEditor}: ToolboxButtonProps) => {
   return (
     <button
       onClick={() => {
-        onClick && onClick();
+        onClick && isEditor && onClick();
       }}
-      className="flex gap-[10px] justify-start text-dashboard-text-description-base p-dashboard-mention-padding-right-left hover:bg-dashboard-background-content-area"
+      // disabled={!isEditor}
+      className={`flex gap-[10px] justify-start text-dashboard-text-description-base p-dashboard-mention-padding-right-left ${isEditor ? 'hover:bg-dashboard-background-content-area': ''}`}
     >
       <div>
         <Icon className="svg-color-dashboard-text-description-base w-[24px] h-[24px] flex" />
