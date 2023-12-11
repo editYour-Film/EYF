@@ -31,18 +31,18 @@ export const appearBottom = ({elmts, liteY, rotateX}:appearBottomArgs) => {
   return tl
 }
 
-const titleTimeline = (title:Element, isPaused?: boolean) => {
+export const titleTimeline = (title:Element, isPaused?: boolean) => {
   const tl = gsap.timeline({
     paused: isPaused
   })
 
-  const elmts = Array.from(title.querySelectorAll('*[data-split-line-index]'))
+  const elmts = title ? Array.from(title.querySelectorAll('*[data-split-line-index]')) : null
    
   let lineIndex = 0
   let _line:HTMLElement[] = []
   let lines:HTMLElement[][] = []  
 
-  elmts.map((el, i) => {
+  elmts && elmts.map((el, i) => {
     if((el as HTMLElement).dataset.splitLineIndex === lineIndex.toString()) {
       _line.push((el as HTMLElement))
       if(i === elmts.length - 1) {
@@ -65,7 +65,15 @@ const titleTimeline = (title:Element, isPaused?: boolean) => {
       opacity: 1,
       duration: 1,
       ease: 'power2.in',
-      stagger: 0.05
+    }, 0.2 * i)
+
+    tl.fromTo(line, {
+      yPercent: 100,
+    }, {
+      yPercent: 0,
+      duration: 4,
+      stagger: 0.08,
+      ease: 'expo',
     }, 0.2 * i)
 
     tl.fromTo(line, {
@@ -73,18 +81,17 @@ const titleTimeline = (title:Element, isPaused?: boolean) => {
     }, {
       y: 0,
       duration: 4,
-      stagger: 0.15,
       ease: 'expo',
     }, 0.2 * i)
 
-    tl.fromTo(line.map((el) => el.querySelectorAll('.split-char')), {
-      y: 30,
-    }, {
-      y: 0,
-      duration: 4,
-      stagger: 0.01,
-      ease: 'expo',
-    }, 0.2 * i)
+    // tl.fromTo(line.map((el) => el.querySelectorAll('.split-char')), {
+    //   y: 30,
+    // }, {
+    //   y: 0,
+    //   duration: 4,
+    //   stagger: 0.001,
+    //   ease: 'expo',
+    // }, 0.2 * i)
   })
 
   return tl
@@ -92,7 +99,7 @@ const titleTimeline = (title:Element, isPaused?: boolean) => {
 
 type appearBottomTitleArgs = {
   title:Element,
-  liteY?:boolean
+  liteY?:boolean,
 }
 
 export const appearBottomTitle = ({title}:appearBottomTitleArgs) => {
@@ -107,10 +114,9 @@ export const appearBottomTitle = ({title}:appearBottomTitleArgs) => {
   
   const trigger = ScrollTrigger.create({
     trigger: title,
-    start: `top+=${window.innerHeight * 0.2} bottom`,
-    end: `top+=${window.innerHeight * 0.2 + 500} bottom`,
+    start: `top bottom`,
+    end: `top+=${window.innerHeight * 0.2 + 1500} bottom`,
     id: 'title',
-
     onUpdate: (self) => {
       tl.progress(self.progress)
     }
@@ -136,7 +142,7 @@ const classicContentTl = (suptitle?:Element | null, title?:Element | null, parap
       y: 60,
     }, {
       y: 0,
-      duration: 4,
+      duration: 1,
       stagger: 0.15,
       ease: 'expo',
     }, 0)
@@ -209,10 +215,9 @@ export const appearBottomClassicContent = ({wrapper, suptitle, title, parapgraph
   
   const trigger = ScrollTrigger.create({
     trigger: wrapper,
-    start: `top+=${window.innerHeight * 0.2} bottom`,
-    end: `top+=${window.innerHeight * 0.2 + 500} bottom`,
+    start: `top bottom`,
+    end: `top+=${window.innerHeight * 0.5 + 500} bottom`,
     id: 'classic-content',
-
     onUpdate: (self) => {
       tl.progress(self.progress)
     }

@@ -1,4 +1,4 @@
-import { Title } from "../_shared/Title";
+import { Title } from "../_shared/typography/TitleAnim";
 import { H2 } from "../_shared/typography/H2";
 import { useInView } from "react-intersection-observer";
 import { gsap } from "gsap";
@@ -11,6 +11,7 @@ import { useDispatch } from 'react-redux'
 import { toClick, toRegular} from "@/store/slices/cursorSlice"
 import { closeNavbar, openNavbar } from "@/store/slices/navbarSlice";
 import store from "@/store/store";
+import { titleTimeline } from "@/Animations/appearBottom";
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -47,6 +48,14 @@ export const StepsSection = ({ data }: any) => {
   const [trigger3Start, setTrigger3Start] = useState<number | Element>(0)
 
   const [medias, setMedias] = useState<{video:string}[]>()
+
+  const [trigger1, setTrigger1] = useState<globalThis.ScrollTrigger>()
+  const [trigger2, setTrigger2] = useState<globalThis.ScrollTrigger>()
+  const [trigger3, setTrigger3] = useState<globalThis.ScrollTrigger>()
+
+  const [progress1, setProgress1] = useState(0)
+  const [progress2, setProgress2] = useState(0)
+  const [progress3, setProgress3] = useState(0)
 
   useEffect(() => {
     stepW(wrapper.current)
@@ -86,8 +95,6 @@ export const StepsSection = ({ data }: any) => {
   }, [isMobile])
   
   useEffect(() => {
-    let trigger1:globalThis.ScrollTrigger, trigger2:globalThis.ScrollTrigger, trigger3:globalThis.ScrollTrigger;
-
     const ctx = gsap.context(() => {
         const step2Offset = (!isMobile && step2.current) ? step2.current?.offsetHeight : 0;
         const step3Offset = (!isMobile && step3.current) ? step3.current?.offsetHeight * 2 : 0;
@@ -102,39 +109,42 @@ export const StepsSection = ({ data }: any) => {
             y: window.innerHeight
           }, {
             y: 0,
-            ease: 'power2.inOut'
+            ease: 'expo.inOut'
           }, 0)
           tl1.fromTo(step1?.current?.querySelector('.content')!, {
-            scale: 1
+            scale: 1,
+            opacity: 1,
           }, {
-            scale: 0.9
+            scale: 0.8,
+            opacity: 0,
+            ease: 'expo.inOut'
           }, 0)
         }
 
-        trigger1 = ScrollTrigger.create({
-          trigger: step1.current,
-          endTrigger: step1.current,
-          start: `top+=${isMobile ? - 150 : 0} ${trigger}`,
-          end: `bottom ${trigger}`,
-          id: "step1",
-          onEnter: () => {
-            setButtonActive(0)
-          },
-          onEnterBack: () => {
-            setButtonActive(0)
-          },
-          onLeave: () => {
-            setButtonActive(1)
-          },
-          onUpdate: (self) => {
-            if(!isMobile) {
-              tl1.progress(self.progress)
-              if(self.progress >= 0.6 && !step2?.current?.querySelector('.content')!.classList.contains('inView')) step2?.current?.querySelector('.content')!.classList.add('inView')
+        setTrigger1(
+          ScrollTrigger.create({
+            trigger: step1.current,
+            endTrigger: step1.current,
+            start: `top+=${isMobile ? - 150 : 0} ${trigger}`,
+            end: `bottom ${trigger}`,
+            id: "step1",
+            onEnter: () => {
+              setButtonActive(0)
+            },
+            onEnterBack: () => {
+              setButtonActive(0)
+            },
+            onLeave: () => {
+              setButtonActive(1)
+            },
+            onUpdate: (self) => {
+              if(!isMobile) {
+                tl1.progress(self.progress)
+                setProgress1(self.progress)
+              }
             }
-          }
-        });
-        setTrigger1Start(trigger1.start)
-
+          })
+        )
         
         const tl2 = gsap.timeline({
           paused: true
@@ -144,54 +154,60 @@ export const StepsSection = ({ data }: any) => {
             y: window.innerHeight
           }, {
             y: 0,
-            ease: 'power2.inOut'
+            ease: 'expo.inOut'
           })
           tl2.fromTo(step2?.current?.querySelector('.content')!, {
             scale: 1
           }, {
-            scale: 0.9
+            scale: 0.8,
+            ease: 'expo.inOut'
           }, 0)
         }
 
 
-        trigger2 = ScrollTrigger.create({
-          trigger: step2.current,
-          endTrigger: step2.current,
-          start: `top+=${isMobile ? step2Offset - 150 : step2Offset} ${trigger}`,
-          end: `bottom+=${isMobile ? step2Offset - 150 : step2Offset} ${trigger}`,
-          id: "step2",
-          onEnter: () => {
-            setButtonActive(1)
-          },
-          onEnterBack: () => {
-            setButtonActive(1)
-          },
-          onLeave: () => {
-            setButtonActive(2)
-          },
-          onUpdate: (self) => {
-            if (!isMobile) {
-              tl2.progress(self.progress)
-              if(self.progress >= 0.6 && !step3?.current?.querySelector('.content')!.classList.contains('inView')) step3?.current?.querySelector('.content')!.classList.add('inView')
+        setTrigger2(
+          ScrollTrigger.create({
+            trigger: step2.current,
+            endTrigger: step2.current,
+            start: `top+=${isMobile ? step2Offset - 150 : step2Offset} ${trigger}`,
+            end: `bottom+=${isMobile ? step2Offset - 150 : step2Offset} ${trigger}`,
+            id: "step2",
+            onEnter: () => {
+              setButtonActive(1)
+            },
+            onEnterBack: () => {
+              setButtonActive(1)
+            },
+            onLeave: () => {
+              setButtonActive(2)
+            },
+            onUpdate: (self) => {
+              if (!isMobile) {
+                tl2.progress(self.progress)
+                setProgress2(self.progress)
+              }
             }
-          }
-        });
-        setTrigger2Start(trigger2.start)
+          })
+        )
     
-        trigger3 = ScrollTrigger.create({
-          trigger: step3.current,
-          endTrigger: step3.current,
-          start: `top+=${isMobile ? step3Offset - 150 : step3Offset} ${trigger}`,
-          end: `bottom+=${step3Offset} ${trigger}`,
-          id: "step3",
-          onEnter: () => {
-            setButtonActive(2)
-          },
-          onEnterBack: () => {
-            setButtonActive(2)
-          },
-        });
-        setTrigger3Start(trigger2.end)
+        setTrigger3(
+          ScrollTrigger.create({
+            trigger: step3.current,
+            endTrigger: step3.current,
+            start: `top+=${isMobile ? step3Offset - 150 : step3Offset} ${trigger}`,
+            end: `bottom+=${step3Offset} ${trigger}`,
+            id: "step3",
+            onEnter: () => {
+              setButtonActive(2)
+            },
+            onEnterBack: () => {
+              setButtonActive(2)
+            },
+            onUpdate: (self) => {
+              setProgress3(self.progress)
+            }
+          })
+        )
       })
     return () => {
       ctx && ctx.revert()
@@ -201,20 +217,19 @@ export const StepsSection = ({ data }: any) => {
     }
   } , [isDesktop, isTablet, isMobile])
 
+  useEffect(() => {
+    trigger1 && setTrigger1Start(trigger1.start)
+    trigger2 && setTrigger2Start(trigger2.start)
+    trigger3 && setTrigger3Start(trigger3.start)
+
+  }, [trigger1, trigger2, trigger3])
+
   const goTo = (offset:number|Element) => {
     lenis.scrollTo(offset, {
       offset: isMobile ? -150 : 10,
       duration: 1.5
     })
   }
-
-  // useEffect(() => {
-  //   if (inviewMain) {      
-  //     dispatch(closeNavbar())
-  //   } else {
-  //     dispatch(openNavbar())
-  //   }
-  // }, [inviewMain])
 
   return (
     <div ref={wrapper} className={`relative md:pt-16 md:h-[330vh] fullHd:h-[280vh]`}>
@@ -242,37 +257,39 @@ export const StepsSection = ({ data }: any) => {
         <div className="relative z-10">
           {medias !== undefined && 
           <>
+            <Step 
+              media={{url: medias[1].video} }
+              title={data.step2_title} 
+              sectionTitle={data.step2_section_title}
+              content={data.step2_text} 
+              side='right'
+              ref={step1}
+              isActive={buttonActive === 0 ? true : false}
+              progress={progress1}
+            />
+
             <Step
-            media={{url: medias[0].video} }
-            title={data.step1_title} 
-            sectionTitle={data.step1_section_title}
-            content={data.step1_text} 
-            side='left'
-            ref={step1}
-            className={inviewMain ? 'inView' : ''}
-            isActive={buttonActive === 0 ? true : false} 
+              media={{url: medias[0].video} }
+              title={data.step1_title} 
+              sectionTitle={data.step1_section_title}
+              content={data.step1_text} 
+              side='left'
+              ref={step2}
+              className={'z-20"'}
+              isActive={buttonActive === 1 ? true : false} 
+              progress={progress1}
             />
 
             <Step 
-            media={{url: medias[1].video} }
-            title={data.step2_title} 
-            sectionTitle={data.step2_section_title}
-            content={data.step2_text} 
-            side='right'
-            ref={step2}
-            isActive={buttonActive === 1 ? true : false} 
-            className="z-20"
-            />
-
-            <Step 
-            media={{url: medias[2].video} }
-            title={data.step3_title} 
-            sectionTitle={data.step3_section_title}
-            content={data.step3_text} 
-            side='left'
-            ref={step3}
-            isActive={buttonActive === 2 ? true : false} 
-            className="z-30"
+              media={{url: medias[2].video} }
+              title={data.step3_title} 
+              sectionTitle={data.step3_section_title}
+              content={data.step3_text} 
+              side='left'
+              ref={step3}
+              isActive={buttonActive === 2 ? true : false}
+              progress={progress2} 
+              className="z-30"
             />
           </>
 
@@ -298,12 +315,20 @@ type stepProps = {
   side: 'left' | 'right',
   className?: string,
   isActive: boolean,
+  progress:number,
 }
 
-const Step = forwardRef(function Step({media, title, sectionTitle, content, side, className, isActive}: stepProps, ref) {
+const Step = forwardRef(function Step({media, title, sectionTitle, content, side, className, isActive, progress}: stepProps, ref) {
   const cardStep = useRef(null)
   const isDesktop = useMediaQuery("(min-width: 1024px)");
-  
+
+  const titleRef = useRef<Element>(null)
+  const titleTl = useRef<GSAPTimeline>()
+
+  useEffect(() => {    
+    // titleTl.current && titleTl.current.progress(progress)
+  }, [progress])
+
   return (
     <div 
       ref={ref as React.LegacyRef<HTMLDivElement>} 
@@ -314,7 +339,15 @@ const Step = forwardRef(function Step({media, title, sectionTitle, content, side
     >
       <div className="md:w-6/12 fullHd:w-1/2 md:max-w-md">
         <H2 arrow fake className="text-base">{sectionTitle}</H2>
-        <Title titleType="h2" anim={isDesktop} className="mt-6 text-title-medium" noLH fake addDuration={'0.4s'}>{title}</Title>
+        <Title
+          ref={titleRef}
+          text={title}
+          type="h2" 
+          // split 
+          // isAnim
+          className="mt-6 text-title-medium leading-normal"
+          onSplitted={() => { titleTl.current = titleRef.current ? titleTimeline(titleRef.current, true) : undefined}}
+        />
         {/* <TitleAnim 
           type="h2"
           text={title}

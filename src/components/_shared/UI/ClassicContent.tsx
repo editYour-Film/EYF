@@ -56,7 +56,7 @@ export const ClassicContent = ({suptitle, title, titleType, titleClassName, para
       {suptitle &&           
         <div
           ref={suptitleRef}
-          className="cc__suptitle text-dashboard-text-description-base-low text-title-small mb-dashboard-spacing-element-medium"
+          className="cc__suptitle text-dashboard-text-description-base-low text-title-small mb-dashboard-spacing-element-medium leading-none"
         >
           {suptitle}
         </div>

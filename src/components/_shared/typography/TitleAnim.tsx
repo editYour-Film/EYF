@@ -8,10 +8,11 @@ type TitleAnimProps = {
   className?: string,
   split?: boolean,
   isAnim?: boolean,
+  isSunset?: boolean,
   onSplitted?: () => void
 }
 
-export const Title = forwardRef<any, TitleAnimProps>(function Title({text, type, className, isAnim, split, onSplitted}, ref) {
+export const Title = forwardRef<any, TitleAnimProps>(function Title({text, type, className, isAnim, isSunset, split, onSplitted}, ref) {
   const ctx = useRef<gsap.Context>()
   const title = (ref as RefObject<any>) ?? useRef<any>(null)
 
@@ -37,6 +38,7 @@ export const Title = forwardRef<any, TitleAnimProps>(function Title({text, type,
           <TextSplit 
             ref={title}
             input={text}
+            isSunset={isSunset}
             onSplitted={() => { 
               onSplitted && onSplitted()
               setIsSplitted(true) 

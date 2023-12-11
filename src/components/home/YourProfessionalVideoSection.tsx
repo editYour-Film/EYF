@@ -51,7 +51,6 @@ export const YourProfessionalVideoSection = ({ data }: any) => {
       start: `top+=${window.innerHeight * 0.3333} bottom`,
       end: `top+=${window.innerHeight * 0.3333 + 600} bottom`,
       id: "step1",
-      // markers: true,
       onUpdate: (self) => {
         tlWrapper.progress(self.progress)
       }
@@ -62,7 +61,6 @@ export const YourProfessionalVideoSection = ({ data }: any) => {
       start: `top+=${window.innerHeight * 0.6666} bottom`,
       end: `top+=${window.innerHeight * 0.6666 + 600} bottom`,
       id: "step2",
-      // markers: true,
       onUpdate: (self) => {        
         tlCards.progress(self.progress)
       }

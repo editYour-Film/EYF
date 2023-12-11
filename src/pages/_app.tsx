@@ -74,7 +74,11 @@ const Content = ({ pageProps }: contentProps) => {
   const mainContent = (
     <>
       <Loader isLoading={isLoading} />
-      <Lenis root>
+      <Lenis 
+        options={{
+          wheelMultiplier: 0.8
+        }}
+        root>
         <PageTransition {...pageProps} />
       </Lenis>
       {hasHover && <Cursor />}
