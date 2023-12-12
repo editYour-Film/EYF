@@ -126,7 +126,7 @@ export const IslandButton = forwardRef<HTMLButtonElement, PropsWithChildren<Isla
       startOffsetX.current = bcr?.x
       startOffsetY.current = bcr?.y
 
-      gsap.set(mainLight.current, {
+      mainLight.current && gsap.set(mainLight.current, {
         x: buttonEl.current?.offsetWidth ? buttonEl.current?.offsetWidth / 2 : 0,
         xPercent: -50,
         scaleX: 1
@@ -147,8 +147,8 @@ export const IslandButton = forwardRef<HTMLButtonElement, PropsWithChildren<Isla
     const buttonWidth = buttonEl.current?.offsetWidth ?? 0
     
     const borderRatio = Math.abs(moveX - buttonWidth / 2) / (buttonWidth / 2)
-        
-    gsap.to(mainLight.current, {
+    
+    mainLight.current && gsap.to(mainLight.current, {
       x: moveX,
       scaleX: 1 - 0.5 * borderRatio
     })

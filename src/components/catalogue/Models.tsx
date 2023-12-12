@@ -4,7 +4,7 @@ import { VideoCatalog, VideoFilter } from "../_shared/video/VideoCatalog";
 
 export const Models = () => {
   return (
-    <div className="mt-10 md:mt-20 bg-pattern">
+    <div className="mt-10 md:mt-20">
       <H1 className="text-center max-w-lg mx-auto">
         NOUS AVONS LE MODÈLE QU’IL VOUS FAUT.
       </H1>

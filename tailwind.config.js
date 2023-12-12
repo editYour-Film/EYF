@@ -454,7 +454,7 @@ module.exports = {
           background: `linear-gradient(var(--linear-orientation, 0deg), ${theme('colors.borderWhite')} 0%, rgba(252, 252, 252, 0.00) 100%)`,
         },
         '.gradient-faq': {
-          backgroundImage: 'linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.6) 50%, rgba(0,0,0,0.65) 100%), url("/img/pattern.png")'
+          backgroundImage: 'linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.35) 100%), url("/img/pattern.png")'
         },
         '.gradient-pastel': {
           background: `linear-gradient(270deg, #c985fe 6.21%, #999dff 103.42%);`

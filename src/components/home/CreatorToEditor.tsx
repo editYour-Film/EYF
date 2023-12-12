@@ -1,10 +1,12 @@
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
-import { Title } from '../_shared/Title';
+import { Title } from '../_shared/typography/TitleAnim';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
 import { useInView } from 'react-intersection-observer';
 import { useWindowSize } from '@uidotdev/usehooks';
+import { titleTimeline } from '@/animations/appearBottom';
+import { map } from '@/utils/Math';
 
 type CreatorToEditorProps = {
   data: any
@@ -21,6 +23,15 @@ export const CreatorToEditor = ({data}:CreatorToEditorProps) => {
   const creatorPan = useRef<HTMLDivElement>(null)
   const editorPan = useRef<HTMLDivElement>(null)
   const editorPanInner = useRef<HTMLDivElement>(null)
+
+  const title1Line1 = useRef<Element>(null)
+  const tl1 = useRef<GSAPTimeline>()
+  const title1Line2 = useRef<HTMLDivElement>(null)
+  const tl2 = useRef<GSAPTimeline>()
+  const title2Line1 = useRef<HTMLDivElement>(null)
+  const tl3 = useRef<GSAPTimeline>()
+  const title2Line2 = useRef<HTMLDivElement>(null)
+  const tl4 = useRef<GSAPTimeline>()
 
   const section = useRef<HTMLDivElement>(null)
   const img1 = useRef<HTMLImageElement>(null)
@@ -80,7 +91,12 @@ export const CreatorToEditor = ({data}:CreatorToEditorProps) => {
             if (self.progress > 0.3) inViewSection && setShowTitle1(true)
             else setShowTitle1(false)
             
+            tl1.current?.progress(self.progress)
+
             if(ww.width && ww.width > 1024) tlTop.progress(self.progress)
+
+            tl1.current?.progress(map(0.4, 1, 0, 1, self.progress))
+            tl2.current?.progress(map(0.45, 1, 0, 1, self.progress))
           }
         })
   
@@ -90,7 +106,7 @@ export const CreatorToEditor = ({data}:CreatorToEditorProps) => {
         })
 
         if(ww.width && ww.width > 1024) {
-          tlLeft.fromTo([creatorPan.current!.querySelectorAll('.title'), creatorPan.current!.querySelectorAll('.creator-to-editor__imgs')], {
+          tlLeft.fromTo([...creatorPan.current!.querySelectorAll('.creator-to-editor__imgs')], {
             xPercent: 0,
           },{
             xPercent: -20,
@@ -114,7 +130,7 @@ export const CreatorToEditor = ({data}:CreatorToEditorProps) => {
             ease: 'power2.inOut'
           }, 0)
     
-          tlLeft.fromTo([editorPanInner.current!.querySelectorAll('.title'), editorPanInner.current!.querySelectorAll('.creator-to-editor__imgs')], {
+          tlLeft.fromTo([...editorPanInner.current!.querySelectorAll('.title'), ...editorPanInner.current!.querySelectorAll('.creator-to-editor__imgs')], {
             xPercent: 50,
           },{
             xPercent: 0,
@@ -132,6 +148,10 @@ export const CreatorToEditor = ({data}:CreatorToEditorProps) => {
             else setShowTitle2(false)
             
             if(ww.width && ww.width > 1024) tlLeft.progress(self.progress)
+
+            tl3.current?.progress(map(0.4, 1, 0, 1, self.progress))
+            tl4.current?.progress(map(0.45, 1, 0, 1, self.progress))
+
           }
         })
       })
@@ -165,10 +185,27 @@ export const CreatorToEditor = ({data}:CreatorToEditorProps) => {
           >
             <div className='flex flex-col basis-1/2 max-w-[450px] grow-0 text-title-large font-medium px-10 lg:px-0'>
               <div>
-                <Title titleType='none' anim={ww.width && ww.width > 1024 ? true : false} charDelay={'0.03s'} className='text-dashboard-text-title-white-high'>{data.text1_line1}</Title>
+                {/* <Title titleType='none' anim={ww.width && ww.width > 1024 ? true : false} charDelay={'0.03s'} className='text-dashboard-text-title-white-high'>{data.text1_line1}</Title> */}
+                <Title
+                  ref={title1Line1}
+                  split 
+                  text={data.text1_line1}
+                  type='h2'
+                  onSplitted={() => {tl1.current = title1Line1.current ? titleTimeline(title1Line1.current, true) : undefined}}
+                  className='text-dashboard-text-title-white-high' 
+                />
               </div>
               <div>
-                <Title titleType='none' anim={ww.width && ww.width > 1024 ? true : false} charDelay={'0.03s'} className='text-linear-sunset' isSunset>{data.text1_line2}</Title>
+                {/* <Title titleType='none' anim={ww.width && ww.width > 1024 ? true : false} charDelay={'0.03s'} className='text-linear-sunset' isSunset>{data.text1_line2}</Title> */}
+                <Title 
+                  ref={title1Line2}
+                  split
+                  text={data.text1_line2}
+                  type='h2'
+                  isSunset
+                  onSplitted={() => {tl2.current = title1Line2.current ? titleTimeline(title1Line2.current, true) : undefined}}
+                  className='text-linear-sunset' 
+                />
               </div>
             </div>
 
@@ -197,12 +234,30 @@ export const CreatorToEditor = ({data}:CreatorToEditorProps) => {
               <div 
                 className='lg:absolute top-0 left-0 w-full h-full rounded-l-[60px] lg:pr-[167px] fullHd:px-[167px] flex flex-col lg:flex-row justify-between lg:items-center gap-[84px] lg:gap-dashboard-spacing-element-medium z-10 '
               >
-                <div className='lg:order-1 w-[390px] flex flex-col text-title-large font-medium px-10 lg:px-0'>
+                <div className='title lg:order-1 w-[390px] flex flex-col text-title-large font-medium px-10 lg:px-0'>
                   <div>
-                    <Title titleType='none' anim={ww.width && ww.width > 1024 ? true : false} charDelay={'0.03s'} className='text-dashboard-text-title-white-high'>{data.text2_line1}</Title>
+                    {/* <Title titleType='none' anim={ww.width && ww.width > 1024 ? true : false} charDelay={'0.03s'} className='text-dashboard-text-title-white-high'>{data.text2_line1}</Title> */}
+                    {/* <Title titleType='none' anim={ww.width && ww.width > 1024 ? true : false} charDelay={'0.03s'} className='text-dashboard-text-title-white-high'></Title> */}
+                    <Title 
+                      ref={title2Line1}
+                      split
+                      text={data.text2_line1}
+                      type='h2'
+                      onSplitted={() => {tl3.current = title2Line1.current ? titleTimeline(title2Line1.current, true) : undefined}}
+                      className='text-dashboard-text-title-white-high'
+                    />                
                   </div>
                   <div className='text-linear-sunset'>
-                    <Title titleType='none' anim={ww.width && ww.width > 1024 ? true : false} charDelay={'0.03s'} isSunset>{data.text1_line2}</Title>
+                    {/* <Title titleType='none' anim={ww.width && ww.width > 1024 ? true : false} charDelay={'0.03s'} isSunset>{data.text1_line2}</Title> */}
+                    <Title 
+                      ref={title2Line2}
+                      split
+                      text={data.text2_line2}
+                      type='h2'
+                      isSunset
+                      onSplitted={() => {tl4.current = title2Line2.current ? titleTimeline(title2Line2.current, true) : undefined}}
+                      className='text-linear-sunset' 
+                    />
                   </div>
                 </div>
 

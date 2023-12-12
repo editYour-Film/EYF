@@ -3,10 +3,8 @@ import { Title } from "../typography/TitleAnim";
 import { IslandButton } from "../buttons/IslandButton";
 
 import { IslandButtonProps } from "../buttons/IslandButton";
-import gsap from "gsap";
-import ScrollTrigger from "gsap/dist/ScrollTrigger";
 import { useInView } from "react-intersection-observer";
-import { appearBottomClassicContent } from "@/Animations/appearBottom";
+import { appearBottomClassicContent } from "@/animations/appearBottom";
 
 type ClassicContentProps = {
   suptitle?: string;
@@ -56,7 +54,7 @@ export const ClassicContent = ({suptitle, title, titleType, titleClassName, para
       {suptitle &&           
         <div
           ref={suptitleRef}
-          className="cc__suptitle text-dashboard-text-description-base-low text-title-small mb-dashboard-spacing-element-medium"
+          className="cc__suptitle text-dashboard-text-description-base-low text-title-small mb-dashboard-spacing-element-medium leading-none"
         >
           {suptitle}
         </div>

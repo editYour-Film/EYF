@@ -9,17 +9,12 @@ import { StepsSection } from "@/components/home/StepsSection";
 import { YourVideoSection } from "@/components/home/YourVideoSection";
 import { EditorSection } from "@/components/home/EditorSection";
 import { FaqSection } from "@/components/home/FaqSection";
-import { NewsletterSection } from "@/components/home/NewsletterSection";
-import WhySectionFilterProvider from "@/components/home/context/WhySectionFilter";
-import { Marquee } from "@/components/home/Marquee";
 import { ComparativeSection } from "@/components/home/ComparativeSection";
 import { CreatorToEditor } from "@/components/home/CreatorToEditor";
 import { videos } from "../components/data/videos";
 import Container, {
-  ContainerFullWidth,
   ContainerFull,
 } from "@/components/_shared/UI/Container";
-import { getStrapiData } from "../components/_prerender/strapiApi";
 import useStrapi from "@/hooks/useStrapi";
 import { useContext, useEffect } from "react";
 import useMediaQuery from "@/hooks/useMediaQuery";
@@ -106,9 +101,6 @@ export default function Home(/*{ seodata }: any*/) {
             <Container>
 
             { data.section3 &&
-              // data.step1_media &&
-              // data.step2_media &&
-              // data.step3_media &&
                 <StepsSection data={data.section3} />
             }
             </Container>
@@ -147,9 +139,7 @@ export default function Home(/*{ seodata }: any*/) {
             }
 
             {dataFaqs && 
-              <Container>
-                <FaqSection data={dataFaqs} />
-              </Container>
+              <FaqSection data={dataFaqs} />
             }
 
             <Container>

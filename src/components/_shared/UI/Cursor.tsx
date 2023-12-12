@@ -387,7 +387,9 @@ export const Cursor = () => {
             <div className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] w-[100%] h-[100%] bg-cursor z-20 opacity-30"></div>
           </div>
 
-          <CursorText active={showText} text={text} />
+          <div className="overflow-hidden">
+            <CursorText active={showText} text={text} />
+          </div>
 
           <div
             ref={iconW}
@@ -447,7 +449,10 @@ const CursorText = ({ text, active }: CursorTextProps) => {
         active ? "active" : ""
       } text-small anim-cursor relative z-10 flex w-full justify-center items-center h-max translate-y-[10%]`}
     >
-      <TextSplit input={text} type="word" />
+      <TextSplit
+        input={text} 
+        type="word" 
+      />
     </div>
   );
 };
