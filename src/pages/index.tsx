@@ -139,9 +139,7 @@ export default function Home(/*{ seodata }: any*/) {
             }
 
             {dataFaqs && 
-              <Container>
-                <FaqSection data={dataFaqs} />
-              </Container>
+              <FaqSection data={dataFaqs} />
             }
 
             <Container>
