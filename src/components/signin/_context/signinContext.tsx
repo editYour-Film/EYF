@@ -17,7 +17,7 @@ import {
   unsetToken,
 } from "@/auth/auth";
 import { useRouter } from "next/router";
-import { ElementsOut } from "@/Animations/elementsOut";
+import { ElementsOut } from "@/animations/elementsOut";
 import { inputErrors } from "@/const";
 import { getUrlParam } from "@/utils/UrlParams";
 import { AuthContext } from "@/context/authContext";

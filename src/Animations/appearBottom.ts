@@ -10,7 +10,7 @@ type appearBottomArgs = {
 export const appearBottom = ({elmts, liteY, rotateX}:appearBottomArgs) => {
   const tl = gsap.timeline()
 
-  tl.fromTo(elmts, {
+  elmts && tl.fromTo(elmts, {
     y: liteY ? 50 : 400,
     rotateX: rotateX ? 10 : 0
   }, {
@@ -20,7 +20,7 @@ export const appearBottom = ({elmts, liteY, rotateX}:appearBottomArgs) => {
     ease: 'expo'
   }, 0)
 
-  tl.fromTo(elmts, {
+  elmts && tl.fromTo(elmts, {
     opacity: 0,
   }, {
     opacity: 1,

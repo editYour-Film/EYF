@@ -29,7 +29,7 @@ export const DashboardMenuMobile = ({ className, menu, trigger, action, children
 
   const setGsapContext = () => {
     const context = gsap.context((self) => {
-      gsap.set(menuContainer.current, {
+      menuContainer.current && gsap.set(menuContainer.current, {
         x: window.innerWidth * 1.1,
       })
 
@@ -60,7 +60,7 @@ export const DashboardMenuMobile = ({ className, menu, trigger, action, children
           }
         })
         
-        tl.to(menuContainer.current, {
+        menuContainer.current && tl.to(menuContainer.current, {
           x: window.innerWidth * 1.1,
           duration: 0.4,
           ease: 'power2.in'

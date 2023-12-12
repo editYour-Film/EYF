@@ -11,7 +11,7 @@ import { useDispatch } from 'react-redux'
 import { toClick, toRegular} from "@/store/slices/cursorSlice"
 import { closeNavbar, openNavbar } from "@/store/slices/navbarSlice";
 import store from "@/store/store";
-import { titleTimeline } from "@/Animations/appearBottom";
+import { titleTimeline } from "@/animations/appearBottom";
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -61,10 +61,10 @@ export const StepsSection = ({ data }: any) => {
     stepW(wrapper.current)
     setMedias([
       {
-        video: '/video/home/step1.webm',
-      },      {
         video: '/video/home/step2.webm',
-      },      {
+      },{
+        video: '/video/home/step1.webm',
+      },{
         video: '/video/home/step3.webm',
       },
     ])
@@ -104,7 +104,7 @@ export const StepsSection = ({ data }: any) => {
           durations: 1
         })
 
-        if (!isMobile) {
+        if (!isMobile && step2.current) {
           tl1.fromTo(step2?.current?.querySelector('.content')!, {
             y: window.innerHeight
           }, {
@@ -149,7 +149,7 @@ export const StepsSection = ({ data }: any) => {
         const tl2 = gsap.timeline({
           paused: true
         })
-        if (!isMobile) {
+        if (!isMobile && step3.current) {
           tl2.fromTo(step3?.current?.querySelector('.content')!, {
             y: window.innerHeight
           }, {
@@ -163,7 +163,6 @@ export const StepsSection = ({ data }: any) => {
             ease: 'expo.inOut'
           }, 0)
         }
-
 
         setTrigger2(
           ScrollTrigger.create({
@@ -258,10 +257,10 @@ export const StepsSection = ({ data }: any) => {
           {medias !== undefined && 
           <>
             <Step 
-              media={{url: medias[1].video} }
-              title={data.step2_title} 
-              sectionTitle={data.step2_section_title}
-              content={data.step2_text} 
+              media={{url: medias[0].video} }
+              title={data.step1_title} 
+              sectionTitle={data.step1_section_title}
+              content={data.step1_text} 
               side='right'
               ref={step1}
               isActive={buttonActive === 0 ? true : false}
@@ -269,15 +268,15 @@ export const StepsSection = ({ data }: any) => {
             />
 
             <Step
-              media={{url: medias[0].video} }
-              title={data.step1_title} 
-              sectionTitle={data.step1_section_title}
-              content={data.step1_text} 
+              media={{url: medias[1].video} }
+              title={data.step2_title} 
+              sectionTitle={data.step2_section_title}
+              content={data.step2_text} 
               side='left'
               ref={step2}
               className={'z-20"'}
               isActive={buttonActive === 1 ? true : false} 
-              progress={progress1}
+              progress={progress2}
             />
 
             <Step 
@@ -295,10 +294,6 @@ export const StepsSection = ({ data }: any) => {
 
           }
         </div>
-
-        {/* <div className="relative top-section-bg1 opacity-70 top-5 z-0"></div>
-        <div className="absolute bg-top-section-2 opacity-70 left-0 w-[800px] h-[500px] -bottom-5 z-0"></div> */}
-
       </div>
     </div>
   );

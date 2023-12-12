@@ -8,7 +8,7 @@ import Send from "@/icons/signin/send.svg";
 import X from "@/icons/signin/x.svg";
 import Connexion from "@/icons/signin/connexion.svg";
 import gsap from "gsap";
-import { ElementsIn } from "@/Animations/elementsIn";
+import { ElementsIn } from "@/animations/elementsIn";
 import { useStrapiPost } from "@/hooks/useStrapi";
 
 export const CodePan = () => {

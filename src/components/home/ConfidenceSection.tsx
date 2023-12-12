@@ -7,7 +7,7 @@ import { Video } from "../model/videos";
 import { formatVideoDuration } from "@/utils/utils";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import { ClassicContent } from "../_shared/UI/ClassicContent";
-import { appearBottom } from "@/Animations/appearBottom";
+import { appearBottom } from "@/animations/appearBottom";
 import gsap from "gsap";
 
 type ConfidenceSectionProps = {

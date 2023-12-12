@@ -1,4 +1,4 @@
-import { appearBottomTitle } from "@/Animations/appearBottom"
+import { appearBottomTitle } from "@/animations/appearBottom"
 import { TextSplit } from "@/utils/TextSplit"
 import { PropsWithChildren, RefObject, forwardRef, useEffect, useRef, useState } from "react"
 

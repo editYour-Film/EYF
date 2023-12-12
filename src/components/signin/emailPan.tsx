@@ -1,4 +1,4 @@
-import { ElementsIn } from "@/Animations/elementsIn";
+import { ElementsIn } from "@/animations/elementsIn";
 import { ReactElement, useContext, useEffect, useRef } from "react";
 import Input from "@/components/_shared/form/Input";
 import { Button } from "@/components/_shared/buttons/Button";

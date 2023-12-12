@@ -5,7 +5,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
 import { useInView } from 'react-intersection-observer';
 import { useWindowSize } from '@uidotdev/usehooks';
-import { titleTimeline } from '@/Animations/appearBottom';
+import { titleTimeline } from '@/animations/appearBottom';
 import { map } from '@/utils/Math';
 
 type CreatorToEditorProps = {
@@ -106,7 +106,7 @@ export const CreatorToEditor = ({data}:CreatorToEditorProps) => {
         })
 
         if(ww.width && ww.width > 1024) {
-          tlLeft.fromTo([creatorPan.current!.querySelectorAll('.title'), creatorPan.current!.querySelectorAll('.creator-to-editor__imgs')], {
+          tlLeft.fromTo([...creatorPan.current!.querySelectorAll('.creator-to-editor__imgs')], {
             xPercent: 0,
           },{
             xPercent: -20,
@@ -130,7 +130,7 @@ export const CreatorToEditor = ({data}:CreatorToEditorProps) => {
             ease: 'power2.inOut'
           }, 0)
     
-          tlLeft.fromTo([editorPanInner.current!.querySelectorAll('.title'), editorPanInner.current!.querySelectorAll('.creator-to-editor__imgs')], {
+          tlLeft.fromTo([...editorPanInner.current!.querySelectorAll('.title'), ...editorPanInner.current!.querySelectorAll('.creator-to-editor__imgs')], {
             xPercent: 50,
           },{
             xPercent: 0,
@@ -234,7 +234,7 @@ export const CreatorToEditor = ({data}:CreatorToEditorProps) => {
               <div 
                 className='lg:absolute top-0 left-0 w-full h-full rounded-l-[60px] lg:pr-[167px] fullHd:px-[167px] flex flex-col lg:flex-row justify-between lg:items-center gap-[84px] lg:gap-dashboard-spacing-element-medium z-10 '
               >
-                <div className='lg:order-1 w-[390px] flex flex-col text-title-large font-medium px-10 lg:px-0'>
+                <div className='title lg:order-1 w-[390px] flex flex-col text-title-large font-medium px-10 lg:px-0'>
                   <div>
                     {/* <Title titleType='none' anim={ww.width && ww.width > 1024 ? true : false} charDelay={'0.03s'} className='text-dashboard-text-title-white-high'>{data.text2_line1}</Title> */}
                     {/* <Title titleType='none' anim={ww.width && ww.width > 1024 ? true : false} charDelay={'0.03s'} className='text-dashboard-text-title-white-high'></Title> */}
