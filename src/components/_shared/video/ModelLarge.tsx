@@ -44,6 +44,9 @@ export const ModelLarge = ({
       }
     }
   }, [hover])
+
+  console.log(video);
+  
   
   return (
     <>{video 
@@ -61,8 +64,8 @@ export const ModelLarge = ({
             >
             {video.thumbnail ? (
               <Image 
-                src={video.thumbnail.url} 
-                alt={video.thumbnail.alternativeText}
+                src={video.thumbnail.data.attributes.url} 
+                alt={video.thumbnail.data.attributes.alternativeText}
                 fill 
                 className="object-cover group-hover:opacity-0 pointer-events-none transition-opacity duration-500 z-10"
                 />
@@ -72,7 +75,7 @@ export const ModelLarge = ({
               <Video
                 ref={videoRef}
                 playerFullWidth
-                video={video.video}
+                video={video.video.data.attributes}
                 className='absolute object-cover z-0'
               />
             </div>
