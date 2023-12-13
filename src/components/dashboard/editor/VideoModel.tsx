@@ -26,13 +26,15 @@ export const VideoModel = ({
   return (
     <div className="video-model relative bg-primary-middle rounded-2xl overflow-hidden translate-z-0">
       <div className="video-model__video relative w-[101%] h-0 pb-[56%]">
-        <Image
-          alt={""}
-          src={thumbnail}
-          width={200}
-          height={200}
-          className="absolute top-0 left-0 w-full h-full object-cover bg-black"
-        />
+        {thumbnail && (
+          <Image
+            alt={""}
+            src={thumbnail}
+            width={200}
+            height={200}
+            className="absolute top-0 left-0 w-full h-full object-cover bg-black"
+          />
+        )}
         <video
           ref={video}
           className="hidden absolute top-0 left-0 w-full h-full object-cover"

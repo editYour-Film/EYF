@@ -9,7 +9,7 @@ import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setJoinBetaVisible } from "@/store/slices/joinBetaSlice";
 
-import Burger from '@/icons/burger.svg'
+import Burger from "@/icons/burger.svg";
 
 import { useRouter } from "next/router";
 import { IslandButton } from "./buttons/IslandButton";
@@ -28,12 +28,14 @@ const Header = ({ activeNavItem = "" }: HeaderProps) => {
 
   const isMobileScreen = useMediaQuery("(max-width: 768px)");
   const [isOpen, setIsOpen] = useState(false);
-  const isScrollUp = useSelector((store:RootState) => store.navbar.isOpen);;
+  const isScrollUp = useSelector((store: RootState) => store.navbar.isOpen);
 
   const [isModalDisplayed, setIsModalDisplayed] = useState(false);
-  const [waitingListType, setWaitingListType] = useState<"client" | "monteur">("client");
+  const [waitingListType, setWaitingListType] = useState<"client" | "monteur">(
+    "client"
+  );
 
-  const routeName = useSelector((store: RootState) => store.routes.routeName)
+  const routeName = useSelector((store: RootState) => store.routes.routeName);
 
   const linkClass = "text-small relative pb-1 focus-visible:outline-blueBerry ";
 
@@ -54,70 +56,61 @@ const Header = ({ activeNavItem = "" }: HeaderProps) => {
         else dispatch(closeNavbar());
       }
 
-      if(st <= 200) dispatch(openNavbar())
+      if (st <= 200) dispatch(openNavbar());
 
       setLastScrollTop(st <= 0 ? 0 : st);
-    }
-
+    };
 
     if (!isMobileScreen) {
       document.addEventListener("scroll", handleScroll, false);
     } else dispatch(openNavbar());
 
     return () => {
-      document.removeEventListener( "scroll", handleScroll, false);
-    }
+      document.removeEventListener("scroll", handleScroll, false);
+    };
   }, [isMobileScreen, lastScrollTop]);
 
   const transitionMobile = `transform 0.5s ${isOpen ? "ease-out" : "ease-in"}`;
 
   return (
     <>
-    <header
-      className={
-        "sticky md:fixed mt-[60px] md:mt-0 top-0 left-0 px-4 w-full z-header transition-all duration-700 bg-black-transparent-light backdrop-blur-sm md:border-b-03 " +
-         (isScrollUp === true
-            ? "translate-y-0"
-            : "-translate-y-20") +
-        (isMobileScreen ? " py-2 " : "")
-      }
-    >
-      <ContainerFullWidth className="md:px-10">
-        <div 
-          className="flex items-center py-2 md:py-[10px] h-[50px] justify-between"
-        >
-          <Link 
-            href={routes.HOME} className="cursor-pointer basis-full md:basis-auto flex justify-center shrink focus-visible:outline-blueBerry" scroll={false}>
-            <Image
-              width={125}
-              height={25}
-              src="/icons/logo-navbar.svg"
-              alt=""
-              className="lg:block max-w-[125px]"
-            />
-            {/* <Image
-              width={35}
-              height={35}
-              src="/icons/logo.svg"
-              alt=""
-              className="lg:hidden"
-            /> */}
-          </Link>
-
-          <nav className="hidden md:flex gap-6 xl:ml-28">
+      <header
+        className={
+          "sticky md:fixed mt-[60px] md:mt-0 top-0 left-0 px-4 w-full z-header transition-all duration-700 bg-black-transparent-light backdrop-blur-sm md:border-b-03 " +
+          (isScrollUp === true ? "translate-y-0" : "-translate-y-20") +
+          (isMobileScreen ? " py-2 " : "")
+        }
+      >
+        <ContainerFullWidth className="md:px-10">
+          <div className="flex items-center py-2 md:py-[10px] h-[50px] justify-between">
             <Link
               href={routes.HOME}
+              className="cursor-pointer basis-full md:basis-auto flex justify-center shrink focus-visible:outline-blueBerry"
               scroll={false}
-              className={
-                linkClass +
-                (activeNavItem === "home"
-                  ? "border-b border-b-white"
-                  : "bottom-inOutSpread")
-              }
             >
-              Accueil
+              <Image
+                width={125}
+                height={25}
+                src="/icons/logo-navbar.svg"
+                alt=""
+                className="lg:block max-w-[125px]"
+              />
             </Link>
-            {/* <Link
+
+            <nav className="hidden md:flex gap-6 xl:ml-28">
+              <Link
+                href={routes.HOME}
+                scroll={false}
+                className={
+                  linkClass +
+                  (activeNavItem === "home"
+                    ? "border-b border-b-white"
+                    : "bottom-inOutSpread")
+                }
+              >
+                Accueil
+              </Link>
+              {/* <Link
               href={routes.CATALOGUE}
               className={
                 linkClass +
@@ -129,100 +122,102 @@ const Header = ({ activeNavItem = "" }: HeaderProps) => {
               Catalogue
             </Link> */}
 
-            <Link
-              href={routes.WHOWEARE}
-              scroll={false}
-              className={
-                linkClass +
-                (activeNavItem === "who-we-are"
-                  ? "border-b border-b-white"
-                  : "bottom-inOutSpread")
-              }
-            >
-              Notre histoire
-            </Link>
+              <Link
+                href={routes.WHOWEARE}
+                scroll={false}
+                className={
+                  linkClass +
+                  (activeNavItem === "who-we-are"
+                    ? "border-b border-b-white"
+                    : "bottom-inOutSpread")
+                }
+              >
+                Notre histoire
+              </Link>
 
-            <Link
-              href={routes.BLOG}
-              scroll={false}
-              className={
-                linkClass +
-                (activeNavItem === "blog"
-                  ? "border-b border-b-white"
-                  : "bottom-inOutSpread")
-              }
-            >
-              Blog
-            </Link>
-          </nav>
-          <div className="hidden md:flex gap-4">
-            <ConnectionOptions
-              onClientClick={() => {
-                setWaitingListType("client");
-                setIsModalDisplayed(true);
-                router.push(routes.SIGNIN);
-              }}
-              onMonteurClick={() => {
-                setWaitingListType("monteur");
-                setIsModalDisplayed(true);
-                router.push(routes.SIGNIN);
-              }}
-            />
-
-            {/*<Link href={routes.QUOTE_STEP1}>*/}
-            <IslandButton
-              type="primary"
-              label="Rejoindre la beta"
-              className="max-w-[100%] sm:max-w-[280px] py-[5px] text-small"
-              enableTwist
-              onClick={() => {
-                dispatch(setJoinBetaVisible());
-                setIsModalDisplayed(true);
-              }}
-            />
-            {/*</Link>*/}
-          </div>
-
-          <div className="md:hidden flex flex-row items-center gap-dashboard-button-separation-spacing">
-            {routeName !== 'accueil' && <div className="text-dashboard-text-description-base text-title-m uppercase">{routeName}</div>}
-            {!isOpen && (
-              <IslandButton
-                type="secondary"
-                Icon={Burger}
-                onClick={() => { dispatch(openMenu()) }}
+              <Link
+                href={routes.BLOG}
+                scroll={false}
+                className={
+                  linkClass +
+                  (activeNavItem === "blog"
+                    ? "border-b border-b-white"
+                    : "bottom-inOutSpread")
+                }
+              >
+                Blog
+              </Link>
+            </nav>
+            <div className="hidden md:flex gap-4">
+              <ConnectionOptions
+                onClientClick={() => {
+                  setWaitingListType("client");
+                  setIsModalDisplayed(true);
+                  router.push(routes.SIGNIN);
+                }}
+                onMonteurClick={() => {
+                  setWaitingListType("monteur");
+                  setIsModalDisplayed(true);
+                  router.push(routes.SIGNIN);
+                }}
               />
-            )}
-          </div>
-        </div>
-      </ContainerFullWidth>
 
-      {/* <Modal
+              {/*<Link href={routes.QUOTE_STEP1}>*/}
+              <IslandButton
+                type="primary"
+                label="Rejoindre la beta"
+                className="max-w-[100%] sm:max-w-[280px] py-[5px] text-small"
+                enableTwist
+                onClick={() => {
+                  dispatch(setJoinBetaVisible());
+                  setIsModalDisplayed(true);
+                }}
+              />
+              {/*</Link>*/}
+            </div>
+
+            <div className="md:hidden flex flex-row items-center gap-dashboard-button-separation-spacing">
+              {routeName !== "accueil" && (
+                <div className="text-dashboard-text-description-base text-title-m uppercase">
+                  {routeName}
+                </div>
+              )}
+              {!isOpen && (
+                <IslandButton
+                  type="secondary"
+                  Icon={Burger}
+                  onClick={() => {
+                    dispatch(openMenu());
+                  }}
+                />
+              )}
+            </div>
+          </div>
+        </ContainerFullWidth>
+
+        {/* <Modal
         isDisplayed={isModalDisplayed}
         onClose={() => setIsModalDisplayed(false)}
       >
         <WaitingListForm userType={waitingListType} />
       </Modal> */}
-    </header>
+      </header>
 
-    <div
-      className="fixed right-0 top-0 w-full h-[100vh] bg-blackBerry origin-top overflow-hidden z-header"
-      style={{
-        transform: isOpen ? "translateX(0)" : "translateX(100%)",
-        transition: transitionMobile,
-      }}
-    >
       <div
-        className="menu-mobile__inner relative w-full h-full"
-      >        
-        <div className="relative w-full h-full px-5 sm:px-10 sm:py-5 z-10">
-          <div className="relative flex flex-col min-h-screen justify-end">
-            <nav>
-              <Menu 
-                items={LANDING_MENU}
-              />
-            </nav>
+        className="fixed right-0 top-0 w-full h-[100vh] bg-blackBerry origin-top overflow-hidden z-header"
+        style={{
+          transform: isOpen ? "translateX(0)" : "translateX(100%)",
+          transition: transitionMobile,
+        }}
+      >
+        <div className="menu-mobile__inner relative w-full h-full">
+          <div className="relative w-full h-full px-5 sm:px-10 sm:py-5 z-10">
+            <div className="relative flex flex-col min-h-screen justify-end">
+              <nav>
+                <Menu items={LANDING_MENU} />
+              </nav>
 
-            {/* <div
+              {/* <div
               className="mt-10 regularH:mt-28"
               style={{
                 opacity: isOpen ? "1" : "0",
@@ -266,30 +261,30 @@ const Header = ({ activeNavItem = "" }: HeaderProps) => {
               </div>
             </div> */}
 
-            {/*<Link href={routes.QUOTE_STEP1}>*/}
-            <div
-              className="mt-16 mb-10"
-              style={{
-                opacity: isOpen ? "1" : "0",
-                transition: "opacity 1s ease-in-out 0.55s",
-              }}
-            >
-              <IslandButton
-                type="primary"
-                label="Rejoindre la beta"
-                className="max-w-[100%] sm:max-w-[280px] py-[5px]"
-                enableTwist
-                onClick={() => {
-                  dispatch(setJoinBetaVisible());
-                  setIsModalDisplayed(true);
+              {/*<Link href={routes.QUOTE_STEP1}>*/}
+              <div
+                className="mt-16 mb-10"
+                style={{
+                  opacity: isOpen ? "1" : "0",
+                  transition: "opacity 1s ease-in-out 0.55s",
                 }}
-              />
+              >
+                <IslandButton
+                  type="primary"
+                  label="Rejoindre la beta"
+                  className="max-w-[100%] sm:max-w-[280px] py-[5px]"
+                  enableTwist
+                  onClick={() => {
+                    dispatch(setJoinBetaVisible());
+                    setIsModalDisplayed(true);
+                  }}
+                />
+              </div>
+              {/*</Link>*/}
             </div>
-            {/*</Link>*/}
           </div>
         </div>
       </div>
-    </div>
     </>
   );
 };
@@ -314,7 +309,9 @@ const ConnectionOptions = ({ onClientClick, onMonteurClick }: any) => {
         label="Connexion"
         // icon="menu"
         // iconLeft
-        onClick={() => {onMonteurClick()}}
+        onClick={() => {
+          onMonteurClick();
+        }}
         className={`py-[5px] text-small`}
       />
       {/* <div
@@ -326,8 +323,8 @@ const ConnectionOptions = ({ onClientClick, onMonteurClick }: any) => {
         }
       >
         <div className="absolute -top-2 left-0 w-full h-full z-0"></div> */}
-        {/*<Link href={routes.SIGNIN + "?type=client"}>*/}
-        {/* <div
+      {/*<Link href={routes.SIGNIN + "?type=client"}>*/}
+      {/* <div
           className="relative flex items-start gap-4 transition-colors duration-300 hover:bg-black-light p-2 rounded-xl cursor-pointer z-1"
           onClick={onClientClick}
         >
@@ -345,9 +342,9 @@ const ConnectionOptions = ({ onClientClick, onMonteurClick }: any) => {
             </p>
           </div>
         </div> */}
-        {/* </Link>*/}
-        {/* <Link href={routes.SIGNIN + "?type=editor"}>*/}
-        {/* <div
+      {/* </Link>*/}
+      {/* <Link href={routes.SIGNIN + "?type=editor"}>*/}
+      {/* <div
           className="relative flex items-start gap-4 transition-colors duration-300 hover:bg-black-light p-2 rounded-xl z-1"
           onClick={onMonteurClick}
         >
@@ -366,7 +363,7 @@ const ConnectionOptions = ({ onClientClick, onMonteurClick }: any) => {
             </p>
           </div>
         </div> */}
-        {/* </Link>*/}
+      {/* </Link>*/}
       {/* </div> */}
     </div>
   );

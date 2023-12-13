@@ -17,7 +17,7 @@ export const YourVideoSection = ({ data }: any) => {
     return (
       <div className="relative">
         <div className="flex flex-col items-center justify-center gap-12 md:gap-18 lg:gap-24 fullHd:gap-52 md:py-20 relative z-20">
-          <ClassicContent 
+          <ClassicContent
             className="flex flex-col items-center text-center max-w-[600px]"
             title={data.title}
             titleType="h2"
@@ -50,11 +50,10 @@ export const YourVideoSection = ({ data }: any) => {
               }}
             />
           </div> */}
-          
-          <div className="relative border rounded-dashboard-button-square-radius overflow-hidden">
-            {
-              data.media && data.media.data.attributes.mime.split('/')[0] === 'video' 
-              ?
+          {data.media && data.media.data && (
+            <div className="relative border rounded-dashboard-button-square-radius overflow-hidden">
+              {data.media &&
+              data.media.data.attributes.mime.split("/")[0] === "video" ? (
                 <Video
                   video={data.media.data.attributes}
                   autoPlay
@@ -62,18 +61,17 @@ export const YourVideoSection = ({ data }: any) => {
                   noPlayer
                   trigger={true}
                 />
-              :
-                <Image 
+              ) : (
+                <Image
                   src={data.media.data.attributes.url}
                   alt={data.media.data.attributes.alternativeText}
                   width={data.media.data.attributes.width}
                   height={data.media.data.attributes.height}
                   className="object-contain top-0"
                 />
-            }
-
-          </div>
-
+              )}
+            </div>
+          )}
         </div>
       </div>
     );

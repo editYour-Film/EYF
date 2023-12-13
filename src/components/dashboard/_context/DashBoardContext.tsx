@@ -1,29 +1,35 @@
-import { AuthContext } from "@/context/authContext"
-import useStrapi, { useStrapiGet } from "@/hooks/useStrapi"
-import { getNotifications } from "@/store/slices/NotificationsSlice"
-import { PropsWithChildren, createContext, useContext, useEffect, useState } from "react"
-import { useDispatch } from "react-redux"
-import { DashboardEditorHome } from "../editor/DashboardEditorHome"
+import { AuthContext } from "@/context/authContext";
+import useStrapi, { useStrapiGet } from "@/hooks/useStrapi";
+import { getNotifications } from "@/store/slices/NotificationsSlice";
+import {
+  PropsWithChildren,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+import { useDispatch } from "react-redux";
+import { DashboardEditorHome } from "../editor/DashboardEditorHome";
 
 export interface dashBoardPanelType {
-  title: string
-  panel: any
+  title: string;
+  panel: any;
 }
 
 export interface CardArticleType {
-  title: string,
-  excerpt: string,
-  category: string,
-  author: string,
-  date: string,
-  length: string,
-  link: string
+  title: string;
+  excerpt: string;
+  category: string;
+  author: string;
+  date: string;
+  length: string;
+  link: string;
 }
 
 export interface infoCardType {
-  title: string,
-  text: any,
-  img: string,
+  title: string;
+  text: any;
+  img: string;
 }
 
 export const DashBoardContext = createContext({
@@ -34,7 +40,7 @@ export const DashBoardContext = createContext({
   activePanel: 0,
   setActivePanel: (payload: number) => {},
 
-  initEditorPanels: [] as {title: string, panel: React.JSX.Element}[],
+  initEditorPanels: [] as { title: string; panel: React.JSX.Element }[],
 
   isAddModelPannelOpen: false,
   setIsAddModelPannelOpen: (payload: boolean) => {},
@@ -51,101 +57,114 @@ export const DashBoardContext = createContext({
   infoCard: undefined as infoCardType | undefined,
 
   buttons: undefined as any,
-  setButtons: (payload:any) => {},
+  setButtons: (payload: any) => {},
 
-  initials: undefined as string | undefined
-})
+  initials: undefined as string | undefined,
+});
 
-export const DashBoardContextProvider = ({children}:PropsWithChildren) => {
-  const authContext = useContext(AuthContext)
-  const dispatch = useDispatch()
-  
-  const initials = authContext.user.details.f_name[0] + authContext.user.details.l_name[0]
+export const DashBoardContextProvider = ({ children }: PropsWithChildren) => {
+  const authContext = useContext(AuthContext);
+  const dispatch = useDispatch();
 
-  const [_data, set_Data] = useState<any>(null)
+  const initials =
+    authContext.user.details.f_name[0] + authContext.user.details.l_name[0];
 
-  const [panels, setPanels] = useState<dashBoardPanelType[] | undefined>(undefined)
-  const [activePanel, setActivePanel] = useState(0)
+  const [_data, set_Data] = useState<any>(null);
 
-  const [isAddModelPannelOpen, setIsAddModelPannelOpen] = useState(false)
+  const [panels, setPanels] = useState<dashBoardPanelType[] | undefined>(
+    undefined
+  );
+  const [activePanel, setActivePanel] = useState(0);
+
+  const [isAddModelPannelOpen, setIsAddModelPannelOpen] = useState(false);
 
   const initEditorPanels = [
     {
       title: "Accueil - Modèles",
       panel: <DashboardEditorHome />,
     },
-  ]
+  ];
 
   useEffect(() => {
-    if(!isAddModelPannelOpen) {
-      setPanels(initEditorPanels)
-      setActivePanel(0)
+    if (!isAddModelPannelOpen) {
+      setPanels(initEditorPanels);
+      setActivePanel(0);
     }
-  }, [isAddModelPannelOpen])
+  }, [isAddModelPannelOpen]);
 
-  const [notificationCenterAnimated, setNotificationCenterAnimated] = useState(false)
-  const [notificationCenterOpen, setNotificationCenterOpen] = useState(false)
+  const [notificationCenterAnimated, setNotificationCenterAnimated] =
+    useState(false);
+  const [notificationCenterOpen, setNotificationCenterOpen] = useState(false);
 
-  const [buttons, setButtons] = useState<any | undefined>(undefined)
-  
+  const [buttons, setButtons] = useState<any | undefined>(undefined);
+
   useEffect(() => {
-    dispatch(getNotifications())
+    dispatch(getNotifications());
 
     useStrapiGet(
-    "dashboard-monteur?" +
-    "populate[add_model]=*&" +
-    "populate[news_info][populate][articles][populate]=*&" +
-    "populate[news_info][populate][info_card][populate]=*").then((res) => {      
-      set_Data(res.data.data.attributes)
-    })
-  }, [])
+      "dashboard-monteur?" +
+        "populate[add_model]=*&" +
+        "populate[news_info][populate][articles][populate]=*&" +
+        "populate[news_info][populate][info_card][populate]=*"
+    ).then((res) => {
+      if (res.data.data) set_Data(res.data.data.attributes);
+    });
+  }, []);
 
   const [posts, setPost] = useState<CardArticleType[]>([]);
-  const [infoCardActive, setInfoCardActive] = useState(false)
-  const [infoCard, setInfoCard] = useState<infoCardType | undefined>(undefined) 
-  
-  useEffect(() => { 
+  const [infoCardActive, setInfoCardActive] = useState(false);
+  const [infoCard, setInfoCard] = useState<infoCardType | undefined>(undefined);
+
+  useEffect(() => {
     if (_data && _data.news_info) {
       if (_data.news_info.articles.data) {
-        const articles = _data.news_info.articles.data
+        const articles = _data.news_info.articles.data;
 
-        const _posts = articles.map((post:any) => post.attributes)
-        
-        setPost(_posts)
-        setInfoCardActive(_data?.news_info.info_card.isActive ? true : false)
+        const _posts = articles.map((post: any) => post.attributes);
+
+        setPost(_posts);
+        setInfoCardActive(_data?.news_info.info_card.isActive ? true : false);
         setInfoCard({
-          title: `${ _data ? _data.news_info.info_card.title : 'Error' }`,
-          text: <div><p>{ _data ? _data.news_info.info_card.content : '' }</p></div>,
-          img: `${ _data ? _data.news_info.info_card.picture.data.attributes.url : '/img/img.png' }`,
-        })
+          title: `${_data ? _data.news_info.info_card.title : "Error"}`,
+          text: (
+            <div>
+              <p>{_data ? _data.news_info.info_card.content : ""}</p>
+            </div>
+          ),
+          img: `${
+            _data
+              ? _data.news_info.info_card.picture.data.attributes.url
+              : "/img/img.png"
+          }`,
+        });
       }
     }
-  }, [_data])
+  }, [_data]);
 
-  const addPannel = (panel:dashBoardPanelType) => {
-    if(panels) setPanels([...panels, panel])
-    else setPanels([panel])
-        
-    setActivePanel(panels ? panels?.length : 0)
-  }
+  const addPannel = (panel: dashBoardPanelType) => {
+    if (panels) setPanels([...panels, panel]);
+    else setPanels([panel]);
+
+    setActivePanel(panels ? panels?.length : 0);
+  };
 
   const closePanels = () => {
-    if(panels) setPanels([panels[0]])
-        
-    setActivePanel(0)
-  }
+    if (panels) setPanels([panels[0]]);
 
-  const openNotificationCenter = () => {    
-    setNotificationCenterOpen(true)
-  }
+    setActivePanel(0);
+  };
+
+  const openNotificationCenter = () => {
+    setNotificationCenterOpen(true);
+  };
 
   const closeNotificationCenter = () => {
-    setNotificationCenterOpen(false)
-  }
+    setNotificationCenterOpen(false);
+  };
 
   const toggleNotificationCenter = () => {
-    setNotificationCenterOpen(!notificationCenterOpen)
-  }
+    setNotificationCenterOpen(!notificationCenterOpen);
+  };
 
   return (
     <DashBoardContext.Provider
@@ -176,10 +195,10 @@ export const DashBoardContextProvider = ({children}:PropsWithChildren) => {
         buttons,
         setButtons,
 
-        initials
+        initials,
       }}
     >
       {children}
     </DashBoardContext.Provider>
-  )  
-}
+  );
+};

@@ -11,7 +11,7 @@ import Image from "next/image";
 export const NewsAndInfos = () => {
   const context = useContext(DashBoardContext);
   const router = useRouter();
-  
+
   return (
     <div className="news-infos flex flex-col gap-dashboard-spacing-element-medium">
       <div className="news-infos__head flex flex-row justify-between px-dashboard-mention-padding-right-left md:px-0">
@@ -41,26 +41,25 @@ export const NewsAndInfos = () => {
 
           <div className="w-full hidden md:block order-1 xl:order-2 xl:basis-1/2 fullHd:basis-1/3">
             <div className="relative w-full h-0 pb-[88%]">
-              <Image
-                src={context.infoCard?.img}
-                alt=""
-                fill
-                className="object-cover"
-              />
+              {context.infoCard && context.infoCard.img && (
+                <Image
+                  src={context.infoCard.img}
+                  alt=""
+                  fill
+                  className="object-cover"
+                />
+              )}
             </div>
           </div>
         </div>
       )}
 
       <div className="news-infos__content flex flex-col gap-dashboard-spacing-element-medium">
-        {(context.posts && context.posts.length > 0) && context.posts.map((post, i) => {
-          return (
-            <CardArticle 
-              key={i}
-              post={post} 
-            />
-          )
-        })}
+        {context.posts &&
+          context.posts.length > 0 &&
+          context.posts.map((post, i) => {
+            return <CardArticle key={i} post={post} />;
+          })}
       </div>
     </div>
   );

@@ -219,12 +219,14 @@ export const VisibilityPan = () => {
               <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center z-10 bg-blackBerry bg-opacity-20 transition-opacity opacity-0 group-hover:opacity-100 cursor-pointer">
                 <Play className="w-[50px] h-[50px] " />
               </div>
-              <Image
-                src={imgUrl}
-                alt="cover de la vidéo"
-                fill
-                className={`object-cover`}
-              />
+              {imgUrl && (
+                <Image
+                  src={imgUrl}
+                  alt="cover de la vidéo"
+                  fill
+                  className={`object-cover`}
+                />
+              )}
             </div>
           )}
           <Video
