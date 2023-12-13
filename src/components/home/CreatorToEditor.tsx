@@ -5,7 +5,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import { useInView } from "react-intersection-observer";
 import { useWindowSize } from "@uidotdev/usehooks";
-import { titleTimeline } from "@/banimations/appearBottom";
+import { titleTimeline } from "@/animations/appearBottom";
 import { map } from "@/utils/Math";
 
 type CreatorToEditorProps = {

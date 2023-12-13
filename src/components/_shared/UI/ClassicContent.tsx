@@ -4,7 +4,7 @@ import { IslandButton } from "../buttons/IslandButton";
 
 import { IslandButtonProps } from "../buttons/IslandButton";
 import { useInView } from "react-intersection-observer";
-import { appearBottomClassicContent } from "@/banimations/appearBottom";
+import { appearBottomClassicContent } from "@/animations/appearBottom";
 
 type ClassicContentProps = {
   suptitle?: string;

@@ -1,4 +1,4 @@
-import { appearBottomTitle } from "@/banimations/appearBottom";
+import { appearBottomTitle } from "@/animations/appearBottom";
 import { TextSplit } from "@/utils/TextSplit";
 import {
   PropsWithChildren,

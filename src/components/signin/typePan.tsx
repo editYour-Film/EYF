@@ -5,7 +5,7 @@ import { SignInContext } from "./_context/signinContext";
 import Logo from "@/icons/logo.svg";
 import Google from "@/icons/google.svg";
 import Arrow from "@/icons/right-arrow-white.svg";
-import { ElementsIn } from "@/banimations/elementsIn";
+import { ElementsIn } from "@/animations/elementsIn";
 import { InfoMessage } from "../_shared/UI/InfoMessage";
 
 import X from "@/icons/signin/x.svg";

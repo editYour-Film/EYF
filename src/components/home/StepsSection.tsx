@@ -11,7 +11,7 @@ import { useDispatch } from "react-redux";
 import { toClick, toRegular } from "@/store/slices/cursorSlice";
 import { closeNavbar, openNavbar } from "@/store/slices/navbarSlice";
 import store from "@/store/store";
-import { titleTimeline } from "@/banimations/appearBottom";
+import { titleTimeline } from "@/animations/appearBottom";
 
 gsap.registerPlugin(ScrollTrigger);
 
