@@ -427,24 +427,26 @@ const Step = forwardRef(function Step(
           <p className="text-xl text-base-text mt-9">{content}</p>
         </div>
 
-        <div
-          ref={cardStep}
-          className="w-full mt-14 md:mt-0 md:w-[45%] md:max-w-md relative p-4"
-        >
-          <div className="step-img-white hidden xl:block"></div>
-          <div className="relative pt-[100%]">
-            <video
-              className="absolute w-full h-full left-0 top-0 z-20"
-              // controls
-              muted
-              // poster={media.poster}
-              autoPlay
-              loop
-            >
-              <source src={media.url} type="video/webm" />
-            </video>
+        {media && media.url && (
+          <div
+            ref={cardStep}
+            className="w-full mt-14 md:mt-0 md:w-[45%] md:max-w-md relative p-4"
+          >
+            <div className="step-img-white hidden xl:block"></div>
+            <div className="relative pt-[100%]">
+              <video
+                className="absolute w-full h-full left-0 top-0 z-20"
+                // controls
+                muted
+                // poster={media.poster}
+                autoPlay
+                loop
+              >
+                <source src={media.url} type="video/webm" />
+              </video>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

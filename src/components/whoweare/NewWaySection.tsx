@@ -111,7 +111,7 @@ export const NewWaySection = ({ data }: any) => {
         <EditorJsParser JSONContent={data.rich_content} />
       </div>
 
-      {data.img && (
+      {data.img && data.img.data && (
         <>
           <div className="two-img__img1 mb-10 lg:mb-0 relative overflow-hidden row-start-1 row-end-2 lg:row-start-1 lg:row-end-4 lg:col-start-2 lg:col-end-3 z-10">
             <div

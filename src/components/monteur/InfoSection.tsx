@@ -64,9 +64,11 @@ export const InfoSection = () => {
         </div>
       </div>
 
-      <video className="rounded-3xl w-full mt-10" controls muted>
-        <source src={videos[0].path} type="video/mp4" />
-      </video>
+      {videos && videos[0] && (
+        <video className="rounded-3xl w-full mt-10" controls muted>
+          <source src={videos[0].path} type="video/mp4" />
+        </video>
+      )}
     </div>
   );
 };

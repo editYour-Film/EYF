@@ -169,7 +169,7 @@ export const VideoCatalog = ({
             })}
           </div>
         )}
-        {videoPath.length > 0 && (
+        {videoPath && videoPath.length > 0 && (
           <div className="px-5 md:px-32 py-8 fixed left-0 top-0 w-full h-screen bg-black bg-opacity-90 z-50 backdrop-blur-sm flex flex-col justify-between items-center">
             <div className="flex justify-end w-full">
               <Image

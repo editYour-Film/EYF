@@ -35,15 +35,17 @@ export const VideoModel = ({
             className="absolute top-0 left-0 w-full h-full object-cover bg-black"
           />
         )}
-        <video
-          ref={video}
-          className="hidden absolute top-0 left-0 w-full h-full object-cover"
-          onLoadedMetadata={(e) => {
-            handleLoadedMetadata(e);
-          }}
-        >
-          <source src={data.attributes.url} type={data.attributes.mime} />
-        </video>
+        {data && data.attributes && (
+          <video
+            ref={video}
+            className="hidden absolute top-0 left-0 w-full h-full object-cover"
+            onLoadedMetadata={(e) => {
+              handleLoadedMetadata(e);
+            }}
+          >
+            <source src={data.attributes.url} type={data.attributes.mime} />
+          </video>
+        )}
       </div>
       <div className="video-model__ui p-2 pr-4 w-full flex flex-wrap justify-between items-center text-[13px]">
         <div className="flex flex-wrap gap-3">
