@@ -5,7 +5,7 @@ import { SignInContext } from "./_context/signinContext";
 import Logo from "@/icons/logo.svg";
 import Google from "@/icons/google.svg";
 import Arrow from "@/icons/right-arrow-white.svg";
-import { ElementsIn } from "@/animations/elementsIn";
+import { ElementsIn } from "@/banimations/elementsIn";
 import { InfoMessage } from "../_shared/UI/InfoMessage";
 
 import X from "@/icons/signin/x.svg";
@@ -38,7 +38,10 @@ export const TypePan = ({ disclaimer }: TypePanProps) => {
           Se connecter à editYour.film
         </div>
         <hr className="w-full border-05" />
-        <a className='w-full' href={process.env.NEXT_PUBLIC_API_STRAPI + "connect/google"}>
+        <a
+          className="w-full"
+          href={process.env.NEXT_PUBLIC_API_STRAPI + "connect/google"}
+        >
           <Button
             type="secondary"
             label="Se connecter avec Google"

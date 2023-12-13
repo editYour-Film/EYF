@@ -8,7 +8,7 @@ import Send from "@/icons/signin/send.svg";
 import X from "@/icons/signin/x.svg";
 import Connexion from "@/icons/signin/connexion.svg";
 import gsap from "gsap";
-import { ElementsIn } from "@/animations/elementsIn";
+import { ElementsIn } from "@/banimations/elementsIn";
 import { useStrapiPost } from "@/hooks/useStrapi";
 
 export const CodePan = () => {
@@ -17,7 +17,7 @@ export const CodePan = () => {
 
   useEffect(() => {
     context.setContainer(container);
-    
+
     const elements = Array.from(container.current!.children);
     context.setCodeState("regular");
     ElementsIn(elements);
@@ -37,7 +37,7 @@ export const CodePan = () => {
   };
 
   const handleGoBack = () => {
-    context.goBack()
+    context.goBack();
   };
 
   const switchMessage = (switchVal: codeStateType) => {

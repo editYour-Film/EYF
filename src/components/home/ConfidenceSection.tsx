@@ -7,7 +7,7 @@ import { Video } from "../model/videos";
 import { formatVideoDuration } from "@/utils/utils";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import { ClassicContent } from "../_shared/UI/ClassicContent";
-import { appearBottom } from "@/animations/appearBottom";
+import { appearBottom } from "@/banimations/appearBottom";
 import gsap from "gsap";
 
 type ConfidenceSectionProps = {
@@ -36,8 +36,8 @@ export const ConfidenceSection = ({ videos, data }: ConfidenceSectionProps) => {
   const isMobile = useMediaQuery("(max-width: 768px)");
 
   const [vids, setVids] = useState<videoInterface[]>([]);
-  const slider = useRef<HTMLDivElement>(null)
-  const tl = useRef<GSAPTimeline>()
+  const slider = useRef<HTMLDivElement>(null);
+  const tl = useRef<GSAPTimeline>();
 
   useEffect(() => {
     const _vids: videoInterface[] = [];
@@ -61,28 +61,31 @@ export const ConfidenceSection = ({ videos, data }: ConfidenceSectionProps) => {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      tl.current = appearBottom({elmts:slider.current, rotateX: true}).pause()
-    })
+      tl.current = appearBottom({
+        elmts: slider.current,
+        rotateX: true,
+      }).pause();
+    });
 
     const trigger = ScrollTrigger.create({
       trigger: slider.current,
       start: `top-=${200} bottom`,
-      end: 'bottom bottom',
-      id: 'slider',
+      end: "bottom bottom",
+      id: "slider",
       onUpdate: (self) => {
-        tl.current && tl.current.progress(self.progress)
-      }
-    })
+        tl.current && tl.current.progress(self.progress);
+      },
+    });
 
     return () => {
-      ctx.revert()
-      trigger.kill()
-    }
-  }, [inView])
+      ctx.revert();
+      trigger.kill();
+    };
+  }, [inView]);
 
   return (
     <div ref={ref} className={`${inView ? " inView" : ""}`}>
-      <ClassicContent 
+      <ClassicContent
         className="flex flex-col items-center text-center px-5 md:px-0 max-w-[660px] mx-auto"
         suptitle={data.section_title}
         title={data.title1 + data.title2}
@@ -94,9 +97,7 @@ export const ConfidenceSection = ({ videos, data }: ConfidenceSectionProps) => {
           {isMobile ? (
             <VideoGrid videos={vids} />
           ) : (
-            <div
-              ref={slider}
-            >
+            <div ref={slider}>
               <VideoSlider videos={vids} />
             </div>
           )}

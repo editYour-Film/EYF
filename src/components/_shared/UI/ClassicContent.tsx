@@ -4,89 +4,112 @@ import { IslandButton } from "../buttons/IslandButton";
 
 import { IslandButtonProps } from "../buttons/IslandButton";
 import { useInView } from "react-intersection-observer";
-import { appearBottomClassicContent } from "@/animations/appearBottom";
+import { appearBottomClassicContent } from "@/banimations/appearBottom";
 
 type ClassicContentProps = {
   suptitle?: string;
   title: string;
-  titleType: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'none',
-  titleClassName?: string,
+  titleType: "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "p" | "none";
+  titleClassName?: string;
   paragraph?: string;
-  paragraphClassName?: string,
-  cta?: string,
-  ctaType?: IslandButtonProps['type'],
-  ctaOnClick?: IslandButtonProps['onClick'],
-  ctaHref?: IslandButtonProps['href'],
-  ctaClassName?: string,
-  className?: string
-}
+  paragraphClassName?: string;
+  cta?: string;
+  ctaType?: IslandButtonProps["type"];
+  ctaOnClick?: IslandButtonProps["onClick"];
+  ctaHref?: IslandButtonProps["href"];
+  ctaClassName?: string;
+  className?: string;
+};
 
-export const ClassicContent = ({suptitle, title, titleType, titleClassName, paragraph, paragraphClassName, cta, ctaType, ctaOnClick, ctaHref, ctaClassName, className}:PropsWithChildren<ClassicContentProps>) => {
-  const ctx = useRef<gsap.Context>()
-  const wrapper = useRef<HTMLDivElement>(null)
-  const {ref: refInview, inView} = useInView({
-    triggerOnce: true
-  })
+export const ClassicContent = ({
+  suptitle,
+  title,
+  titleType,
+  titleClassName,
+  paragraph,
+  paragraphClassName,
+  cta,
+  ctaType,
+  ctaOnClick,
+  ctaHref,
+  ctaClassName,
+  className,
+}: PropsWithChildren<ClassicContentProps>) => {
+  const ctx = useRef<gsap.Context>();
+  const wrapper = useRef<HTMLDivElement>(null);
+  const { ref: refInview, inView } = useInView({
+    triggerOnce: true,
+  });
 
-  const suptitleRef = useRef(null)
-  const titleRef = useRef(null)
-  const paragraphRef = useRef(null)
-  const ctaRef = useRef(null)
+  const suptitleRef = useRef(null);
+  const titleRef = useRef(null);
+  const paragraphRef = useRef(null);
+  const ctaRef = useRef(null);
 
-  const [isSplitted, setIsSplitted] = useState(false)
+  const [isSplitted, setIsSplitted] = useState(false);
 
   useEffect(() => {
-    refInview(wrapper.current)
-  }, [])
+    refInview(wrapper.current);
+  }, []);
 
-  useEffect(() => {         
-    ctx.current = appearBottomClassicContent({wrapper: wrapper.current, suptitle: suptitleRef.current, title: titleRef.current, parapgraph: paragraphRef.current, cta: ctaRef.current})
-    
-    return () => {      
-      ctx.current && ctx.current?.revert()
-    }
-  }, [inView, isSplitted])
+  useEffect(() => {
+    ctx.current = appearBottomClassicContent({
+      wrapper: wrapper.current,
+      suptitle: suptitleRef.current,
+      title: titleRef.current,
+      parapgraph: paragraphRef.current,
+      cta: ctaRef.current,
+    });
+
+    return () => {
+      ctx.current && ctx.current?.revert();
+    };
+  }, [inView, isSplitted]);
 
   return (
-    <div 
-      ref={wrapper}
-      className={`${className ?? ''}`}>
-      {suptitle &&           
+    <div ref={wrapper} className={`${className ?? ""}`}>
+      {suptitle && (
         <div
           ref={suptitleRef}
           className="cc__suptitle text-dashboard-text-description-base-low text-title-small mb-dashboard-spacing-element-medium leading-none"
         >
           {suptitle}
         </div>
-      }
+      )}
 
       <Title
         ref={titleRef}
         type={titleType}
         text={title}
-        className={`${titleClassName ?? ''}`}
+        className={`${titleClassName ?? ""}`}
         split
-        onSplitted={() => { setIsSplitted(true) }}
+        onSplitted={() => {
+          setIsSplitted(true);
+        }}
       />
 
-      {paragraph &&
+      {paragraph && (
         <p
-        ref={paragraphRef}
-        className={`mt-dashboard-spacing-element-medium text-base text-dashboard-text-description-base ${paragraphClassName ?? ''}`}>
+          ref={paragraphRef}
+          className={`mt-dashboard-spacing-element-medium text-base text-dashboard-text-description-base ${
+            paragraphClassName ?? ""
+          }`}
+        >
           {paragraph}
         </p>
-      }
+      )}
 
-      {
-        cta && 
-        <IslandButton 
+      {cta && (
+        <IslandButton
           ref={ctaRef}
-          type={ctaType as IslandButtonProps['type']}
+          type={ctaType as IslandButtonProps["type"]}
           label={cta}
           enableTwist
-          className={`cc__cta mt-dashboard-spacing-element-medium ${ctaClassName ?? ''}`}
+          className={`cc__cta mt-dashboard-spacing-element-medium ${
+            ctaClassName ?? ""
+          }`}
         />
-      }
+      )}
     </div>
-  )
-}
+  );
+};

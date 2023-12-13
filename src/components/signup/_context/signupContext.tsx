@@ -16,8 +16,8 @@ import X from "@/icons/signin/x.svg";
 
 import { MessageType } from "@/components/_shared/UI/InfoMessage";
 import { StepBubbleProps } from "@/components/_shared/buttons/StepBubble";
-import { ElementsIn } from "@/animations/elementsIn";
-import { ElementsOut } from "@/animations/elementsOut";
+import { ElementsIn } from "@/banimations/elementsIn";
+import { ElementsOut } from "@/banimations/elementsOut";
 import { useStrapiGet, useStrapiPost } from "@/hooks/useStrapi";
 import { inputErrors, languageObjects } from "@/const";
 import validator from "validator";

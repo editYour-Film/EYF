@@ -17,7 +17,7 @@ import {
   unsetToken,
 } from "@/auth/auth";
 import { useRouter } from "next/router";
-import { ElementsOut } from "@/animations/elementsOut";
+import { ElementsOut } from "@/banimations/elementsOut";
 import { inputErrors } from "@/const";
 import { getUrlParam } from "@/utils/UrlParams";
 import { AuthContext } from "@/context/authContext";
@@ -184,7 +184,7 @@ export const SignInContextProvider: React.FC<any> = (props) => {
       if (authContext.user.user.role.name === "editor")
         push(routes.DASHBOARD_EDITOR);
       else if (authContext.user.user.role.name === "client")
-        push(routes.DASHBOARD_CLIENT)
+        push(routes.DASHBOARD_CLIENT);
   }, []);
 
   useEffect(() => {

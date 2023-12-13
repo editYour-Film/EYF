@@ -9,7 +9,7 @@ import { SimpleCard } from "../_shared/UI/CardSimple";
 import { IslandButton } from "../_shared/buttons/IslandButton";
 import routes from "@/routes";
 import { Video } from "../_shared/video/Video";
-import { appearBottom } from "@/animations/appearBottom";
+import { appearBottom } from "@/banimations/appearBottom";
 
 gsap.registerPlugin(ScrollTrigger);
 
