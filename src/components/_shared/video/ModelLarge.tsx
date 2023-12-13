@@ -74,12 +74,14 @@ export const ModelLarge = ({
                 className="object-cover group-hover:opacity-0 pointer-events-none transition-opacity duration-500 z-10"
               />
             )}
-            <Video
-              ref={videoRef}
-              playerFullWidth
-              video={video.video.data.attributes}
-              className="absolute object-cover z-0"
-            />
+            {video.video && video.video.data && (
+              <Video
+                ref={videoRef}
+                playerFullWidth
+                video={video.video.data.attributes}
+                className="absolute object-cover z-0"
+              />
+            )}
           </div>
           <div className="model-large__content relative p-padding-medium border-t z-10">
             <div className="model-large__infos w-full flex flex-row justify-between">

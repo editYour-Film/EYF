@@ -378,7 +378,10 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
       "generate-token-signup",
       {
         email: email,
-        role: accountType === "editor" ? 4 : 3,
+        role:
+          accountType === "editor"
+            ? process.env.NEXT_PUBLIC_EDITOR_ROLE_ID
+            : process.env.NEXT_PUBLIC_CLIENT_ROLE_ID,
       },
       false
     );
@@ -553,7 +556,10 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
                   .join(";"),
           skills: _skills,
           picture: imageId,
-          role: accountType === "editor" ? 4 : 3,
+          role:
+            accountType === "editor"
+              ? process.env.NEXT_PUBLIC_EDITOR_ROLE_ID
+              : process.env.NEXT_PUBLIC_CLIENT_ROLE_ID,
         },
         false,
         true
