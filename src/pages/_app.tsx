@@ -74,11 +74,12 @@ const Content = ({ pageProps }: contentProps) => {
   const mainContent = (
     <>
       <Loader isLoading={isLoading} />
-      <Lenis 
+      <Lenis
         options={{
-          wheelMultiplier: 0.8
+          wheelMultiplier: 0.8,
         }}
-        root>
+        root
+      >
         <PageTransition {...pageProps} />
       </Lenis>
       {hasHover && <Cursor />}
@@ -88,6 +89,11 @@ const Content = ({ pageProps }: contentProps) => {
   if (authContext.isLoggedIn && authContext.user) {
     return (
       <>
+        {process.env.NEXT_PUBLIC_ENV === "prod" && (
+          <span className="fixed bottom-1 left-1 p-1 rounded-full bg-white text-gray-900 z-50 text-xs font-bold">
+            PROD
+          </span>
+        )}
         <DashBoardContextProvider>
           {authContext.user.user.role.name === "editor" ? (
             <EditorContextProvider>{mainContent}</EditorContextProvider>
@@ -98,6 +104,15 @@ const Content = ({ pageProps }: contentProps) => {
       </>
     );
   } else {
-    return <>{mainContent}</>;
+    return (
+      <>
+        {process.env.NEXT_PUBLIC_ENV === "prod" && (
+          <span className="fixed bottom-1 left-1 p-1 rounded-full bg-white text-gray-900 z-50 text-xs font-bold">
+            PROD
+          </span>
+        )}
+        {mainContent}
+      </>
+    );
   }
 };
