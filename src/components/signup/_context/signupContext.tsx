@@ -19,7 +19,12 @@ import { StepBubbleProps } from "@/components/_shared/buttons/StepBubble";
 import { ElementsIn } from "@/animations/elementsIn";
 import { ElementsOut } from "@/animations/elementsOut";
 import { useStrapiGet, useStrapiPost } from "@/hooks/useStrapi";
-import { inputErrors, languageObjects } from "@/const";
+import {
+  CLIENT_ROLE_ID,
+  EDITOR_ROLE_ID,
+  inputErrors,
+  languageObjects,
+} from "@/const";
 import validator from "validator";
 import { getGoogleAuthEmailCookie } from "@/auth/auth";
 import useLocalStorage from "@/hooks/useLocalStorage";
@@ -378,10 +383,7 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
       "generate-token-signup",
       {
         email: email,
-        role:
-          accountType === "editor"
-            ? process.env.NEXT_PUBLIC_EDITOR_ROLE_ID
-            : process.env.NEXT_PUBLIC_CLIENT_ROLE_ID,
+        role: accountType === "editor" ? EDITOR_ROLE_ID : CLIENT_ROLE_ID,
       },
       false
     );
@@ -556,10 +558,7 @@ export const SignUpContextProvider: React.FC<any> = (props) => {
                   .join(";"),
           skills: _skills,
           picture: imageId,
-          role:
-            accountType === "editor"
-              ? process.env.NEXT_PUBLIC_EDITOR_ROLE_ID
-              : process.env.NEXT_PUBLIC_CLIENT_ROLE_ID,
+          role: accountType === "editor" ? EDITOR_ROLE_ID : CLIENT_ROLE_ID,
         },
         false,
         true

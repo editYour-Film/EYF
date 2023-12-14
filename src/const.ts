@@ -145,3 +145,6 @@ export const languageObjects = () => {
 
   return _langObjectArray;
 };
+
+export const CLIENT_ROLE_ID = process.env.NEXT_PUBLIC_ENV === "prod" ? 4 : 3;
+export const EDITOR_ROLE_ID = process.env.NEXT_PUBLIC_ENV === "prod" ? 3 : 4;
