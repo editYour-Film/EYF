@@ -15,6 +15,7 @@ type DropBoxProps = {
   onChange: (value: any) => void;
   onDelete?: () => void;
   className?: string;
+  bgSolid?: boolean;
 };
 
 export const DropBox = ({
@@ -29,6 +30,7 @@ export const DropBox = ({
   onChange,
   onDelete,
   className,
+  bgSolid,
 }: DropBoxProps) => {
   const defaultLinkValue = "Ajoutez un lien";
 
@@ -187,17 +189,19 @@ export const DropBox = ({
   return (
     <div
       ref={container}
-      className={`absolute dropbox min-w-[128px] w-full md:w-max py-dashboard-spacing-element-medium md:py-0 px-dashboard-mention-padding-right-left md:px-0 bg-dashboard-background-content-area md:bg-dashboard-button-white-default rounded-dashboard-mention-radius border-03 overflow-hidden backdrop-blur-[6.5px] z-popup ${className} ${
+      className={`absolute dropbox min-w-[128px] w-full md:w-max py-dashboard-spacing-element-medium md:py-0 px-dashboard-mention-padding-right-left md:px-0 bg-dashboard-background-content-area ${bgSolid ? 'md:bg-[rgb(27,29,30)]' : 'md:bg-dashboard-button-white-default'} rounded-dashboard-mention-radius border-03 overflow-hidden backdrop-blur-[6.5px] z-popup ${className ?? ''} ${
         toggle ? "pointer-events-auto" : "pointer-events-none"
       }`}
     >
-      <div className="flex flex-row gap-[10px] p-dashboard-mention-padding-right-left border-b-03 text-small">
-        <div>{<Icon />}</div>
+      <div className="flex flex-row items-center gap-[10px] p-dashboard-mention-padding-right-left border-b-03 text-small">
+        <div>{<Icon className="w-[24px] h-[24px] svg-color-dashboard-text-description-base-low" />}</div>
+        
         {(type === "simple" || type === "multiple") && (
           <div className="text-dashboard-text-description-base-low text-small">
             {title}
           </div>
         )}
+
         {(type === "link" || type === "add" || type === "addRemove") && (
           <input
             ref={inputLink}
