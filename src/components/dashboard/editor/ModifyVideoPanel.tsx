@@ -337,7 +337,7 @@ export const ModifyVideoPanel = ({context, type}: ModifyVideoPanelProps) => {
               </div>
 
               <div className="modify-video__metaInfoW w-full md:col-[sidebar-start_/_sidebar-end] row-[3_/_4] md:row-[3_/_5] h-full md:pt-[60px] flex flex-col gap-dashboard-mention-padding-right-left overflow-hidden md:overflow-visible md:border-r-05">
-                <div className="flex w-full md:flex-col overflow-scroll md:overflow-visible  gap-dashboard-mention-padding-right-left no-scroll-bar">
+                <div className="flex w-full md:flex-col overflow-scroll md:overflow-visible gap-dashboard-mention-padding-right-left no-scroll-bar">
                   <div className="relative">
                     <ToolboxButton
                       Icon={Frame}
@@ -975,10 +975,10 @@ export const ModifyVideoPanel = ({context, type}: ModifyVideoPanelProps) => {
 type ToolboxButtonProps = {
   Icon: any;
   label?: any;
-  onClick: () => void;
+  onClick?: () => void;
   isEditor?: boolean;
 };
-const ToolboxButton = ({ Icon, label, onClick, isEditor}: ToolboxButtonProps) => {
+export const ToolboxButton = ({ Icon, label, onClick, isEditor}: ToolboxButtonProps) => {
   return (
     <button
       onClick={() => {

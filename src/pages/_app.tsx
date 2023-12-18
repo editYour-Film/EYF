@@ -3,6 +3,7 @@ import "@/styles/globals.css";
 import "@/styles/animated-border.css";
 import "@/styles/utils/splitText.scss";
 import "@/styles/components/Footer.scss";
+import 'react-loading-skeleton/dist/skeleton.css'
 
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";

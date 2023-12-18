@@ -7,6 +7,7 @@ import Maximize from "@/icons/maximize.svg";
 
 import { Video } from "./Video";
 import useMediaQuery from "@/hooks/useMediaQuery";
+import Skeleton from "react-loading-skeleton";
 interface ModelProps extends ModelsProps {
   active: boolean;
 }
@@ -22,6 +23,7 @@ export const Model = ({
   handleSetHighlighted,
   handleEnable,
   handleOpenDetail,
+  className
 }: ModelProps) => {
   const [hover, setHover] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -36,7 +38,7 @@ export const Model = ({
       imgRatio = "pb-[177.77%]";
       break;
     case "Carr\u00E9":
-      imgRatio = "pb-[100%]";
+      imgRatio = "pb-[56.25%]";
       break;
     case "Mobile":
       imgRatio = "pb-[168%]";
@@ -124,79 +126,79 @@ export const Model = ({
   }, [hover]);
 
   return (
-    <div
-      className={`model group bg-dashboard-button-dark rounded-dashboard-button-square-radius overflow-hidden border border-transparent ${
-        active ? "hover:border-dashboard-button-stroke-hover" : ""
-      } focus-within:outline-blueBerry`}
-      onMouseOver={() => {
-        setHover(true);
-      }}
-      onMouseLeave={() => {
-        setHover(false);
-      }}
-    >
-      <div className={`model__image w-full relative h-0 ${imgRatio}`}>
-        {type === "creator" && (
-          <div
+      <div
+        className={`model group bg-dashboard-button-dark rounded-dashboard-button-square-radius overflow-hidden border border-transparent ${
+          active ? "hover:border-dashboard-button-stroke-hover" : ""
+        } focus-within:outline-blueBerry ${className ?? ''}`}
+        onMouseOver={() => {
+          setHover(true)
+        }}
+        onMouseLeave={() => {
+          setHover(false)
+        }}
+      >
+        <div className={`model__image w-full relative h-0 ${imgRatio}`}>
+          {
+            type === 'creator' &&
+            <div 
             className="absolute flex flex-col justify-end gap-dashboard-button-separation-spacing p-[18px] top-0 left-0 w-full h-full z-20 bg-blackBerry bg-opacity-80 backdrop-blur opacity-0 group-hover:opacity-100 transition-opacity duration-400"
-            onClick={() => {
-              isMobile && handleOpenDetail && handleOpenDetail();
-            }}
-          >
-            <div className="flex flex-col gap-dashboard-mention-padding-top-bottom">
-              <div className="text-base text-dashboard-text-title-white-high">
-                {video.title}
+            onClick={() => { isMobile && handleOpenDetail && handleOpenDetail() }}
+            >
+              <div className="flex flex-col gap-dashboard-mention-padding-top-bottom">
+                <div className="text-base text-dashboard-text-title-white-high">{video.title}</div>
+                <div className="text-dashboard-text-description-base text-base">{video.user_info.data.attributes.f_name} {video.user_info.data.attributes.l_name}</div>
               </div>
-              <div className="text-dashboard-text-description-base text-base">
-                {video.user_info.data.attributes.f_name}{" "}
-                {video.user_info.data.attributes.l_name}
+
+              <div className="flex gap-dashboard-button-separation-spacing">
+                {buttons}
               </div>
             </div>
+          }
+          {thumbnail ? (
+            <Image src={thumbnail} alt="" fill className="object-cover group-hover:opacity-0 transition-opacity duration-500 z-10" />
+            ) : (
+              <></>
+              )}
 
-            <div className="flex gap-dashboard-button-separation-spacing">
-              {buttons}
-            </div>
-          </div>
-        )}
-        {thumbnail ? (
-          <Image
-            src={thumbnail}
-            alt=""
-            fill
-            className="object-cover group-hover:opacity-0 transition-opacity duration-500 z-10"
-          />
-        ) : (
-          <></>
-        )}
-
-        {video.video && video.video.data && (
           <div className="absolute h-full w-full z-0">
             <Video
               video={video.video.data.attributes}
               ref={videoRef}
               noPlayer
               className="h-full"
-            />
+              />
           </div>
-        )}
-      </div>
-
-      {type === "editor" && (
-        <div
+        </div>
+        
+        {type === 'editor' &&
+          <div
           className={`model-infos flex flex-col gap-dashboard-button-separation-spacing p-dashboard-button-separation-spacing ${
             active
-              ? "text-dashboard-text-title-white-high"
-              : "text-dashboard-text-disabled"
+            ? "text-dashboard-text-title-white-high"
+            : "text-dashboard-text-disabled"
           }`}
-        >
+          >
           <div>{video.title}</div>
 
           <div>{video.length}</div>
           <div className="flex gap-dashboard-button-separation-spacing">
             {buttons}
           </div>
+          
         </div>
-      )}
-    </div>
+        }
+      </div>
   );
 };
+
+export const ModelSkeleton = () => {
+  return (
+    <div className="flex flex-col gap-dashboard-spacing-element-medium">
+      <div className="relative h-0 pb-[56.25%] rounded-dashboard-button-square-radius">
+        <Skeleton height='100%' containerClassName="absolute w-full h-full"/>
+      </div>
+
+      <Skeleton count={2}/>
+    </div>
+  )
+}

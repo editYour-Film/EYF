@@ -44,7 +44,7 @@ export const OverlayModel = ({className, toggle, onOpen, onOpened, onClose, onCl
       })
     })
 
-    context && context.add('open', () => {      
+    context && context.add('open', () => {    
         const tl = gsap.timeline({
           onStart: () => {
             setIsOpen(true)
