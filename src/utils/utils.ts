@@ -1,4 +1,5 @@
 import validator from "validator";
+import { map } from "./Math";
 
 export const checkAlphanumeric = (string: string, cb: Function) => {
   const errorTxt = "Le champ ne doit comporter que des chiffre et des lettres";
@@ -43,3 +44,11 @@ export const formatVideoDuration = (duration: number) => {
   var mzseconds = Math.floor(duration - mzminutes * 60);
   return mzminutes + ":" + (mzseconds < 10 ? "0" + mzseconds : mzseconds);
 };
+
+
+export const formatDuration = (duration: number) => {
+  return {
+    min:  Math.trunc(duration),
+    sec: map(0, 1, 0, 60, duration - Math.floor(duration)),
+  }
+}

@@ -12,6 +12,7 @@ import { useDispatch } from "react-redux";
 import { enableTransition } from "@/store/slices/transitionSlice";
 import { closeMenu } from "@/store/slices/menuSlice";
 import { CustomToaster } from "../_shared/UI/CustomToaster";
+import { SkeletonTheme } from 'react-loading-skeleton';
 
 export const PageTransition = ({
   Component,
@@ -110,7 +111,9 @@ export const PageTransition = ({
           onExit={() => {store.getState().transition.enabled && onLeave()}}
           onEnter={() => {store.getState().transition.enabled && onEnter()}}
         >
-          <Component {...pageProps} />
+          <SkeletonTheme baseColor="#202020" highlightColor="#444">
+            <Component {...pageProps} />
+          </SkeletonTheme>
         </Transition>
       </SwitchTransition>
 

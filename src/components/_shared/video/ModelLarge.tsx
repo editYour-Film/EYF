@@ -16,13 +16,15 @@ export type ModelsProps = {
   model?: modelType;
   type?: "default" | "editor" | "creator";
 
-  handleModify?: () => void;
-  handleDisable?: () => void;
-  handleEnable?: () => void;
-  handleDelete?: () => void;
-  handleSetHighlighted?: () => void;
-  handleOpenDetail?: () => void;
-};
+  handleModify?: () => void,
+  handleDisable?: () => void,
+  handleEnable?: () => void,
+  handleDelete?: () => void,
+  handleSetHighlighted?: () => void,
+  handleOpenDetail?: () => void,
+  
+  className?: string;
+}
 
 export const ModelLarge = ({
   video,
@@ -48,10 +50,8 @@ export const ModelLarge = ({
         }, 500);
       }
     }
-  }, [hover]);
-
-  console.log(video);
-
+  }, [hover])
+  
   return (
     <>
       {video ? (

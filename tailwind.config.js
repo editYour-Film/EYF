@@ -31,6 +31,7 @@ module.exports = {
 
         'dashboard-success-dark': tokens.dashboard_success_dark,
         'dashboard-success': tokens.dashboard_success,
+        'dashboard-warning': tokens.dashboard_warning,
 
         // Backgrounds
         'dashboard-button-island-BlueBerry-default' : tokens.dashboard_button_island_BlueBerry_default,
@@ -272,14 +273,18 @@ module.exports = {
           fontWeight: 400,
           letterSpacing: '-0.208px',
         },
-
         '.text-base-light' : {
           fontFamily: tokens.font_default.join(', '),
           fontSize: tokens.text_base,
           fontWeight: 400,
           letterSpacing: '-0.208px',
         },
-        
+        '.text-base-bold' : {
+          fontFamily: tokens.font_default.join(', '),
+          fontSize: tokens.text_small,
+          fontWeight: 700,
+          letterSpacing: '-0.208px',
+        },
         '.text-small' : {
           fontFamily: tokens.font_default.join(', '),
           fontSize: tokens.text_small,
@@ -287,14 +292,12 @@ module.exports = {
           letterSpacing: '-0.084px',
           lineHeight: 1.35
         },
-
         '.text-large' : {
           fontFamily: tokens.font_default.join(', '),
           fontSize: tokens.text_large,
           fontWeight: 500,
           letterSpacing: '-0.456px',
         },
-
         '.text-title-M' : {
           fontFamily: tokens.font_title.join(', '),
           fontSize: tokens.title_m,
@@ -302,7 +305,6 @@ module.exports = {
           lineHeight: '27.398px',
           textTransform: 'uppercase',
         },
-
         '.text-title-large' : {
           fontFamily: tokens.font_title.join(', '),
           fontSize: tokens.title_large,
@@ -325,7 +327,11 @@ module.exports = {
           lineHeight: '200%',
           textTransform: 'uppercase',
         },
-
+        '.visually-hidden' : {
+          opacity: 0,
+          width: 0,
+          height: 0
+        },
         '.form-separator' : {
           display: 'none',
           '@media screen and (min-width: 640px)': {
@@ -407,6 +413,11 @@ module.exports = {
           gridTemplateColumns: 'repeat(7, max-content)',
           rowGap: '12px',
           columnGap: '0',
+        },
+        '.grid-quote-files': {
+          gridTemplateColumns: '1.3fr 1fr',
+          gridAutoRows: '100px',
+          gap: '2px',
         },
         '.no-widget': {
           '&::-webkit-calendar-picker-indicator': {

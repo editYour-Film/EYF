@@ -1,10 +1,9 @@
 import { ContainerFullWidth } from "@/components/_shared/UI/Container";
-import Button from "@/components/_shared/form/Button";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import routes from "@/routes";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 import { setJoinBetaVisible } from "@/store/slices/joinBetaSlice";

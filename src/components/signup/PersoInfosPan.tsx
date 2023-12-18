@@ -9,7 +9,7 @@ import { Button } from "../_shared/buttons/Button";
 import { ProgressDots } from "../_shared/UI/ProgressDots";
 
 import VideoIcon from "@/icons/signup/video.svg";
-import SlidersIcon from "@/icons/signup/sliders.svg";
+import SlidersIcon from "@/icons/sliders.svg";
 
 export const PersoInfosPan = () => {
   const context = useContext(SignUpContext);
