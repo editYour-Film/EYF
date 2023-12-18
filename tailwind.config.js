@@ -31,6 +31,7 @@ module.exports = {
 
         'dashboard-success-dark': tokens.dashboard_success_dark,
         'dashboard-success': tokens.dashboard_success,
+        'dashboard-warning': tokens.dashboard_warning,
 
         // Backgrounds
         'dashboard-button-island-BlueBerry-default' : tokens.dashboard_button_island_BlueBerry_default,
@@ -412,6 +413,11 @@ module.exports = {
           gridTemplateColumns: 'repeat(7, max-content)',
           rowGap: '12px',
           columnGap: '0',
+        },
+        '.grid-quote-files': {
+          gridTemplateColumns: '1.3fr 1fr',
+          gridAutoRows: '100px',
+          gap: '2px',
         },
         '.no-widget': {
           '&::-webkit-calendar-picker-indicator': {

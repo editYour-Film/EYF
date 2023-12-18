@@ -36,6 +36,7 @@ let routes = {
 
   SIGNUP: "/signup",
 
+  QUOTE: "/quote/",
   QUOTE_STEP1: "/quote/",
   QUOTE_STEP2: "/quote/model",
   QUOTE_STEP3: "/quote/files",

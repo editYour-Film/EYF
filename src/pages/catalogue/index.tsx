@@ -1,8 +1,8 @@
 import Head from "next/head";
 import LayoutMain from "@/components/layouts/LayoutMain";
 import { NewsletterSection } from "@/components/home/NewsletterSection";
-import { TopSection } from "@/components/catalogue/TopSection";
-import { Models } from "@/components/catalogue/Models";
+import { TopSection } from "@/components/catalogue/_TopSection";
+import { Models } from "@/components/catalogue/_Models";
 import { ContainerFullWidth } from "@/components/_shared/UI/Container";
 
 export default function Catalog() {
