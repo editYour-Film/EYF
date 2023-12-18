@@ -20,6 +20,7 @@ export const base_rose_sunset_violet = 'rgb(201, 133, 254)';
 
 export const dashboard_success_dark = '#264529'
 export const dashboard_success = '#6BC98B'
+export const dashboard_warning = '#FFDA44'
 
 // Backgrounds
 
