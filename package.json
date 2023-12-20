@@ -10,7 +10,7 @@
     "build:prod:export": "NODE_ENV=production next build && next export",
     "export": "next export",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "npx eslint .",
     "format": "prettier --write ."
   },
   "dependencies": {
