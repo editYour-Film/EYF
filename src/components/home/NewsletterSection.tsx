@@ -1,19 +1,19 @@
-import { useEffect, useState } from "react";
-import { H1 } from "../_shared/typography/H1";
-import Button from "../_shared/form/Button";
-import validator from "validator";
-import { inputErrors } from "@/const";
-import { useStrapi, useStrapiPost } from "@/hooks/useStrapi";
-import { addEmailToNewsletter } from "@/lib/addEmailToNewsletter";
+import { useEffect, useState } from 'react'
+import { H1 } from '../_shared/typography/H1'
+import Button from '../_shared/form/Button'
+import validator from 'validator'
+import { inputErrors } from '@/const'
+import { useStrapi, useStrapiPost } from '@/hooks/useStrapi'
+import { addEmailToNewsletter } from '@/lib/addEmailToNewsletter'
 
 export const NewsletterSection = () => {
   const { data: newsletterData, mutate: getNewsLetterData } = useStrapi(
-    "newsletter-section",
+    'newsletter-section',
     false
-  );
+  )
 
-  const [email, setEmail] = useState("");
-  const [emailResponse, setEmailResponse] = useState("");
+  const [email, setEmail] = useState('')
+  const [emailResponse, setEmailResponse] = useState('')
 
   /*const handleResponse = (status: any, msg: string) => {
     if (status === 200)
@@ -60,26 +60,26 @@ export const NewsletterSection = () => {
     handleResponse(res.status, text);*/
 
     const sendRes = await useStrapiPost(
-      "send-mail",
+      'send-mail',
       {
         email: email,
-        subject: "Bienvenue sur la newsletter",
+        subject: 'Bienvenue sur la newsletter',
         text:
-          "Bonjour " +
+          'Bonjour ' +
           email +
-          ", merci de vous inscrire sur la newsletter de EditYour.film.",
+          ', merci de vous inscrire sur la newsletter de EditYour.film.',
       },
       false
-    );
+    )
     if (sendRes.status === 200)
       await addEmailToNewsletter(email).then(() => {
-        setEmailResponse("L'email a bien été ajouté à la newsletter.");
-      });
-  };
+        setEmailResponse("L'email a bien été ajouté à la newsletter.")
+      })
+  }
 
   useEffect(() => {
-    getNewsLetterData();
-  }, []);
+    getNewsLetterData()
+  }, [])
 
   return (
     <>
@@ -108,7 +108,7 @@ export const NewsletterSection = () => {
                 id="input-email"
                 onChange={(e) => setEmail(e.target.value)}
                 className={
-                  "border-2 rounded-2xl h-10 bg-black w-full px-4 text-white md:pr-56"
+                  'border-2 rounded-2xl h-10 bg-black w-full px-4 text-white md:pr-56'
                 }
                 value={email}
                 placeholder="Email"
@@ -121,13 +121,13 @@ export const NewsletterSection = () => {
                   type="button"
                   id="submitInput"
                   onClick={() => {
-                    setEmailResponse("");
+                    setEmailResponse('')
 
                     if (validator.isEmpty(email))
-                      setEmailResponse(inputErrors.required);
+                      setEmailResponse(inputErrors.required)
                     else if (!validator.isEmail(email))
-                      setEmailResponse(inputErrors.invalid);
-                    else sendgrid();
+                      setEmailResponse(inputErrors.invalid)
+                    else sendgrid()
                   }}
                 >
                   Rejoindre la newsletter
@@ -145,13 +145,13 @@ export const NewsletterSection = () => {
                 text="Rejoindre la newsletter"
                 id="submitInput"
                 onClick={() => {
-                  setEmailResponse("");
+                  setEmailResponse('')
 
                   if (validator.isEmpty(email))
-                    setEmailResponse(inputErrors.required);
+                    setEmailResponse(inputErrors.required)
                   else if (!validator.isEmail(email))
-                    setEmailResponse(inputErrors.invalid);
-                  else sendgrid();
+                    setEmailResponse(inputErrors.invalid)
+                  else sendgrid()
                 }}
               />
             </div>
@@ -161,5 +161,5 @@ export const NewsletterSection = () => {
         </div>
       </div>
     </>
-  );
-};
+  )
+}
