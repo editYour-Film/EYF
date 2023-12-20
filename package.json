@@ -10,7 +10,8 @@
     "build:prod:export": "NODE_ENV=production next build && next export",
     "export": "next export",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "npx eslint .",
+    "format": "prettier --write ."
   },
   "dependencies": {
     "@cloudinary/react": "^1.11.2",
@@ -25,7 +26,6 @@
     "@uidotdev/usehooks": "^2.4.1",
     "axios": "^1.4.0",
     "dayjs": "^1.11.10",
-    "eslint": "8.36.0",
     "eslint-config-next": "13.2.4",
     "gsap": "^3.11.5",
     "js-cookie": "^3.0.5",
@@ -56,8 +56,13 @@
     "@svgr/webpack": "^8.0.1",
     "@types/react": "^18.0.28",
     "@types/validator": "^13.7.14",
+    "@typescript-eslint/eslint-plugin": "^6.15.0",
+    "@typescript-eslint/parser": "^6.15.0",
     "autoprefixer": "^10.4.14",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
     "postcss": "^8.4.21",
+    "prettier": "^3.1.1",
     "sass": "^1.63.6",
     "tailwindcss": "^3.2.7"
   }
