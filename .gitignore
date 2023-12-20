@@ -37,5 +37,3 @@ yarn-error.log*
 .npmrc
 
 yarn.lock
-
-.eslintrc.json
