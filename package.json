@@ -10,7 +10,8 @@
     "build:prod:export": "NODE_ENV=production next build && next export",
     "export": "next export",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "format": "prettier --write ."
   },
   "dependencies": {
     "@cloudinary/react": "^1.11.2",
