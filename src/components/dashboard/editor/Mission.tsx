@@ -1,4 +1,3 @@
-import { ResponsiveImg } from "@/components/_shared/ResponsiveImg";
 
 type MissionProps = {
   data: any;
@@ -9,13 +8,7 @@ export const Mission = ({ data }: MissionProps) => {
     <div className="db-editor-mission bg-black rounded-3xl sm:p-5 flex flex-col lg:flex-row justify-between items-start">
       <div className="db-editor-mission__img relative h-1/2 w-full basis-1/2 shrink-0 rounded-3xl border overflow-hidden">
         <div className="w-full h-0 pb-[56%]">
-          <ResponsiveImg
-            isStatic
-            data={data.cover}
-            w={{ xs: 0 }}
-            alt="alternativeText"
-            className="object-cover"
-          />
+
         </div>
       </div>
       <div className="db-editor-mission__infos flex flex-col gap-2 basis-1/2 shrink-0 p-5 pr-0">
