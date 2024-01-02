@@ -102,7 +102,7 @@ export const Catalog = ({searchChoices, models, isQuote}: CatalogProps) => {
         ref={mainContent}
         className="catalog__main-content relative flex flex-col gap-dashboard-spacing-element-medium w-screen"
       >
-        <div className="catalog-searchbar sticky top-0 flex flex-col md:flex-row justify-center w-full gap-4 py-2 z-50 bg-black-transparent-light backdrop-blur-sm">
+        <div className="catalog-searchbar sticky top-0 flex flex-col md:flex-row justify-center w-full gap-4 py-2 z-50 bg-blackBerry-500 backdrop-blur-sm">
           <SearchBar
             placeholder="Rechercher"
             onSearch={() => {console.log('search')}}

@@ -128,7 +128,7 @@ const VideoGrid = ({ videos }: VideoGridProps) => {
           return (
             <div
               key={i}
-              className="relative rounded-lg pb-[117%] h-0 border overflow-hidden bg-white opacity-20"
+              className="relative rounded-lg pb-[117%] h-0 border overflow-hidden bg-soyMilk opacity-20"
             ></div>
           );
         })}

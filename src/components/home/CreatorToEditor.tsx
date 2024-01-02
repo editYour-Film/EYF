@@ -211,7 +211,7 @@ export const CreatorToEditor = ({ data }: CreatorToEditorProps) => {
         >
           <div
             ref={creatorPan}
-            className={`creator-to-editor__creator-pan relative flex flex-col lg:flex-row lg:pl-[167px] fullHd:px-[167px] justify-start lg:justify-between gap-[84px] lg:gap-dashboard-spacing-element-medium lg:items-center h-full w-full basis-full shrink-0 z-0 bg-black ${
+            className={`creator-to-editor__creator-pan relative flex flex-col lg:flex-row lg:pl-[167px] fullHd:px-[167px] justify-start lg:justify-between gap-[84px] lg:gap-dashboard-spacing-element-medium lg:items-center h-full w-full basis-full shrink-0 z-0 bg-blackBerry ${
               showTitle1 ? "inView" : ""
             }`}
           >

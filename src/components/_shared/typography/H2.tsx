@@ -12,7 +12,7 @@ return arrow ? (
     <Wrapper
       type = {fake ? 'none' : 'h2'}
       className={
-        "text-violet text-lg md:text-xl flex items-start gap-5 " + className
+        "text-linear-sunset text-lg md:text-xl flex items-start gap-5 " + className
       }
       style={style}
     >

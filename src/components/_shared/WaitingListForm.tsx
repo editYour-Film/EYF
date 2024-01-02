@@ -8,10 +8,10 @@ type WaitingListFormProps = {
 };
 const WaitingListForm = ({ userType = "client" }: WaitingListFormProps) => {
   const inputClass =
-    "rounded-2xl h-10 w-full px-4  border border-2 bg-white text-alpha-black-600";
+    "rounded-2xl h-10 w-full px-4 border border-2 bg-soyMilk text-blackBerry-500";
   const labelClass = " flex flex-wrap items-center gap-3 mb-2";
   const buttonClass =
-    "border rounded-full w-full text-white  px-5 flex items-center justify-center gap-2.5 transition-all duration-1000 h-10 bg-violet";
+    "border rounded-full w-full text-soyMilk  px-5 flex items-center justify-center gap-2.5 transition-all duration-1000 h-10 bg-blueBerry";
 
   const [fname, setfname] = useState("");
   const [fnameError, setfnameError] = useState("");

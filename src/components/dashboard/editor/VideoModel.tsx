@@ -32,7 +32,7 @@ export const VideoModel = ({
             src={thumbnail}
             width={200}
             height={200}
-            className="absolute top-0 left-0 w-full h-full object-cover bg-black"
+            className="absolute top-0 left-0 w-full h-full object-cover bg-blackBerry"
           />
         )}
         {data && data.attributes && (

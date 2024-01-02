@@ -8,14 +8,6 @@ export default function Document() {
         <link rel="icon" href="/favicon.ico" />
 
         {/* FONTS */}
-        <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap"
-          rel="stylesheet"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;700&display=swap"
-          rel="stylesheet"
-        />
         <link href="https://fonts.cdnfonts.com/css/satoshi" rel="stylesheet" />
         <link href="https://fonts.cdnfonts.com/css/n27" rel="stylesheet" />
 

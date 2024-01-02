@@ -83,7 +83,7 @@ export const NewsletterSection = () => {
 
   return (
     <>
-      <div className="relative p-8 md:p-14 my-10 md:my-24 rounded-4xl max-w-5xl mx-auto bg-newsletter overflow-hidden">
+      <div className="relative p-8 md:p-14 my-10 md:my-24 rounded-4xl max-w-5xl mx-auto bg-rose-sunset linear-orientation-270 overflow-hidden">
         <div className="absolute left-0 top-0 w-full h-full bg-pattern z-30 opacity-20 pointer-events-none mix-blend-hard-light"></div>
 
         <div className="absolute hidden md:flex justify-center items-center top-0 right-0 translate-x-[80%] -translate-y-[10%] md:translate-x-[40%] md:-translate-y-[40%] lg:translate-x-[20%] lg:-translate-y-[30%] w-[350px] h-[350px] z-10 pointer-events-none">
@@ -108,7 +108,7 @@ export const NewsletterSection = () => {
                 id="input-email"
                 onChange={(e) => setEmail(e.target.value)}
                 className={
-                  "border-2 rounded-2xl h-10 bg-black w-full px-4 text-white md:pr-56"
+                  "border-2 rounded-2xl h-10 bg-blackBerry w-full px-4 text-soyMilk md:pr-56"
                 }
                 value={email}
                 placeholder="Email"
@@ -117,7 +117,7 @@ export const NewsletterSection = () => {
               />
               <div className="hidden md:block" id="div-submitInput">
                 <button
-                  className="absolute right-0 pr-8 border-l pl-4 top-2 text-white cursor-pointer"
+                  className="absolute right-0 pr-8 border-l pl-4 top-2 text-soyMilk cursor-pointer"
                   type="button"
                   id="submitInput"
                   onClick={() => {
@@ -141,7 +141,7 @@ export const NewsletterSection = () => {
             <div id="div-submitInput">
               <Button
                 variant="black"
-                className="md:hidden mt-4 bg-black"
+                className="md:hidden mt-4 bg-blackBerry"
                 text="Rejoindre la newsletter"
                 id="submitInput"
                 onClick={() => {

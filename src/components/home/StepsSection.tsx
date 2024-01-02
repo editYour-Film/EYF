@@ -273,7 +273,7 @@ export const StepsSection = ({ data }: any) => {
       >
         <div
           ref={buttonsW}
-          className={`sticky md:relative mb-dashboard-spacing-element-medium md:mb-0 bg-blackBerry bg-opacity-80 top-0 py-[20px] md:py-0 flex ${styles.buttonsW} relative w-full justify-center z-20`}
+          className={`sticky md:relative mb-dashboard-spacing-element-medium md:mb-0 bg-blackBerry bg-opacity-80 top-0 py-[20px] md:py-0 flex w-full justify-center z-20`}
         >
           <div className="flex flex-row justify-space-between gap-5">
             <StepButton
@@ -384,10 +384,6 @@ const Step = forwardRef(function Step(
   const titleRef = useRef<Element>(null);
   const titleTl = useRef<GSAPTimeline>();
 
-  useEffect(() => {
-    // titleTl.current && titleTl.current.progress(progress)
-  }, [progress]);
-
   return (
     <div
       ref={ref as React.LegacyRef<HTMLDivElement>}
@@ -400,7 +396,7 @@ const Step = forwardRef(function Step(
       <div
         className={`content flex flex-col ${
           side === "right" ? "md:flex-row-reverse" : "md:flex-row"
-        } fullHd:h-[50vh] border rounded-dashboard-button-square-radius overflow-hidden gap-4 md:gap-16 lg:gap-40 justify-between md:justify-center lg:justify-between items-center max-w-6xl mx-auto py-5 px-5 md:px-[72px] fullHd:px-[100px] md:py-16 bg-black`}
+        } fullHd:h-[50vh] border rounded-dashboard-button-square-radius overflow-hidden gap-4 md:gap-16 lg:gap-40 justify-between md:justify-center lg:justify-between items-center max-w-6xl mx-auto py-5 px-5 md:px-[72px] fullHd:px-[100px] md:py-16 bg-blackBerry`}
       >
         <div className="md:w-6/12 fullHd:w-1/2 md:max-w-md">
           <H2 arrow fake className="text-base">
@@ -410,8 +406,6 @@ const Step = forwardRef(function Step(
             ref={titleRef}
             text={title}
             type="h2"
-            // split
-            // isAnim
             className="mt-6 text-title-medium leading-normal"
             onSplitted={() => {
               titleTl.current = titleRef.current
@@ -419,11 +413,6 @@ const Step = forwardRef(function Step(
                 : undefined;
             }}
           />
-          {/* <TitleAnim 
-          type="h2"
-          text={title}
-          className="mt-6 text-title-medium"
-        /> */}
           <p className="text-xl text-base-text mt-9">{content}</p>
         </div>
 
@@ -432,13 +421,11 @@ const Step = forwardRef(function Step(
             ref={cardStep}
             className="w-full mt-14 md:mt-0 md:w-[45%] md:max-w-md relative p-4"
           >
-            <div className="step-img-white hidden xl:block"></div>
+            <div className="bg-step hidden xl:block absolute opacity-60 rounded-full h-[400px] top-[50px] right-0 w-full -mr-[150px]"></div>
             <div className="relative pt-[100%]">
               <video
                 className="absolute w-full h-full left-0 top-0 z-20"
-                // controls
                 muted
-                // poster={media.poster}
                 autoPlay
                 loop
               >
@@ -473,11 +460,9 @@ const StepButton = forwardRef(function StepButton(
       onMouseLeave={() => {
         dispatch(toRegular());
       }}
-      className={`${styles.button} ${
-        isActive && styles.active
-      } bg-black px-8 py-2 rounded-full border h-max cursor-pointer font-medium`}
+      className={`group bg-blackBerry px-8 py-2 rounded-full border h-max cursor-pointer font-medium`}
     >
-      <span>{children}</span>
+      <span className={`group-hover:opacity-70 hover:opacity-100 ${isActive && 'text-linear-sunset'}`}>{children}</span>
     </div>
   );
 });

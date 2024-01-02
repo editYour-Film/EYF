@@ -5,7 +5,7 @@ type MissionProps = {
 
 export const Mission = ({ data }: MissionProps) => {
   return (
-    <div className="db-editor-mission bg-black rounded-3xl sm:p-5 flex flex-col lg:flex-row justify-between items-start">
+    <div className="db-editor-mission bg-blackBerry rounded-3xl sm:p-5 flex flex-col lg:flex-row justify-between items-start">
       <div className="db-editor-mission__img relative h-1/2 w-full basis-1/2 shrink-0 rounded-3xl border overflow-hidden">
         <div className="w-full h-0 pb-[56%]">
 

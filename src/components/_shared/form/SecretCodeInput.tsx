@@ -170,7 +170,7 @@ const Screen = ({value, inputChange, state}:ScreenProps) => {
 
   return (
     <div 
-      className={`secret-code__screen focus-within:border-white relative w-full bg-soyMilk-40 rounded-dashboard-button-square-radius p-dashboard-button-separation-spacing border ${state === 'error' ? 'border-appleRed' : ''}  ${textcolor} text-center n27 text-[30px]`}>
+      className={`secret-code__screen focus-within:border-soyMilk relative w-full bg-soyMilk-40 rounded-dashboard-button-square-radius p-dashboard-button-separation-spacing border ${state === 'error' ? 'border-appleRed' : ''}  ${textcolor} text-center n27 text-[30px]`}>
       <div className="absolute top-0 left-0 h-full w-20 flex justify-center items-center">{state === 'loading' && <LoadingIcon />}</div>
       <div>{value[0] ?? '0'} {value[1] ?? '0'} - {value[2] ?? '0'} {value[3] ?? '0'} - {value[4] ?? '0'} {value[5] ?? '0'}</div>
       

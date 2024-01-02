@@ -176,7 +176,7 @@ export const Dropdown = ({
         onClick={(e) => {
           button.current && handleToogleDropdown();
         }}
-        className={`relative w-max z-10 ${isOpen && "border-white"}`}
+        className={`relative w-max z-10 ${isOpen && "border-soyMilk"}`}
       >
         <label htmlFor="langSearch" className="absolute w-0 h-0 opacity-0">
           {label}
@@ -193,7 +193,7 @@ export const Dropdown = ({
           name="search lang"
           ref={searchInput}
           type="search"
-          className={`bg-black absolute z-30 left-4 w-[calc(100%-50px)] hide-search-input-reset ${
+          className={`bg-blackBerry absolute z-30 left-4 w-[calc(100%-50px)] hide-search-input-reset ${
             enableSearch ? "block" : "hidden"
           }`}
           onChange={(e) => {
@@ -209,15 +209,15 @@ export const Dropdown = ({
         >
           <div
             ref={dropdownOptionsInner}
-            className={`dropdown__options-inner w-full bg-black p-4 rounded-b-xl border-x border-b ${
-              enableSearch && "border-white"
+            className={`dropdown__options-inner w-full bg-blackBerry p-4 rounded-b-xl border-x border-b ${
+              enableSearch && "border-soyMilk"
             } pt-6`}
           >
             <hr className="mb-4" />
 
             <div
               ref={optionslist}
-              className="dropdown__list flex flex-col max-h-[200px] overflow-y-scroll bg-black bg-opacity-70 w-full pb-2 pr-4 gap-2"
+              className="dropdown__list flex flex-col max-h-[200px] overflow-y-scroll bg-blackBerry bg-opacity-70 w-full pb-2 pr-4 gap-2"
             >
               {currentOptions.map((option, i: number) => {
                 return (
@@ -231,8 +231,8 @@ export const Dropdown = ({
                     icon={option.icon}
                     text={option?.label}
                     bg="light"
-                    className={`dropdown_tag hover:bg-alphaWhite-300 ${
-                      selectedOption === i ? "bg-alphaWhite-300" : ""
+                    className={`dropdown_tag hover:bg-soyMilk hover:bg-opacity-30 ${
+                      selectedOption === i ? "bg-soyMilk bg-opacity-30" : ""
                     } w-full ${
                       isOpen ? "pointer-events-auto" : "pointer-events-none"
                     }`}

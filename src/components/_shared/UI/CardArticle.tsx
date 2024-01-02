@@ -79,7 +79,7 @@ export const CardArticle = ({post, disableClick, smallGap, onMouseOver, onMouseL
       </div>
 
       <div className="dashboard-post__content basis-full grow flex flex-col gap-padding-medium w-full xl:basis-[384px]">
-        <div className="max-w-[384px] text-title-m uppercase n27">{post.title}</div>
+        <div className="max-w-[384px] text-title-M n27">{post.title}</div>
         <hr className="w-full border-05"/>
         <div className="max-w-[384px] text-dashboard-text-description-base md:text-dashboard-text-description-base-low text-base transition-color duration-200 group-hover:text-dashboard-text-description-base">{post.short_intro || post.excerpt}</div>
         

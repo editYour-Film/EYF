@@ -113,8 +113,8 @@ export const TopSection = ({ data }: any) => {
 
       <div className="max-w-7xl mx-auto px-4">
         <div className="max-w-2xl">
-          <p className="text-white opacity-60 text-lg mb-4">{data.suptitle}</p>
-          <H1 className="text-violet text-[45px] leading-[110%] font-medium">
+          <p className="text-soyMilk opacity-60 text-lg mb-4">{data.suptitle}</p>
+          <H1 className="text-linear-sunset text-[45px] leading-[110%] font-medium">
             {data.title}
           </H1>
           <div className="relative text-base-text text-xl mt-10 z-10">

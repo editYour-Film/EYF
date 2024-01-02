@@ -164,32 +164,32 @@ export const YourProfessionalVideoSection = ({ data }: any) => {
 
           <div>
             <div className="relative flex flex-row justify-between w-full z-20">
-              <div className="flex flex-row justify-between items-center border rounded-full z-10 bg-010304">
-                <div className="flex justify-center items-center rounded-full bg-white text-black w-[24px] h-[24px] n27 font-bold">
+              <div className="flex flex-row justify-between items-center border rounded-full z-10 bg-blackBerry">
+                <div className="flex justify-center items-center rounded-full bg-soyMilk text-black w-[24px] h-[24px] n27 font-bold">
                   1
                 </div>
-                <div className="text-alphaWhite px-1 md:px-3 text-[11px] md:text-sm">
+                <div className="text-soyMilk px-1 md:px-3 text-[11px] md:text-sm">
                   Modèle
                 </div>
               </div>
-              <div className="flex flex-row justify-between items-center border rounded-full z-10 bg-010304">
-                <div className="flex justify-center items-center rounded-full bg-white text-black w-[24px] h-[24px] n27 font-bold">
+              <div className="flex flex-row justify-between items-center border rounded-full z-10 bg-blackBerry">
+                <div className="flex justify-center items-center rounded-full bg-soyMilk text-black w-[24px] h-[24px] n27 font-bold">
                   2
                 </div>
-                <div className="text-alphaWhite px-1 md:px-3 text-[11px] md:text-sm">
+                <div className="text-soyMilk px-1 md:px-3 text-[11px] md:text-sm">
                   Durée du film
                 </div>
               </div>
-              <div className="flex flex-row justify-between items-center border rounded-full z-10 bg-010304">
-                <div className="flex justify-center items-center rounded-full bg-violet text-white w-[24px] h-[24px] n27 font-bold">
+              <div className="flex flex-row justify-between items-center border rounded-full z-10 bg-blackBerry">
+                <div className="flex justify-center items-center rounded-full bg-blueBerry text-soyMilk w-[24px] h-[24px] n27 font-bold">
                   3
                 </div>
-                <div className="text-alphaWhite px-1 md:px-3 text-[11px] md:text-sm">
+                <div className="text-soyMilk px-1 md:px-3 text-[11px] md:text-sm">
                   {" "}
                   12 Fichiers
                 </div>
               </div>
-              <div className="absolute w-full h-[1px] bg-white opacity-30 z-0 top-1/2 -translate-y-1/2"></div>
+              <div className="absolute w-full h-[1px] bg-soyMilk opacity-30 z-0 top-1/2 -translate-y-1/2"></div>
             </div>
 
             {data.card2_img && data.card2_img.data && (

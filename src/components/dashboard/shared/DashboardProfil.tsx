@@ -26,7 +26,7 @@ export const DashboardEditorProfil = () => {
   return (
     <>
       {authContext.isLoading ? (
-        <p className="text-white">Chargement...</p>
+        <p className="text-soyMilk">Chargement...</p>
       ) : (
         <div className="db-profil flex flex-col gap-dashboard-spacing-element-medium">
           <div className="db-profil__head">

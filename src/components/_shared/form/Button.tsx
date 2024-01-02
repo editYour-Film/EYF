@@ -139,7 +139,7 @@ const Button = forwardRef<HTMLButtonElement, buttonProps>(function Button({
           type="button"
           className={
             buttonClass +
-            (disabled ? " bg-primary-300 " : " bg-violet ") +
+            (disabled ? " bg-blackBerry bg-opacity-30 " : " bg-blueBerry ") +
             className +
             " anim-cta"
           }
@@ -165,7 +165,7 @@ const Button = forwardRef<HTMLButtonElement, buttonProps>(function Button({
           ref={ref}
           type="button"
           className={
-            buttonClass + " bg-transparent hover:border-white " + className
+            buttonClass + " bg-transparent hover:border-soyMilk " + className
           }
           disabled={disabled}
           onClick={(e) => {onClick ? onClick(e) : () => {}}}
@@ -187,7 +187,7 @@ const Button = forwardRef<HTMLButtonElement, buttonProps>(function Button({
         <button
           ref={ref}
           type="button"
-          className={buttonClass + " bg-black hover:border-white " + className}
+          className={buttonClass + " bg-blackBerry hover:border-soyMilk " + className}
           disabled={disabled}
           onClick={(e) => {onClick ? onClick(e) : () => {}}}
           onMouseEnter={() => {
@@ -208,7 +208,7 @@ const Button = forwardRef<HTMLButtonElement, buttonProps>(function Button({
         <button
           ref={ref}
           type="button"
-          className={buttonClass + " bg-darkgrey bg-opacity-50 hover:border-white " + className}
+          className={buttonClass + " bg-darkgrey bg-opacity-50 hover:border-soyMilk " + className}
           disabled={disabled}
           onClick={(e) => {onClick ? onClick(e) : () => {}}}
           onMouseEnter={() => {
@@ -230,7 +230,7 @@ const Button = forwardRef<HTMLButtonElement, buttonProps>(function Button({
         <button
           ref={ref}
           type="button"
-          className={buttonClass + " bg-white border-white bg-opacity-10 hover:bg-opacity-40 " + className}
+          className={buttonClass + " bg-soyMilk border-soyMilk bg-opacity-10 hover:bg-opacity-40 " + className}
           disabled={disabled}
           onClick={(e) => {onClick ? onClick(e) : () => {}}}
           onMouseEnter={() => {

@@ -203,7 +203,7 @@ export const Marquee = ({ firstLine, secondLine, className}:MarqueeProps) => {
         <div 
           key={i} className={`inline-block absolute ${way === 'toRight' ? 'right-0 px-1' : 'left-0 px-5'} w-max uppercase`}>
             <span className={`${i === iArrow && line === 1 ? "before:mr-2 before:content-[url('/icons/right-arrow-violet.svg')]" : ""}`}>
-              {i === iArrow ? <span className='text-violet'>{text}</span> : text }
+              {i === iArrow ? <span className='text-linear-sunset'>{text}</span> : text }
             </span> 
         </div>
       );

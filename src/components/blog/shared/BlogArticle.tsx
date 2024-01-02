@@ -61,7 +61,7 @@ export const BlogArticle = ({
               .format("DD MMMM YYYY")}
           </p>
 
-          <div className="text-title-m uppercase n27 text-dashboard-text-title-white-high transition-color duration-300 group-focus-visible:text-dashboard-text-title-white-high group-hover:text-dashboard-text-title-white-high">
+          <div className="text-title-M n27 text-dashboard-text-title-white-high transition-color duration-300 group-focus-visible:text-dashboard-text-title-white-high group-hover:text-dashboard-text-title-white-high">
             {article.attributes.title}
           </div>
 

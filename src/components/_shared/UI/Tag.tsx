@@ -23,7 +23,7 @@ export const Tag = forwardRef<HTMLDivElement, tagProps>(function Tag ({text, ico
       bgColor = "bg-primary-middle bg-opacity-40"
       break;
     case "light":
-      bgColor = "bg-alphaWhite bg-opacity-10"
+      bgColor = "bg-soyMilk bg-opacity-10"
       break;
   }
 
@@ -52,7 +52,7 @@ export const Tag = forwardRef<HTMLDivElement, tagProps>(function Tag ({text, ico
        } }
     >
       {(icon || selected) && 
-        <div className='rounded-full absolute left-dashboard-mention-padding-right-left w-[22px] h-[22px] border border-white group-hover:border-appleRed overflow-hidden'>
+        <div className='rounded-full absolute left-dashboard-mention-padding-right-left w-[22px] h-[22px] border border-soyMilk group-hover:border-appleRed overflow-hidden'>
           { (icon === 'cross' || selected) && <CloseIcon
             onClick={(e:MouseEvent) => { 
               e.stopPropagation()

@@ -91,7 +91,7 @@ export const TitleReveal = ({ data }: any) => {
     >
       <div className="title-reveal__container sticky h-[100vh] w-full flex top-0 justify-center items-center">
         <div className="title-reveal__content w-full overflow-hidden">
-          <div className="title-reveal__suptitle text-center text-violet font-medium text-2xl n27">
+          <div className="title-reveal__suptitle text-center text-linear-sunset font-medium text-2xl n27">
             Une nouvelle façon de travailler pour les
           </div>
           <div className="relative title-reveal__titles text-center grid place-content-center text-[40px] md:text-[70px] leading-[100%] mt-8 n27 font-bold">

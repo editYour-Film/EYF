@@ -377,14 +377,14 @@ export const Cursor = () => {
       <div className="fixed top-0 left-0 w-full h-full z-cursor pointer-events-none">
         <div
           ref={cursor}
-          className="absolute w-[60px] h-[60px] flex justify-center items-center backdrop-blur-[3px] rounded-full border-white border-[3px] overflow-hidden"
+          className="absolute w-[60px] h-[60px] flex justify-center items-center backdrop-blur-[3px] rounded-full border-soyMilk border-[3px] overflow-hidden"
         >
           <div
             ref={shape}
             className="absolute w-full h-full origin-center translate-z-0"
           >
             {/* <div className="absolute top-0 left-0 w-full h-full scale-120 rounded-full"></div> */}
-            <div className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] w-[100%] h-[100%] bg-cursor z-20 opacity-30"></div>
+            <div className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] w-[100%] h-[100%] bg-blackBerry z-20 opacity-30"></div>
           </div>
 
           <div className="overflow-hidden">

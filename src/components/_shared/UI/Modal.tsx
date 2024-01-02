@@ -8,8 +8,8 @@ type ModalProps = {
 };
 const Modal: React.FC<ModalProps> = ({ children, isDisplayed, onClose }) => {
   return isDisplayed ? (
-    <div className="fixed p-4 left-0 top-0 w-full min-h-screen bg-black-transparent z-50 flex flex-col justify-center items-center">
-      <div className="max-w-lg bg-primary p-8 rounded-3xl border overflow-auto max-h-screen">
+    <div className="fixed p-4 left-0 top-0 w-full min-h-screen bg-blackBerry-900 z-50 flex flex-col justify-center items-center">
+      <div className="max-w-lg bg-blackBerry p-8 rounded-3xl border overflow-auto max-h-screen">
         <div className="flex justify-end w-full mb-4">
           <Image
             src="/icons/cross-white.svg"

@@ -36,12 +36,12 @@ export const AvatarInput = ({
       }`}
     >
       <div
-        className={`db-profil__img relative rounded-full border border-alphaWhite border-opacity-70 overflow-hidden ${imgSize}`}
+        className={`db-profil__img relative rounded-full border border-soyMilk border-opacity-70 overflow-hidden ${imgSize}`}
       >
         <GeneratedAvatar img={img} label={label} noHover />
 
         <div
-          className={`avatar-input__overlay absolute z-10 top-0 left-0 w-full h-full bg-black bg-opacity-70 group-hover:opacity-100 transition-opacity duration-500 ${
+          className={`avatar-input__overlay absolute z-10 top-0 left-0 w-full h-full bg-blackBerry bg-opacity-70 group-hover:opacity-100 transition-opacity duration-500 ${
             showOverlay ? "opacity-100" : "opacity-0"
           }`}
           onClick={() => {

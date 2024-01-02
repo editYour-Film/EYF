@@ -92,12 +92,12 @@ export const ArrowCards = ({data}: ArrowCardsProps) => {
   
   return (
     <div ref={section} className="arrow-cards mb-32">
-      <div ref={arrow} className="arrow-cards__arrow flex justify-center items-center rounded-full border w-[92px] h-[92px] mx-auto border-white border-opacity-70">
+      <div ref={arrow} className="arrow-cards__arrow flex justify-center items-center rounded-full border w-[92px] h-[92px] mx-auto border-soyMilk border-opacity-70">
         <Arrow className='rotate-[-90deg]'/>
       </div>
 
       <div className={`flex flex-col items-center text-center px-4 mx-auto md:max-w-2xl mt-32 ${inView && 'inView'}`}>
-        <div className="text-violet text-[22px] font-medium">{data.suptitle}</div>
+        <div className="text-linear-sunset text-[22px] font-medium">{data.suptitle}</div>
         <Title titleType="h1" fake anim className="mt-4 leading-[110%]">
           {data.title}
         </Title>
@@ -106,7 +106,7 @@ export const ArrowCards = ({data}: ArrowCardsProps) => {
       <div ref={cardsW} className="arrow-cards__cards flex flex-col gap-8 lg:flex-row items-stretch mt-32 px-4 md:px-32 lg:px-24 xl:px-32 perspective">
         {data.arrow_card.length && data.arrow_card.map((card:any, i:number) => {        
           return (
-            <div ref={cards.current[i]} key={i} className="bg-cards basis-1/3 py-4 px-10 pt-32">
+            <div ref={cards.current[i]} key={i} className="border-05 rounded-dashboard-button-square-radius bg-dashboard-background-content-area basis-1/3 py-4 px-10 pt-32">
               <div className="inner relative z-10 flex flex-col items-center text-center">
                 <div className="card_title font-medium text-[28px]">{card.title}</div>
                 <div className="card_text text-xl text-base-text mt-4">{card.content}</div>

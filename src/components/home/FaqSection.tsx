@@ -30,13 +30,13 @@ export const FaqSection = ({ filter, data }: FaqSectionProps) => {
   }, [filteredData])
   
   return (
-    <div className="bg-primary relative gradient-faq md:pt-28 border-b">
+    <div className="bg-blackBerry relative gradient-faq md:pt-28 border-b">
       <div className="absolute top-0 left-0 w-full h-full gradient-faq z-0"></div>
       <Container>
         <div className="relative mx-auto max-w-[1600px] bg-dashboard-background-content-area rounded-t-[24px] py-16 px-4 md:pl-16 md:pr-8 pr-3 border-t border-x z-10">
           <div className="flex flex-col xl:flex-row gap-10 xl:gap-20">
             <div className="basis-1/3 shrink-0">
-              <H1 className="text-violet font-medium text-title md:mt-8 leading-[110%]" fake>VOS QUESTIONS FRÉQUENTES</H1>
+              <H1 className="text-linear-sunset font-medium text-title-large md:mt-8 leading-[110%]" fake>VOS QUESTIONS FRÉQUENTES</H1>
               <div className={`${filter === 'about-us' ? 'hidden' : 'flex'} faq__toggler relative flex-row justify-between bg-darkgrey rounded-full mt-6 n27`}>
                 <div 
                   className={`${type === 'creator' ? 'opacity-100' : 'opacity-50'} z-10 basis-[50%] shrink-0 text-center cursor-pointer py-2`}
@@ -52,11 +52,11 @@ export const FaqSection = ({ filter, data }: FaqSectionProps) => {
                     }
                   }
                 >MONTEUR.SE</div>
-                <div className={`absolute left-0 top-0 w-1/2 h-full z-0 bg-black border border-white rounded-full transition-transform ${type === 'creator' ? 'translate-x-0' : 'translate-x-[100%]'}`}></div>
+                <div className={`absolute left-0 top-0 w-1/2 h-full z-0 bg-blackBerry border border-soyMilk rounded-full transition-transform ${type === 'creator' ? 'translate-x-0' : 'translate-x-[100%]'}`}></div>
               </div>
             </div>
 
-            <div className="basis-2/4 divide-y w-full md:min-w-2xl">
+            <div className="basis-2/4 divide-y border-dashboard-button-stroke-default w-full md:min-w-2xl">
               {filteredData?.map((x: any) => {
                   return (
                     <FaqItem

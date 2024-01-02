@@ -7,7 +7,7 @@ export const TopSection = () => {
   return (
     <div className="rounded-3xl border p-4 md:px-28 md:py-32 catalog-top-section-bg">
       <div className="max-w-xl">
-        <H1 className="text-violet" textSize="text-2xl md:text-6xl">
+        <H1 className="text-linear-sunset" textSize="text-2xl md:text-6xl">
           FIERS DE NOS MONTEUR.SES.
         </H1>
         <p className="mt-6 text-xl opacity-80">

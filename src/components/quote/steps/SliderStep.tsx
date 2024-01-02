@@ -88,7 +88,7 @@ export const SliderStep = () => {
                   key={i}
                 >
                   <div className="basis-[2.5%]">
-                    <div className="w-[1px] h-3 bg-white block mb-4 mx-auto"></div>
+                    <div className="w-[1px] h-3 bg-soyMilk block mb-4 mx-auto"></div>
                   </div>
                   <RangeLabel
                     key={x}
@@ -121,7 +121,7 @@ type RangeLabelProps = {
 const RangeLabel = ({ number }: RangeLabelProps) => {
   return (
     <div className="text-sm w-[2.5%] text-center relative">
-      <span className="w-3 h-0.25 rotate-90 bg-white block mb-4 mx-auto"></span>
+      <span className="w-3 border rotate-90 bg-soyMilk block mb-4 mx-auto"></span>
       {number}
     </div>
   );

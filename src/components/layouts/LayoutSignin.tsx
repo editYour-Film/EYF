@@ -17,7 +17,7 @@ const LayoutSignin: React.FC<layoutProps> = ({ children }) => {
 
   return (
     <>
-      <div className={"bg-black relative min-h-screen overflow-hidden"}>
+      <div className={"bg-blackBerry relative min-h-screen overflow-hidden"}>
         <GradientFollowMouse/>
         <main
           className={`flex min-h-[calc(100vh)] w-full justify-center items-center perspective`}

@@ -92,7 +92,7 @@ export const Month = forwardRef<HTMLDivElement, MonthProps>(function({id, year},
         {
           !isMobile &&
           <>
-            <div className="text-title-m text-dashboard-text-description-base n27 uppercase">Période de {monthNames[id]} {year}</div>
+            <div className="text-title-M text-dashboard-text-description-base n27">Période de {monthNames[id]} {year}</div>
             <hr />
           </>
         }
