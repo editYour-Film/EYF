@@ -16,7 +16,7 @@ export const EndPan = () => {
 
   return (
     <>
-      <div className="relative bg-black rounded-2xl px-16 py-14 overflow-hidden">
+      <div className="relative bg-blackBerry rounded-2xl px-16 py-14 overflow-hidden">
         <div className="flex flex-col justify-center items-center gap-8">
           <MessageCircle />
           <div className="flex flex-col items-center w-2/3 gap-4 text-center">

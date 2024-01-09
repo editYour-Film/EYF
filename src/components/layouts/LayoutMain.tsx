@@ -54,7 +54,7 @@ const LayoutMain = ({
 
   return (
     <>
-        <div className="bg-black min-h-screen flex flex-col justify-between gap-10 no-cursor w-full overflow-clip">
+        <div className="bg-blackBerry min-h-screen flex flex-col justify-between gap-10 no-cursor w-full overflow-clip">
           {quoteNavbar ? (
             <HeaderQuote step={2} />
           ) : (
@@ -69,8 +69,8 @@ const LayoutMain = ({
           <main className="md:pt-navbar-h">
             {topSectionBackground && (
               <>
-                <div className="top-section-bg1"></div>
-                <div className="top-section-bg2 -top-10 sm:top-24"></div>
+                {/* <div className="top-section-bg1"></div>
+                <div className="bg-hero absolute left-0 w-1/2 h-[300px] rounded-[200px] -top-10 sm:top-24"></div> */}
               </>
             )}
             <div className="flex flex-col gap-8 md:gap-11 relative z-20 ">

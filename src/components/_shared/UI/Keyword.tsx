@@ -57,7 +57,7 @@ export const Keyword = forwardRef<HTMLButtonElement, keywordProps>(function Tag 
       }}
     >
       {(icon || isWaiting || selected && !noCross) && 
-        <div className={`rounded-full left-dashboard-mention-padding-right-left w-[22px] h-[22px] ${selected && !noCross ? 'border border-white hover:border-appleRed' : ''} overflow-hidden'`}>
+        <div className={`rounded-full left-dashboard-mention-padding-right-left w-[22px] h-[22px] ${selected && !noCross ? 'border border-soyMilk hover:border-appleRed' : ''} overflow-hidden'`}>
           { (icon === 'cross' || selected) && <CloseIcon
             onClick={(e:MouseEvent) => { 
               e.stopPropagation()

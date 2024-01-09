@@ -263,7 +263,7 @@ export const HistorySection = ({ data }: any) => {
   return (
     <div>
       <div className="relative my-10 md:my-20 max-w-md mx-auto lg:mx-0 lg:max-w-[50%] lg:left-[40%] lg:pl-36 pr-8">
-        <p className="text-violet text-xl">
+        <p className="text-linear-sunset text-xl">
           <span className="n27 text-4xl">2012,</span> Notre histoire commence.
         </p>
 
@@ -284,14 +284,14 @@ export const HistorySection = ({ data }: any) => {
           ></Bubble>
         </div>
 
-        <p className="text-right text-xl text-white opacity-60">
+        <p className="text-right text-xl text-soyMilk opacity-60">
           François, distribué.
         </p>
       </div>
 
       <div ref={scrollParent} className="md:h-[170vh]">
         <div className="flex justify-between items-start gap-8 md:h-[80vh] lg:h-[80vh] md:sticky md:top-[15vh] lg:top-[15vh]">
-          <div className="relative shrink-0 border md:border-l-0 rounded-r-3xl bg-primary hidden md:flex justify-end items-center md:w-4/12 lg:w-2/5 self-stretch z-10">
+          <div className="relative shrink-0 border md:border-l-0 rounded-r-3xl bg-blackBerry hidden md:flex justify-end items-center md:w-4/12 lg:w-2/5 self-stretch z-10">
             <div className="md:flex flex-col md:justify-center md:items-center lg:justify-start h-max items-center lg:p-16 lg:pr-28 relative overflow-hidden w-full">
               <Tag
                 date="2012"
@@ -330,7 +330,7 @@ export const HistorySection = ({ data }: any) => {
             <div className="absolute top-0 left-0 w-full h-full z-0 pointer-events-none opacity-20 bg-pattern"></div>
           </div>
 
-          <div className="relative flex items-center h-full text-base no-scroll-bar overflow-scroll bg-010304 border md:border-r-0 rounded-3xl md:rounded-r-none md:rounded-l-3xl p-8 md:p-4 mx-4 md:mx-0 md:px-16 lg:px-28 md:py-24 md:w-8/12 lg:w-3/5 z-10">
+          <div className="relative flex items-center h-full text-base no-scroll-bar overflow-scroll bg-blackBerry border md:border-r-0 rounded-3xl md:rounded-r-none md:rounded-l-3xl p-8 md:p-4 mx-4 md:mx-0 md:px-16 lg:px-28 md:py-24 md:w-8/12 lg:w-3/5 z-10">
             <div ref={scrollContent} className="max-w-3xl text-base-text">
               <div ref={p1}>
                 <span className="font-medium">
@@ -370,7 +370,7 @@ export const HistorySection = ({ data }: any) => {
               <div ref={p3} className="mt-12 md:mt-8 md:opacity-90">
                 Après deux versions de test, nous sommes enfin prêts à vous
                 aider à{" "}
-                <span className="text-violet font-medium">
+                <span className="text-linear-sunset font-medium">
                   transformer vos vidéos en véritables œuvres d&rsquo;art
                 </span>{" "}
                 grâce à toutes les fonctionnalités que nous avons développées.
@@ -378,7 +378,7 @@ export const HistorySection = ({ data }: any) => {
             </div>
           </div>
 
-          <div className="absolute hidden md:block w-full h-full gradient-menu-mobile z-0"></div>
+          {/* <div className="absolute hidden md:block w-full h-full gradient-menu-mobile z-0"></div> */}
         </div>
       </div>
     </div>
@@ -412,12 +412,12 @@ const Tag = ({ date, text, readed, offset = 0, onClick }: tagProps) => {
     >
       <div
         className={`bg-background-card text-4xl n27 py-2 px-8 rounded-full border ${
-          readed ? "border-white  border-opacity-70" : ""
-        } hover:border-white hover:border-opacity-70 transition-colors duration-500 overflow-hidden`}
+          readed ? "border-soyMilk  border-opacity-70" : ""
+        } hover:border-soyMilk hover:border-opacity-70 transition-colors duration-500 overflow-hidden`}
       >
-        <span className="text-violet">{date}</span>
+        <span className="text-linear-sunset">{date}</span>
       </div>
-      <div ref={textEl} className="text-white opacity-60 mt-4 text-center">
+      <div ref={textEl} className="text-soyMilk opacity-60 mt-4 text-center">
         {text}
       </div>
     </div>

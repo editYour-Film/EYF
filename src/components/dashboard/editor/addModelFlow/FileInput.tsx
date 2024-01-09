@@ -233,7 +233,7 @@ export const FileInput = ({}: FileInputProps) => {
         )}
 
         <div
-          className={`w-full relative bg-black rounded-3xl flex h-full justify-center items-center border border-white border-opacity-0 ${
+          className={`w-full relative bg-blackBerry rounded-3xl flex h-full justify-center items-center border border-soyMilk border-opacity-0 ${
             isDragging && "border-opacity-30"
           }`}
           onDragOver={() => {

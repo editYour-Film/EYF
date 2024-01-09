@@ -14,7 +14,7 @@ type TitleSvgCardProps = {
 }
 export const TitleSvgCard = ({type, title, text, cta, ctaHref, ctaOnClick, img, className, hideImgMobile, Svg}: TitleSvgCardProps) => {
   return (
-    <div className={`dashboard-editor-cover__placeholder relative flex flex-col items-center xl:flex-row justify-center ${type === 'imgBottomRight' ? 'xl:justify-start' : ''} gap-[30px] border bg-black rounded-dashboard-button-square-radius lg:mb-0 overflow-hidden ${className} ${type !== 'imgBottomRight' ? 'px-[53px] py-[61px]' : ''}`}>
+    <div className={`dashboard-editor-cover__placeholder relative flex flex-col items-center xl:flex-row justify-center ${type === 'imgBottomRight' ? 'xl:justify-start' : ''} gap-[30px] border bg-blackBerry rounded-dashboard-button-square-radius lg:mb-0 overflow-hidden ${className} ${type !== 'imgBottomRight' ? 'px-[53px] py-[61px]' : ''}`}>
       <div className="absolute bg-pattern opacity-20 w-full h-full top-0 left-0"></div>
       
       <div className={`text-center xl:text-left min-w-[150px] max-w-[500px] fullHd:max-w-[600px] z-10 ${type === 'imgBottomRight' ? 'px-[53px] py-[61px]' : ''}`}>

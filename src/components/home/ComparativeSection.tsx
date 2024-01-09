@@ -1,6 +1,4 @@
-import { H2 } from "../_shared/typography/H2";
 import { useInView } from "react-intersection-observer";
-import { Title } from "../_shared/Title";
 import Cross from "@/icons/comparison-cross.svg";
 import Check from "@/icons/comparison-check.svg";
 import { RefObject, createRef, forwardRef, useEffect, useRef, useState } from "react";
@@ -208,16 +206,9 @@ type CardProps = {
   delay: number
 }
 
-const Card = forwardRef<HTMLDivElement, CardProps>(function Card({type, details, title, supTitle, delay}, ref) {  
+const Card = forwardRef<HTMLDivElement, CardProps>(function Card({type, details, title, supTitle}, ref) {  
   const chart = useRef<HTMLDivElement>(null)
-  const card = (ref as RefObject<HTMLDivElement>) ?? useRef<HTMLDivElement>()
-
   const linesH = "150";
-  const isMobile = useMediaQuery("(max-width: 768px)");
-
-  // const { ref: inViewCard, inView } = useInView({
-  //   triggerOnce: true,
-  // });
 
   const { ref: inViewChartRef, inView: inViewChart } = useInView({
     triggerOnce: true,
@@ -291,7 +282,7 @@ const Card = forwardRef<HTMLDivElement, CardProps>(function Card({type, details,
                   <div className="shrink-0">
                     {type === "cons" ? <Cross /> : <Check />}
                   </div>
-                  <div className="lg:text-center text-dashboard-text-description-base text-base">{detail.entry}</div>
+                  <div className="lg:text-center text-dashboard-text-description-base text-medium">{detail.entry}</div>
                 </div>
               );
             })}

@@ -236,7 +236,7 @@ export const MoreArticles = ({ articles, current }: any) => {
   };
 
   return (
-    <div className="pt-[109px] pb-[122px] mt-20 bg-primary overflow-hidden">
+    <div className="pt-[109px] pb-[122px] mt-20 bg-blackBerry overflow-hidden">
       <div
         ref={wrapper}
         className="w-full flex flex-col md:flex-row items-stretch justify-start px-4 lg:px-0 gap-[44px]"

@@ -75,8 +75,8 @@ export const InfoSection = () => {
 
 const AvailableNow = () => {
   return (
-    <div className="flex justify-between items-center gap-4 px-4 py-2 bg-black bg-opacity-70 rounded-xl w-52">
-      <span className="rounded-full bg-green w-4 h-4"></span>
+    <div className="flex justify-between items-center gap-4 px-4 py-2 bg-blackBerry bg-opacity-70 rounded-xl w-52">
+      <span className="rounded-full bg-dashboard-success w-4 h-4"></span>
       <span className="opacity-80 text-sm font-medium">
         Disponible dès demain
       </span>

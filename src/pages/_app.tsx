@@ -1,8 +1,5 @@
 import "@/styles/globals.css";
-// import "@/styles/strapi.css";
-import "@/styles/animated-border.css";
 import "@/styles/utils/splitText.scss";
-import "@/styles/components/Footer.scss";
 import 'react-loading-skeleton/dist/skeleton.css'
 
 import { gsap } from "gsap";
@@ -90,11 +87,6 @@ const Content = ({ pageProps }: contentProps) => {
   if (authContext.isLoggedIn && authContext.user) {
     return (
       <>
-        {process.env.NEXT_PUBLIC_ENV === "prod" && (
-          <span className="fixed bottom-1 left-1 p-1 rounded-full bg-white text-gray-900 z-50 text-xs font-bold">
-            PROD
-          </span>
-        )}
         <DashBoardContextProvider>
           {authContext.user.user.role.name === "editor" ? (
             <EditorContextProvider>{mainContent}</EditorContextProvider>
@@ -107,11 +99,6 @@ const Content = ({ pageProps }: contentProps) => {
   } else {
     return (
       <>
-        {process.env.NEXT_PUBLIC_ENV === "prod" && (
-          <span className="fixed bottom-1 left-1 p-1 rounded-full bg-white text-gray-900 z-50 text-xs font-bold">
-            PROD
-          </span>
-        )}
         {mainContent}
       </>
     );

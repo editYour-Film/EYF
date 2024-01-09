@@ -125,13 +125,13 @@ const Input = ({
       ? "pl-4 "
       : "") +
     (error ? "border-appleRed " : "") +
-    (bg === "white" ? "border bg-white text-alpha-black-600 " : "") +
+    (bg === "white" ? "border bg-soyMilk text-blackBerry-500 " : "") +
     (bg === "light" ? "border bg-soyMilk-40 " : "") +
     (bg === "black"
-      ? "bg-darkgrey bg-opacity-50 text-white border border-0.5 "
+      ? "bg-darkgrey bg-opacity-50 text-soyMilk border border-0.5 "
       : "") +
     (bg === "card"
-      ? "bg-background-card text-white text-opacity-50 border border-0.5 "
+      ? "bg-background-card text-soyMilk text-opacity-50 border border-0.5 "
       : "") +
     (bg === "underlined"
       ? "bg-transparent text-dashboard-text-title-white-high placeholder-text-dashboard-text-description-base border-b border-1 hover:border-stroke-dashboard-button-stroke-hover "
@@ -567,7 +567,7 @@ const Input = ({
                   key={i}
                   className={
                     " px-5 py-1 rounded-lg  transition-all duration-200 " +
-                    (selectedOption === x.value ? "bg-violet" : "bg-gray-light")
+                    (selectedOption === x.value ? "bg-blueBerry" : "bg-dashboard-text-description-base-low")
                   }
                   onClick={() => onChange(x.value)}
                   disabled={disabled}
@@ -652,7 +652,7 @@ const Input = ({
               {helpIconText && <Help text={helpIconText} label={label} />}
             </label>
           )}
-          <div className="flex rounded-full bg-primary w-min">
+          <div className="flex rounded-full bg-blackBerry w-min">
             {options?.map((x: any, i: number) => {
               return (
                 <button
@@ -660,7 +660,7 @@ const Input = ({
                   className={
                     "px-4 py-2 rounded-full font-medium cursor-pointer " +
                     (selectedOption === x.value
-                      ? "bg-white text-neutral-900"
+                      ? "bg-white text-neutral-02"
                       : "")
                   }
                   onClick={(e) => {

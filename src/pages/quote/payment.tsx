@@ -123,7 +123,7 @@ export default function Payment() {
           </p>
 
           <div className="grid md:grid-cols-2 gap-8 lg:gap-32 ">
-            <div className="bg-black rounded-xl p-4 -mx-4">
+            <div className="bg-blackBerry rounded-xl p-4 -mx-4">
               <h4 className="text-lg ">Nom du monteur</h4>
               <h4 className="text-lg ">numéro de commande</h4>
 
@@ -260,7 +260,7 @@ type InfoItemProps = {
 };
 const InfoItem: React.FC<InfoItemProps> = ({ children }) => {
   return (
-    <div className="flex justify-between p-4 bg-primary rounded-md gap-4">
+    <div className="flex justify-between p-4 bg-blackBerry rounded-md gap-4">
       {children}
     </div>
   );

@@ -29,11 +29,11 @@ const Footer = () => {
                 width={52}
                 height={52}
                 src="/icons/logo.svg"
-                className="bg-black rounded-xl p-2 shrink-0 grow-0 h-[52px]"
+                className="bg-blackBerry rounded-xl p-2 shrink-0 grow-0 h-[52px]"
                 alt="editYour.film"
               />
               <div>
-                <p className="text-white font-medium text-lg">
+                <p className="text-soyMilk font-medium text-lg">
                   Un peu de nous dans votre feed ?
                 </p>
                 <p>

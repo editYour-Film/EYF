@@ -127,7 +127,7 @@ const Pan = ({title, year, pan, isOpen, onClose}: PanProps) => {
         className={`fixed top-0 left-0 h-screen overflow-scroll pt-[100px] flex flex-col justify-stretch gap-dashboard-spacing-element-medium items-center bg-blackBerry z-popup w-full w-max-screen transition-translate duration-500 ${isOpen ? 'translate-x-0' : 'translate-x-[100vw]'}`}
       >
         <div className="flex flex-row w-full px-dashboard-button-separation-spacing items-end justify-between h-[131px]">
-          <div className="uppercase n27 text-title-m text-dashboard-text-description-base">{title} {year}</div>
+          <div className="n27 text-title-M text-dashboard-text-description-base">{title} {year}</div>
           <IslandButton
             type="secondary"
             Icon={Close}

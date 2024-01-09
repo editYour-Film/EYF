@@ -170,7 +170,7 @@ export const VideoCatalog = ({
           </div>
         )}
         {videoPath && videoPath.length > 0 && (
-          <div className="px-5 md:px-32 py-8 fixed left-0 top-0 w-full h-screen bg-black bg-opacity-90 z-50 backdrop-blur-sm flex flex-col justify-between items-center">
+          <div className="px-5 md:px-32 py-8 fixed left-0 top-0 w-full h-screen bg-blackBerry bg-opacity-90 z-50 backdrop-blur-sm flex flex-col justify-between items-center">
             <div className="flex justify-end w-full">
               <Image
                 src="/icons/cross-white.svg"
@@ -236,7 +236,7 @@ type videoTagProps = {
 export const Tag = ({ name }: videoTagProps) => {
   return (
     <Link href={routes.SEARCH_KEYWORD}>
-      <button className="bg-white bg-opacity-10 border border-transparent hover:border-white p-2 md:p-2.5 transition-all duration-500 rounded-full flex gap-3 items-center justify-center cursor-pointer">
+      <button className="bg-soyMilk bg-opacity-10 border border-transparent hover:border-white p-2 md:p-2.5 transition-all duration-500 rounded-full flex gap-3 items-center justify-center cursor-pointer">
         {/*<span className="rounded-full p-1 border border-white">
         <Image
           src="/icons/cross-white.svg"
@@ -400,8 +400,8 @@ const VideoInfo = ({ profilePath, title, madeBy }: VideoInfoProps) => {
 
 const AvailableNow = () => {
   return (
-    <div className="flex justify-between items-center gap-4 px-4 py-2 bg-black bg-opacity-50 rounded-xl w-52 absolute top-3 right-3">
-      <span className="rounded-full bg-green w-4 h-4"></span>
+    <div className="flex justify-between items-center gap-4 px-4 py-2 bg-blackBerry bg-opacity-50 rounded-xl w-52 absolute top-3 right-3">
+      <span className="rounded-full bg-dashboard-success w-4 h-4"></span>
       <span className="opacity-80 text-sm font-medium">
         Disponible dès demain
       </span>

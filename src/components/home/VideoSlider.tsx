@@ -1,4 +1,3 @@
-import styles from '@/styles/components/VideoSlider.module.scss';
 import { useEffect, useState, useRef, createRef, useMemo } from 'react';
 import gsap from 'gsap';
 import { useSwipeable } from 'react-swipeable';
@@ -158,26 +157,6 @@ export const VideoSlider = ({videos}: VideoSliderPros) => {
             }, 0)
           }
         }
-
-        // const titleDuration = 0.4;
-        // if(i === currentIndex) {
-        //   (ref.titleEl.querySelectorAll('.char-content') && ref.editorEl.querySelectorAll('.char-content')) && tl.fromTo([ref.titleEl.querySelectorAll('.char-content'), ref.editorEl.querySelectorAll('.char-content')], {
-        //     yPercent: 120,
-        //   },{
-        //     yPercent: 0,
-        //     stagger: 0.01,
-        //     ease:'power2.out',
-        //     duration: titleDuration
-        //   }, titleDuration)
-        // } else {
-        //   (ref.titleEl.querySelectorAll('.char-content') && ref.editorEl.querySelectorAll('.char-content')) && tl.to([ref.titleEl.querySelectorAll('.char-content'), ref.editorEl.querySelectorAll('.char-content')], {
-        //     yPercent: -120,
-        //     stagger: 0.01,
-        //     ease:'power.in',
-        //     duration: titleDuration
-        //   }, 0)
-        // }
-        
       });
     })
   }, [currentIndex])
@@ -190,15 +169,6 @@ export const VideoSlider = ({videos}: VideoSliderPros) => {
           xPercent: -50,
           x: offset.current * ref.position + moveOffset.current
         })
-
-        // setTimeout(() => {
-        //   if(i !== currentIndex) {                    
-        //     (ref.titleEl.querySelectorAll('.char-content') && ref.editorEl.querySelectorAll('.char-content')) && gsap.set([ref.titleEl.querySelectorAll('.char-content'), ref.editorEl.querySelectorAll('.char-content')], {
-        //       yPercent: -100
-        //     })
-        //   }
-        // }, 100)
-
       });
     })
   }
@@ -286,11 +256,6 @@ export const VideoSlider = ({videos}: VideoSliderPros) => {
 
     dispatch(toRegular())
 
-    if(!video.classList.contains('playing')) {
-      // video.classList.remove('mouse-over');
-      // video.currentTime = 0
-      // video.pause()
-    }
   }
 
   const handleMouseEnter = (video: HTMLVideoElement, i:number) => {
@@ -335,18 +300,18 @@ export const VideoSlider = ({videos}: VideoSliderPros) => {
   return (
     <div 
       {...swipeHandlers} 
-      className={`${styles.wrapper} flex flex-col items-center w-full overflow-hidden`}
+      className={`flex flex-col items-center w-full overflow-hidden`}
       onMouseLeave={() => {dispatch(toRegular())}}
       >
       <div 
         ref={videoCardsWrapper} 
-        className={`${styles.wrapper} relative md:h-[38vw] md:lg:h-[29vw] w-full md:flex md:flex-row md:gap-20`}
+        className={`relative md:h-[38vw] md:lg:h-[29vw] w-full md:flex md:flex-row md:gap-20`}
       >
         {videos?.map((video, i) => {          
           return (
-            <div key={i} ref={videosWRef.current[i]} className={`${styles.videoW} relative md:absolute w-[75vw] h-[38vw] lg:w-[57vw] lg:h-[29vw] flex-shrink-0 px-1 md:px-2 lg:px-4 origin-bottom`}>
-              <div className="rounded-dashboard-button-square-radius w-full h-full overflow-hidden">
-                <div className={`${styles.filter} filter absolute w-full h-full text-blue text-lg z-10 flex justify-center items-center pointer-events-none`}></div>
+            <div key={i} ref={videosWRef.current[i]} className={`relative md:absolute w-[75vw] h-[38vw] lg:w-[57vw] lg:h-[29vw] flex-shrink-0 px-1 md:px-2 lg:px-4 origin-bottom`}>
+              <div className="relative rounded-dashboard-button-square-radius w-full h-full overflow-hidden after:content-[''] after:w-full after:h-full after:border after:absolute after:top-0 after:left-0 after:z-10 after:rounded-dashboard-button-square-radius after:pointer-events-none">
+                <div className={`filter absolute w-full h-full text-blue text-lg z-10 flex justify-center items-center pointer-events-none bg-gradient-to-r from-[rgba(0,0,0,0.5)] to-black `}></div>
                 <video 
                   ref={videosRef.current[i]} 
                   className="w-full h-full object-cover pointer-events-auto"
@@ -376,13 +341,7 @@ export const VideoSlider = ({videos}: VideoSliderPros) => {
 
       <div className="w-[75vw] lg:w-[57vw] px-1 md:px-2 lg:px-4 mt-dashboard-spacing-element-medium flex flex-row justify-between items-center text-soyMilk-500 text-[17px] font-light">
           <div>{currentIndex + 1 < 10 ? "0" + (currentIndex + 1) : (currentIndex + 1)}</div>
-          {/* <div
-            className='cursor-pointer opacity-60 hover:opacity-100 transition-opacity'
-            onClick={() => {
-              handlePrev()
-            }}
 
-          > {'<'} </div> */}
           <div className='w-4/6 h-[25px] flex flex-row justify-center'>
             {videos?.map((video, i) => {
               return (
@@ -396,12 +355,7 @@ export const VideoSlider = ({videos}: VideoSliderPros) => {
                 ></div>)
             })}
           </div>
-          {/* <div
-            className='cursor-pointer opacity-60 hover:opacity-100 transition-opacity'
-            onClick={() => {
-              handleNext()
-            }}
-          > {'>'} </div> */}
+
           <div>{videos?.length < 10 ? "0" + (videos?.length) : (videos?.length)}</div>
         </div>
     </div>

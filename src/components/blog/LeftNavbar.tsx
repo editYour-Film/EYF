@@ -86,7 +86,7 @@ const LeftNavbar = ({ article, percentage = 0, currentTitle, articleHeight}: Lef
           <div>
             <div className="overflow-hidden h-full w-1.5 rounded-full bg-gray-700">
               <div
-                className="w-full rounded-full bg-violet"
+                className="w-full rounded-full bg-blueBerry"
                 style={{ height: scrollVal * 100 + "%" }}
               ></div>
             </div>
@@ -147,21 +147,6 @@ const LeftNavbar = ({ article, percentage = 0, currentTitle, articleHeight}: Lef
           </div>
         </div>
       </div>
-{/* 
-      <div className="flex gap-x-4 items-center mt-6 sm:mt-10 mb-6 md:mb-0 bg-primary p-2.5 rounded-2xl">
-        <img
-          src={article.author.profile_picture.data.attributes.url}
-          alt={article.author.name}
-          className="h-14 rounded-full"
-        />
-        <div>
-          <p className="n27 mb-2 text-white">{article.author.name}</p>
-          <p className="text-sm text-gray opacity-80">
-            Mis à jour le{" "}
-            {dayjs(article.updatedAt).locale("fr").format("DD MMMM YYYY")}
-          </p>
-        </div>
-      </div> */}
     </div>
   );
 };

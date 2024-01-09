@@ -5,6 +5,9 @@ export const base_Edy_appleRed_200 = 'rgba(221, 160, 160, 0.2)';
 
 
 export const base_Edy_blackBerry = 'rgb(1, 3, 4)';
+export const base_Edy_blackBerry_300 = 'rgba(1, 3, 4, 0.3)';
+export const base_Edy_blackBerry_500 = 'rgba(1, 3, 4, 0.5)';
+export const base_Edy_blackBerry_900 = 'rgba(1, 3, 4, 0.9)';
 
 export const base_Edy_blueBerry = 'rgb(126, 94, 255)';
 

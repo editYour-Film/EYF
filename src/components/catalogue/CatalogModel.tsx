@@ -94,8 +94,8 @@ export const CatalogModel = ({
 
 //         <div className="flex flex-col gap-dashboard-button-separation-spacing p-dashboard-button-separation-spacing">
 //           <div>
-//             <div className="text-dashboard-text-title-white-high text-base w-full bg-black"></div>
-//             <div className="text-dashboard-text-description-base text-base mt-dashboard-mention-padding-top-bottom w-full bg-black"></div>
+//             <div className="text-dashboard-text-title-white-high text-base w-full bg-blackBerry"></div>
+//             <div className="text-dashboard-text-description-base text-base mt-dashboard-mention-padding-top-bottom w-full bg-blackBerry"></div>
 //           </div>
 //           <hr />
 //           <div className="flex flex-row gap-3">

@@ -2,24 +2,17 @@ import routes from "@/routes";
 import Link from "next/link";
 import Button from "../_shared/form/Button";
 import { H1 } from "../_shared/typography/H1";
-import { H2 } from "../_shared/typography/H2";
-// import { Title } from "../_shared/Title";
 import Image from "next/image";
-import { ResponsiveImg } from "../_shared/ResponsiveImg";
 import { useEffect, useState, useRef } from "react";
 import { useInView } from "react-intersection-observer";
 import { useDispatch } from "react-redux";
 import { toClick, toRegular } from "@/store/slices/cursorSlice";
-
-import cardStyles from "@/styles/components/EditorCard.module.scss";
-import cardLargeStyles from "@/styles/components/EditorCardLarge.module.scss";
 
 import { Cross } from "../_shared/icons/cross";
 
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import useMediaQuery from "@/hooks/useMediaQuery";
-import { Title } from "../_shared/typography/TitleAnim";
 import { ClassicContent } from "../_shared/UI/ClassicContent";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -122,21 +115,6 @@ export const EditorSection = ({ data }: EditorSectionProps) => {
     >
       <div className="relative mx-auto z-20">
         <div className="flex flex-col max-w-[660px] pl-[20px]">
-          {/* <div
-            className="text-dashboard-text-description-base-low text-title-small"
-          >
-            {data.section_title ?? 'MONTEUR.SE.S'}
-          </div>
-          <Title
-            type="h2"
-            text={data.title}
-            className="text-title-large font-medium text-dashboard-text-title-white-high mt-6"
-          />
-          <p
-            className="mt-9 text-base text-dashboard-text-description-base">
-              Vous êtes disponibles quelques jours en attendant ton prochain montage ? editYour.Film vous propose d’occuper 1, 2 jusqu’à 5 jours d’inactivité par le montage d’une vidéo à destination des réseaux sociaux, des plateformes ou de la TV.
-          </p> */}
-
           <ClassicContent
             suptitle={data.section_title ?? 'MONTEUR.SE.S'}
             title={data.title}
@@ -145,8 +123,6 @@ export const EditorSection = ({ data }: EditorSectionProps) => {
             paragraph="Vous êtes disponibles quelques jours en attendant ton prochain montage ? editYour.Film vous propose d’occuper 1, 2 jusqu’à 5 jours d’inactivité par le montage d’une vidéo à destination des réseaux sociaux, des plateformes ou de la TV."
           />
         </div>
-
-        <div className="absolute left-1/2 -translate-x-1/2 w-full h-[600px] bg-[rgba(47,35,80,0.36)] blur-[100px]"></div>
 
         <div className="editorSection__cardsWrapper relative perspective">
           <div
@@ -181,7 +157,7 @@ export const EditorSection = ({ data }: EditorSectionProps) => {
 
           <div
             ref={largeCard}
-            className={`relative ${cardLargeStyles.editorcardLarge} md:border rounded-dashboard-button-square-radius mt-dashboard-spacing-element-medium md:mt-4 bg-dashboard-background-content-area md:bg-transparent border pt-dashboard-spacing-element-medium z-10 overflow-hidden perspective origin-center`}
+            className={`relative group md:border rounded-dashboard-button-square-radius mt-dashboard-spacing-element-medium md:mt-4 bg-dashboard-background-content-area md:bg-transparent border pt-dashboard-spacing-element-medium z-10 overflow-hidden perspective origin-center`}
             style={{"--item-delay": 40 / 100} as React.CSSProperties}
           >
             <div
@@ -192,18 +168,17 @@ export const EditorSection = ({ data }: EditorSectionProps) => {
                 className={`pointer-events-none hidden md:block absolute top-0 left-0 w-full h-full`}
               >
                 <div
-                  className={`absolute w-[130%] h-[130%] left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] z-10 ${cardLargeStyles.filter}`}
+                  className={`absolute w-[130%] h-[130%] left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] z-10 bg-brightness-dark opacity-0 transition-opacity duration-500 group-hover:opacity-50`}
                 ></div>
                 <div
-                  className={`absolute w-[150%] h-[150%] left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] z-10 bg-[#010304] opacity-[0.43]`}
+                  className={`absolute w-[150%] h-[150%] left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] z-10 bg-blackBerry opacity-[0.43]`}
                 ></div>
                 {data.large_card_img.data && (
-                  <ResponsiveImg
-                    isStatic
-                    className={`${cardLargeStyles.image} scale-150 object-cover`}
-                    data={data.large_card_img.data.attributes.url}
+                  <Image
+                    className={`scale-150 object-cover group-hover:blur-[7px] transition-[filter] duration-500`}
+                    src={data.large_card_img.data.attributes.url}
                     alt={data.large_card_img.data.attributes.alternativeText}
-                    w={{ xs: 500, sm: 900, lg: 1100 }}
+                    fill
                   />
                 )}
               </div>
@@ -226,7 +201,7 @@ export const EditorSection = ({ data }: EditorSectionProps) => {
                   </div>
                 </div>
                 <div
-                  className={`md:overflow-visible overflow-hidden relative md:basis-[30%] ${cardLargeStyles.smartphone}`}
+                  className={`md:overflow-visible overflow-hidden relative md:basis-[30%] translate-y-[30px] group-hover:translate-y-0 transition-transform duration-500`}
                 >
                   <div className="h-0 pb-[120%] md:pb-[100%] overflow-hidden">
                     <Image
@@ -327,9 +302,7 @@ const Item = ({ title, text, img, i, delay, inView }: ItemProps) => {
   return (
     <div
       ref={card}
-      className={`${cardStyles.editorcard} ${
-        isDisplayed ? cardStyles.active : " "
-      } relative basis-11/12 md:basis-1/4 shrink-0 grow flex items-end w-screen h-[80vh] md:w-auto md:h-auto before:content-[''] before:display-block before:pointer-events-none before:pb-[100%] border rounded-dashboard-button-square-radius overflow-hidden cursor-pointer`}
+      className={`relative group basis-11/12 md:basis-1/4 shrink-0 grow flex items-end w-screen h-[80vh] md:w-auto md:h-auto before:content-[''] before:display-block before:pointer-events-none before:pb-[100%] border rounded-dashboard-button-square-radius overflow-hidden cursor-pointer`}
       onMouseLeave={() => {
         dispatch(toRegular());
         !isMobile && setIsDisplayed(false);
@@ -344,28 +317,18 @@ const Item = ({ title, text, img, i, delay, inView }: ItemProps) => {
     >
       <div ref={cardInner} className="absolute w-full h-full top-0 left-0">
         <div
-          className={
-            cardStyles.monFiltre +
-            " monFiltre hidden md:block absolute w-[130%] h-[130%] left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] bg-black z-20 "
-          }
+          className={" hidden md:block absolute w-[130%] h-[130%] left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] z-20 bg-radial-filter opacity-0  group-hover:opacity-50 duration-300"}
         ></div>
         <div
-          className={
-            cardStyles.img +
-            " w-[130%] h-[130%] left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] rounded-3xl ease-in duration-200 absolute z-10 bg-brightness-dark origin-center"
-          }
+          className={`w-[130%] h-[130%] left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] rounded-3xl ease-in duration-200 absolute z-10 bg-brightness-dark origin-center group-hover:scale-[1.02] group-hover:-translate-x-1/2 group-hover:-translate-y-1/2 group-hover:blur-[7px] ${isDisplayed ? 'opacity-50' : ''}`}
         >
-          <div
-            className={`absolute w-[130%] h-[130%] left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] z-10 bg-[#010304] opacity-[0.2]`}
-          ></div>
 
           {img.data && (
-            <ResponsiveImg
-              isStatic
-              data={img.data.attributes.url}
-              w={{ xs: 300, sm: 400, md: 450, lg: 550 }}
+            <Image
+              src={img.data.attributes.url}
               alt={img.data.attributes.alternativeText}
               className={`w-full h-full absolute object-cover`}
+              fill
             />
           )}
         </div>
@@ -373,10 +336,7 @@ const Item = ({ title, text, img, i, delay, inView }: ItemProps) => {
           <div className={"flex gap-4 justify-between items-start"}>
             <p className="font-title text-[18px] text-dashboard-text-title-white-high uppercase">{title}</p>
             <div
-              className={
-                cardStyles.icon +
-                " hidden md:block rounded-full p-2 cursor-pointer transition-all duration-300 "
-              }
+              className={`hidden md:block rounded-full p-2 cursor-pointer bg-soyMilk group-hover:bg-blueBerry svg-color-black group-hover:svg-color-soyMilk transition-transform ${isDisplayed ? 'rotate-0' : 'rotate-45'}`}
             >
               <div className="w-2">
                 <Cross className="w-full h-full" />

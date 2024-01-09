@@ -36,7 +36,7 @@ const Header = ({ activeNavItem = "" }: HeaderProps) => {
 
   const routeName = useSelector((store: RootState) => store.routes.routeName);
 
-  const linkClass = "text-small relative pb-1 focus-visible:outline-blueBerry ";
+  const linkClass = "text-small block relative pb-1 focus-visible:outline-blueBerry ";
 
   useEffect(() => {
     !isMobileScreen && setIsOpen(false);
@@ -75,7 +75,7 @@ const Header = ({ activeNavItem = "" }: HeaderProps) => {
     <>
       <header
         className={
-          "sticky md:fixed mt-[60px] md:mt-0 top-0 left-0 px-4 w-full z-header transition-all duration-700 bg-black-transparent-light backdrop-blur-sm md:border-b-03 " +
+          "sticky md:fixed mt-[60px] md:mt-0 top-0 left-0 px-4 w-full z-header transition-all duration-700 bg-blackBerry-500 backdrop-blur-sm md:border-b-03 " +
           (isScrollUp === true ? "translate-y-0" : "-translate-y-20") +
           (isMobileScreen ? " py-2 " : "")
         }
@@ -103,23 +103,12 @@ const Header = ({ activeNavItem = "" }: HeaderProps) => {
                 className={
                   linkClass +
                   (activeNavItem === "home"
-                    ? "border-b border-b-white"
+                    ? "border-b border-b-soyMilk"
                     : "bottom-inOutSpread")
                 }
               >
                 Accueil
               </Link>
-              {/* <Link
-              href={routes.CATALOGUE}
-              className={
-                linkClass +
-                (activeNavItem === "catalog"
-                  ? "border-b border-b-white"
-                  : "bottom-inOutSpread")
-              }
-            >
-              Catalogue
-            </Link> */}
 
               <Link
                 href={routes.WHOWEARE}
@@ -127,7 +116,7 @@ const Header = ({ activeNavItem = "" }: HeaderProps) => {
                 className={
                   linkClass +
                   (activeNavItem === "who-we-are"
-                    ? "border-b border-b-white"
+                    ? "border-b border-b-soyMilk"
                     : "bottom-inOutSpread")
                 }
               >
@@ -140,7 +129,7 @@ const Header = ({ activeNavItem = "" }: HeaderProps) => {
                 className={
                   linkClass +
                   (activeNavItem === "blog"
-                    ? "border-b border-b-white"
+                    ? "border-b border-b-soyMilk"
                     : "bottom-inOutSpread")
                 }
               >
@@ -160,8 +149,6 @@ const Header = ({ activeNavItem = "" }: HeaderProps) => {
                   router.push(routes.SIGNIN);
                 }}
               />
-
-              {/*<Link href={routes.QUOTE_STEP1}>*/}
               <IslandButton
                 type="primary"
                 label="Rejoindre la beta"
@@ -172,12 +159,11 @@ const Header = ({ activeNavItem = "" }: HeaderProps) => {
                   setIsModalDisplayed(true);
                 }}
               />
-              {/*</Link>*/}
             </div>
 
             <div className="md:hidden flex flex-row items-center gap-dashboard-button-separation-spacing">
               {routeName !== "accueil" && (
-                <div className="text-dashboard-text-description-base text-title-m uppercase">
+                <div className="text-dashboard-text-description-base text-title-M">
                   {routeName}
                 </div>
               )}
@@ -193,13 +179,6 @@ const Header = ({ activeNavItem = "" }: HeaderProps) => {
             </div>
           </div>
         </ContainerFullWidth>
-
-        {/* <Modal
-        isDisplayed={isModalDisplayed}
-        onClose={() => setIsModalDisplayed(false)}
-      >
-        <WaitingListForm userType={waitingListType} />
-      </Modal> */}
       </header>
 
       <div
@@ -216,51 +195,6 @@ const Header = ({ activeNavItem = "" }: HeaderProps) => {
                 <Menu items={LANDING_MENU} />
               </nav>
 
-              {/* <div
-              className="mt-10 regularH:mt-28"
-              style={{
-                opacity: isOpen ? "1" : "0",
-                transition: "opacity 1s ease-in-out 0.5s",
-              }}
-            >
-              <div className="text-base-text">Social</div>
-              <div className="footer__icons group flex flex-wrap gap-1 sm:gap-2 md:gap-4 mt-6">
-                <a
-                  href="https://www.facebook.com/edityour.film"
-                  target="_blank"
-                  rel="noopener"
-                >
-                  <FbIcon />
-                </a>
-
-                <a
-                  href="https://www.instagram.com/edityour.film/"
-                  target="_blank"
-                  rel="noopener"
-                >
-                  <InstaIcon />
-                </a>
-
-                <a
-                  href="https://www.linkedin.com/in/francois-herard/"
-                  target="_blank"
-                  rel="noopener"
-                >
-                  <LnkdnIcon />
-                </a>
-
-                <a
-                  href="https://twitter.com/edityourfilmFR"
-                  target="_blank"
-                  rel="noopener"
-                  className="flex justify-center items-center w-[35px] h-[35px]"
-                >
-                  <TwtIcon />
-                </a>
-              </div>
-            </div> */}
-
-              {/*<Link href={routes.QUOTE_STEP1}>*/}
               <div
                 className="mt-16 mb-10"
                 style={{
@@ -279,7 +213,6 @@ const Header = ({ activeNavItem = "" }: HeaderProps) => {
                   }}
                 />
               </div>
-              {/*</Link>*/}
             </div>
           </div>
         </div>
@@ -298,72 +231,15 @@ const ConnectionOptions = ({ onClientClick, onMonteurClick }: any) => {
       className="relative h-max"
       onMouseEnter={() => setDisplayCnx(true)}
       onMouseLeave={() => setDisplayCnx(false)}
-      onClick={() => {
-        // onMonteurClick()
-        // setDisplayCnx(!displayCnx)
-      }}
     >
       <IslandButton
         type="tertiary"
         label="Connexion"
-        // icon="menu"
-        // iconLeft
         onClick={() => {
           onMonteurClick();
         }}
         className={`py-[5px] text-small`}
       />
-      {/* <div
-        className={
-          "absolute bg-black top-14 md:top-12 left-0 border rounded-2xl p-2 z-20 w-72 transition-transform-opacity duration-300 " +
-          (displayCnx
-            ? "opacity-100 translate-y-0"
-            : "opacity-0 pointer-events-none translate-y-2")
-        }
-      >
-        <div className="absolute -top-2 left-0 w-full h-full z-0"></div> */}
-      {/*<Link href={routes.SIGNIN + "?type=client"}>*/}
-      {/* <div
-          className="relative flex items-start gap-4 transition-colors duration-300 hover:bg-black-light p-2 rounded-xl cursor-pointer z-1"
-          onClick={onClientClick}
-        >
-          <Image
-            src="/icons/right-arrow-violet.svg"
-            height={12}
-            width={30}
-            alt="narrow"
-            className="mt-1"
-          />
-          <div>
-            <p className="n27 text-violet">Client</p>
-            <p className="mt-1 text-sm">
-              Accéder à votre profil pour retrouver vos commandes.
-            </p>
-          </div>
-        </div> */}
-      {/* </Link>*/}
-      {/* <Link href={routes.SIGNIN + "?type=editor"}>*/}
-      {/* <div
-          className="relative flex items-start gap-4 transition-colors duration-300 hover:bg-black-light p-2 rounded-xl z-1"
-          onClick={onMonteurClick}
-        >
-          <Image
-            src="/icons/right-arrow-violet.svg"
-            height={12}
-            width={30}
-            alt="narrow"
-            className="mt-1"
-          />
-          <div>
-            <p className="n27 text-violet">Monteur</p>
-            <p className="mt-1 text-sm">
-              S&apos;inscrire ou se connecter pour accéder à votre espace de
-              travail.
-            </p>
-          </div>
-        </div> */}
-      {/* </Link>*/}
-      {/* </div> */}
     </div>
   );
 };
