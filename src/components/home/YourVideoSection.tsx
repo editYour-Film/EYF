@@ -10,7 +10,7 @@ export const YourVideoSection = ({ data }: any) => {
   if (data)
     return (
       <div className="relative">
-        <div className="flex flex-col items-center justify-center gap-12 md:gap-18 lg:gap-24 fullHd:gap-52 md:py-20 relative z-20">
+        <div className="flex flex-col items-center justify-center gap-12 md:gap-18 lg:gap-18 md:py-20 relative z-20">
           <ClassicContent
             className="flex flex-col items-center text-center max-w-[600px]"
             title={data.title}

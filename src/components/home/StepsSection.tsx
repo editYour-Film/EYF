@@ -413,7 +413,7 @@ const Step = forwardRef(function Step(
                 : undefined;
             }}
           />
-          <p className="text-xl text-base-text mt-9">{content}</p>
+          <p className="text-dashboard-text-description-base mt-padding-medium">{content}</p>
         </div>
 
         {media && media.url && (
@@ -462,7 +462,7 @@ const StepButton = forwardRef(function StepButton(
       }}
       className={`group bg-blackBerry px-8 py-2 rounded-full border h-max cursor-pointer font-medium`}
     >
-      <span className={`group-hover:opacity-70 hover:opacity-100 ${isActive && 'text-linear-sunset'}`}>{children}</span>
+      <span className={`group-hover:opacity-70 hover:opacity-100 ${isActive ? 'text-linear-sunset' : 'text-dashboard-text-description-base'}`}>{children}</span>
     </div>
   );
 });

@@ -190,7 +190,7 @@ export const TopVideoSection = ({ data }: any) => {
             </Title>
           </div>
 
-          <p className="text-left w-full sm:w-auto sm:text-center text-xl mt-6 sm:max-w-md sm:mx-auto text-base-text">
+          <p className="text-left w-full sm:w-auto sm:text-center text-medium mt-6 sm:max-w-md sm:mx-auto text-dashboard-text-description-base">
             {data.content}
           </p>
 
