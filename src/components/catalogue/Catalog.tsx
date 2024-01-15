@@ -53,7 +53,7 @@ export const Catalog = ({searchChoices, models, isQuote}: CatalogProps) => {
 
   const [isTweening, setIsTweening] = useState(false)
   const ctx = useRef<gsap.Context>()
-  const ww = useWindowSize()
+  const ww = typeof window !== 'undefined' ? useWindowSize() : undefined
   
   // Animation when more panel is oppen
   useEffect(() => {
@@ -129,7 +129,7 @@ export const Catalog = ({searchChoices, models, isQuote}: CatalogProps) => {
         <div className="catalog-models w-full flex flex-col items-center justify-center gap-dashboard-spacing-element-medium">
           {models.map((line:CatalogContextType['models'][number], i: number) => {
             return (
-              <ModelsLine key={i} keyword={line.keyword} models={line.models} isQuote={isQuote}/>
+              <ModelsLine key={i * 10 + 20} keyword={line.keyword} models={line.models} isQuote={isQuote}/>
             )
           })}
           {
@@ -166,7 +166,7 @@ export const MorePanel = forwardRef<HTMLDivElement, MorePanelProps>(function Mor
   const wrapperRef = ref ? (ref as RefObject<HTMLDivElement>) : useRef<HTMLDivElement>(null)
   const tempScroll = useRef(0)
 
-  const ww = useWindowSize()
+  const ww = typeof window !== 'undefined' ? useWindowSize() : undefined
   const lenis = useLenis()
 
   // Animation of the more panel
@@ -211,6 +211,7 @@ type ContentProps = {
 
 const Content = ({isQuote}:ContentProps) => {
   const catalogContext = useContext(CatalogContext)
+  const quoteContext = useContext(QuoteContext)
 
   const contentRef = useRef<HTMLDivElement>(null)
 
@@ -280,7 +281,10 @@ const Content = ({isQuote}:ContentProps) => {
                             catalogContext.setDetailModel(model);
                             catalogContext.setOpenDetailPanel(true)
                           }}
-                          onAdd={() => {}}
+                          onAdd={() => {
+                            console.log('added');
+                            
+                          }}
                           isQuote={isQuote}
                         />
                         )

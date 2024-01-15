@@ -17,7 +17,7 @@ export const CreatorToEditor = ({ data }: CreatorToEditorProps) => {
     triggerOnce: true,
   });
 
-  const ww = useWindowSize();
+  const ww = typeof window !== 'undefined' ? useWindowSize() : undefined
 
   const pans = useRef<HTMLDivElement>(null);
   const creatorPan = useRef<HTMLDivElement>(null);
@@ -57,7 +57,7 @@ export const CreatorToEditor = ({ data }: CreatorToEditorProps) => {
         end: `top+=${window.innerHeight * 2} top`,
         id: "triggerParralax",
         onUpdate: (self) => {
-          if (ww.width && ww.width > 1024) {
+          if (ww && ww.width && ww.width > 1024) {
             gsap.set(img1.current, {
               yPercent: -50 * self.progress,
             });
@@ -69,7 +69,7 @@ export const CreatorToEditor = ({ data }: CreatorToEditorProps) => {
         paused: true,
       });
 
-      if (ww.width && ww.width > 1024) {
+      if (ww && ww.width && ww.width > 1024) {
         tlTop.fromTo(
           pans.current,
           {
@@ -97,7 +97,7 @@ export const CreatorToEditor = ({ data }: CreatorToEditorProps) => {
 
           tl1.current?.progress(self.progress);
 
-          if (ww.width && ww.width > 1024) tlTop.progress(self.progress);
+          if (ww && ww.width && ww.width > 1024) tlTop.progress(self.progress);
 
           tl1.current?.progress(map(0.4, 1, 0, 1, self.progress));
           tl2.current?.progress(map(0.45, 1, 0, 1, self.progress));
@@ -108,7 +108,7 @@ export const CreatorToEditor = ({ data }: CreatorToEditorProps) => {
         paused: true,
       });
 
-      if (ww.width && ww.width > 1024) {
+      if (ww && ww.width && ww.width > 1024) {
         tlLeft.fromTo(
           [...creatorPan.current!.querySelectorAll(".creator-to-editor__imgs")],
           {
@@ -175,7 +175,7 @@ export const CreatorToEditor = ({ data }: CreatorToEditorProps) => {
           if (self.progress > 0.3) inViewSection && setShowTitle2(true);
           else setShowTitle2(false);
 
-          if (ww.width && ww.width > 1024) tlLeft.progress(self.progress);
+          if (ww && ww.width && ww.width > 1024) tlLeft.progress(self.progress);
 
           tl3.current?.progress(map(0.4, 1, 0, 1, self.progress));
           tl4.current?.progress(map(0.45, 1, 0, 1, self.progress));

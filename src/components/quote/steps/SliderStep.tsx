@@ -18,7 +18,7 @@ export const SliderStep = () => {
   const bubble = useRef<HTMLDivElement>(null)
   const rangeWrapper = useRef<HTMLDivElement>(null)
 
-  const ww = useWindowSize()
+  const ww = typeof window !== 'undefined' ? useWindowSize() : undefined
   const isMobile = useMediaQuery('(max-width: 768px)')
 
   const rangeMax = 20

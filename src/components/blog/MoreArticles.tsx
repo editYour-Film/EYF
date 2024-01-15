@@ -32,7 +32,7 @@ export const MoreArticles = ({ articles, current }: any) => {
   const [initOffset, setInitOffset] = useState(0);
 
   const [isTweening, setIsTweening] = useState(false);
-  const ww = useWindowSize();
+  const ww = typeof window !== 'undefined' ? useWindowSize() : undefined;
 
   const [dragStart, setDragStart] = useState(false);
   const dragOffset = useRef(0);
@@ -104,7 +104,7 @@ export const MoreArticles = ({ articles, current }: any) => {
   }, [ctx.current, currentSlide, initOffset, elementWidth, ww]);
 
   useEffect(() => {
-    if (ww.width && ww.width > 768) {
+    if (ww && ww.width && ww.width > 768) {
       getValues();
       ctx.current && ctx.current.goTo(currentSlide);
     } else {

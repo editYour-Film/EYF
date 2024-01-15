@@ -28,7 +28,7 @@ export const ComparativeSection = ({ data }: ComparativeSectionProps) => {
     threshold: 0,
   });
 
-  const ww = useWindowSize()
+  const ww = typeof window !== 'undefined' ? useWindowSize() : undefined
   const isMobile = useMediaQuery('(max-width:1024px)')
 
   useEffect(() => {
@@ -37,7 +37,7 @@ export const ComparativeSection = ({ data }: ComparativeSectionProps) => {
 
   useEffect(() => {
     const tl = gsap.timeline()
-    if(ww.width && ww.width <= 1024) {
+    if(ww && ww.width && ww.width <= 1024) {
       tl.to(cardsWrapper.current, {
         opacity: 0,
         duration: 0.2
@@ -59,7 +59,7 @@ export const ComparativeSection = ({ data }: ComparativeSectionProps) => {
 
     let tl:GSAPTimeline, st:globalThis.ScrollTrigger, st2:globalThis.ScrollTrigger
     
-    if(ww.width && ww.width > 1024) {
+    if(ww && ww.width && ww.width > 1024) {
       gsap.set([cards.current[0].current, cards.current[1].current], {
         x: 0
       })
