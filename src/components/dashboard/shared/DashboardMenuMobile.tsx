@@ -25,7 +25,7 @@ export const DashboardMenuMobile = ({ className, menu, trigger, action, children
   const [isTweening, setIsTweening] = useState(false)
 
   const ctx = useRef<gsap.Context>()
-  const wSize = typeof window === 'undefined' ? useWindowSize() : undefined
+  const wSize = typeof window !== 'undefined' ? useWindowSize() : undefined
 
   const setGsapContext = () => {
     const context = gsap.context((self) => {

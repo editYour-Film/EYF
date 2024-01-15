@@ -22,7 +22,7 @@ export const OverlayModel = ({className, toggle, onOpen, onOpened, onClose, onCl
   const [isOpen, setIsOpen] = useState(true)
   const [isTweening, setIsTweening] = useState(false)
   const isMobile = useMediaQuery('(max-width: 768px)')
-  const wSize = useWindowSize()
+  const wSize = typeof window !== 'undefined' ? useWindowSize() : undefined
   
   const container = useRef<HTMLDivElement>(null)
   const bg = useRef<HTMLDivElement>(null)

@@ -17,7 +17,7 @@ type PlayerProps = {
 }
 
 export const Player = ({isPlaying, onPlay, onPause, onTrackClick, duration = 0, currentTime = 0, className}: PlayerProps) => {
-  const window = useWindowSize()
+  const windowS = typeof window !== 'undefined' ? useWindowSize() : undefined
   const trackButton = useRef<HTMLDivElement>(null)
   const trackPlayed = useRef<HTMLDivElement>(null)
   const trackParent = useRef<HTMLDivElement>(null)
@@ -44,7 +44,7 @@ export const Player = ({isPlaying, onPlay, onPause, onTrackClick, duration = 0, 
       x: (progress) * trackParent.current!.offsetWidth
     })
 
-  }, [progress, window])
+  }, [progress, windowS])
 
   const handleTrackClick = (e: React.MouseEvent<HTMLDivElement>) => {
     const normalizedClickedProgress = e.nativeEvent.offsetX / trackParent.current!.offsetWidth;    

@@ -219,7 +219,7 @@ export const TopVideoSection = ({ data }: any) => {
       </div>
 
       <div className="mt-24 lg:absolute lg:h-full lg:w-full lg:top-0 lg:left-0 lg:mt-0 pointer-events-none">
-        <div ref={sticky} className={`sticky w-full perpsective-1`}>
+        <div ref={sticky} className={`sticky w-full perspective-1`}>
           {media.current && (
             <div
               ref={videoW}

@@ -16,7 +16,7 @@ export const QuoteContent = () => {
   const step2 = useRef<HTMLDivElement>(null)
   const step3 = useRef<HTMLDivElement>(null)
 
-  const ww = useWindowSize()
+  const ww = typeof window !== 'undefined' ? useWindowSize() : undefined
   
   useEffect(() => {
     lenis && lenis.start()
