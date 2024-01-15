@@ -1,4 +1,4 @@
-import { useContext } from "react"
+import React, { useContext } from "react"
 import { SimpleCard } from "../_shared/UI/CardSimple"
 import { IslandButton } from "../_shared/buttons/IslandButton"
 import { CatalogModel } from "./CatalogModel"
@@ -13,7 +13,6 @@ type ModelsLineProps = {
   skeleton?: boolean,
   isQuote?: boolean,
 }
-
 
 export const ModelsLine = ({keyword, models, skeleton, isQuote}:ModelsLineProps) => {  
   const catalogContext = useContext(CatalogContext)
@@ -40,13 +39,14 @@ export const ModelsLine = ({keyword, models, skeleton, isQuote}:ModelsLineProps)
         />
       </div>
 
-      {lines.map((line) => {
+      {lines.map((line, j) => {
         let emptyItems = []
 
         if(line.models.length > 0 && line.models.length < 3) {
           for (let i = 0; i < 3 - line.models.length; i++) {
             emptyItems.push(
               <div
+                key={i}
                 className="w-1/3 basis-1/3 align-self-stretch bg-dashboard-background-content-area rounded-dashboard-button-square-radius"
               ></div>
             );
@@ -55,7 +55,9 @@ export const ModelsLine = ({keyword, models, skeleton, isQuote}:ModelsLineProps)
 
         return  (
           line.models.length > 0 ?
-            <div className="flex flex-col lg:flex-row gap-dashboard-spacing-element-medium">
+            <div 
+              key={j}
+              className="flex flex-col lg:flex-row gap-dashboard-spacing-element-medium">
               {line.models.map((model, i) => {
                 return  (
                   <CatalogModel
@@ -74,8 +76,13 @@ export const ModelsLine = ({keyword, models, skeleton, isQuote}:ModelsLineProps)
                 )
               })}
               {
-                emptyItems.length > 0 && emptyItems.map((item) => {
-                  return item
+                emptyItems.length > 0 && emptyItems.map((item, i) => {
+                  return (
+                  <React.Fragment
+                    key={i}
+                  >
+                   {item}
+                  </React.Fragment>)
                 }) 
               }
             </div>

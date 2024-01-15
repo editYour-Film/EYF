@@ -129,11 +129,11 @@ export const Catalog = ({searchChoices, models, isQuote}: CatalogProps) => {
         <div className="catalog-models w-full flex flex-col items-center justify-center gap-dashboard-spacing-element-medium">
           {models.map((line:CatalogContextType['models'][number], i: number) => {
             return (
-              <ModelsLine key={i * 10 + 20} keyword={line.keyword} models={line.models} isQuote={isQuote}/>
+              <ModelsLine key={i} keyword={line.keyword} models={line.models} isQuote={isQuote}/>
             )
           })}
           {
-           (catalogContext.isFetching || isFetching )&&
+           (catalogContext.isFetching || isFetching ) &&
             <>
               <ModelsLineSkeleton />
               <ModelsLineSkeleton />
