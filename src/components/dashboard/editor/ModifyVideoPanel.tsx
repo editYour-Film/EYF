@@ -480,13 +480,13 @@ export const ModifyVideoPanel = ({context, type}: ModifyVideoPanelProps) => {
                       Icon={Barchart}
                       label={
                         context.modelWorkTime
-                          ? context.modelWorkTime === "base" ||
+                          ? context.modelWorkTime === "basic" ||
                             context.modelWorkTime === "Basique"
                             ? "Basique"
                             : context.modelWorkTime === "medium" ||
                               context.modelWorkTime === "Moyen"
                             ? "Moyen"
-                            : (context.modelWorkTime === "high" ||
+                            : (context.modelWorkTime === "complex" ||
                                 context.modelWorkTime ===
                                   "Très compliqué") &&
                               "Très compliqué"

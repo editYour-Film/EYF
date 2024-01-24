@@ -5,8 +5,6 @@ import { InfoMessage } from "@/components/_shared/UI/InfoMessage";
 import Info from '@/icons/info.svg'
 import { MentionInteraction } from "@/components/_shared/buttons/MentionInteraction";
 import gsap from "gsap";
-import { map } from "@/utils/Math";
-import Link from "next/link";
 import routes from "@/routes";
 import { useWindowSize } from "@uidotdev/usehooks";
 import useMediaQuery from "@/hooks/useMediaQuery";

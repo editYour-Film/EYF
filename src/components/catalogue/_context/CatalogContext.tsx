@@ -105,7 +105,7 @@ export const CatalogContextProvider = ({children}: PropsWithChildren) => {
   const fetch = async () => {
     // get the videos
     setIsFetching(true)
-    await fakeDelay(3000)
+    await fakeDelay(1000)
 
     const testVid2 = await useStrapiGet(
       'editor-videos/473' +
@@ -124,13 +124,7 @@ export const CatalogContextProvider = ({children}: PropsWithChildren) => {
 
     setModels([{
       keyword: 'Youtube',
-      models: [testVid2.data.data.attributes, testVid2.data.data.attributes, testVid2.data.data.attributes]
-    }, {
-      keyword: '1234',
-      models: [testVid2.data.data.attributes, testVid3.data.data.attributes, testVid2.data.data.attributes]
-    }, {
-      keyword: '5678',
-      models: [testVid4.data.data.attributes, testVid2.data.data.attributes, testVid2.data.data.attributes]
+      models: [testVid2.data.data.attributes, testVid3.data.data.attributes, testVid4.data.data.attributes]
     }])
     
     setIsFetching(false)
@@ -139,7 +133,7 @@ export const CatalogContextProvider = ({children}: PropsWithChildren) => {
   const fetchMore = async () => {
     // get more of the current screen
     setIsFetching(true)
-    await fakeDelay(4000)
+    await fakeDelay(2000)
 
     const testVid3 = await useStrapiGet(
       'editor-videos/468' +

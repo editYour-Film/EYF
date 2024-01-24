@@ -12,7 +12,6 @@ type HeaderQuoteProps = {
 };
 const HeaderQuote = ({ step }: HeaderQuoteProps) => {
   const quoteContext = useContext(QuoteContext)
-  const lenis = useLenis()
   const [isUnderlined, setIsUnderlined] = useState(true)
   const header = useRef<HTMLElement>(null)
   
