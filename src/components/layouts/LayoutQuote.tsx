@@ -31,19 +31,21 @@ const LayoutQuote = ({children }: LayoutMainProps) => {
           <HeaderQuote step={quoteContext.currentStep} />
           
           <main className="w-full md:pt-navbar-h">
-            <div className="relative z-0 w-screen overflow-hidden">
+            <div className="fixed z-0 w-screen h-screen overflow-hidden">
               <GradientFollowMouse/>
             </div>
 
-            <CatalogContextProvider>
-              <Content>{children}</Content>
+            <div className="relative z-1">
+              <CatalogContextProvider>
+                <Content>{children}</Content>
 
-              <div className="w-full overflow-hidden">
-                <MorePanel isQuote/>
-              </div>
+                <div className="relative w-full overflow-hidden z-10">
+                  <MorePanel isQuote/>
+                </div>
 
-              <PrevNextNav />
-            </CatalogContextProvider>
+                <PrevNextNav />
+              </CatalogContextProvider>
+            </div>
           </main>
         
         </QuoteContextProvider>

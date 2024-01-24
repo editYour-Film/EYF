@@ -31,7 +31,7 @@ export const Video = forwardRef<HTMLVideoElement, VideoProps>(function Video(
     trigger,
     autoPlay,
     muted,
-    loop
+    loop,
   },
   ref
 ) {

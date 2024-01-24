@@ -105,8 +105,8 @@ export const Catalog = ({searchChoices, models, isQuote}: CatalogProps) => {
         <div className="catalog-searchbar sticky top-0 flex flex-col md:flex-row justify-center w-full gap-4 py-2 z-50 bg-blackBerry-500 backdrop-blur-sm">
           <SearchBar
             placeholder="Rechercher"
-            onSearch={() => {console.log('search')}}
-            onChange={() => {console.log('Change')}}
+            onSearch={() => {}}
+            onChange={() => {}}
             onFilterClick={() => { setFilterOpen(!filterOpen) }}
             className='md:w-[500px]'
             choices={searchChoices}
@@ -281,10 +281,7 @@ const Content = ({isQuote}:ContentProps) => {
                             catalogContext.setDetailModel(model);
                             catalogContext.setOpenDetailPanel(true)
                           }}
-                          onAdd={() => {
-                            console.log('added');
-                            
-                          }}
+                          onAdd={() => {}}
                           isQuote={isQuote}
                         />
                         )
