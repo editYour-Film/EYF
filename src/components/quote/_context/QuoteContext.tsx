@@ -90,7 +90,7 @@ export const QuoteContextProvider = ({children}:PropsWithChildren) => {
 
   const [currentStep, setCurrentStep] = useState<QuoteContextType['currentStep']>(0)
   const [selectedModel, setSelectedModel] = useState<QuoteContextType['selectedModel']>(undefined)
-  const [selectedDuration, setSelectedDuration] = useState<QuoteContextType['selectedDuration']>(0.5)
+  const [selectedDuration, setSelectedDuration] = useState<QuoteContextType['selectedDuration']>(undefined)
   const [uploadedFiles, setUploadedFiles] = useState<QuoteContextType['uploadedFiles']>(undefined)
 
   const RUSHES_DURATION_RATIO = 5
@@ -154,7 +154,7 @@ export const QuoteContextProvider = ({children}:PropsWithChildren) => {
     if(complexity && rushTotalMinutes && videoExpectedMinutes) {
       calculateQuotePrice({complexity, rushTotalMinutes, videoExpectedMinutes})
       .then((res) => {
-        setPrice(res.data.toString() + '€')
+        setPrice(res.data.price.toString() + '€')
       })
       .catch((err) => {
         setPrice(PRICE_DEFAULT)
@@ -183,7 +183,7 @@ export const QuoteContextProvider = ({children}:PropsWithChildren) => {
       case 1 :
         setStep1Status('done')
         setStep2Status('current')
-        
+        selectedDuration === undefined && setSelectedDuration(0.5)
         selectedDuration === undefined ? setNextButtonDisabled(true) : setNextButtonDisabled(false) 
         uploadedFiles.length === 0 ? setStep3Status('default') : setStep3Status('done')
         
