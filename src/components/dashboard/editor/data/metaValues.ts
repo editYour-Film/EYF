@@ -19,7 +19,7 @@ export const Visibility: VisibilityType[] = [
   "unrepertoried",
 ];
 
-export type WorkTimeType = "base" | "medium" | "high";
+export type WorkTimeType = "basic" | "medium" | "complex";
 export type WorkTimeLabelType = "Basique" | "Moyen" | "Très compliqué";
 export const Worktime: WorkTimeLabelType[] = [
   "Basique",

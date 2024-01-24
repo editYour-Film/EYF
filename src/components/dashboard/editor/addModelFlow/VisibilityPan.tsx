@@ -61,7 +61,7 @@ export const VisibilityPan = () => {
     helper: string;
   }[] = [
     {
-      value: "base",
+      value: "basic",
       label: "Basique",
       helper:
         "Recherche minimale et peu de temps nécessaire, montage simple et rapide.",
@@ -73,7 +73,7 @@ export const VisibilityPan = () => {
         "Recherche modérée, temps raisonnable, montage nécessitant une certaine compétence.",
     },
     {
-      value: "high",
+      value: "complex",
       label: "Très compliqué",
       helper:
         "Recherche intensive, temps substantiel, montage complexe nécessitant des compétences avancées.",

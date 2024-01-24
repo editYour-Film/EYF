@@ -266,11 +266,11 @@ export const EditorContextProvider = ({ children }: PropsWithChildren) => {
           audio: currentModelToModify?.audio,
           worktime:
             (currentModelToModify?.worktime as string) === "Basique"
-              ? "base"
+              ? "basic"
               : (currentModelToModify?.worktime as string) === "Moyen"
               ? "medium"
               : (currentModelToModify?.worktime as string) === "Très compliqué"
-              ? "high"
+              ? "complex"
               : currentModelToModify?.worktime,
           video_softwares: currentModelToModify?.video_softwares.data,
           video_tags: currentModelToModify?.video_tags.data,

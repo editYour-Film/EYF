@@ -198,7 +198,7 @@ export const AddModelContextProvider: React.FC<any> = (props) => {
     undefined
   );
   const [copywrite, setCopywrite] = useState<string | undefined>(undefined);
-  const [worktime, setWorktime] = useState<WorkTimeType | undefined>("base");
+  const [worktime, setWorktime] = useState<WorkTimeType | undefined>("basic");
   const [is_highlighed, setIs_highlighed] = useState<boolean | undefined>(
     undefined
   );
@@ -359,7 +359,7 @@ export const AddModelContextProvider: React.FC<any> = (props) => {
     setRessources(undefined);
     setVisibility(undefined);
     setCopywrite(undefined);
-    setWorktime("base");
+    setWorktime("basic");
     setIs_highlighed(undefined);
   };
 
