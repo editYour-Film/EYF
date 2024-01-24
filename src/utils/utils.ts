@@ -52,3 +52,15 @@ export const formatDuration = (duration: number) => {
     sec: map(0, 1, 0, 60, duration - Math.floor(duration)),
   }
 }
+
+export const displayDuration = (duration: number) => {
+  const format = formatDuration(duration)
+
+  const minString = format.min > 1 ? 'minutes' :'minute';
+  const secString = format.sec > 1 ? 'secondes' :'seconde';
+
+  const min = format.min > 0 ? format.min + ' ' + minString : '';
+  const sec = Math.round(format.sec) > 0 ? Math.round(format.sec) + ' ' + secString : '';
+
+  return min + ' ' + sec;
+}
