@@ -10,12 +10,8 @@ import { Video } from "@/components/_shared/video/Video";
 import { ReactElement } from "react-markdown/lib/react-markdown";
 import { Keyword } from "@/components/_shared/UI/Keyword";
 import useMediaQuery from "@/hooks/useMediaQuery";
-
-interface fileObject {
-  file: File,
-  name: string,
-  duration: number
-}
+import Image from "next/image";
+import toast from "react-hot-toast";
 
 export const FilesStep = () => {
   const quoteContext = useContext(QuoteContext)
@@ -25,53 +21,212 @@ export const FilesStep = () => {
   const [uploadedFiles, setUploadedFiles] = useState<string | number | readonly string[] | undefined>(undefined)
   const [tempFiles, setTempFiles] = useState<File[]>([])
 
-  const uploadedDuration = useRef(0)
+  // Total duration of the rushes
   const [duration, setDuration] = useState(0)
+  // Duration without audio
+  const [visualRushesDuration, setVisualRushesDuration] = useState(0)
 
   const [previewComponents, setPreviewComponents] = useState<{id: number, comp:ReactElement}[]>([])
 
-  const RATIO_FILES_EDIT = 1.5
+  // The ratio of the totale rushes / video duration
+  const RATIO_FILES_EDIT = 5
+  const MINIMUM_RUSHES_LENGTH = quoteContext.selectedDuration * RATIO_FILES_EDIT
+  const isMinimumRushLengthOk = MINIMUM_RUSHES_LENGTH - visualRushesDuration <= 0
+
+  const IMG_DEFAULT_DURATION = 15
+
+  const IMG_MIMES = [
+    'image/png',
+    'image/jpeg',
+    'image/jpg',
+    'image/tiff',
+    //eps
+    'application/postscript',
+    'image/x-eps',
+    //psd
+    'image/vnd.adobe.photoshop',
+    'application/x-photoshop',
+    'application/photoshop',
+    'application/psd',
+    'image/psd',
+  ]
+  const VIDEO_MIMES = [
+    'video/mp4',
+    'video/quicktime',
+    'video/x-msvideo',
+    // mts
+    'video/mts',
+    'video/avchd-stream',
+    'application/metastream',
+    'video/vnd.dlna.mpeg-tts',
+    // mxf
+    'application/mxf'
+  ]
+  const AUDIO_MIMES = [
+    'audio/mpeg3',
+    'audio/mpeg',
+    'audio/wav',
+    'audio/aac',
+    'audio/aiff',
+    'audio/mp4'
+  ]
+
+  type durationByType = {type: 'video' | 'audio' | 'image', dur: number}
+
+  const getduration:(file: File, onlyVisual?: boolean) => Promise<durationByType> = async (file, onlyVisual = false) => {
+    const url = URL.createObjectURL(file);
+    // Check if file is video or audio and get its duration
+    // or set a default duration for imgs
+    return new Promise((resolve) => {
+      if (VIDEO_MIMES.includes(file.type)) {
+        const video = document.createElement("video");
+        video.muted = true;
+        const source = document.createElement("source");
+        source.src = url;
+        video.preload= "metadata";
+        video.appendChild(source);
+        video.onloadedmetadata = function(){
+          resolve({type: 'video', dur: video.duration})
+        };
+      } else if (AUDIO_MIMES.includes(file.type)) {
+        if (!onlyVisual) {
+          const audio = document.createElement("audio");
+          audio.muted = true;
+          const source = document.createElement("source");
+          source.src = url;
+          audio.preload= "metadata";
+          audio.appendChild(source);
+          audio.onloadedmetadata = function(){
+            resolve({type: 'audio', dur: audio.duration})
+          };
+        }
+      } else {
+        resolve({type: 'image', dur: IMG_DEFAULT_DURATION})
+      }
+    });
+   }
+
+  const parsDurationByType = (durationTByTypeArr:durationByType[]) => {
+    let audiosDuration = 0
+    let videosDuration = 0
+    let imagesDuration = 0
+
+    let audiosNb = 0
+    let videosNb = 0
+    let imagesNb = 0
+
+    durationTByTypeArr.forEach((item) => {
+      switch(item.type) {
+        case 'audio':
+          audiosDuration += item.dur;
+          audiosNb++;
+          break;
+        case 'video':
+          videosDuration += item.dur;
+          videosNb++;
+          break;
+        case 'image':
+          imagesDuration += item.dur;
+          imagesNb++;
+          break;
+      }
+    })
+
+    const vals = {
+      // Durations by types
+      audios: audiosDuration,
+      videos: videosDuration,
+      images: imagesDuration,
+      visual: videosDuration + imagesDuration,
+      all: audiosDuration + videosDuration + imagesDuration,
+      // Number dy type
+      audiosNb,
+      videosNb,
+      imagesNb,
+      visualNb: videosNb + imagesNb,
+      allNb: audiosNb + videosNb + imagesNb,
+    }    
+
+    return vals
+  } 
 
   useEffect(() => {
-    let _previewComponents:{id: number, comp:ReactElement}[] = []
+    const getFilesDuration = async () => {
+      const durations = await Promise.all(tempFiles.map(file => getduration(file)))
 
-    tempFiles.forEach((file, i) => {
-      // Get the video duration
-      if (file.type === 'video/mp4') {
-        var video = document.createElement('video');
-        video.preload = 'metadata';
-        video.src = URL.createObjectURL(file);
-        
+      const parsedDuration = parsDurationByType(durations)
+
+      setDuration(parsedDuration.all / 60)
+      setVisualRushesDuration(parsedDuration.visual / 60)
+      
+      quoteContext.setRushesDuration(parsedDuration.all / 60)
+      quoteContext.setVideoRushsDuration(parsedDuration.videos / 60)
+      quoteContext.setImagesRushsDuration(parsedDuration.images / 60)
+      quoteContext.setAudioRushsDuration(parsedDuration.audios / 60)
+
+      quoteContext.setImageRushsNumber(parsedDuration.imagesNb)
+      quoteContext.setVideoRushsNumber(parsedDuration.videosNb)
+      quoteContext.setAudioRushsNumber(parsedDuration.audiosNb)
+    }
+
+    getFilesDuration()
+
+    // Set the preview of uploaded files
+    let _previewComponents:{id: number, comp:ReactElement}[] = []
+    tempFiles.forEach(async (file, i) => {
+      if (VIDEO_MIMES.includes(file.type)) {
+        const videoSrc = URL.createObjectURL(file);
         _previewComponents.push(
           {
             id: Math.random(),
             comp: 
               <Video 
                 key={i}
-                video={{url: video.src, name:file.name}} 
-                onLoadedMetadata={() => {
-                  window.URL.revokeObjectURL(video.src)
-                  // uploadedDuration.current += video.duration
-                              
-                  setDuration(duration + video.duration)
-                }}
+                video={{url: videoSrc, name:file.name}}
                 className="w-full h-full"
               />
-          }
-          )
-
-      } else {
-        uploadedDuration.current += 15
+          })
+      } else if (IMG_MIMES.includes(file.type)) {
+        const imgsrc = URL.createObjectURL(file);
+        _previewComponents.push(
+          {
+            id: Math.random(),
+            comp: 
+              <Image
+                aria-hidden
+                key={i}
+                src={imgsrc}
+                alt={file.name}
+                fill
+                className="w-full h-full object-cover"
+              />
+          })
       }
     });
     
     quoteContext.setUploadedFiles(tempFiles)
     setPreviewComponents([..._previewComponents]);
 
-  }, [tempFiles, duration])
+  }, [tempFiles])
 
+  // Get new files uploaded by the user
   const handleChange = (files:FileList | null) => {
-    files && setTempFiles([...tempFiles, ...files])
+    let _files:File[] = []
+    files && Array.from(files).forEach(file => {
+      if ([...AUDIO_MIMES, ...VIDEO_MIMES, ...IMG_MIMES].includes(file.type)) {
+        _files.push(file)
+      } else {
+        toast(`Le format du fichier : ${file.name} n'est pas supporté`)
+      }
+    });
+
+    setTempFiles([...tempFiles, ..._files])
+    inputFile.current!.value = ''
+  }
+
+  const removeFromTempFiles = (file:File) => {
+    setTempFiles([...tempFiles.filter((f) =>  f !== file)])
+    inputFile.current!.value = ''
   }
 
   const getLenght = () => {
@@ -84,10 +239,6 @@ export const FilesStep = () => {
   const totalLengthOfUploadedFiles = () => {
     const l = getLenght()
     return `${l.min < 10 ? '0' + l.min : l.min }:${l.sec < 10 ? '0' + l.sec : l.sec}` 
-  }
-
-  const removeFromTempFiles = (file:File) => {
-    setTempFiles([...tempFiles.filter((f) =>  f !== file)])
   }
 
   return (
@@ -123,24 +274,25 @@ export const FilesStep = () => {
                 </MentionInteraction>
               </div>
             </div>
-            <div className="text-dashboard-text-description-base">Durée totale des éléments de montage à télécharger : {totalLengthOfUploadedFiles()}</div>
-
+            <div className="text-dashboard-text-description-base">Durée totale des éléments de montage à télécharger : <span className={`${isMinimumRushLengthOk ? 'text-dashboard-success' : 'text-appleRed'}`}>{totalLengthOfUploadedFiles()}</span></div>
           </div>
 
-          <div className="flex flex-col md:flex-row border-t h-[33vh]">
-            <div className="relative basis-1/2 min-h-[300px] shrink-0 flex flex-col justify-center items-center gap-[15px] p-dashboard-spacing-element-medium  overflow-hidden">
-              <label htmlFor="quoteFiles" className="absolute w-full h-full visually-hidden">
+          <div 
+              data-lenis-prevent
+              className="flex flex-col md:flex-row border-t h-[33vh]">
+            <div 
+              className="relative basis-1/2 min-h-[300px] shrink-0 flex flex-col justify-start items-center gap-[15px] p-dashboard-spacing-element-medium overflow-scroll no-scroll-bar">
+              <label htmlFor="quoteFiles" className="absolute w-full h-full top-0 left-0 visually-hidden cursor-pointer">
                 Sélectionner des fichiers
                 <input
                   id="quoteFiles"
                   ref={inputFile}
                   type="file"
-                  className="absolute w-full h-full visually-hidden"
+                  className="absolute top-0 left-0 w-full h-full visually-hidden z-50 cursor-pointer"
                   multiple
                   value={uploadedFiles}
                   onChange={(e) => {
                     inputFile.current && handleChange(inputFile.current.files)
-                    setUploadedFiles(e.target.value)
                   }}
                 />
               </label>
@@ -150,7 +302,9 @@ export const FilesStep = () => {
               <IslandButton 
                 type="tertiary"
                 label="Accéder à mes fichiers"
-                onClick={() => {}}
+                onClick={() => {
+                  inputFile.current && inputFile.current?.click()
+                }}
               />
               {
                 isMobile &&
@@ -193,7 +347,7 @@ export const FilesStep = () => {
                       return (
                         <div 
                           key={previewComponents[i] ? previewComponents[i].id : i}
-                          className={`bg-dashboard-background-content-area rounded-dashboard-button-square-radius ${i === 0 ? 'row-[1/3] overflow-hidden' : 'overflow-hidden'}`}>
+                          className={`relative bg-dashboard-background-content-area rounded-dashboard-button-square-radius ${i === 0 ? 'row-[1/3] overflow-hidden' : 'overflow-hidden'}`}>
                           {previewComponents[i] ? previewComponents[i].comp : <></>}
                         </div>
                       )
@@ -204,7 +358,7 @@ export const FilesStep = () => {
                     return (
                       <div
                         key={component.id}
-                        className={`bg-dashboard-background-content-area ${i === 0 ? 'row-[1/3] overflow-hidden' : 'overflow-hidden'}`}
+                        className={`relative bg-dashboard-background-content-area ${i === 0 ? 'row-[1/3] overflow-hidden' : 'overflow-hidden'}`}
                       >
                         {component.comp}
                       </div>
