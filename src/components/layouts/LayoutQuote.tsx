@@ -26,7 +26,7 @@ const LayoutQuote = ({children }: LayoutMainProps) => {
 
   return (
     <>
-      <div className="relative bg-blackBerry min-h-screen w-screen">
+      <div className="relative bg-blackBerry min-h-screen w-full">
         <QuoteContextProvider>
           <HeaderQuote step={quoteContext.currentStep} />
           

@@ -97,10 +97,10 @@ export const Catalog = ({searchChoices, models, isQuote}: CatalogProps) => {
   return (
     <div 
       ref={wrapper}
-      className="catalog relative">
+      className="catalog relative w-full">
       <div 
         ref={mainContent}
-        className="catalog__main-content relative flex flex-col gap-dashboard-spacing-element-medium w-screen"
+        className="catalog__main-content relative flex flex-col gap-dashboard-spacing-element-medium w-full"
       >
         <div className="catalog-searchbar sticky top-0 flex flex-col md:flex-row justify-center w-full gap-4 py-2 z-50 bg-blackBerry-500 backdrop-blur-sm">
           <SearchBar
