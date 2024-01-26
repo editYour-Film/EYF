@@ -3,8 +3,7 @@ import { SliderStep } from "./steps/SliderStep"
 import { QuoteContext } from "./_context/QuoteContext"
 import { CatalogStep } from "./steps/CatalogStep"
 import { FilesStep } from "./steps/FilesStep"
-import { Lenis, ReactLenis, useLenis } from "@studio-freight/react-lenis"
-import Container from "../_shared/UI/Container"
+import { ReactLenis, useLenis } from "@studio-freight/react-lenis"
 import { useWindowSize } from "@uidotdev/usehooks"
 import { Recap } from "./steps/Recap"
 
@@ -57,7 +56,7 @@ export const QuoteContent = () => {
     <div className="quote-content flex flex-col gap-[100vh]">
       <div
         ref={step1}
-        className=""
+        className="w-full"
       >
         <ReactLenis
           wrapper={step1.current}
@@ -67,7 +66,7 @@ export const QuoteContent = () => {
         </ReactLenis>
       </div>
 
-      <Container
+      <div
         className="flex flex-col gap-[100vh]"
       >
         <div
@@ -78,6 +77,7 @@ export const QuoteContent = () => {
 
         <div
           ref={step3}
+          className="w-full"
         >
           <FilesStep />
         </div>
@@ -92,7 +92,7 @@ export const QuoteContent = () => {
             <Recap />
           </ReactLenis>
         </div>
-      </Container>
+      </div>
     </div>
   )
 }
