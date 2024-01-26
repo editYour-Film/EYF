@@ -35,12 +35,12 @@ const LayoutQuote = ({children }: LayoutMainProps) => {
               <GradientFollowMouse/>
             </div>
 
-            <div className="relative z-1">
+            <div className="relative z-1 w-full">
               <CatalogContextProvider>
                 <Content>{children}</Content>
 
-                <div className="relative w-full overflow-hidden z-10">
-                  <MorePanel isQuote/>
+                <div className="absolute w-full overflow-hidden z-50">
+                  <MorePanel isQuote />
                 </div>
 
                 <PrevNextNav />
@@ -80,7 +80,7 @@ const PrevNextNav = () => {
   const catalogContext = useContext(CatalogContext)
 
   return (
-    <div className="fixed w-full flex justify-between bottom-0 px-[44px] pb-dashboard-specific-radius z-buttons pointer-events-none">
+    <div className="fixed w-full flex justify-between bottom-0 px-[100px] pb-dashboard-specific-radius z-40 pointer-events-none">
       <IslandButton 
         type="tertiary"
         Icon={ArrowLeft}
