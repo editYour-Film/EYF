@@ -15,6 +15,7 @@ import Close from "@/icons/dashboard/x.svg";
 
 import { Keyword } from "../_shared/UI/Keyword";
 import { IslandButton } from "../_shared/buttons/IslandButton";
+import { QuoteContext } from "../quote/_context/QuoteContext";
 
 type PopupDetailProps = {
   trigger: boolean,
@@ -25,6 +26,7 @@ type PopupDetailProps = {
 export const PopupDetail = ({trigger, onClose, onClosed}: PopupDetailProps) => {
   const isMobile = useMediaQuery('(max-width: 768px)')
   const catalogContext = useContext(CatalogContext)
+  const quoteContext = useContext(QuoteContext)
 
   return (
     <div className="popup-detail fixed flex justify-center top-0 left-0 w-full h-full z-popup pointer-events-none">
@@ -45,7 +47,14 @@ export const PopupDetail = ({trigger, onClose, onClosed}: PopupDetailProps) => {
             </div>
 
             <div className="modify-video__toolBox hidden md:flex flex-row items-stretch col-[main-start_/_main-end] row-[2_/_3] py-dashboard-specific-radius px-[50px] gap-dashboard-mention-padding-right-left border-b-05">
-
+              <IslandButton 
+                label="Selectionner ce model"
+                onClick={() => {
+                  quoteContext.setSelectedModel(catalogContext.detailModel)
+                  onClose()
+                }}
+                type="small"
+              />
             </div>
 
             <div className="modify-video__metaInfoW w-full md:col-[sidebar-start_/_sidebar-end] row-[3_/_4] md:row-[3_/_5] h-full md:pt-[60px] flex flex-col gap-dashboard-mention-padding-right-left overflow-hidden md:overflow-visible md:border-r-05">
