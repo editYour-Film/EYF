@@ -85,7 +85,7 @@ const MainArticle = ({ article }: MainArticleProps) => {
         </div>
         {article.attributes.image &&
           article.attributes.image.image &&
-          article.attributes.image.data && (
+          article.attributes.image.image.data && (
             <div className="w-full h-0 pb-[100%] md:pb-[35%] bg-cover bg-no-repeat bg-center relative md:rounded-t-dashboard-medium-radius overflow-hidden">
               <Image
                 alt={

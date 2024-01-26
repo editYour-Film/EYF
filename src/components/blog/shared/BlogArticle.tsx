@@ -77,7 +77,7 @@ export const BlogArticle = ({
 
         {article.attributes.image &&
           article.attributes.image.image &&
-          article.attributes.image.data && (
+          article.attributes.image.image.data && (
             <div className="relative w-full h-0 pb-[50%] bg-cover bg-center rounded-t-dashboard-button-square-radius md:opacity-80 md:group-hover:opacity-100 transition-opacity duration-200 overflow-hidden">
               <Image
                 alt={
