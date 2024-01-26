@@ -182,8 +182,7 @@ export const CatalogContextProvider = ({children}: PropsWithChildren) => {
         testVid4.data.data.attributes, 
         testVid2.data.data.attributes,
         testVid3.data.data.attributes, 
-        testVid4.data.data.attributes, 
-        testVid3.data.data.attributes
+        testVid4.data.data.attributes,
       ])
     } else {
       setMoreModels([
@@ -194,8 +193,7 @@ export const CatalogContextProvider = ({children}: PropsWithChildren) => {
         testVid4.data.data.attributes, 
         testVid2.data.data.attributes,
         testVid3.data.data.attributes, 
-        testVid4.data.data.attributes, 
-        testVid3.data.data.attributes
+        testVid4.data.data.attributes,
       ])
     }
 

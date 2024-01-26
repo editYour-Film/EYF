@@ -269,7 +269,7 @@ const Content = ({isQuote}:ContentProps) => {
                 return (
                   <div 
                     key={i}
-                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-dashboard-spacing-element-medium">
+                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-dashboard-spacing-element-medium">
                     {modelsFormat.models.map((model, j) => {
                       return (
                         <CatalogModel 
@@ -294,19 +294,22 @@ const Content = ({isQuote}:ContentProps) => {
 
             {catalogContext.isFetching &&
             <>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  gap-dashboard-spacing-element-medium mt-dashboard-spacing-element-medium">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4  gap-dashboard-spacing-element-medium mt-dashboard-spacing-element-medium">
                 <ModelSkeleton />
                 <ModelSkeleton />
                 {!isMd && <ModelSkeleton />}
+                {!isMd && <ModelSkeleton />}
               </div>
-              <div className="hidden md:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  gap-dashboard-spacing-element-medium mt-dashboard-spacing-element-medium">
+              <div className="hidden md:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4  gap-dashboard-spacing-element-medium mt-dashboard-spacing-element-medium">
                 <ModelSkeleton />
                 <ModelSkeleton />
                 {!isMd && <ModelSkeleton />}
+                {!isMd && <ModelSkeleton />}
               </div>
-              <div className="hidden lg:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-dashboard-spacing-element-medium mt-dashboard-spacing-element-medium">
+              <div className="hidden lg:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-dashboard-spacing-element-medium mt-dashboard-spacing-element-medium">
                 <ModelSkeleton />
                 <ModelSkeleton />
+                {!isMd && <ModelSkeleton />}
                 {!isMd && <ModelSkeleton />}
               </div>
             </>
