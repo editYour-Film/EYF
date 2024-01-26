@@ -60,7 +60,7 @@ const Content = ({children}:PropsWithChildren) => {
   const catalogContext = useContext(CatalogContext)
   return (
     <>
-      <div className="relative z-10">
+      <div className="relative z-10 w-full">
         {children}
       </div> 
 
@@ -85,7 +85,7 @@ const PrevNextNav = () => {
         type="tertiary"
         Icon={ArrowLeft}
         label="Retour"
-        disabled={quoteContext.currentStep === 0}
+        disabled={quoteContext.currentStep === 0 || quoteContext.prevButtonDisabled}
         onClick={() => { quoteContext.handlePrev() }}
         className="pointer-events-auto"
       />
