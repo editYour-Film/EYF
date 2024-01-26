@@ -1,3 +1,4 @@
+import { QuoteInfos } from "@/components/quote/steps/QuoteInfos"
 import React from "react"
 
 type StepperProps = {
@@ -18,6 +19,7 @@ export const Stepper = ({steps}:StepperProps) => {
               text={step.text}
               state={step.state}
               onClick={step.onClick}
+              isPrice={step.isPrice}
             />
             {i !== steps.length - 1 && <hr className="hidden md:block w-[45px]"/>}
           </React.Fragment>
@@ -31,16 +33,14 @@ export type StepProps = {
   hasNumber: boolean,
   number?: number,
   text: string,
-  state: 'default' | 'done' | 'disabled' | 'current'
+  state: 'default' | 'done' | 'disabled' | 'current',
+  isPrice?: boolean,
   onClick: () => void,
 }
 
-export const Step = ({hasNumber, number, text, state, onClick}:StepProps) => {
-
+export const Step = ({hasNumber, number, text, state, isPrice, onClick}:StepProps) => {  
   let textClass: string
   let numberClass: string
-  const textActive = 'text-dashboard-text-title-white-high'
-  const textDefault = 'text-dashboard-text-description-base-low'
   const numberActive = 'text-soyMilk bg-blueBerry'
   const numberDefault = 'text-black bg-soyMilk'
 
@@ -65,14 +65,20 @@ export const Step = ({hasNumber, number, text, state, onClick}:StepProps) => {
 
   return (
     <button 
-      className="step flex items-center border rounded-full bg-blackBerry"
+      className="step group relative flex items-center border rounded-full bg-blackBerry"
       onClick={() => {
         state === 'done' && onClick()
       }}
       disabled={['disabled', 'default'].includes(state)}
     >
       {hasNumber && <div className={`w-[28px] h-[28px] rounded-full flex justify-center align-center ${numberClass}`}>{number}</div>}
-      <div className={`${textClass} pl-[10px] pr-[15px]`}>{text}</div>
+      <div className={`${textClass} flex items-center pl-[10px] pr-[15px] min-h-[28px]`}>{text}</div>
+
+      {isPrice && 
+        <div className="absolute top-full pt-[10px] opacity-0 invisible group-hover:group-enabled:visible group-hover:group-enabled:opacity-100 h-max text-left cursor-auto transition-opacity duration-400">
+          <QuoteInfos isLight/>
+        </div>
+      }
     </button>
   )
 }

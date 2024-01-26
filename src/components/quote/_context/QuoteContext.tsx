@@ -141,6 +141,7 @@ export const QuoteContextProvider = ({children}:PropsWithChildren) => {
     hasNumber: false,
     text: price.toString(),
     state: step4Status,
+    isPrice: true,
     onClick: () => {}
   }]
 
@@ -172,35 +173,49 @@ export const QuoteContextProvider = ({children}:PropsWithChildren) => {
     setCurrentStep(currentStep + 1)
   }
 
-  useEffect(() => {
+
+  const defineStepStatus = (step:number, cb:(state:StepProps['state']) => void, test:boolean | number | undefined) => {
+    let state:StepProps['state']
+    if(currentStep === step) state = 'current'
+    else {
+      test ? state = 'done' : state = 'default';
+    }
+
+    cb(state)
+  }
+
+  const defineAllStepStatus = () => {
+    defineStepStatus(0, setStep1Status, selectedModel !== undefined)
+    defineStepStatus(1, setStep2Status, selectedDuration !== undefined)
+    defineStepStatus(2, setStep3Status, isRushsDurationOk)
+    defineStepStatus(3, setStep4Status, selectedModel && selectedDuration && isRushsDurationOk)
+  }
+
+  const defineNavStatus = () => {
     switch(currentStep) {
       case 0 :
-        setStep1Status('current')
-
-        selectedModel === undefined ? setNextButtonDisabled(true) : setNextButtonDisabled(false) 
-        selectedDuration === undefined ? setStep2Status('default') : setStep2Status('done')
+        selectedModel === undefined ? setNextButtonDisabled(true) : setNextButtonDisabled(false);
+        setPrevButtonDisabled(true);
         break;
       case 1 :
-        setStep1Status('done')
-        setStep2Status('current')
-        selectedDuration === undefined && setSelectedDuration(0.5)
-        selectedDuration === undefined ? setNextButtonDisabled(true) : setNextButtonDisabled(false) 
-        uploadedFiles.length === 0 ? setStep3Status('default') : setStep3Status('done')
-        
+        selectedDuration === undefined && setSelectedDuration(0.5);
+        selectedDuration === undefined ? setNextButtonDisabled(true) : setNextButtonDisabled(false);
+        setPrevButtonDisabled(false);
         break;
       case 2 :
-        setStep2Status('done')
-        setStep3Status('current')
-        
-        rushesDuration && (rushesDuration >= (selectedDuration * RUSHES_DURATION_RATIO)) ? setNextButtonDisabled(false) : setNextButtonDisabled(true) 
+        isRushsDurationOk ? setNextButtonDisabled(false) : setNextButtonDisabled(true);
+        setPrevButtonDisabled(false);
         break;
       case 3 :
-        setStep2Status('done')
-        setStep4Status('current')
-
         setNextButtonDisabled(true)
+        setPrevButtonDisabled(false);
         break;
-    }    
+    }
+  }
+
+  useEffect(() => {
+    defineAllStepStatus()
+    defineNavStatus()
   }, [currentStep, selectedModel, selectedDuration, uploadedFiles, rushesDuration])
 
   return (
@@ -243,7 +258,7 @@ export const QuoteContextProvider = ({children}:PropsWithChildren) => {
         handlePrev,
         handleNext,
 
-        nextButtonDisabled
+        defineNavStatus,
       }}
     >
       {children}
