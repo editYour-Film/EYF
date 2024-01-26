@@ -14,6 +14,7 @@ export const checkAlphanumeric = (string: string, cb: Function) => {
 
 export const lockDocumentScroll = (offset: number) => {
   document.body.style.position = "fixed";
+  document.body.style.width = "100%";
   document.body.style.top = `-${offset}px`;
 };
 
@@ -40,9 +41,10 @@ export const extractDataFromDate = (
 };
 
 export const formatVideoDuration = (duration: number) => {
-  var mzminutes = Math.floor(duration / 60);
+  var mzminutes = Math.floor(duration / 60) ? Math.floor(duration / 60) : 0;
   var mzseconds = Math.floor(duration - mzminutes * 60);
-  return mzminutes + ":" + (mzseconds < 10 ? "0" + mzseconds : mzseconds);
+  
+  return (mzminutes < 10 ? "0" + mzminutes : mzminutes) + ":" + (mzseconds < 10 ? "0" + mzseconds : mzseconds);
 };
 
 

@@ -46,10 +46,6 @@ export const DropBox = ({
   useEffect(() => {
     ctx.current = gsap.context(() => {
       gsap.set(container.current, {
-        height: 0,
-      });
-
-      gsap.set(container.current, {
         opacity: 0,
       });
     });
@@ -71,7 +67,7 @@ export const DropBox = ({
         },
         {
           opacity: 1,
-          duration: 0.3,
+          duration: 0.2,
           ease: "power2.out",
         },
         0
@@ -80,10 +76,8 @@ export const DropBox = ({
       tl.to(
         container.current,
         {
-          height: "auto",
-          ease: "power2.out",
-        },
-        0
+          pointerEvents: "all",
+        }
       );
     });
 
@@ -97,13 +91,11 @@ export const DropBox = ({
         },
       });
 
-      tl.to(
+      tl.set(
         container.current,
         {
-          height: 0,
-          ease: "power2.out",
-        },
-        0
+          pointerEvents: "none",
+        }
       );
 
       tl.fromTo(
@@ -113,10 +105,10 @@ export const DropBox = ({
         },
         {
           opacity: 0,
-          duration: 0.3,
+          duration: 0.2,
           ease: "power2.out",
         },
-        "-=0.3"
+        0
       );
     });
 

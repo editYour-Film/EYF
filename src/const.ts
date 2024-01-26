@@ -12,6 +12,44 @@ export const inputErrors = {
   agreeToTerms: "Merci d'accepter les conditions d'utilisation.",
 };
 
+export const IMG_MIMES = [
+  'image/png',
+  'image/jpeg',
+  'image/jpg',
+  'image/tiff',
+  //eps
+  'application/postscript',
+  'image/x-eps',
+  //psd
+  'image/vnd.adobe.photoshop',
+  'application/x-photoshop',
+  'application/photoshop',
+  'application/psd',
+  'image/psd',
+]
+
+export const VIDEO_MIMES = [
+  'video/mp4',
+  'video/quicktime',
+  'video/x-msvideo',
+  // mts
+  'video/mts',
+  'video/avchd-stream',
+  'application/metastream',
+  'video/vnd.dlna.mpeg-tts',
+  // mxf
+  'application/mxf'
+]
+
+export const AUDIO_MIMES = [
+  'audio/mpeg3',
+  'audio/mpeg',
+  'audio/wav',
+  'audio/aac',
+  'audio/aiff',
+  'audio/mp4'
+]
+
 export const days = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 export const months = [
   "Janvier",

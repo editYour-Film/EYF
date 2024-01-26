@@ -4,7 +4,11 @@ import { QuoteContext } from "../_context/QuoteContext"
 import { useContext } from "react"
 import { displayDuration, formatDuration } from "@/utils/utils"
 
-export const QuoteInfos = () => {
+type QuoteInfosProps = {
+  isLight?: boolean
+}
+
+export const QuoteInfos = ({isLight}: QuoteInfosProps) => {
   const quoteContext = useContext(QuoteContext)
 
   const displaySelectedDuration = displayDuration(quoteContext.selectedDuration)
@@ -44,10 +48,14 @@ export const QuoteInfos = () => {
           title="Film" 
           items={[['Durée sélectionnée', displaySelectedDuration ], ['Livraison prévu', '15 janvier 2024']]} 
         />
-        <ItemGroup 
-          title="Modèle de montage" 
-          items={[['Format du modèle', quoteContext.selectedModel ? quoteContext.selectedModel.model : '']]} 
-        />
+        {
+          !isLight &&
+
+          <ItemGroup 
+            title="Modèle de montage" 
+            items={[['Format du modèle', quoteContext.selectedModel ? quoteContext.selectedModel.model : '']]} 
+          />
+        }
         <ItemGroup 
           title="Fichiers vidéos" 
           items={[['Importés', quoteContext.videoRushsNumber ? quoteContext.videoRushsNumber.toString() : '0'], ['Durée', videoRushsTimeDisplay]]}
@@ -56,14 +64,20 @@ export const QuoteInfos = () => {
           title="Fichiers photos" 
           items={[['Importés', quoteContext.imageRushsNumber ? quoteContext.imageRushsNumber.toString() : '0'], ['Durée', imageRushsTimeDisplay]]} 
         />
-        <ItemGroup 
-          title="Fichiers audios" 
-          items={[['Importés', quoteContext.audioRushsNumber ? quoteContext.audioRushsNumber.toString() : '0'], ['Durée', audioRushsTimeDisplay]]} 
-        />
-        <ItemGroup 
-          title="Date de remise" 
-          items={[['Rendu du projet', '10 Octobre 2024']]} 
-        />
+
+        {
+          !isLight && 
+          <>
+            <ItemGroup 
+              title="Fichiers audios" 
+              items={[['Importés', quoteContext.audioRushsNumber ? quoteContext.audioRushsNumber.toString() : '0'], ['Durée', audioRushsTimeDisplay]]} 
+            />
+            <ItemGroup 
+              title="Date de remise" 
+              items={[['Rendu du projet', '10 Octobre 2024']]} 
+            />
+          </>
+        }
       </SimpleCard>
     </div>
   )
@@ -81,7 +95,9 @@ const ItemGroup = ({title, items}: ItemGroupProps) => {
       <div className="dashboard-text-title-white-high text-base mb-1">{title}</div>
       {items && items.map((item, index) => {
         return (
-          <div className='flex justify-between text-dashboard-text-description-base text-small'>
+          <div 
+            key={index}
+            className='flex justify-between text-dashboard-text-description-base text-small'>
             <div>{item[0]}</div>
             <div>{item[1]}</div>
           </div>

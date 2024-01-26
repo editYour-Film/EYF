@@ -27,7 +27,7 @@ export const calculateQuotePrice = async ({complexity, rushTotalMinutes, videoEx
     const response = await apiService.post('/quotes/calculate', {
       complexity: complexity,
       rushTotalMinutes: rushTotalMinutes,
-      videoExpectedMinutes: videoExpectedMinutes
+      videoExpectedMinutes: Math.max(videoExpectedMinutes, 1)
     });
     return response.data;
   } catch (error) {

@@ -50,7 +50,6 @@ export const SearchBar = ({placeholder, choices, onChange, onSearch, onFilterCli
       })
 
       gsap.set(choicesPanel.current, {
-        height: 0,
         opacity: 0,
       })
 
@@ -58,13 +57,13 @@ export const SearchBar = ({placeholder, choices, onChange, onSearch, onFilterCli
         if (isTweening) return
         tl.clear()
         tl.fromTo(choicesPanel.current, {
-          height: 0,
+          y: -10,
           opacity: 0,
         }, {
-          height: 'auto',
+          y: 0,
           opacity: 1,
           ease: 'power3',
-          duration: 0.5
+          duration: 0.2
         })
       })
 
@@ -74,10 +73,10 @@ export const SearchBar = ({placeholder, choices, onChange, onSearch, onFilterCli
         tl.fromTo(choicesPanel.current, {
           opacity: 1,
         }, {
-          height: 0,
+          y: 0,
           opacity: 0,
           ease: 'power3',
-          duration: 0.5
+          duration: 0.2
         })
       })
     })

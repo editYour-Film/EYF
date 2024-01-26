@@ -21,6 +21,7 @@ import { EditorContextProvider } from "@/components/dashboard/editor/_context/Ed
 import { ClientContextProvider } from "@/components/dashboard/client/_context/DashboardClientContext";
 import { GlobalContextProvider } from "@/components/_context/GlobalContext";
 
+
 if (typeof window !== "undefined") {
   gsap.defaults({ ease: "none" });
   gsap.registerPlugin(ScrollTrigger);

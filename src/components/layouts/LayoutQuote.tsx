@@ -26,7 +26,7 @@ const LayoutQuote = ({children }: LayoutMainProps) => {
 
   return (
     <>
-      <div className="relative bg-blackBerry min-h-screen w-screen">
+      <div className="relative bg-blackBerry min-h-screen w-full">
         <QuoteContextProvider>
           <HeaderQuote step={quoteContext.currentStep} />
           
@@ -35,12 +35,12 @@ const LayoutQuote = ({children }: LayoutMainProps) => {
               <GradientFollowMouse/>
             </div>
 
-            <div className="relative z-1">
+            <div className="relative z-1 w-full">
               <CatalogContextProvider>
                 <Content>{children}</Content>
 
-                <div className="relative w-full overflow-hidden z-10">
-                  <MorePanel isQuote/>
+                <div className="absolute w-full overflow-hidden z-50">
+                  <MorePanel isQuote />
                 </div>
 
                 <PrevNextNav />
@@ -60,7 +60,7 @@ const Content = ({children}:PropsWithChildren) => {
   const catalogContext = useContext(CatalogContext)
   return (
     <>
-      <div className="relative z-10">
+      <div className="relative z-10 w-full">
         {children}
       </div> 
 
@@ -80,12 +80,12 @@ const PrevNextNav = () => {
   const catalogContext = useContext(CatalogContext)
 
   return (
-    <div className="fixed w-full flex justify-between bottom-0 px-[44px] pb-dashboard-specific-radius z-buttons pointer-events-none">
+    <div className="fixed w-full flex justify-between bottom-0 px-[100px] pb-dashboard-specific-radius z-40 pointer-events-none">
       <IslandButton 
         type="tertiary"
         Icon={ArrowLeft}
         label="Retour"
-        disabled={quoteContext.currentStep === 0}
+        disabled={quoteContext.currentStep === 0 || quoteContext.prevButtonDisabled}
         onClick={() => { quoteContext.handlePrev() }}
         className="pointer-events-auto"
       />

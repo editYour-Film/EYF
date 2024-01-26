@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Stepper } from "./UI/Stepper";
 import { QuoteContext } from "../quote/_context/QuoteContext";
 import { useContext, useEffect, useRef, useState } from "react";
-import { useLenis } from "@studio-freight/react-lenis";
+import { IslandButton } from "./buttons/IslandButton";
 
 type HeaderQuoteProps = {
   step: number;
@@ -59,15 +59,11 @@ const HeaderQuote = ({ step }: HeaderQuoteProps) => {
             />
 
           </nav>
-          <div>
-            <Image
-              src="/icons/question.svg"
-              height={12}
-              width={30}
-              alt="narrow"
-              className="mt-1 hidden lg:block"
-            />
-          </div>
+          <IslandButton
+            type="small-secondary"
+            label="Enregistrer pour plus tard"
+            onClick={() => {}}
+          />
         </div>
       </ContainerFullWidth>
     </header>
