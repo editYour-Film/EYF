@@ -5,6 +5,7 @@ import { themeColors } from './theme/colors.js';
 import { themeGradients } from './theme/gradient.js';
 import { themeTypography } from "./theme/typography.js";
 import { themeGrids } from "./theme/grids.js";
+import { themeEase } from "./theme/ease.js";
 
 /** @type {import('tailwindcss').Config} */
 const plugin = require('tailwindcss/plugin')
@@ -25,6 +26,7 @@ module.exports = {
       transformOrigin: {
         'top-left-90-90' : '90% 90%',
       },
+      transitionTimingFunction: themeEase,
       screens: {
         'fullHd' : '1920px',
         'regularH': { 'raw': '(min-height: 750px))' }
