@@ -115,6 +115,9 @@ export const QuoteContextProvider = ({children}:PropsWithChildren) => {
   const [videoRushsDuration, setVideoRushsDuration] = useState<number | undefined>(undefined)
   const [videoRushsNumber, setVideoRushsNumber] = useState<number | undefined>(undefined)
 
+  const visualRushDuration = (videoRushsDuration ?? 0) + (imagesRushsDuration ?? 0)
+  const isRushsDurationOk = visualRushDuration && (visualRushDuration >= (Math.max(selectedDuration, 1) * RUSHES_DURATION_RATIO))
+
   const PRICE_DEFAULT = 'Prix'
   const [price, setPrice] = useState<number | string>(PRICE_DEFAULT)
 
