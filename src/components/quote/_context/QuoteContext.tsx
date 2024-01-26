@@ -37,7 +37,12 @@ export type QuoteContextType = {
 
   handlePrev: () => void,
   handleNext: () => void,
-  nextButtonDisabled: boolean
+  
+  nextButtonDisabled: boolean,
+  setNextButtonDisabled: (val:boolean) => void,
+  prevButtonDisabled: boolean,
+  setPrevButtonDisabled: (val:boolean) => void,
+  defineNavStatus: () => void,
 }
 
 const defaultValue:QuoteContextType = {
@@ -77,7 +82,12 @@ const defaultValue:QuoteContextType = {
 
   handlePrev: () => {},
   handleNext: () => {},
+
   nextButtonDisabled: true,
+  setNextButtonDisabled: (val:boolean) => {},
+  prevButtonDisabled: true,
+  setPrevButtonDisabled: (val:boolean) => {},
+  defineNavStatus: () => {},
 }
 
 export const QuoteContext = createContext(defaultValue)
@@ -108,7 +118,8 @@ export const QuoteContextProvider = ({children}:PropsWithChildren) => {
   const PRICE_DEFAULT = 'Prix'
   const [price, setPrice] = useState<number | string>(PRICE_DEFAULT)
 
-  const [nextButtonDisabled, setNextButtonDisabled] = useState<QuoteContextType['nextButtonDisabled']>(false)	
+  const [nextButtonDisabled, setNextButtonDisabled] = useState<QuoteContextType['nextButtonDisabled']>(false)
+  const [prevButtonDisabled, setPrevButtonDisabled] = useState<QuoteContextType['prevButtonDisabled']>(false)
 
   const steps:StepProps[] = [{
     hasNumber: true,
@@ -154,12 +165,12 @@ export const QuoteContextProvider = ({children}:PropsWithChildren) => {
 
     if(complexity && rushTotalMinutes && videoExpectedMinutes) {
       calculateQuotePrice({complexity, rushTotalMinutes, videoExpectedMinutes})
-      .then((res) => {
-        setPrice(res.data.price.toString() + '€')
-      })
-      .catch((err) => {
-        setPrice(PRICE_DEFAULT)
-      })
+        .then((res) => {
+          setPrice(res.data.price.toString() + '€')
+        })
+        .catch((err) => {
+          setPrice(PRICE_DEFAULT)
+        })
     } else {
       setPrice(PRICE_DEFAULT)
     }
@@ -258,6 +269,10 @@ export const QuoteContextProvider = ({children}:PropsWithChildren) => {
         handlePrev,
         handleNext,
 
+        nextButtonDisabled,
+        setNextButtonDisabled,
+        prevButtonDisabled,
+        setPrevButtonDisabled,
         defineNavStatus,
       }}
     >
