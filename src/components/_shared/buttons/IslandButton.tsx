@@ -67,7 +67,7 @@ export const IslandButton = forwardRef<HTMLButtonElement, PropsWithChildren<Isla
         disabled
           ? "bg-dashboard-button-island-disabled"
           : "bg-dashboard-button-island-BlueBerry-default"
-      } ${size} border hover:border-dashboard-button-stroke-hover`;
+      } ${size} border hover:enabled:border-dashboard-button-stroke-hover`;
       disabledStyle = ``;
       break;
     case "primary":
@@ -75,19 +75,19 @@ export const IslandButton = forwardRef<HTMLButtonElement, PropsWithChildren<Isla
         disabled
           ? "bg-dashboard-button-island-disabled"
           : "bg-dashboard-button-island-BlueBerry-default"
-      } ${size} border hover:border-dashboard-button-stroke-hover hover:bg-dashboard-button-island-hover focus:bg-dashboard-button-island-hover`;
+      } ${size} border hover:enabled:border-dashboard-button-stroke-hover hover:enabled:bg-dashboard-button-island-hover focus:enabled:bg-dashboard-button-island-hover`;
       disabledStyle = ``;
       break;
     case "secondary":
-      typeStyle = `bg-dashboard-button-dark ${size} border hover:border-dashboard-button-stroke-hover`;
+      typeStyle = `bg-dashboard-button-dark ${size} border hover:enabled:border-dashboard-button-stroke-hover`;
       disabledStyle = ``;
       break;
     case "tertiary":
-      typeStyle = `bg-dashboard-button-dark ${size} border hover:border-dashboard-button-stroke-hover`;
+      typeStyle = `bg-dashboard-button-dark ${size} border hover:enabled:border-dashboard-button-stroke-hover`;
       disabledStyle = ``;
       break;
     case "danger":
-      typeStyle = `bg-dashboard-button-dark ${size} border text-appleRed hover:bg-dashboard-button-alert hover:border-dashboard-button-stroke-hover`;
+      typeStyle = `bg-dashboard-button-dark ${size} border text-appleRed hover:enabled:bg-dashboard-button-alert hover:enabled:border-dashboard-button-stroke-hover`;
       iconColor = "svg-color-appleRed";
       disabledStyle = ``;
       break;
@@ -97,7 +97,7 @@ export const IslandButton = forwardRef<HTMLButtonElement, PropsWithChildren<Isla
         disabled
           ? "bg-background-dashboard-button-dark border"
           : "bg-dashboard-button-white-default border border-transparent"
-      } text-small text-dashboard-text-description-base ${size} hover:bg-dashboard-button-white-hover hover:text-dashboard-text-title-white-high focus:bg-dashboard-button-white-hover focus:text-dashboard-text-title-white-high hover:border-dashboard-button-stroke-hover`;
+      } text-small text-dashboard-text-description-base ${size} hover:enabled:bg-dashboard-button-white-hover hover:enabled:text-dashboard-text-title-white-high focus:bg-dashboard-button-white-hover focus:text-dashboard-text-title-white-high hover:enabled:border-dashboard-button-stroke-hover`;
       break;
     case "small-solid":
       iconSize = 'w-[20px] h-[20px]';
@@ -105,7 +105,7 @@ export const IslandButton = forwardRef<HTMLButtonElement, PropsWithChildren<Isla
         disabled
           ? "bg-background-dashboard-button-dark border"
           : "bg-dashboard-button-white-default-solid border border-transparent"
-      } text-small text-dashboard-text-description-base ${size} hover:bg-dashboard-button-white-hover hover:text-dashboard-text-title-white-high focus:bg-dashboard-button-white-hover focus:text-dashboard-text-title-white-high hover:border-dashboard-button-stroke-hover`;
+      } text-small text-dashboard-text-description-base ${size} hover:enabled:bg-dashboard-button-white-hover hover:enabled:text-dashboard-text-title-white-high focus:bg-dashboard-button-white-hover focus:text-dashboard-text-title-white-high hover:enabled:border-dashboard-button-stroke-hover`;
       break;
     case "small-secondary":
       iconSize = 'w-[20px] h-[20px]';
@@ -113,7 +113,7 @@ export const IslandButton = forwardRef<HTMLButtonElement, PropsWithChildren<Isla
         disabled
           ? "boder-dashboard-button-stroke-disabled"
           : " "
-      } text-small text-dashboard-text-description-base ${size} hover:text-dashboard-text-title-white-high focus:text-dashboard-text-title-white-high hover:border-dashboard-button-stroke-hover`;
+      } text-small text-dashboard-text-description-base ${size} hover:enabled:text-dashboard-text-title-white-high focus:text-dashboard-text-title-white-high hover:enabled:border-dashboard-button-stroke-hover`;
       break;
   }
 
