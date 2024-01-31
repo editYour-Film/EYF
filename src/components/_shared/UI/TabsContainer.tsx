@@ -22,6 +22,7 @@ export const TabsContainer = ({ panels, activePanel, onActivePannelChange, class
             <TabWindow
               key={i}
               label={pan.title}
+              locked={pan.locked}
               disabled={activePanel !== i}
               onClick={() => {
                 onActivePannelChange(i)

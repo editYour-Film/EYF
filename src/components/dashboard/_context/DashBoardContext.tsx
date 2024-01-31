@@ -14,6 +14,7 @@ import { DashboardEditorHome } from "../editor/DashboardEditorHome";
 export interface dashBoardPanelType {
   title: string;
   panel: any;
+  locked?: boolean;
 }
 
 export interface CardArticleType {
