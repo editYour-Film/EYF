@@ -1,5 +1,3 @@
-import { RefObject } from "react"
-
 type TabWindowProps = {
   label: string,
   disabled?: boolean,
