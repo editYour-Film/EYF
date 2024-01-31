@@ -138,7 +138,7 @@ const Input = ({
       : "") +
     (bg !== "underlined" && (roundedFull ? "rounded-full " : "rounded-lg ")) +
     (size === "sm"
-      ? " py-2 min-h-[40px] "
+      ? " px-dashboard-button-separation-spacing py-2 min-h-[40px] "
       : " p-dashboard-button-separation-spacing min-h-[52px] ") +
     (disabled === true ? "opacity-50 " : "") +
     textClass +
