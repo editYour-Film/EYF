@@ -460,7 +460,7 @@ const Input = ({
       );
     case "radio":
       return (
-        <div className="flex flex-col justify-stretch h-full gap-dashboard-button-separation-spacing">
+        <div className={`flex flex-col justify-stretch h-full gap-dashboard-button-separation-spacing ${className ?? ''}`}>
           {label && (
             <label className={labelClass}>
               {label}
