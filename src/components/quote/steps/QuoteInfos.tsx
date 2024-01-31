@@ -22,6 +22,7 @@ export const QuoteInfos = ({isLight}: QuoteInfosProps) => {
         className={`flex flex-col gap-dashboard-button-separation-spacing ${!isLight? 'border-none' : ''}`}
       >
         <div className="text-title-medium text-dashboard-text-title-white-high">{quoteContext.price} {typeof quoteContext.price === 'number' ? '€' : ''}</div>
+        <hr />
         <div className="quote-infos__head flex gap-[17px] w-full">
           <div className="quote-infos__thumbnail w-full">
             <div className="relative h-0 pb-[50%] rounded-dashboard-button-square-radius overflow-hidden">
