@@ -6,14 +6,23 @@ import { PaiementTab } from "./tabs/PaiementTab"
 
 export const InfosPaimentTabs = () => {
   const [activePanel, setActivePanel] = useState(0)
+  const [paimentLocked, setPaimentLocked] = useState(true)
+
   const panels:dashBoardPanelType[] = [
     {
       title: 'Infos',
-      panel: <InfoTab />,
+      panel: 
+        <InfoTab 
+          onConfirm={() => {
+            setActivePanel(1)
+            setPaimentLocked(false)
+          }}
+        />,
     },
     {
       title: 'Paiement',
       panel: <PaiementTab />,
+      locked: paimentLocked
     }
   ]
 
