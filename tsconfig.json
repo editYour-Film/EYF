@@ -18,7 +18,8 @@
     "paths": {
       "@/*": ["./src/*"],
       "@/img/*": ["./public/img/*"],
-      "@/icons/*": ["./public/icons/*"]
+      "@/icons/*": ["./public/icons/*"],
+      "~/*": ["./*"],
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/components/_shared/videoCatalog/VideoElementtsx", "src/routes.ts", "theme.js"],
