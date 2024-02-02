@@ -1,13 +1,16 @@
 import { IslandButton } from "@/components/_shared/buttons/IslandButton"
 import Input from "@/components/_shared/form/Input"
 import { useResizeTextArea } from "@/hooks/useResizeTextArea"
-import { useEffect, useRef, useState } from "react"
+import { useUpdateEffect } from "@/hooks/useUpdateEffect"
+import { useLenis } from "@studio-freight/react-lenis"
+import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react"
 
 type InfoTabProps = {
   onConfirm: () => void;
+  onErrors: () => void;
 }
 
-export const InfoTab = ({onConfirm}: InfoTabProps) => {
+export const InfoTab = ({onConfirm, onErrors}: InfoTabProps) => {
   const resolutionOptions = [
     {
       label: "1280x720 pixels (720p)",
@@ -30,7 +33,6 @@ export const InfoTab = ({onConfirm}: InfoTabProps) => {
       helper: "Le 4K est de plus en plus courant, offrant une résolution quatre fois supérieure à la Full HD. Il est utilisé pour les productions haut de gamme, la diffusion en ligne, la création de contenu UHD et la distribution sur les télévisions 4K."
     }
   ]
-
   const formatOptions = [
     {
       label: "MP4 (MPEG-4 Part 14)",
@@ -58,8 +60,25 @@ export const InfoTab = ({onConfirm}: InfoTabProps) => {
     },   
   ]
 
+  const lenis = useLenis()
+
   const [resolution, setResolution] = useState(resolutionOptions[0].value)
   const [format, setFormat] = useState(formatOptions[0].value)
+  const [textValues, setTextValues] = useState<{}>({})
+  const formRef = useRef<validateHandle>(null)
+
+  const [errors, setErrors] = useState(false)
+
+  const handleValidate = () => {
+    if(formRef.current && formRef.current!.validateFields()) {
+      onConfirm();
+    }
+    lenis.scrollTo(0)
+  }
+
+  useEffect(() => {
+    if(errors) onErrors()
+  }, [errors])
 
   return (
     <div className="info-tab flex flex-col gap-dashboard-spacing-element-medium">
@@ -70,7 +89,17 @@ export const InfoTab = ({onConfirm}: InfoTabProps) => {
         desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vestibulum ac tortor id vulputate. Integer laoreet leo quis ex volutpat, eget feugiat justo lacinia. Nam suscipit, elit eu iaculis feugiat, augue ex vestibulum libero, quis vulputate eros dui nec risus. Sed facilisis,"
       />
 
-      <Form />
+      <Form 
+        ref={formRef}
+        onChange={(values) => {setTextValues(values)}}
+        onError={() => { 
+          setErrors(true)
+          onErrors() 
+        }}
+        onSucceed={() => {
+          setErrors(false)
+        }}
+      />
 
       <hr />
 
@@ -114,7 +143,7 @@ export const InfoTab = ({onConfirm}: InfoTabProps) => {
         type="primary"
         label="Confirmer et accéder au paiement"
         onClick={() => {
-          onConfirm();
+          handleValidate();
         }}
         className="w-max self-end"
       />
@@ -132,11 +161,77 @@ const TitleDesc = ({title, desc}:{title:string, desc:string}) => {
   ) 
 }
 
-const Form = () => {
-  return (
-    <form
+type FormProps = {
+  onChange: (values: {}) => void,
+  onError: () => void,
+  onSucceed: () => void
+}
 
-    >
+type validateHandle = {
+  validateFields: () => boolean
+}
+
+const Form = forwardRef<validateHandle, FormProps>(({onChange, onError, onSucceed}, ref) => {
+  const [title, setTitle] = useState<string>('')
+  const [titleError, setTitleError] = useState<string>('')
+
+  const [description, setDescription] = useState<string>('')
+  const [descriptionError, setDescriptionError] = useState<string>('')
+
+  const [script, setScript] = useState<string>('')
+  const [visuals, setVisuals] = useState<string>('')
+  const [sound, setSound] = useState<string>('')
+  const [notes, setNotes] = useState<string>('')
+
+  const values = {
+    title,
+    description,
+    script,
+    visuals,
+    sound,
+    notes
+  }
+
+  const checkField = (value:unknown, flags:string[]) => {
+    let err = ''
+
+    if(flags.includes('required') && !value) {
+      return err = 'value required'
+    }
+
+    if(flags.includes('string') && typeof value !== 'string') {
+      return err = 'value must be a string'
+    }
+
+    return err
+  }
+
+  useUpdateEffect(() => {
+    onChange(values)
+  }, [title, description, script, visuals, sound, notes])
+
+  useEffect(() => {
+    if(titleError || descriptionError) {
+      onError()
+    } else {
+      onSucceed()
+    }
+  }, [titleError, descriptionError])
+
+  const checkAll = () => {
+    setTitleError(checkField(title, ['required', 'string']))
+    setDescriptionError(checkField(description, ['required', 'string']))
+  }
+
+  useImperativeHandle(ref, () => ({
+    validateFields: () => {
+      checkAll()
+      return (checkField(title, ['required', 'string']) || checkField(description, ['required', 'string'])) ? false : true
+    }
+  }), [titleError, descriptionError])
+
+  return (
+    <form>
       <div className="divide-y border rounded-dashboard-button-square-radius">
         <TextInput 
           label="Titre"
@@ -144,6 +239,11 @@ const Form = () => {
           name="project-title"
           placeholder="Choisir un nom pour votre projet..."
           required
+          onValueChange={(val) => { 
+            setTitleError(checkField(val, ['required', 'string']))
+            setTitle(val) 
+          }}
+          error={titleError}
         />
         <TextInput 
           label="Vue d’ensemble du projet"
@@ -151,43 +251,54 @@ const Form = () => {
           name="project-description"
           placeholder="Détaillez le concept du projet et ses objectifs. Précisez le ton, l’ambiance, le style visuel..."
           required
+          onValueChange={(val) => { 
+            setDescriptionError(checkField(val, ['required', 'string']))
+            setDescription(val) 
+          }}
+          error={descriptionError}
         />
         <TextInput 
           label="Script et narration"
           id="project-script"
           name="project-script"
           placeholder="Partagez le script pour aider le monteur à comprendre le flux narratif des séquences..."
+          onValueChange={(val) => { setScript(val) }}
         />
         <TextInput 
           label="Consistence visuelle"
           id="project-visuals"
           name="project-visuals"
           placeholder="Précisez les normes de couleurs et d’étalonnage à respecter..."
+          onValueChange={(val) => { setVisuals(val) }}
         />
         <TextInput 
           label="Son et musique"
           id="project-sound"
           name="project-sound"
           placeholder="Indiquez si des ajustements de son ou de musique sont nécessaires..."
+          onValueChange={(val) => { setSound(val) }}
         />
         <TextInput 
           label="Notes sur le montage"
           id="project-notes"
           name="project-notes"
           placeholder="Partagez vos idées sur la structure du montage..."
+          onValueChange={(val) => { setNotes(val) }}
         />
       </div>
     </form>
   )
-}
+})
 
 interface TextInputProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   label: string,
   id: string,
   name: string,
+  onValueChange: (value: string) => void,
+  error?: string,
 }
 
-const TextInput = ({label, id, name, ...rest}:TextInputProps) => {
+const TextInput = ({label, id, name, onValueChange, error, ...rest}:TextInputProps) => {
   const { required } = rest
   const [value, setValue] = useState("")
 
@@ -211,9 +322,11 @@ const TextInput = ({label, id, name, ...rest}:TextInputProps) => {
         rows={1}
         onChange={(e) => {
           setValue(e.target.value)
+          onValueChange(e.target.value)
         }}
         {...rest}
       ></textarea>
+      {error && <div className="input-error text-small text-dashboard-warning">{error}</div>}
     </div>
   )
 }
