@@ -1,4 +1,3 @@
-import { IslandButton } from "@/components/_shared/buttons/IslandButton";
 import {
   PaymentElement,
   useStripe,
@@ -11,7 +10,7 @@ export default function CheckoutForm() {
   const elements = useElements();
 
 
-  const [message, setMessage] = useState<string>('');
+  const [message, setMessage] = useState<string | undefined>('');
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -46,7 +45,7 @@ export default function CheckoutForm() {
     });
   }, [stripe]);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e:any) => {
     e.preventDefault();
 
     if (!stripe || !elements) {
@@ -79,13 +78,9 @@ export default function CheckoutForm() {
     setIsLoading(false);
   };
 
-  const paymentElementOptions = {
-    layout: "tabs",
-  };
-
   return (
     <form className='flex flex-col gap-' id="payment-form" onSubmit={handleSubmit}>
-      <PaymentElement id="payment-element" options={paymentElementOptions} />
+      <PaymentElement id="payment-element" />
       {/* Show any error or success messages */}
       {message && <div id="payment-message">{message}</div>}
     </form>

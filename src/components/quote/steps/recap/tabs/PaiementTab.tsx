@@ -1,5 +1,5 @@
 import { Elements } from "@stripe/react-stripe-js";
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import CheckoutForm from './CheckoutForm';
 import * as tokens from '~/theme'
 
@@ -11,9 +11,11 @@ import routes from "@/routes";
 import { SimpleLink } from "@/components/_shared/SimpleLink";
 import { StripeElementsOptions } from "@stripe/stripe-js";
 import { Appearance } from "@stripe/stripe-js";
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
+import { QuoteContext } from "@/components/quote/_context/QuoteContext";
+const stripePromise = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ? loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY) : undefined;
 
 export const PaiementTab = () => {
+  const quoteContext = useContext(QuoteContext)
   const [clientSecret, setClientSecret] = useState("");
   const [CGU, setCGU] = useState(false)
 
@@ -30,14 +32,14 @@ export const PaiementTab = () => {
   
 
   const appearance:Appearance = {
-    theme: 'stripe',
+    theme: 'night',
 
     variables: {
-      colorPrimary: '#ff0000',
-      colorBackground: '00FFff',
+      colorPrimary: tokens.base_Edy_blueBerry,
+      colorBackground: tokens.dashboard_background_content_area,
       colorText: tokens.base_Edy_soyMilk,
-      colorTextPlaceholder: tokens.dashboard_text_description_base_low,
-      colorDanger: '#df1b41',
+      colorTextPlaceholder: tokens.dashboard_text_title_white_high,
+      colorDanger: tokens.dashboard_warning,
       fontFamily: tokens.font_default.join(', '),
       spacingUnit: '2px',
       borderRadius: '4px',
@@ -47,10 +49,7 @@ export const PaiementTab = () => {
       '.Input': {
         border: `1px solid ${tokens.dashboard_button_stroke_default}`,
         boxShadow: '0px 1px 1px rgba(0, 0, 0, 0.03), 0px 3px 6px rgba(18, 42, 66, 0.02)',
-        backgroundColor: 'transparent',
-      },
-      '.Input::placeholder': {
-        color: tokens.dashboard_text_title_white_high
+        // backgroundColor: 'transparent',
       },
       '.Label': {
         color: tokens.dashboard_text_description_base_low
@@ -61,22 +60,23 @@ export const PaiementTab = () => {
   const options:StripeElementsOptions = {
     clientSecret,
     appearance,
-  };
+  };  
 
   return (
     <div className="flex flex-col gap-dashboard-spacing-element-medium">
-      <div>
-        <div className="text-dashboard-text-description-base title-small uppercase">Votre film : <span className="text-dashboard-text-title-white-high">Nom du film</span></div>
-        <div className="text-dashboard-text-description-base ">Le montage commence le <span className="text-dashboard-text-title-white-high">date</span></div>
-        <div className="text-dashboard-text-description-base ">Livraison prévu le <span className="text-dashboard-text-title-white-high">date</span></div>
-
-      </div>
+      {quoteContext.selectedModel && 
+        <div>
+          <div className="text-dashboard-text-description-base title-small uppercase">Votre film : <span className="text-dashboard-text-title-white-high">{quoteContext.selectedModel.title}</span></div>
+          <div className="text-dashboard-text-description-base ">Le montage commence le <span className="text-dashboard-text-title-white-high">10/01/2024</span></div>
+          <div className="text-dashboard-text-description-base ">Livraison prévu le <span className="text-dashboard-text-title-white-high">15/01/2024</span></div>
+        </div>
+      }
 
       <div className="text-title-medium text-dashboard-text-title-white-high">Payer avec</div>
 
       <hr/>
 
-      {clientSecret && (
+      {(clientSecret && stripePromise) && (
         <Elements options={options} stripe={stripePromise}>
           <CheckoutForm />
         </Elements>

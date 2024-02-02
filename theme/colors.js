@@ -27,6 +27,7 @@ const themeColors = {
   'dashboard-success-dark': tokens.dashboard_success_dark,
   'dashboard-success': tokens.dashboard_success,
   'dashboard-warning': tokens.dashboard_warning,
+  'dashboard-danger': tokens.appleRed,
 
   // Backgrounds
   'dashboard-button-island-BlueBerry-default' : tokens.dashboard_button_island_BlueBerry_default,
