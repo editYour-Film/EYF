@@ -80,26 +80,30 @@ const PrevNextNav = () => {
   const catalogContext = useContext(CatalogContext)
 
   return (
-    <div className="fixed w-full flex justify-between bottom-0 px-[100px] pb-dashboard-specific-radius z-40 pointer-events-none">
-      <IslandButton 
-        type="tertiary"
-        Icon={ArrowLeft}
-        label="Retour"
-        disabled={quoteContext.currentStep === 0 || quoteContext.prevButtonDisabled}
-        onClick={() => { quoteContext.handlePrev() }}
-        className="pointer-events-auto"
-      />
-      <IslandButton 
-        type="tertiary"
-        Icon={ArrowRight}
-        label="Suivant"
-        disabled={quoteContext.nextButtonDisabled}
-        onClick={() => { 
-          quoteContext.handleNext() 
-          catalogContext.setShowMorePanel(false)
-        }}
-        className="pointer-events-auto"
-      />
-    </div>
+    <>
+      {quoteContext.currentStep !== 3 &&
+        <div className="fixed w-full flex justify-between bottom-0 px-[100px] pb-dashboard-specific-radius z-40 pointer-events-none">
+          <IslandButton 
+            type="tertiary"
+            Icon={ArrowLeft}
+            label="Retour"
+            disabled={quoteContext.currentStep === 0 || quoteContext.prevButtonDisabled}
+            onClick={() => { quoteContext.handlePrev() }}
+            className="pointer-events-auto"
+          />
+          <IslandButton 
+            type="tertiary"
+            Icon={ArrowRight}
+            label="Suivant"
+            disabled={quoteContext.nextButtonDisabled}
+            onClick={() => { 
+              quoteContext.handleNext() 
+              catalogContext.setShowMorePanel(false)
+            }}
+            className="pointer-events-auto"
+          />
+        </div>
+      }
+    </>
   )
 }
