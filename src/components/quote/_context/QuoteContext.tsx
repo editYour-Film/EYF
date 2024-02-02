@@ -10,7 +10,7 @@ export type QuoteContextType = {
   setSelectedModel: (model: any) => void,
   selectedDuration: any,
   setSelectedDuration: (duration: any) => void,
-  uploadedFiles: any,
+  uploadedFiles: File[] | undefined,
   setUploadedFiles: (files: any) => void,
 
   rushesDuration: number | undefined,
@@ -159,7 +159,6 @@ export const QuoteContextProvider = ({children}:PropsWithChildren) => {
     onClick: () => {}
   }]
 
-
   // update the quote / price depending on the input values
   useEffect(() => {
     const complexity = selectedModel && selectedModel.worktime || undefined;
@@ -186,7 +185,6 @@ export const QuoteContextProvider = ({children}:PropsWithChildren) => {
   const handleNext = () => {
     setCurrentStep(currentStep + 1)
   }
-
 
   const defineStepStatus = (step:number, cb:(state:StepProps['state']) => void, test:boolean | number | undefined) => {
     let state:StepProps['state']
