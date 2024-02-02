@@ -2,10 +2,10 @@ import { useContext, useEffect, useRef } from "react"
 import { SliderStep } from "./steps/SliderStep"
 import { QuoteContext } from "./_context/QuoteContext"
 import { CatalogStep } from "./steps/CatalogStep"
-import { FilesStep } from "./steps/FilesStep"
+import { FilesStep } from "./steps/FilesStep/FilesStep"
 import { ReactLenis, useLenis } from "@studio-freight/react-lenis"
 import { useWindowSize } from "@uidotdev/usehooks"
-import { Recap } from "./steps/Recap"
+import { Recap } from "./steps/recap/Recap"
 
 export const QuoteContent = () => {
   const quoteContext = useContext(QuoteContext)

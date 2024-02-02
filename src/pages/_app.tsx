@@ -2,6 +2,8 @@ import "@/styles/globals.css";
 import "@/styles/utils/splitText.scss";
 import 'react-loading-skeleton/dist/skeleton.css'
 
+import '@stripe/stripe-js';
+
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import { useContext, useEffect, useState } from "react";

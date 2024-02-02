@@ -14,6 +14,9 @@ module.exports = {
   content: ["./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      backgroundImage: {
+        'checkmark': 'url(/icons/check-checkbox.svg)'
+      },
       colors: themeColors,
       zIndex: {
         'header': 80,

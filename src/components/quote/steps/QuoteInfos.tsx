@@ -17,13 +17,15 @@ export const QuoteInfos = ({isLight}: QuoteInfosProps) => {
   const audioRushsTimeDisplay = quoteContext.audioRushsDuration ? displayDuration(quoteContext.audioRushsDuration) : '0'
   
   return (
-    <div className="quote-infos">
+    <div className="quote-infos w-[350px]">
       <SimpleCard 
-        className="flex flex-col gap-dashboard-button-separation-spacing"
+        className={`flex flex-col gap-dashboard-button-separation-spacing ${!isLight? 'border-none' : ''}`}
       >
-        <div className="quote-infos__head flex gap-[17px] w-[400px]">
-          <div className="quote-infos__thumbnail basis-[42%]">
-            <div className="relative h-0 pb-[60%] rounded-dashboard-button-square-radius overflow-hidden">
+        <div className="text-title-medium text-dashboard-text-title-white-high">{quoteContext.price} {typeof quoteContext.price === 'number' ? '€' : ''}</div>
+        <hr />
+        <div className="quote-infos__head flex gap-[17px] w-full">
+          <div className="quote-infos__thumbnail w-full">
+            <div className="relative h-0 pb-[50%] rounded-dashboard-button-square-radius overflow-hidden">
               {quoteContext.selectedModel ?
                 <Image
                   src={quoteContext.selectedModel.thumbnail.data.attributes.formats.small.url}
@@ -35,13 +37,13 @@ export const QuoteInfos = ({isLight}: QuoteInfosProps) => {
               }
             </div>
           </div>
-          <div className="basis-[58%] flex flex-col justify-between">
-           <div>
+        </div>
+        <div className="flex flex-col justify-between gap-dashboard-button-separation-spacing">
+          <div>
             <div className="text-small text-dashboard-text-title-white-high">Numéro de commande</div>
             <div className="text-base text-dashboard-text-title-white-high">{quoteContext.selectedModel ? quoteContext.selectedModel.title : 'Nom du model de montage'}</div>
-           </div>
-           <div className="text-small text-dashboard-text-description-base">Nom du monteur</div>
           </div>
+          <div className="text-small text-dashboard-text-description-base">Nom du monteur</div>
         </div>
 
         <ItemGroup 

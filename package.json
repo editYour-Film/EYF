@@ -18,6 +18,8 @@
     "@gsap/react": "^2.1.0",
     "@reduxjs/toolkit": "^1.9.7",
     "@sendgrid/mail": "^7.7.0",
+    "@stripe/react-stripe-js": "^2.4.0",
+    "@stripe/stripe-js": "^2.4.0",
     "@studio-freight/react-lenis": "^0.0.21",
     "@types/js-cookie": "^3.0.3",
     "@types/node": "18.15.3",
@@ -49,6 +51,7 @@
     "sharp": "^0.32.1",
     "slugify": "^1.6.6",
     "splitting": "^1.0.6",
+    "stripe": "^14.14.0",
     "typescript": "4.9.5",
     "use-debounce": "^9.0.4",
     "validator": "^13.9.0"
