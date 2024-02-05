@@ -77,9 +77,12 @@ export const PaiementTab = () => {
       <hr/>
 
       {(clientSecret) && (
-        <Elements options={options} stripe={stripePromise}>
-          <CheckoutForm />
-        </Elements>
+        <>
+          <div>12345</div>
+          <Elements options={options} stripe={stripePromise}>
+            <CheckoutForm />
+          </Elements>
+        </>
       )}
 
       <Input
