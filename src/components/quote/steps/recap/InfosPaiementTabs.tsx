@@ -7,7 +7,7 @@ import { useLenis } from "@studio-freight/react-lenis"
 
 export const InfosPaimentTabs = () => {
   const [activePanel, setActivePanel] = useState(0)
-  const [paimentLocked, setPaimentLocked] = useState(false)
+  const [paimentLocked, setPaimentLocked] = useState(true)
   const lenis = useLenis()
   // List of the tabs
   const panels:dashBoardPanelType[] = [
