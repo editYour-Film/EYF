@@ -12,7 +12,7 @@ import { SimpleLink } from "@/components/_shared/SimpleLink";
 import { StripeElementsOptions } from "@stripe/stripe-js";
 import { Appearance } from "@stripe/stripe-js";
 import { QuoteContext } from "@/components/quote/_context/QuoteContext";
-const stripePromise = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ? loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY) : undefined;
+const stripePromise = loadStripe('pk_test_51OediaLURiQftpoAtUepwzZrgchPfP32r2moHOa7DoXAgM8lijXCOe7JqYH1XQ8DavPQq0MEIwtZjE5YTnPruTSF00GR42N6EB');
 
 export const PaiementTab = () => {
   const quoteContext = useContext(QuoteContext)
@@ -76,7 +76,7 @@ export const PaiementTab = () => {
 
       <hr/>
 
-      {(clientSecret && stripePromise) && (
+      {(clientSecret) && (
         <Elements options={options} stripe={stripePromise}>
           <CheckoutForm />
         </Elements>
