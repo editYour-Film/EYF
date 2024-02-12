@@ -21,7 +21,6 @@ export type IslandButtonProps = {
   href?: string;
   id?: string;
   children?: ReactNode;
-  submit?: boolean;
 };
 
 export const IslandButton = forwardRef<HTMLButtonElement, PropsWithChildren<IslandButtonProps>>(function IslandButton({
@@ -38,7 +37,6 @@ export const IslandButton = forwardRef<HTMLButtonElement, PropsWithChildren<Isla
   href,
   id,
   children,
-  submit,
 }, ref) {
   const buttonEl = (ref as RefObject<HTMLButtonElement>) ?? useRef<HTMLButtonElement>(null)
   const mainLight = useRef<HTMLDivElement>(null)
@@ -180,7 +178,6 @@ export const IslandButton = forwardRef<HTMLButtonElement, PropsWithChildren<Isla
           disabled={disabled}
           onMouseMove={(e:React.MouseEvent) => { type === 'main' && handleMouseMove(e)}}
           onMouseLeave={() => { handleMouseLeave()}}
-          type={submit ? 'submit' : 'button'}
           >
             <div
               className={`button__inner flex justify-center items-center gap-dashboard-mention-padding-right-left ${disabled ? "opacity-30" : ""}`}
