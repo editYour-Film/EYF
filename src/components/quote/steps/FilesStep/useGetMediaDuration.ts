@@ -6,7 +6,7 @@ export const useGetMediaDuration = (filesUploaded:File[] | undefined) => {
   const quoteContext = useContext(QuoteContext)
   type durationByType = {type: 'video' | 'audio' | 'image', dur: number}
 
-  const IMG_DEFAULT_DURATION = 10
+  const IMG_DEFAULT_DURATION = 15
 
   const getduration:(file: File, onlyVisual?: boolean) => Promise<durationByType> = async (file, onlyVisual = false) => {
     const url = URL.createObjectURL(file);
