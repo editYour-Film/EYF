@@ -94,7 +94,8 @@ const Input = ({
   setDate = () => {},
   /** search */
   datalist,
-  searchIcon
+  searchIcon,
+  ... rest
 }: inputProps) => {
   const [isPassword, setIsPassword] = useState(true);
   
@@ -212,6 +213,7 @@ const Input = ({
               maxLength={maxlength}
               disabled={disabled}
               onKeyDown={(e) => {onKeyDown && onKeyDown(e)}}
+              {... rest}
             />
           </div>
 {/* 
@@ -263,6 +265,7 @@ const Input = ({
               placeholder={placeholder}
               disabled={disabled}
               onKeyDown={(e) => {onKeyDown && onKeyDown(e)}}
+              {... rest}
             ></textarea>
           </div>
 
@@ -301,6 +304,7 @@ const Input = ({
               placeholder={placeholder}
               disabled={disabled}
               onKeyDown={(e) => {onKeyDown && onKeyDown(e)}}
+              {... rest}
             />
           </div>
           {helper && <p className={helperClass}>{helper}</p>}
@@ -328,6 +332,7 @@ const Input = ({
               placeholder={placeholder}
               disabled={disabled}
               onKeyDown={(e) => {onKeyDown && onKeyDown(e)}}
+              {... rest}
             />
             {isPassword ? (
               <Image
@@ -377,6 +382,7 @@ const Input = ({
               value={value as string}
               name={name}
               disabled={disabled}
+              {... rest}
             >
               <option value="" disabled selected>{placeholder}</option>
               {options.map((opt: ReactElement) => {
@@ -436,6 +442,7 @@ const Input = ({
               className="bg-transparent top-0 left-0 w-full h-full px-dashboard-button-separation-spacing no-widget"
               list={datalist}
               disabled={disabled}
+              {... rest}
             />
             {(iconRight && searchIcon) && (
               <div className="flex h-full flex-row gap-4">
@@ -488,6 +495,7 @@ const Input = ({
                           onChange(x.value);
                         }}
                         disabled={disabled}
+                        {... rest}
                       />
                       <EditButton
                         selected={selectedOption === x.value}
@@ -532,6 +540,7 @@ const Input = ({
                           onChange(x.value);
                         }}
                         disabled={disabled}
+                        {... rest}
                       />
                       <EditButton
                         selected={selectedOption === x.value}
