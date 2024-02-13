@@ -11,8 +11,6 @@ const nextConfig = {
       "4766ec8c-7b28-4c2a-86ea-2701e612e516.pub.instances.scw.cloud",
       "edityour.film",
       "edityourfilm.s3.fr-par.scw.cloud",
-      "edityourfilm-dev.s3.fr-par.scw.cloud",
-      "edityourfilm-prod.s3.fr-par.scw.cloud",
     ],
   },
   webpack: (config, options) => {
