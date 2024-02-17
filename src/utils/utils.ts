@@ -66,3 +66,5 @@ export const displayDuration = (duration: number) => {
 
   return min + ' ' + sec;
 }
+
+export const secureUrl = (url: string) => url.replace('http://', 'https://');

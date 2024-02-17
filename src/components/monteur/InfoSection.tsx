@@ -1,6 +1,7 @@
 import { H1 } from "../_shared/typography/H1";
 import Image from "next/image";
 import { videos } from "../data/videos";
+import { secureUrl } from "@/utils/utils";
 
 export const InfoSection = () => {
   return (
@@ -66,7 +67,7 @@ export const InfoSection = () => {
 
       {videos && videos[0] && (
         <video className="rounded-3xl w-full mt-10" controls muted>
-          <source src={videos[0].path} type="video/mp4" />
+          <source src={secureUrl(videos[0].path)} type="video/mp4" />
         </video>
       )}
     </div>

@@ -12,6 +12,7 @@ import { toClick, toRegular } from "@/store/slices/cursorSlice";
 import { closeNavbar, openNavbar } from "@/store/slices/navbarSlice";
 import store from "@/store/store";
 import { titleTimeline } from "@/animations/appearBottom";
+import { secureUrl } from "@/utils/utils";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -429,7 +430,7 @@ const Step = forwardRef(function Step(
                 autoPlay
                 loop
               >
-                <source src={media.url} type="video/webm" />
+                <source src={secureUrl(media.url)} type="video/webm" />
               </video>
             </div>
           </div>

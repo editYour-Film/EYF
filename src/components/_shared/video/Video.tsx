@@ -1,5 +1,6 @@
 import { RefObject, forwardRef, useEffect, useRef, useState } from "react";
 import { Player } from "./Player";
+import { secureUrl } from "@/utils/utils";
 
 type VideoProps = {
   video: any;
@@ -105,11 +106,11 @@ export const Video = forwardRef<HTMLVideoElement, VideoProps>(function Video(
         }}
       >
         {video.url ? (
-          <source src={video.url} type={video.mime} />
+          <source src={secureUrl(video.url)} type={video.mime} />
         ) : (
           video.data && (
             <source
-              src={video.url}
+              src={secureUrl(video.url)}
               type={video.mime}
             />
           )
