@@ -137,7 +137,7 @@ const LeftNavbar = ({ article, percentage = 0, currentTitle, articleHeight}: Lef
               <LnkdnIcon className="svg-color-dashboard-icon-color-default hover:svg-color-blueBerry w-[35px] h-[35px]"/>
             </a>
             <a
-              href={`http://twitter.com/share?&url=${currentUrl.current}&hashtags=editYourfilm`}
+              href={`https://twitter.com/share?&url=${currentUrl.current}&hashtags=editYourfilm`}
               target="_blank"
               className="flex justify-center items-center w-[35px] h-[35px] focus-visible:outline-blueBerry"
               rel="noopener"

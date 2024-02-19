@@ -241,7 +241,7 @@ export const DropBox = ({
             onClick={() => {
               let url;
               if (!currentValue.match(/^https?:\/\//i)) {
-                url = "http://" + currentValue;
+                url = "https://" + currentValue;
               }
               window.open(url, "_blank");
               setIsOpen(false);

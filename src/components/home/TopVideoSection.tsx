@@ -9,6 +9,7 @@ import { setJoinBetaVisible } from "../../store/slices/joinBetaSlice";
 import { toMute, toRegular, toUnmute } from "@/store/slices/cursorSlice";
 
 import { IslandButton } from "../_shared/buttons/IslandButton";
+import { secureUrl } from "@/utils/utils";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -254,7 +255,7 @@ export const TopVideoSection = ({ data }: any) => {
                         handleClick();
                       }}
                     >
-                      <source src={media.current.attributes?.url} />
+                      <source src={secureUrl(media.current.attributes?.url ?? '')} />
                     </video>
                   )}
                 </div>

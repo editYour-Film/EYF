@@ -7,6 +7,7 @@ import Button from "../form/Button";
 import Link from "next/link";
 import routes from "@/routes";
 import { VideoListSection } from "@/components/model/videos";
+import { secureUrl } from "@/utils/utils";
 
 export const carouselResponsiveOptions = {
   desktop: {
@@ -182,7 +183,7 @@ export const VideoCatalog = ({
               />
             </div>
             <video className="w-full max-w-4xl" controls autoPlay>
-              <source src={videoPath} type="video/mp4" />
+              <source src={secureUrl(videoPath)} type="video/mp4" />
             </video>
             <div></div>
           </div>

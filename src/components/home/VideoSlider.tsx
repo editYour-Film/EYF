@@ -4,6 +4,7 @@ import { useSwipeable } from 'react-swipeable';
 import { useDispatch } from 'react-redux'
 import { toWatch, toRegular, toPause} from "@/store/slices/cursorSlice"
 import {videoInterface} from './ConfidenceSection'
+import { secureUrl } from '@/utils/utils';
 
 interface slideInterface {
   el: HTMLDivElement,
@@ -331,7 +332,7 @@ export const VideoSlider = ({videos}: VideoSliderPros) => {
                   onPlay={ () => { setIsPlaying(true) }}
                   onPause={() => { setIsPlaying(false)}}
                   >
-                  <source src={video.path} type="video/mp4" />
+                  <source src={secureUrl(video.path)} type="video/mp4" />
                 </video>
               </div>
             </div>

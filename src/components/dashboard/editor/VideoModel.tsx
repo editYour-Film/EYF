@@ -2,6 +2,7 @@ import Button from "@/components/_shared/form/Button";
 import { VideoDuration, getDuration } from "@/utils/Video";
 import { SyntheticEvent, useRef, useState } from "react";
 import Image from "next/image";
+import { secureUrl } from "@/utils/utils";
 
 type VideoModelProps = {
   data: any;
@@ -43,7 +44,7 @@ export const VideoModel = ({
               handleLoadedMetadata(e);
             }}
           >
-            <source src={data.attributes.url} type={data.attributes.mime} />
+            <source src={secureUrl(data.attributes.url)} type={data.attributes.mime} />
           </video>
         )}
       </div>
