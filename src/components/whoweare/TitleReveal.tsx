@@ -89,7 +89,7 @@ export const TitleReveal = ({ data }: any) => {
       className="title-reveal w-full"
       style={{ height: `${stepHeight * (titlesNumber + 1)}px` }}
     >
-      <div className="title-reveal__container sticky h-[100vh] w-full flex top-0 justify-center items-center">
+      <div className="title-reveal__container sticky h-[80vh] w-full flex top-[10vh] justify-center items-center">
         <div className="title-reveal__content w-full overflow-hidden">
           <div className="title-reveal__suptitle text-center text-linear-sunset linear-orientation-90 text-large n27">
             Nous avons créé une nouvelle façon de travailler pour les
