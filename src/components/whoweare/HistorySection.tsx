@@ -262,25 +262,28 @@ export const HistorySection = ({ data }: any) => {
 
   return (
     <div>
-      <div className="relative my-10 md:my-20 max-w-md mx-auto lg:mx-0 lg:max-w-[50%] lg:left-[40%] lg:pl-36 pr-8">
-        <p className="text-linear-sunset text-xl">
-          <span className="n27 text-4xl">2012,</span> Notre histoire commence.
+      <div className="relative my-10 md:my-20 max-w-[700px] mx-auto">
+        <p className="text-xl">
+          <span className="n27 text-linear-sunset text-poster">2012,</span>{" "}
+          <span className="text-dashboard-text-description-base text-large">
+            Notre histoire commence.
+          </span>
         </p>
 
         <div
           ref={bubble}
-          className="relative hystory__bubble flex justify-center items-center my-6 px-7 py-4 origin-bottom-right min-h-[150px]"
+          className="relative hystory__bubble flex justify-center items-center my-6 px-7 py-4 origin-bottom-right min-h-[100px]"
         >
           <div
             ref={bubbleText}
-            className="relative hystory__msg  text-2xl z-20"
+            className="relative hystory__msg text-base z-20 pr-[160px]"
           >
             <TextSplit input="Et si on pouvait faire monter ses vidéos par un.e professionnel.le à tout moment, peu importe le lieu où on se trouve ?" />
           </div>
-          <div className="absolute top-0 left-0 w-full h-full object-cover bg-[#9747FF] rounded-3xl z-10"></div>
+          <div className="absolute top-0 left-0 w-full h-full object-cover bg-blackBerry border rounded-3xl z-10"></div>
           <Bubble
             ref={bubbleSvg}
-            className="absolute hidden md:block top-6 left-4 w-full h-full object-cover z-0"
+            className="absolute hidden md:block top-6 left-4 w-full h-auto object-contain z-0 svg-color-dashboard-button-island-hover"
           ></Bubble>
         </div>
 

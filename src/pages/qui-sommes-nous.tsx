@@ -65,9 +65,10 @@ export default function WhoWeAre(/*{ data, dataFaqs }: any*/) {
             <div className="relative w-full -translate-y-full">
               <GradientPlanet />
             </div>
-            {data && <HistorySection data={data} />}
 
             {data && <TitleReveal data={data.text_content} />}
+
+            {data && <HistorySection data={data} />}
 
             <ContainerFullWidth>
               {data && <NewWaySection data={data.text_image} />}
