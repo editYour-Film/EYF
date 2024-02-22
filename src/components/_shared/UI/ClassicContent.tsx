@@ -8,6 +8,7 @@ import { appearBottomClassicContent } from "@/animations/appearBottom";
 
 type ClassicContentProps = {
   suptitle?: string;
+  suptitleClassName?: string;
   title: string;
   titleType: "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "p" | "none";
   titleClassName?: string;
@@ -23,6 +24,7 @@ type ClassicContentProps = {
 
 export const ClassicContent = ({
   suptitle,
+  suptitleClassName,
   title,
   titleType,
   titleClassName,
@@ -71,7 +73,7 @@ export const ClassicContent = ({
       {suptitle && (
         <div
           ref={suptitleRef}
-          className="cc__suptitle text-dashboard-text-description-base-low text-title-small mb-dashboard-spacing-element-medium leading-none"
+          className={`cc__suptitle text-dashboard-text-description-base-low text-title-small mb-dashboard-spacing-element-medium leading-none ${suptitleClassName}`}
         >
           {suptitle}
         </div>
