@@ -14,6 +14,7 @@ import { useDispatch } from "react-redux";
 import { GradientCard } from "@/components/dashboard/shared/GradientCard";
 import { GlobalContext } from "@/components/_context/GlobalContext";
 import GradientPlanet from "@/img/whoweare/gradient-planet.svg";
+import { Team } from "@/components/whoweare/team/Team";
 {
   /* 
 export async function getStaticProps() {
@@ -36,6 +37,7 @@ export default function WhoWeAre(/*{ data, dataFaqs }: any*/) {
       "populate=message_img&" +
       "populate[text_image][populate]=*&" +
       "populate[arrow_cards][populate]=*&" +
+      "populate[team][populate][team_members][populate]=*&" +
       "populate[text_content][populate]=*",
     false
   );
@@ -73,6 +75,7 @@ export default function WhoWeAre(/*{ data, dataFaqs }: any*/) {
 
             {data && <ArrowCards data={data.arrow_cards} />}
 
+            {data && <Team data={data.team} />}
             <ContainerFullWidth>
               {dataFaqs && <FaqSection data={dataFaqs} filter="about-us" />}
               <div className="max-w-[1400px] lg:mx-[100px] xl:mx-[167px] 2xl:mx-auto md:pt-[90px] flex flex-col gap-dashboard-spacing-element-medium">
