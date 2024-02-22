@@ -14,7 +14,7 @@ export const TitleReveal = ({ data }: any) => {
     });
   });
 
-  titles.push({ text: "...", isActive: false });
+  titles.push({ text: "...", content: "...", isActive: false });
 
   const [titleActive, setTitleActive] = useState<number | null>(null);
 
@@ -89,12 +89,12 @@ export const TitleReveal = ({ data }: any) => {
       className="title-reveal w-full"
       style={{ height: `${stepHeight * (titlesNumber + 1)}px` }}
     >
-      <div className="title-reveal__container sticky h-[100vh] w-full flex top-0 justify-center items-center">
+      <div className="title-reveal__container sticky h-[80vh] w-full flex top-[10vh] justify-center items-center">
         <div className="title-reveal__content w-full overflow-hidden">
-          <div className="title-reveal__suptitle text-center text-linear-sunset font-medium text-2xl n27">
-            Une nouvelle façon de travailler pour les
+          <div className="title-reveal__suptitle text-center text-linear-sunset linear-orientation-90 text-large n27">
+            Nous avons créé une nouvelle façon de travailler pour les
           </div>
-          <div className="relative title-reveal__titles text-center grid place-content-center text-[40px] md:text-[70px] leading-[100%] mt-8 n27 font-bold">
+          {/* <div className="relative title-reveal__titles text-center grid text-poster place-content-center mt-8 n27 font-bold">
             {titles.length &&
               titles.map((title, i) => {
                 return (
@@ -107,21 +107,22 @@ export const TitleReveal = ({ data }: any) => {
                   />
                 );
               })}
-          </div>
-          <div className="relative w-full p-4 md:p-0 md:w-1/2 mx-auto">
+          </div> */}
+          <div className="relative w-full mt-dashboard-spacing-element-medium p-4 md:p-0 md:w-1/2 mx-auto">
             <div className="absolute gradient-dark-transparent w-[37.5vw] h-full -translate-x-[100%] z-10"></div>
             <div className="absolute gradient-dark-transparent w-[37.5vw] h-full right-0 rotate-[180deg] translate-x-[100%] z-10"></div>
 
             <div
               ref={contents}
-              className="relative w-full mt-12 flex gap-[400px] z-0"
+              className="relative w-full flex gap-[400px] z-0"
             >
               {titles.length &&
                 titles.map((title: any, i) => {
                   return (
-                    <div 
+                    <div
                       key={i}
-                      className="basis-[100%] shrink-0 text-center text-base-text text-xl">
+                      className="basis-[100%] shrink-0 text-center text-dashboard-text-title-white-high text-poster"
+                    >
                       {title.content}
                     </div>
                   );

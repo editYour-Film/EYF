@@ -8,6 +8,7 @@ import { appearBottomClassicContent } from "@/animations/appearBottom";
 
 type ClassicContentProps = {
   suptitle?: string;
+  suptitleClassName?: string;
   title: string;
   titleType: "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "p" | "none";
   titleClassName?: string;
@@ -19,10 +20,12 @@ type ClassicContentProps = {
   ctaHref?: IslandButtonProps["href"];
   ctaClassName?: string;
   className?: string;
+  gap?: string;
 };
 
 export const ClassicContent = ({
   suptitle,
+  suptitleClassName,
   title,
   titleType,
   titleClassName,
@@ -34,6 +37,7 @@ export const ClassicContent = ({
   ctaHref,
   ctaClassName,
   className,
+  gap,
 }: PropsWithChildren<ClassicContentProps>) => {
   const ctx = useRef<gsap.Context>();
   const wrapper = useRef<HTMLDivElement>(null);
@@ -67,11 +71,16 @@ export const ClassicContent = ({
   }, [inView, isSplitted]);
 
   return (
-    <div ref={wrapper} className={`${className ?? ""}`}>
+    <div
+      ref={wrapper}
+      className={`flex flex-col ${
+        gap ? "gap-" + gap : "gap-dashboard-spacing-element-medium"
+      } ${className ?? ""}`}
+    >
       {suptitle && (
         <div
           ref={suptitleRef}
-          className="cc__suptitle text-dashboard-text-description-base-low text-title-small mb-dashboard-spacing-element-medium leading-none"
+          className={`cc__suptitle text-dashboard-text-description-base-low text-title-small leading-none ${suptitleClassName}`}
         >
           {suptitle}
         </div>
@@ -91,7 +100,7 @@ export const ClassicContent = ({
       {paragraph && (
         <p
           ref={paragraphRef}
-          className={`mt-dashboard-spacing-element-medium text-base text-dashboard-text-description-base ${
+          className={`text-base text-dashboard-text-description-base ${
             paragraphClassName ?? ""
           }`}
         >
@@ -105,9 +114,7 @@ export const ClassicContent = ({
           type={ctaType as IslandButtonProps["type"]}
           label={cta}
           enableTwist
-          className={`cc__cta mt-dashboard-spacing-element-medium ${
-            ctaClassName ?? ""
-          }`}
+          className={`cc__cta w-max ${ctaClassName ?? ""}`}
         />
       )}
     </div>

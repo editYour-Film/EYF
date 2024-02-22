@@ -78,10 +78,13 @@ const themeGradients = {
     filter: 'blur(69.547px)',
   },
   '.gradient-dark-transparent': {
-    background: `linear-gradient(-90deg, rgba(1, 3, 4, 0.00) 0%, ${themeColors['blackBerry']} 50%)`,
+    background: `linear-gradient(var(--linear-orientation, -90deg), rgba(1, 3, 4, 0.00) 0%, ${themeColors['blackBerry']['DEFAULT']} 50%)`,
+  },
+  '.gradient-black-transparent': {
+    background: `linear-gradient(var(--linear-orientation, 180deg), rgba(1, 3, 4, 0.00) var(--gradient-start, 0%), ${themeColors['blackBerry']['DEFAULT']} var(--gradient-end, 100%))`,
   },
   '.gradient-to-top-black-transparent': {
-    background: 'linear-gradient(180deg, rgba(1, 3, 4, 0.00) 0%, #010304 100%)',
+    background: `linear-gradient(180deg, rgba(1, 3, 4, 0.00) 0%, ${themeColors['blackBerry']['DEFAULT']} 100%)`,
   },
   '.gradient-white-transparent' : {
     background: `linear-gradient(var(--linear-orientation, 0deg), ${themeColors['soyMilk'][200]} 0%, ${themeColors['soyMilk']} 100%)`,
