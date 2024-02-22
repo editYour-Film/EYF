@@ -122,7 +122,17 @@ module.exports = {
         90: '90deg',
         180: '180deg',
         270: '270deg',
-      }})
+      }}),
+      matchUtilities({
+        'gradient-start': (value) => ({
+          '--gradient-start': value,
+        }),
+      }),
+      matchUtilities({
+        'gradient-end': (value) => ({
+          '--gradient-end': value,
+        }),
+      })
     }),
     plugin(function({matchComponents, theme}) {
       matchComponents({
