@@ -25,7 +25,7 @@ export const TopSection = ({ data }: any) => {
       <div className="absolute w-full h-full top-0 left-0 bg-rose-sunset z-0 opacity-50"></div>
       <div className="absolute w-full h-[200%] top-0 left-0 gradient-black-transparent gradient-start-[-20%] gradient-end-[90%] linear-orientation-0 z-10"></div>
       <div className="top-section__stars absolute w-full h-full top-0 left-0 z-30">
-        <Stars className="w-full" />
+        <Stars className="min-w-full h-full" />
       </div>
     </div>
   );
