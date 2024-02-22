@@ -71,6 +71,7 @@ export const text_large = '24px';
 export const text_small_light = '14px';
 export const text_base_ligth = '16px';
 export const text_base_bold = '14px';
+export const text_poster = '50px';
 
 export const title_small = '16px';
 export const title_m = '22px';

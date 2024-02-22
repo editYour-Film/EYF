@@ -71,6 +71,12 @@ const themeTypography = {
     fontSize: '28px',
     textTransform: 'uppercase',
   },
+  '.text-poster' : {
+    fontFamily: tokens.font_title.join(', '),
+    fontSize: tokens.text_poster,
+    fontWeight: 500,
+    lineHeight: 1.1
+  },
   'n27': {
     fontFamily: '"N27", sans-serif',
   },
