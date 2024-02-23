@@ -175,23 +175,17 @@ export const TopVideoSection = ({ data }: any) => {
         ref={title}
         className={`px-4 w-full lg:sticky lg:top-56 flex flex-col justify-center sm:items-center text-72`}
       >
-        <div className="relative flex flex-col">
-          <div className="title text-10">
-            <Title
-              titleType="mainh1"
-              className="text-left sm:text-center text-3xl md:text-5xl"
-            >
+        <div className="relative flex flex-col items-center md:items-start">
+          <div className="title text-10 text-center">
+            <Title titleType="mainh1" className="text-poster md:text-5xl n27">
               {data.title_line_1}
             </Title>
-            <Title
-              titleType="mainh1"
-              className="text-left sm:text-center text-3xl md:text-5xl"
-            >
+            <Title titleType="mainh1" className="text-poster md:text-5xl n27">
               {data.title_line_2}
             </Title>
           </div>
 
-          <p className="text-left w-full sm:w-auto sm:text-center text-medium mt-6 sm:max-w-md sm:mx-auto text-dashboard-text-description-base">
+          <p className="text-center md:text-left w-full sm:w-auto sm:text-center text-medium mt-6 sm:max-w-md sm:mx-auto text-dashboard-text-description-base">
             {data.content}
           </p>
 
@@ -205,7 +199,7 @@ export const TopVideoSection = ({ data }: any) => {
             }}
           />
 
-          <div className="absolute top-[60%] left-[50%] -translate-x-1/2 -translate-y-1/2 bg-radial-gradient-blueLight rounded-full w-full lg:w-[400px] h-[400px]"></div>
+          <div className="absolute hidden md:block top-[60%] left-[50%] -translate-x-1/2 -translate-y-1/2 bg-radial-gradient-blueLight rounded-full w-full lg:w-[400px] h-[400px]"></div>
         </div>
       </div>
 
@@ -224,7 +218,7 @@ export const TopVideoSection = ({ data }: any) => {
           {media.current && (
             <div
               ref={videoW}
-              className="relative w-full h-[100vw] sm:h-auto md:w-[80%] xl:w-full xl:max-w-5xl 2xl:max-w-6xl mx-auto mt-64 overflow-hidden"
+              className="relative w-full h-auto sm:h-auto md:w-[80%] xl:w-full xl:max-w-5xl 2xl:max-w-6xl mx-auto md:mt-64 overflow-hidden"
             >
               <div className="relative px-dashboard-mention-padding-right-left py-dashboard-spacing-element-medium rounded-dashboard-button-square-radius border-03 bg-dashboard-button-dark pointer-events-auto z-10">
                 <div className="graaaad absolute top-[30px] left-[-10%] w-[120%] h-full gradient-white-transparent linear-orientation-180 blur-[32px]"></div>
@@ -255,7 +249,9 @@ export const TopVideoSection = ({ data }: any) => {
                         handleClick();
                       }}
                     >
-                      <source src={secureUrl(media.current.attributes?.url ?? '')} />
+                      <source
+                        src={secureUrl(media.current.attributes?.url ?? "")}
+                      />
                     </video>
                   )}
                 </div>
