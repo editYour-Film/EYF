@@ -164,11 +164,11 @@ const Header = ({ activeNavItem = "" }: HeaderProps) => {
             </div>
 
             <div className="md:hidden flex flex-row items-center gap-dashboard-button-separation-spacing">
-              {routeName !== "accueil" && (
+              {/* {routeName !== "accueil" && (
                 <div className="text-dashboard-text-description-base text-title-M">
                   {routeName}
                 </div>
-              )}
+              )} */}
               {!isOpen && (
                 <IslandButton
                   type="secondary"

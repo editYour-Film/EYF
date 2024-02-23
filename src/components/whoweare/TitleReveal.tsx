@@ -90,8 +90,8 @@ export const TitleReveal = ({ data }: any) => {
       style={{ height: `${stepHeight * (titlesNumber + 1)}px` }}
     >
       <div className="title-reveal__container sticky h-[80vh] w-full flex top-[10vh] justify-center items-center">
-        <div className="title-reveal__content w-full overflow-hidden">
-          <div className="title-reveal__suptitle text-center text-linear-sunset linear-orientation-90 text-large n27">
+        <div className="title-reveal__content w-full overflow-hidden py-4">
+          <div className="title-reveal__suptitle text-center text-linear-sunset linear-orientation-90 text-large font-light n27">
             Nous avons créé une nouvelle façon de travailler pour les
           </div>
           {/* <div className="relative title-reveal__titles text-center grid text-poster place-content-center mt-8 n27 font-bold">
@@ -158,7 +158,7 @@ const Title = forwardRef<HTMLDivElement, TitleProps>(function Title(
         } as React.CSSProperties
       }
     >
-      <TextSplit input={text} />
+      {text}
     </div>
   );
 });
