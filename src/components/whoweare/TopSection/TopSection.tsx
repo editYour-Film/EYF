@@ -11,7 +11,7 @@ export const TopSection = ({ data }: any) => {
   return (
     <div
       ref={wrapper}
-      className="top-section sticky flex justify-center items-center top-0 -mt-navbar-h w-full min-h-screen z-0"
+      className="top-section sticky flex justify-center items-center top-0 -mt-navbar-h w-full min-h-screen z-0 pointer-events-none"
     >
       <div className="top-section__text relative max-w-2xl z-30">
         <H1 className="top-section__title text-dashboard-text-title-white-high text-center text-[45px] leading-[110%] font-medium">
