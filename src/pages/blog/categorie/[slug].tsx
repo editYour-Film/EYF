@@ -14,14 +14,15 @@ import { useDispatch } from "react-redux";
 import { setRouteName } from "@/store/slices/routesSlice";
 import { GradientCard } from "@/components/dashboard/shared/GradientCard";
 import { GlobalContext } from "@/components/_context/GlobalContext";
+import { ArticleTrends } from "@/components/blog/ArticleTrends";
 
 const BlogCategory = () => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const globalContext = useContext(GlobalContext)
+  const globalContext = useContext(GlobalContext);
 
-  const [maxArticles, setMaxArticles] = useState(3)
-  const [availableArticles, setAvailableArticles] = useState<any[]>([])
+  const [maxArticles, setMaxArticles] = useState(3);
+  const [availableArticles, setAvailableArticles] = useState<any[]>([]);
 
   const { slug } = router.query;
 
@@ -40,7 +41,7 @@ const BlogCategory = () => {
   const [currentCategory, setCurrentCategory] = useState<any>();
 
   useEffect(() => {
-    dispatch(setRouteName({name: 'blog'}))
+    dispatch(setRouteName({ name: "blog" }));
     getCategories();
     getStrapi();
   }, []);
@@ -50,10 +51,10 @@ const BlogCategory = () => {
   }, [slug]);
 
   useEffect(() => {
-    handleRefresh(currentCategory);    
+    handleRefresh(currentCategory);
   }, [data, currentCategory]);
 
-  const handleRefresh = (categories: any) => {    
+  const handleRefresh = (categories: any) => {
     const _articles: any = [];
     data?.forEach((x: any) => {
       categories.forEach((cat: any) => {
@@ -69,9 +70,14 @@ const BlogCategory = () => {
     setArticles(_articles);
   };
 
+  console.log(data);
+
   useEffect(() => {
-    setAvailableArticles(articles.slice(0, maxArticles))
-  }, [articles, maxArticles])
+    setAvailableArticles(articles.slice(0, maxArticles));
+  }, [articles, maxArticles]);
+
+  console.log(data);
+  console.log(articles);
 
   return (
     <>
@@ -87,32 +93,30 @@ const BlogCategory = () => {
               <CategoriesList
                 categories={categories}
                 current={currentCategory}
-                onChange={(selectedCategories: any) => {                
+                onChange={(selectedCategories: any) => {
                   setCurrentCategory(selectedCategories);
                 }}
               />
             )}
           </div>
-          
+
           <div className="bg-dashboard-background-content-area md:bg-transparent flex flex-col gap-dashboard-spacing-element-medium rounded-dashboard-button-square-radius">
-            <h1 className="w-full pl-dashboard-mention-padding-right-left md:pl-0 text-left text-title-large text-soyMilk">{currentCategory}</h1>
-            
-            {
-              availableArticles.length > 2 && 
-              <div 
-                className="bg-radial-custom absolute top-[1000px] left-0 w-[1000px] h-[500px] translate-x-[-90%] opacity-[0.22]"
-              ></div>
-            }
+            <h1 className="w-full pl-dashboard-mention-padding-right-left md:pl-0 text-left text-title-large text-soyMilk">
+              {currentCategory}
+            </h1>
+
+            {availableArticles.length > 2 && (
+              <div className="bg-radial-custom absolute top-[1000px] left-0 w-[1000px] h-[500px] translate-x-[-90%] opacity-[0.22]"></div>
+            )}
+
+            {articles && (
+              <ArticleTrends articles={articles} showPoster={false} />
+            )}
 
             <div className="flex flex-col gap-5 w-full basis-full">
               {availableArticles && availableArticles.length ? (
-                availableArticles.map((article: any, i: number) => {
-                  return (
-                    <CardArticle
-                      key={i}
-                      post={article.attributes}
-                    />
-                  );
+                availableArticles.slice(4).map((article: any, i: number) => {
+                  return <CardArticle key={i} post={article.attributes} />;
                 })
               ) : (
                 <div>Aucun article</div>
@@ -121,26 +125,30 @@ const BlogCategory = () => {
           </div>
 
           <div className="flex justify-center">
-          {articles.length > maxArticles &&
-            <Button 
-              type="primary"
-              label="Voir plus d’articles"
-              onClick={() => { setMaxArticles(maxArticles + 5) }}
-              className="w-[360px]"
-            />
-          }
+            {articles.length > maxArticles + 4 && (
+              <Button
+                type="primary"
+                label="Voir plus d’articles"
+                onClick={() => {
+                  setMaxArticles(maxArticles + 5);
+                }}
+                className="w-[360px]"
+              />
+            )}
           </div>
+
           <GradientCard
-            title='PARRAINER UN AMI'
-            content='Bénéficiez d’avantages exclusifs en rejoignant la communauté des parrains editYour.Film dès aujourd’hui.'
-            hasCta 
+            title="PARRAINER UN AMI"
+            content="Bénéficiez d’avantages exclusifs en rejoignant la communauté des parrains editYour.Film dès aujourd’hui."
+            hasCta
             type="email"
-            placeholder="Email" 
+            placeholder="Email"
             ctaLabel="Envoyer le lien de parrainage"
-            onClick={(email: string) => { globalContext.sendSponsorLink(email)}}
+            onClick={(email: string) => {
+              globalContext.sendSponsorLink(email);
+            }}
           />
         </div>
-
       </LayoutMain>
     </>
   );

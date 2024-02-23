@@ -14,8 +14,9 @@ require("dayjs/locale/fr");
 
 type ArticleTrendsProps = {
   articles: any;
+  showPoster?: boolean;
 };
-export const ArticleTrends = ({ articles }: ArticleTrendsProps) => {
+export const ArticleTrends = ({ articles, showPoster }: ArticleTrendsProps) => {
   articles.sort((a: any, b: any) => {
     const dateA = new Date(a.publishedAt);
     const dateB = new Date(b.publishedAt);
@@ -23,9 +24,17 @@ export const ArticleTrends = ({ articles }: ArticleTrendsProps) => {
     return dateB.getTime() - dateA.getTime();
   });
 
+  const trendArticles = showPoster
+    ? articles.slice(1, 5)
+    : articles.slice(0, 4);
+
   return (
-    <CardsContainer headingComp={<MainArticle article={articles[0]} />}>
-      {articles.slice(1, 5)?.map((article: any, i: number) => {
+    <CardsContainer
+      headingComp={
+        showPoster ? <MainArticle article={articles[0]} /> : undefined
+      }
+    >
+      {trendArticles?.map((article: any, i: number) => {
         return (
           <BlogArticle
             key={article.id}
