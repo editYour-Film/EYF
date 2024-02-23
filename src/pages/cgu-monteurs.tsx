@@ -2,7 +2,6 @@ import Head from "next/head";
 import LayoutMain from "@/components/layouts/LayoutMain";
 import { NewsletterSection } from "@/components/home/NewsletterSection";
 import { ContainerFullWidth } from "@/components/_shared/UI/Container";
-import { TopSection } from "@/components/whoweare/TopSection";
 import { MentorContent } from "@/components/cgu/MentorContent";
 import useStrapi from "@/hooks/useStrapi";
 import { useEffect } from "react";
