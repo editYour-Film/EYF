@@ -76,7 +76,7 @@ const themeTypography = {
     fontWeight: 400,
     lineHeight: 1.1
   },
-  'n27': {
+  '.n27': {
     fontFamily: '"N27", sans-serif',
   },
 }

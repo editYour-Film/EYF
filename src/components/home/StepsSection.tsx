@@ -4,7 +4,6 @@ import { useInView } from "react-intersection-observer";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import { useEffect, useRef, forwardRef, useState } from "react";
-import styles from "@/styles/components/StepsSection.module.scss";
 import { useLenis } from "@studio-freight/react-lenis";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { useDispatch } from "react-redux";
@@ -414,7 +413,9 @@ const Step = forwardRef(function Step(
                 : undefined;
             }}
           />
-          <p className="text-dashboard-text-description-base mt-padding-medium">{content}</p>
+          <p className="text-dashboard-text-description-base mt-padding-medium">
+            {content}
+          </p>
         </div>
 
         {media && media.url && (
@@ -461,9 +462,17 @@ const StepButton = forwardRef(function StepButton(
       onMouseLeave={() => {
         dispatch(toRegular());
       }}
-      className={`group bg-blackBerry px-8 py-2 rounded-full border h-max cursor-pointer font-medium`}
+      className={`group bg-blackBerry px-4 md:px-8 py-2 rounded-full border h-max cursor-pointer font-medium`}
     >
-      <span className={`group-hover:opacity-70 hover:opacity-100 ${isActive ? 'text-linear-sunset' : 'text-dashboard-text-description-base'}`}>{children}</span>
+      <span
+        className={`group-hover:opacity-70 hover:opacity-100 ${
+          isActive
+            ? "text-linear-sunset"
+            : "text-dashboard-text-description-base"
+        }`}
+      >
+        {children}
+      </span>
     </div>
   );
 });
