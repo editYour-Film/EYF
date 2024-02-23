@@ -6,8 +6,12 @@ import { RefObject } from "react";
 export const useScrollAnimation = (el: RefObject<HTMLDivElement>) => {
   const { contextSafe } = useGSAP(() => {
     const tl = gsap.timeline({
-      paused: true,
+      paused: true
     })
+
+    tl.set(el.current, {
+      position: 'sticky'
+    }, 0)
 
     tl.to('.top-section__text', {
       opacity: 0.2,
@@ -22,6 +26,10 @@ export const useScrollAnimation = (el: RefObject<HTMLDivElement>) => {
       scale: 1.1,
       ease: 'power.in'
     }, 0)
+
+    tl.set(el.current, {
+      position: 'relative'
+    })
 
     const trigger = new ScrollTrigger({
       start: 'top top',
