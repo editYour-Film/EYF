@@ -266,7 +266,7 @@ export const HistorySection = ({ data }: any) => {
   return (
     <div>
       <div className="relative my-10 md:my-20 max-w-[700px] mx-auto">
-        <Container className="px-4">
+        <div className="px-4">
           <p className="text-xl">
             <span className="n27 text-linear-sunset text-poster">2012,</span>{" "}
             <span className="text-dashboard-text-description-base text-large">
@@ -294,7 +294,7 @@ export const HistorySection = ({ data }: any) => {
           <p className="text-right text-xl text-soyMilk opacity-60">
             François, distribué.
           </p>
-        </Container>
+        </div>
       </div>
 
       <div ref={scrollParent} className="md:h-[170vh]">

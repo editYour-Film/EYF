@@ -131,7 +131,7 @@ export const NewWaySection = ({ data }: any) => {
           <div className="two-img__img2 relative row-start-3 row-end-4 lg:row-start-2 lg:row-end-4 col-start-1 col-end-2 lg:col-start-1 lg:col-end-2 z-10">
             <div
               ref={img2W}
-              className="relative w-full h-0 pb-[200%] lg:pb-[130%] rounded-r-3xl overflow-hidden"
+              className="relative w-full h-0 pb-[200%] lg:pb-[100%] rounded-r-3xl overflow-hidden"
             >
               <Image
                 ref={img2}
