@@ -36,7 +36,8 @@ const Header = ({ activeNavItem = "" }: HeaderProps) => {
 
   const routeName = useSelector((store: RootState) => store.routes.routeName);
 
-  const linkClass = "text-small block relative pb-1 focus-visible:outline-blueBerry ";
+  const linkClass =
+    "text-small block relative pb-1 focus-visible:outline-blueBerry ";
 
   useEffect(() => {
     !isMobileScreen && setIsOpen(false);
@@ -151,13 +152,14 @@ const Header = ({ activeNavItem = "" }: HeaderProps) => {
               />
               <IslandButton
                 type="primary"
-                label="Rejoindre la beta"
+                label="Obtenir mon devis"
                 className="max-w-[100%] sm:max-w-[280px] py-[5px] text-small"
                 enableTwist
-                onClick={() => {
-                  dispatch(setJoinBetaVisible());
-                  setIsModalDisplayed(true);
-                }}
+                // onClick={() => {
+                //   dispatch(setJoinBetaVisible());
+                //   setIsModalDisplayed(true);
+                // }}
+                href={routes.QUOTE}
               />
             </div>
 
@@ -204,13 +206,14 @@ const Header = ({ activeNavItem = "" }: HeaderProps) => {
               >
                 <IslandButton
                   type="primary"
-                  label="Rejoindre la beta"
+                  label="Obtenir mon devis"
                   className="max-w-[100%] sm:max-w-[280px] py-[5px]"
                   enableTwist
-                  onClick={() => {
-                    dispatch(setJoinBetaVisible());
-                    setIsModalDisplayed(true);
-                  }}
+                  // onClick={() => {
+                  //   dispatch(setJoinBetaVisible());
+                  //   setIsModalDisplayed(true);
+                  // }}
+                  href={routes.QUOTE}
                 />
               </div>
             </div>
