@@ -59,6 +59,8 @@ export const ConfidenceSection = ({ videos, data }: ConfidenceSectionProps) => {
     setVids(_vids);
   }, [data]);
 
+  const [currentVideo, setCurrentVideo] = useState<any>(undefined);
+
   useEffect(() => {
     const ctx = gsap.context(() => {
       tl.current = appearBottom({
@@ -84,34 +86,57 @@ export const ConfidenceSection = ({ videos, data }: ConfidenceSectionProps) => {
   }, [inView]);
 
   return (
-    <div ref={ref} className={`${inView ? " inView" : ""}`}>
-      <ClassicContent
-        className="flex flex-col items-center text-center px-5 md:px-0 max-w-[660px] mx-auto"
-        suptitle={data.section_title}
-        title={data.title1 + data.title2}
-        titleClassName="text-title-medium font-medium"
-        titleType="h2"
-      />
-      {vids.length && (
-        <div className="mt-dashboard-spacing-element-medium perspective">
-          {isMobile ? (
-            <VideoGrid videos={vids} />
-          ) : (
-            <div ref={slider}>
-              <VideoSlider videos={vids} />
-            </div>
-          )}
-        </div>
-      )}
-    </div>
+    <>
+      <div ref={ref} className={`${inView ? " inView" : ""}`}>
+        <ClassicContent
+          className="flex flex-col items-center text-center px-5 md:px-0 max-w-[660px] mx-auto"
+          suptitle={data.section_title}
+          title={data.title1 + data.title2}
+          titleClassName="text-title-medium font-medium"
+          titleType="h2"
+        />
+        {vids.length && (
+          <div className="mt-dashboard-spacing-element-medium perspective">
+            {isMobile ? (
+              <VideoGrid
+                videos={vids}
+                currentVideo={(video) => {
+                  setCurrentVideo(video);
+                }}
+              />
+            ) : (
+              <div ref={slider}>
+                <VideoSlider videos={vids} />
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+
+      <div
+        className={`fixed flex items-center justify-center top-0 left-0 w-full h-full bg-blackBerry bg-opacity-80 ${
+          currentVideo ? "block" : "hidden"
+        } z-popup`}
+        onClick={() => {
+          setCurrentVideo(null);
+        }}
+      >
+        {currentVideo && (
+          <video controls>
+            <source src={currentVideo.path} type={"video/mp4"} />
+          </video>
+        )}
+      </div>
+    </>
   );
 };
 
 type VideoGridProps = {
   videos: Array<videoInterface>;
+  currentVideo: (video: any) => void;
 };
 
-const VideoGrid = ({ videos }: VideoGridProps) => {
+const VideoGrid = ({ videos, currentVideo }: VideoGridProps) => {
   const videosRef = useRef<any>([]);
   videosRef.current = videos.map(
     (element, i) =>
@@ -121,7 +146,15 @@ const VideoGrid = ({ videos }: VideoGridProps) => {
   return (
     <div className="grid grid-cols-3 gap-4">
       {videos.map((video, i) => {
-        return <VideoVignet videoInfo={video} key={i}></VideoVignet>;
+        return (
+          <VideoVignet
+            videoInfo={video}
+            key={i}
+            onClick={() => {
+              currentVideo(video);
+            }}
+          ></VideoVignet>
+        );
       })}
       {videos.length < 9 &&
         [...Array(9 - videos.length).keys()].map((el, i) => {
@@ -138,80 +171,48 @@ const VideoGrid = ({ videos }: VideoGridProps) => {
 
 type videoVignetProps = {
   videoInfo: videoInterface;
+  onClick: () => void;
 };
 
-const VideoVignet = ({ videoInfo }: videoVignetProps) => {
+const VideoVignet = ({ videoInfo, onClick }: videoVignetProps) => {
   const video = useRef<HTMLVideoElement>(null);
 
   const [isOpen, setIsOpen] = useState(false);
 
   const handleClick = (videoRef: any) => {
-    setIsOpen(!isOpen);
-  };
-
-  const requestFullscreenVideo = (videoRef: any) => {
-    if (videoRef.requestFullscreen) {
-      videoRef.requestFullscreen();
-      videoRef.classList.remove("object-cover");
-    } else {
-      videoRef.webkitEnterFullscreen();
-    }
+    onClick();
   };
 
   const [videoDuration, setVideoDuration] = useState<string>();
 
-  useEffect(() => {
-    if (isOpen) {
-      requestFullscreenVideo(video.current);
-    }
-  }, [isOpen]);
+  useEffect(() => {}, [isOpen]);
 
-  const handleFullscreenChange = () => {
-    if (!document.fullscreenElement) {
-      setIsOpen(false);
-    }
-  };
+  useEffect(() => {}, []);
 
-  useEffect(() => {
-    let videoRef = video.current;
-
-    if (videoRef) {
-      videoRef.addEventListener("fullscreenchange", handleFullscreenChange);
-      videoRef.addEventListener("loadedmetadata", () => {
-        setVideoDuration(formatVideoDuration(videoRef!.duration));
-      });
-    }
-
-    return () => {
-      videoRef &&
-        videoRef.removeEventListener(
-          "fullscreenchange",
-          handleFullscreenChange
-        );
-    };
-  }, []);
-
-  return (
-    <div
-      className="relative rounded-lg pb-[117%] h-0 border overflow-hidden"
-      onClick={() => {
-        handleClick(video.current);
-      }}
+  const videoElement = (
+    <video
+      ref={video}
+      className={`absolute top-0 left-0 w-full h-full z-0 ${
+        !isOpen && "object-cover"
+      }`}
     >
-      {videoInfo && (
-        <video
-          ref={video}
-          className={`absolute top-0 left-0 w-full h-full z-0 ${
-            !isOpen && "object-cover"
-          }`}
-        >
-          <source src="" />
-        </video>
-      )}
-      <div className="overlay absolute top-0 left-0 w-full h-full flex flex-col justify-center object-cover items-center z-10">
-        <PlayButton />
-        <div>{videoDuration}</div>
+      <source src={videoInfo.path} type={"video/mp4"} />
+    </video>
+  );
+  return (
+    <>
+      <div
+        className="relative rounded-lg pb-[117%] h-0 border overflow-hidden"
+        onClick={() => {
+          handleClick(video.current);
+        }}
+      >
+        {videoInfo && videoElement}
+        <div className="overlay absolute top-0 left-0 w-full h-full flex flex-col justify-center object-cover items-center z-10">
+          <PlayButton />
+          <div>{videoDuration}</div>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
