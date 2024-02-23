@@ -95,7 +95,7 @@ export const NewWaySection = ({ data }: any) => {
   return (
     <div
       ref={section}
-      className="two-imgs relative grid grid-cols-[1fr_1fr] grid-rows-[auto_80px_auto_auto] lg:grid-rows-[auto_auto_auto_auto] gap-y-dashboard-spacing-element-medium lg:gap-y-[100px] gap-x-[45px] lg:gap-x-[85px] my-10 md:my-40 z-10 w-full overflow-hidden"
+      className="two-imgs relative grid grid-cols-[1fr_1fr] grid-rows-[auto_80px_auto_auto] lg:grid-rows-[auto_auto_auto_auto] gap-y-dashboard-spacing-element-medium lg:gap-y-[80px] gap-x-[45px] lg:gap-x-[85px] my-10 md:my-40 z-10 w-full overflow-hidden"
     >
       <ClassicContent
         className="w-full px-4 row-start-1 row-end-2 col-start-1 col-end-3 lg:col-start-1 lg:col-end-2 lg:justify-self-end xl:max-w-[80%]"
@@ -107,16 +107,16 @@ export const NewWaySection = ({ data }: any) => {
         paragraph={data.content}
       />
 
-      <div className="px-4 lg:px-0 text-base-text relative self-end opacity-80 mt-4 row-start-4 col-start-1 col-end-3 lg:row-start-3 lg:row-end-4 lg:col-start-2 lg:col-end-3 lg:pr-20 z-10 xl:max-w-[80%]">
+      <div className="px-4 lg:px-0 text-base-text relative self-end opacity-80 row-start-4 col-start-1 col-end-3 lg:row-start-3 lg:row-end-4 lg:col-start-2 lg:col-end-3 lg:pr-20 z-10 xl:max-w-[80%]">
         <EditorJsParser JSONContent={data.rich_content} />
       </div>
 
       {data.img && data.img.data && (
         <>
-          <div className="two-img__img1 mb-10 lg:mb-0 relative overflow-hidden row-start-2 row-end-4 col-start-2 col-end-3 lg:row-start-1 lg:row-end-4 lg:col-start-2 lg:col-end-3 z-10">
+          <div className="two-img__img1 mb-10 lg:mb-0 relative overflow-hidden row-start-2 row-end-4 col-start-2 col-end-3 lg:row-start-1 lg:row-end-3 lg:col-start-2 lg:col-end-3 z-10">
             <div
               ref={img1W}
-              className="relative w-full h-0 pb-[150%] lg:pb-[130%] rounded-3xl lg:rounded-l-3xl overflow-hidden"
+              className="relative w-full h-full rounded-3xl lg:rounded-l-3xl overflow-hidden"
             >
               <Image
                 ref={img1}

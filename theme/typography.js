@@ -72,9 +72,8 @@ const themeTypography = {
     textTransform: 'uppercase',
   },
   '.text-poster' : {
-    fontFamily: tokens.font_title.join(', '),
     fontSize: tokens.text_poster,
-    fontWeight: 500,
+    fontWeight: 400,
     lineHeight: 1.1
   },
   'n27': {

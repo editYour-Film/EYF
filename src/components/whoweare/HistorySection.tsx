@@ -7,6 +7,7 @@ import { useLenis } from "@studio-freight/react-lenis";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { TextSplit } from "@/utils/TextSplit";
 import Bubble from "@/img/whoweare/Bubble.svg";
+import Container from "../_shared/UI/Container";
 
 export const HistorySection = ({ data }: any) => {
   const p1 = useRef<HTMLDivElement>(null);
@@ -265,33 +266,35 @@ export const HistorySection = ({ data }: any) => {
   return (
     <div>
       <div className="relative my-10 md:my-20 max-w-[700px] mx-auto">
-        <p className="text-xl">
-          <span className="n27 text-linear-sunset text-poster">2012,</span>{" "}
-          <span className="text-dashboard-text-description-base text-large">
-            Notre histoire commence.
-          </span>
-        </p>
+        <Container className="px-4">
+          <p className="text-xl">
+            <span className="n27 text-linear-sunset text-poster">2012,</span>{" "}
+            <span className="text-dashboard-text-description-base text-large">
+              Notre histoire commence.
+            </span>
+          </p>
 
-        <div
-          ref={bubble}
-          className="relative hystory__bubble flex justify-center items-center my-6 px-7 py-4 origin-bottom-right min-h-[100px]"
-        >
           <div
-            ref={bubbleText}
-            className="relative hystory__msg text-base z-20 pr-[160px]"
+            ref={bubble}
+            className="relative hystory__bubble flex justify-center items-center my-6 px-7 py-4 origin-bottom-right min-h-[100px]"
           >
-            <TextSplit input="Et si on pouvait faire monter ses vidéos par un.e professionnel.le à tout moment, peu importe le lieu où on se trouve ?" />
+            <div
+              ref={bubbleText}
+              className="relative hystory__msg text-base z-20 xl:pr-[160px]"
+            >
+              <TextSplit input="Et si on pouvait faire monter ses vidéos par un.e professionnel.le à tout moment, peu importe le lieu où on se trouve ?" />
+            </div>
+            <div className="absolute top-0 left-0 w-full h-full object-cover bg-blackBerry border rounded-3xl z-10"></div>
+            <Bubble
+              ref={bubbleSvg}
+              className="absolute hidden md:block top-6 left-4 w-full h-auto object-contain z-0 svg-color-dashboard-button-island-hover"
+            ></Bubble>
           </div>
-          <div className="absolute top-0 left-0 w-full h-full object-cover bg-blackBerry border rounded-3xl z-10"></div>
-          <Bubble
-            ref={bubbleSvg}
-            className="absolute hidden md:block top-6 left-4 w-full h-auto object-contain z-0 svg-color-dashboard-button-island-hover"
-          ></Bubble>
-        </div>
 
-        <p className="text-right text-xl text-soyMilk opacity-60">
-          François, distribué.
-        </p>
+          <p className="text-right text-xl text-soyMilk opacity-60">
+            François, distribué.
+          </p>
+        </Container>
       </div>
 
       <div ref={scrollParent} className="md:h-[170vh]">
@@ -335,7 +338,7 @@ export const HistorySection = ({ data }: any) => {
             <div className="absolute top-0 left-0 w-full h-full z-0 pointer-events-none opacity-20 bg-pattern"></div>
           </div>
 
-          <div className="relative flex items-center h-full text-base no-scroll-bar overflow-scroll bg-blackBerry border md:border-r-0 rounded-3xl md:rounded-r-none md:rounded-l-3xl p-8 md:p-4 mx-4 md:mx-0 md:px-16 lg:px-28 md:py-24 md:w-8/12 lg:w-3/5 z-10">
+          <div className="relative flex items-center h-full text-base no-scroll-bar overflow-scroll bg-blackBerry md:border md:border-r-0 rounded-3xl md:rounded-r-none md:rounded-l-3xl md:p-4 mx-4 md:mx-0 md:px-16 lg:px-28 md:py-24 md:w-8/12 lg:w-3/5 z-10">
             <div ref={scrollContent} className="max-w-3xl text-base-text">
               <div ref={p1}>
                 <span className="font-medium">
