@@ -7,7 +7,7 @@ import { HistorySection } from "@/components/whoweare/HistorySection";
 import { NewWaySection } from "@/components/whoweare/NewWaySection";
 import { ArrowCards } from "@/components/whoweare/ArrowCards";
 import useStrapi from "@/hooks/useStrapi";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { TitleReveal } from "@/components/whoweare/TitleReveal";
 import { setRouteName } from "@/store/slices/routesSlice";
 import { useDispatch } from "react-redux";
@@ -15,6 +15,7 @@ import { GradientCard } from "@/components/dashboard/shared/GradientCard";
 import { GlobalContext } from "@/components/_context/GlobalContext";
 import GradientPlanet from "@/img/whoweare/gradient-planet.svg";
 import { Team } from "@/components/whoweare/team/Team";
+import { ImgContent } from "@/components/whoweare/ImgContent";
 {
   /* 
 export async function getStaticProps() {
@@ -30,6 +31,8 @@ export async function getStaticProps() {
 
 export default function WhoWeAre(/*{ data, dataFaqs }: any*/) {
   const dispatch = useDispatch();
+  const stickySections = useRef<HTMLDivElement>(null);
+
   const globalContext = useContext(GlobalContext);
   const { data, mutate: getStrapi } = useStrapi(
     "about-me?" +
@@ -74,9 +77,18 @@ export default function WhoWeAre(/*{ data, dataFaqs }: any*/) {
               {data && <NewWaySection data={data.text_image} />}
             </ContainerFullWidth>
 
-            {data && <ArrowCards data={data.arrow_cards} />}
+            <div ref={stickySections}>
+              {data && <ArrowCards data={data.arrow_cards} />}
 
-            {data && <Team data={data.team} />}
+              <div className="sticky top-0 xl:-top-[50vh] z-0">
+                {data && <ImgContent data={data.arrow_cards} />}
+              </div>
+
+              <div className="relative z-10">
+                {data && <Team data={data.team} />}
+              </div>
+            </div>
+
             <ContainerFullWidth>
               {dataFaqs && <FaqSection data={dataFaqs} filter="about-us" />}
               <div className="max-w-[1400px] lg:mx-[100px] xl:mx-[167px] 2xl:mx-auto md:pt-[90px] flex flex-col gap-dashboard-spacing-element-medium">
