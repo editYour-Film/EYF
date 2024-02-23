@@ -1,7 +1,7 @@
 import { SimpleCard } from "@/components/_shared/UI/CardSimple";
 import Image from "next/image";
 
-import Linkedin from "@/icons/LinkedIn.svg";
+import Linkedin from "@/icons/lkdn.svg";
 import Github from "@/icons/GitHub.svg";
 
 type TeamCardProps = {
