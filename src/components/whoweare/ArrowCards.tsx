@@ -61,8 +61,6 @@ export const ArrowCards = ({ data }: ArrowCardsProps) => {
     };
   }, [inView, data]);
 
-  console.log(data);
-
   return (
     <div ref={section} className="arrow-cards mb-32">
       <Container>
