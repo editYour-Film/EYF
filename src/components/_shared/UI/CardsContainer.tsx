@@ -1,19 +1,26 @@
-import { PropsWithChildren, forwardRef } from "react"
+import { PropsWithChildren, forwardRef } from "react";
 import { ReactElement } from "react-markdown/lib/react-markdown";
 
 type CardsContainerProps = {
-  headingComp: ReactElement,
-  className?: string,
-}
+  headingComp?: ReactElement;
+  className?: string;
+};
 
-export const CardsContainer = forwardRef<HTMLDivElement, PropsWithChildren<CardsContainerProps>>(function CardsContainer({headingComp, children, className}, ref) {  
+export const CardsContainer = forwardRef<
+  HTMLDivElement,
+  PropsWithChildren<CardsContainerProps>
+>(function CardsContainer({ headingComp, children, className }, ref) {
   return (
-    <div 
+    <div
       ref={ref}
-      className={`flex flex-col gap-dashboard-spacing-element-medium w-full shadow-large bg-dashboard-background-content-area md:p-dashboard-spacing-element-medium rounded-dashboard-button-square-radius border-03 ${className ?? ''}`}
+      className={`flex flex-col gap-dashboard-spacing-element-medium w-full shadow-large bg-dashboard-background-content-area md:p-dashboard-spacing-element-medium rounded-dashboard-button-square-radius border-03 ${
+        className ?? ""
+      }`}
     >
-      <div className="perspective">{headingComp}</div>
-      <div className="grid md:grid-cols-2 gap-dashboard-spacing-element-medium perspective">{children}</div>
+      {headingComp && <div className="perspective">{headingComp}</div>}
+      <div className="grid md:grid-cols-2 gap-dashboard-spacing-element-medium perspective">
+        {children}
+      </div>
     </div>
-  )
-})
+  );
+});
