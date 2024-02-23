@@ -255,6 +255,8 @@ export const HistorySection = ({ data }: any) => {
       });
     });
 
+    ctx.current.firstDate();
+
     return () => {
       ctx.current?.revert();
     };
