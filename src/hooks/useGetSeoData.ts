@@ -6,7 +6,7 @@ const seoQueryString = qs.stringify(
     populate: ["seo", "seo.metaSocial.image"],
   },
   {
-    encodeValuesOnly: true, // prettify URL
+    encodeValuesOnly: true,
   }
 );
 
@@ -20,14 +20,23 @@ const client = axios.create({
 export const useGetSeoData = async (page:string) => {
   const path = `${page}?${seoQueryString}`
   
-  const { data } = await client.get(path)
-  
-  return data.data.attributes.seo
+  try {
+    const { data } = await client.get(path)
+    return data.data.attributes.seo
+  } catch (error) {
+    console.log(error);
+    return null
+  } 
 }
 
 export const useGetSeoDataFiltered = async (endpoint:string, filter:string) => {
   const path = `${endpoint}?${filter}&${seoQueryString}`
-  const { data } =  await client.get(path)
-
-  return data.data[0].attributes.seo
+  
+  try {
+    const { data } = await client.get(path)
+    return data.data.attributes.seo
+  } catch (error) {
+    console.log(error);
+    return null
+  } 
 }
