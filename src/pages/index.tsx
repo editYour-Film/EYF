@@ -12,29 +12,27 @@ import { FaqSection } from "@/components/home/FaqSection";
 import { ComparativeSection } from "@/components/home/ComparativeSection";
 import { CreatorToEditor } from "@/components/home/CreatorToEditor";
 import { videos } from "../components/data/videos";
-import Container, {
-  ContainerFull,
-} from "@/components/_shared/UI/Container";
+import Container, { ContainerFull } from "@/components/_shared/UI/Container";
 import useStrapi from "@/hooks/useStrapi";
 import { useContext, useEffect } from "react";
-import useMediaQuery from "@/hooks/useMediaQuery";
 import { setRouteName } from "@/store/slices/routesSlice";
 import { useDispatch } from "react-redux";
 import { GradientCard } from "@/components/dashboard/shared/GradientCard";
 import { GlobalContext } from "@/components/_context/GlobalContext";
 
-/*export async function getStaticProps() {
-  const data = await getStrapiData(
-    "page-home?populate[seo][populate]=*",
-    false
-  );
+import { useGetSeoData } from "@/hooks/useGetSeoData";
 
-  return { props: { seodata: data.seo } };
-}*/
+export async function getServerSideProps() {
+  const data: any = await useGetSeoData("page-home");
 
-export default function Home(/*{ seodata }: any*/) {
+  return { props: { seodata: data } };
+}
+
+export default function Home(props: any) {
+  const { seodata } = props;
+
   const dispatch = useDispatch();
-  const globalContext = useContext(GlobalContext)
+  const globalContext = useContext(GlobalContext);
 
   const { data, mutate: getStrapi } = useStrapi(
     "page-home?" +
@@ -46,7 +44,7 @@ export default function Home(/*{ seodata }: any*/) {
       "populate[section3][populate]=*&" +
       "populate[section4][populate]=*&" +
       "populate[marquee][populate]=*&" +
-      "populate[section5][populate]=*&" + 
+      "populate[section5][populate]=*&" +
       "populate[section6][populate]=*&" +
       "populate[comparison_section][populate][classic_content][populate]=*&" +
       "populate[comparison_section][populate][comparison_cards][populate]=*&" +
@@ -56,25 +54,18 @@ export default function Home(/*{ seodata }: any*/) {
   );
   const { data: dataFaqs, mutate: getStrapiFaq } = useStrapi("faqs", false);
 
-  const { data: seodata, mutate: getSeoData } = useStrapi(
-    "page-home?populate[seo][populate]=*",
-    false
-  );
-
   useEffect(() => {
     dispatch(setRouteName({ name: "accueil" }));
 
     getStrapi();
     getStrapiFaq();
-    getSeoData();        
   }, []);
-
-  const isMobile = useMediaQuery("(max-width: 768px)");
 
   return (
     <>
       {seodata && (
         <Head>
+          <title>{seodata.metaTitle}</title>
           <Seo data={seodata} />
         </Head>
       )}
@@ -82,27 +73,24 @@ export default function Home(/*{ seodata }: any*/) {
       <LayoutMain activeNavItem="home">
         {data && dataFaqs && (
           <div className="flex flex-col gap-[100px]">
-            {data.top_video && data.head &&
+            {data.top_video && data.head && (
               <ContainerFull>
                 <TopVideoSection data={{ ...data.top_video, ...data.head }} />
               </ContainerFull>
-            }
+            )}
 
             <Container>
               <PartnersSection />
             </Container>
-            
+
             {data.section1 && (
-            <Container>
-              <YourProfessionalVideoSection data={data.section1} />
-            </Container>
+              <Container>
+                <YourProfessionalVideoSection data={data.section1} />
+              </Container>
             )}
 
             <Container>
-
-            { data.section3 &&
-                <StepsSection data={data.section3} />
-            }
+              {data.section3 && <StepsSection data={data.section3} />}
             </Container>
 
             {data.section2 && (
@@ -114,7 +102,7 @@ export default function Home(/*{ seodata }: any*/) {
                 <YourVideoSection data={data.section4} />
               </Container>
 
-              <hr className="pb-[100px]"/>
+              <hr className="pb-[100px]" />
 
               <div className="hidden md:block absolute right-0 bg-radial-gradient-pink w-[600px] h-[400px] translate-x-[33%]"></div>
 
@@ -127,33 +115,31 @@ export default function Home(/*{ seodata }: any*/) {
               </Container>
             </div>
 
-            {data.transition_mockup &&
-              <CreatorToEditor data={data.transition_mockup}/>
-            }
+            {data.transition_mockup && (
+              <CreatorToEditor data={data.transition_mockup} />
+            )}
 
-
-            {data.section5 && 
+            {data.section5 && (
               <Container>
                 <EditorSection data={data.section5} />
               </Container>
-            }
+            )}
 
-            {dataFaqs && 
-              <FaqSection data={dataFaqs} />
-            }
+            {dataFaqs && <FaqSection data={dataFaqs} />}
 
             <Container>
               <GradientCard
-                title='PARRAINER UN AMI'
-                content='Bénéficiez d’avantages exclusifs en rejoignant la communauté des parrains editYour.Film dès aujourd’hui.'
-                hasCta 
+                title="PARRAINER UN AMI"
+                content="Bénéficiez d’avantages exclusifs en rejoignant la communauté des parrains editYour.Film dès aujourd’hui."
+                hasCta
                 type="email"
-                placeholder="Email" 
+                placeholder="Email"
                 ctaLabel="Envoyer le lien de parrainage"
-                onClick={(email: string) => { globalContext.sendSponsorLink(email)}}
+                onClick={(email: string) => {
+                  globalContext.sendSponsorLink(email);
+                }}
               />
             </Container>
-
           </div>
         )}
       </LayoutMain>

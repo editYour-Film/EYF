@@ -16,20 +16,18 @@ import { GlobalContext } from "@/components/_context/GlobalContext";
 import GradientPlanet from "@/img/whoweare/gradient-planet.svg";
 import { Team } from "@/components/whoweare/team/Team";
 import { ImgContent } from "@/components/whoweare/ImgContent";
-{
-  /* 
-export async function getStaticProps() {
-  const data = await getStrapiData("about-me", false);
+import { useGetSeoData } from "@/hooks/useGetSeoData";
+import { Seo } from "@/components/_shared/Seo";
 
-  const dataFaqs = await getStrapiData("faqs", false);
-  return {
-    props: {data, dataFaqs },
-  };
-}
-*/
+export async function getServerSideProps() {
+  const data: any = await useGetSeoData("about-me");
+
+  return { props: { seodata: data } };
 }
 
-export default function WhoWeAre(/*{ data, dataFaqs }: any*/) {
+export default function WhoWeAre(props: any) {
+  const { seodata } = props;
+
   const dispatch = useDispatch();
   const stickySections = useRef<HTMLDivElement>(null);
 
@@ -55,10 +53,12 @@ export default function WhoWeAre(/*{ data, dataFaqs }: any*/) {
 
   return (
     <>
-      <Head>
-        <title>EditYour.Film</title>
-        <meta name="description" content="" />
-      </Head>
+      {seodata && (
+        <Head>
+          <title>{seodata.metaTitle}</title>
+          <Seo data={seodata} />
+        </Head>
+      )}
 
       <LayoutMain activeNavItem="who-we-are">
         <div>

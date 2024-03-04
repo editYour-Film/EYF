@@ -6,8 +6,6 @@ import { useContext, useEffect, useState } from "react";
 import useStrapi from "@/hooks/useStrapi";
 
 import { CategoriesList } from "../../../components/blog/shared/CategoriesList";
-import { ContainerFullWidth } from "@/components/_shared/UI/Container";
-import { NewsletterSection } from "@/components/home/NewsletterSection";
 import { CardArticle } from "@/components/_shared/UI/CardArticle";
 import { Button } from "@/components/_shared/buttons/Button";
 import { useDispatch } from "react-redux";
@@ -15,8 +13,25 @@ import { setRouteName } from "@/store/slices/routesSlice";
 import { GradientCard } from "@/components/dashboard/shared/GradientCard";
 import { GlobalContext } from "@/components/_context/GlobalContext";
 import { ArticleTrends } from "@/components/blog/ArticleTrends";
+import { GetServerSideProps } from "next";
+import { useGetSeoDataFiltered } from "@/hooks/useGetSeoData";
+import { Seo } from "@/components/_shared/Seo";
 
-const BlogCategory = () => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const query = context.query;
+  const slug = query.slug as string;
+
+  const data: any = await useGetSeoDataFiltered(
+    "blog-categories",
+    `filters[slug][$eq]=${slug.toLowerCase()}`
+  );
+
+  return { props: { seodata: data } };
+};
+
+const BlogCategory = (props: any) => {
+  const { seodata } = props;
+
   const router = useRouter();
   const dispatch = useDispatch();
   const globalContext = useContext(GlobalContext);
@@ -70,21 +85,18 @@ const BlogCategory = () => {
     setArticles(_articles);
   };
 
-  console.log(data);
-
   useEffect(() => {
     setAvailableArticles(articles.slice(0, maxArticles));
   }, [articles, maxArticles]);
 
-  console.log(data);
-  console.log(articles);
-
   return (
     <>
-      <Head>
-        <title>EditYour.Film</title>
-        <meta name="description" content="" />
-      </Head>
+      {seodata && (
+        <Head>
+          <title>{seodata.metaTitle}</title>
+          <Seo data={seodata} />
+        </Head>
+      )}
 
       <LayoutMain activeNavItem="blog">
         <div className="max-w-[1400px] lg:mx-[100px] xl:mx-[167px] 2xl:mx-auto  flex flex-col gap-dashboard-spacing-element-medium md:pt-dashboard-spacing-element-medium">
