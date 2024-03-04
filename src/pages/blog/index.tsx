@@ -11,18 +11,18 @@ import routes from "@/routes";
 import { GradientCard } from "@/components/dashboard/shared/GradientCard";
 import { setRouteName } from "@/store/slices/routesSlice";
 import { useDispatch } from "react-redux";
+import { useGetSeoData } from "@/hooks/useGetSeoData";
+import { Seo } from "@/components/_shared/Seo";
 
-/*export async function getStaticProps() {
-  const data = await getStrapiData(
-    "articles?populate[blog_category][populate]=*&populate[author][populate]=*&populate[image][populate]=*&populate[paragraphs][populate]=*",
-    false
-  );
-  return {
-    props: { data },
-  };
-}*/
+export async function getServerSideProps() {
+  const data: any = await useGetSeoData("blog-page");
 
-export default function Blog(/*{ data }: any*/) {
+  return { props: { seodata: data } };
+}
+
+export default function Blog(props: any) {
+  const { seodata } = props;
+
   const { push } = useRouter();
   const dispatch = useDispatch();
 
@@ -44,10 +44,12 @@ export default function Blog(/*{ data }: any*/) {
 
   return (
     <>
-      <Head>
-        <title>EditYour.Film</title>
-        <meta name="description" content="" />
-      </Head>
+      {seodata && (
+        <Head>
+          <title>{seodata.metaTitle}</title>
+          <Seo data={seodata} />
+        </Head>
+      )}
 
       <LayoutMain activeNavItem="blog">
         <div className="flex flex-col gap-dashboard-spacing-element-medium md:pt-dashboard-spacing-element-medium">
