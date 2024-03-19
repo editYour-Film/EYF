@@ -18,7 +18,7 @@ export const CardsContainer = forwardRef<
       }`}
     >
       {headingComp && <div className="perspective">{headingComp}</div>}
-      <div className="grid md:grid-cols-2 gap-dashboard-spacing-element-medium perspective">
+      <div className="grid md:grid-cols-3 gap-dashboard-spacing-element-medium perspective">
         {children}
       </div>
     </div>

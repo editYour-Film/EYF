@@ -39,7 +39,8 @@ export default function Home(props: any) {
       "populate[head][populate]=*&" +
       "populate[top_video][populate][video][populate]=*&" +
       "populate[top_video][populate][editor_video][populate]=*&" +
-      "populate[section1][populate]=*&" +
+      "populate[section1][populate][cards][populate][img]=*&" +
+      "populate[section1][populate][image]=*&" +
       "populate[section2][populate]=videos.video&" +
       "populate[section3][populate]=*&" +
       "populate[section4][populate]=*&" +
@@ -83,16 +84,19 @@ export default function Home(props: any) {
               <PartnersSection />
             </Container>
 
+            {/* Large card + 3 small cards */}
             {data.section1 && (
               <Container>
                 <YourProfessionalVideoSection data={data.section1} />
               </Container>
             )}
 
+            {/* Steps */}
             <Container>
               {data.section3 && <StepsSection data={data.section3} />}
             </Container>
 
+            {/* Video Slider */}
             {data.section2 && (
               <ConfidenceSection videos={videos} data={data.section2} />
             )}
