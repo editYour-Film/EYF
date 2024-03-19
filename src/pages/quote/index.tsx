@@ -26,11 +26,9 @@ export default function Duration() {
         <QuoteContent />
       </LayoutQuote> */}
 
-      <LayoutMain>
-        <div className="w-full h-[100vh]">
+      <LayoutMain noFooter>
+        <div className="w-full h-[calc(100vh-300px)] lg:h-[calc(100vh-100px)]">
           <Widget
-            width="100%"
-            height="100%"
             fullScreen={true}
             id="WVu9Lcrc"
             style={{ width: "50%" }}

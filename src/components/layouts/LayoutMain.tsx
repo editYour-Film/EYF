@@ -6,8 +6,8 @@ import HeaderQuote from "../_shared/HeaderQuote";
 import { useLenis } from "@studio-freight/react-lenis";
 import Router from "next/router";
 import { JoinBeta } from "@/components/_shared/JoinBeta";
-import { useSelector, useDispatch } from 'react-redux'
-import {RootState} from "@/store/store"
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "@/store/store";
 import { setJoinBetaInvisible } from "@/store/slices/joinBetaSlice";
 import { enableCustomCursor } from "@/store/slices/cursorSlice";
 import { DashboardMenuMobile } from "../dashboard/shared/DashboardMenuMobile";
@@ -20,24 +20,27 @@ type LayoutMainProps = {
   activeNavItem?: string;
   topSectionBackground?: boolean;
   quoteNavbar?: boolean;
+  noFooter?: boolean;
 };
 const LayoutMain = ({
   children,
   activeNavItem = "",
   quoteNavbar,
   topSectionBackground,
+  noFooter,
 }: LayoutMainProps) => {
-
   const lenis = useLenis();
-  
-  const joinBetaState = useSelector((state: RootState) => state.joinBeta.isVisible)
-  const dispatch = useDispatch()
 
-  const isMenuOpen = useSelector((store: RootState) => store.menu.isOpen)
+  const joinBetaState = useSelector(
+    (state: RootState) => state.joinBeta.isVisible
+  );
+  const dispatch = useDispatch();
+
+  const isMenuOpen = useSelector((store: RootState) => store.menu.isOpen);
 
   useEffect(() => {
-    dispatch(enableCustomCursor())
-  }, [])
+    dispatch(enableCustomCursor());
+  }, []);
 
   useEffect(() => {
     function onHashChangeStart(url: string) {
@@ -54,40 +57,46 @@ const LayoutMain = ({
 
   return (
     <>
-        <div className="bg-blackBerry min-h-screen flex flex-col justify-between gap-10 no-cursor w-full overflow-clip">
-          {quoteNavbar ? (
-            <HeaderQuote step={2} />
-          ) : (
-            <Header activeNavItem={activeNavItem} />
-          )}
+      <div className="bg-blackBerry min-h-screen flex flex-col justify-between gap-10 no-cursor w-full overflow-clip">
+        {quoteNavbar ? (
+          <HeaderQuote step={2} />
+        ) : (
+          <Header activeNavItem={activeNavItem} />
+        )}
 
-          <JoinBeta 
-            isVisible={joinBetaState}
-            onClose={() => {dispatch(setJoinBetaInvisible())}}
-          />
+        <JoinBeta
+          isVisible={joinBetaState}
+          onClose={() => {
+            dispatch(setJoinBetaInvisible());
+          }}
+        />
 
-          <main className="md:pt-navbar-h">
-            {topSectionBackground && (
-              <>
-                {/* <div className="top-section-bg1"></div>
+        <main className="md:pt-navbar-h">
+          {topSectionBackground && (
+            <>
+              {/* <div className="top-section-bg1"></div>
                 <div className="bg-hero absolute left-0 w-1/2 h-[300px] rounded-[200px] -top-10 sm:top-24"></div> */}
-              </>
-            )}
-            <div className="flex flex-col gap-8 md:gap-11 relative z-20 ">
-              {children}
-            </div>
-          </main>
+            </>
+          )}
+          <div className="flex flex-col gap-8 md:gap-11 relative z-20 ">
+            {children}
+          </div>
+        </main>
 
-          <DashboardMenuMobile menu={LANDING_MENU} trigger={isMenuOpen} action={closeMenu}>
-            <IslandButton
-              type="primary"
-              label="Obtenir mon devis"
-              onClick={() => {}}
-            />
-          </DashboardMenuMobile>
+        <DashboardMenuMobile
+          menu={LANDING_MENU}
+          trigger={isMenuOpen}
+          action={closeMenu}
+        >
+          <IslandButton
+            type="primary"
+            label="Obtenir mon devis"
+            onClick={() => {}}
+          />
+        </DashboardMenuMobile>
 
-          <Footer />
-        </div>
+        {!noFooter ? <Footer /> : <div></div>}
+      </div>
     </>
   );
 };
