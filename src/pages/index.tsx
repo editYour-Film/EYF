@@ -39,6 +39,7 @@ export default function Home(props: any) {
       "populate[head][populate]=*&" +
       "populate[top_video][populate][video][populate]=*&" +
       "populate[top_video][populate][editor_video][populate]=*&" +
+      "populate[partners][populate][partner][populate]=*&" +
       "populate[section1][populate][cards][populate][img]=*&" +
       "populate[section1][populate][image]=*&" +
       "populate[section2][populate]=videos.video&" +
@@ -81,7 +82,7 @@ export default function Home(props: any) {
             )}
 
             <Container>
-              <PartnersSection />
+              <PartnersSection data={data.partners} />
             </Container>
 
             {/* Large card + 3 small cards */}

@@ -1,30 +1,35 @@
 import Image from "next/image";
 
-export const PartnersSection = () => {
+export const PartnersSection = ({ data }: { data: any }) => {
   return (
-    <div className=""> 
-      <div className="text-dashboard-text-description-base-low text-title-small w-full text-center">Nos partenaires</div>
-      <div className="flex flex-wrap gap-4 md:gap-dashboard-spacing-element-medium justify-center items-stretch max-w-7xl mx-auto mt-5">
-        <div className="p-dashboard-spacing-element-medium rounded-dashboard-button-square-radius flex justify-center items-center border">
-          <Image
-            src="/img/home/partners/pool.svg"
-            alt="Le pool"
-            width={104}
-            height={25}
-            className="min-w-[150px]"
-          />
+    <div className="flex flex-col gap-dashboard-spacing-element-medium">
+      {data.title && (
+        <div className="text-dashboard-text-description-base-low text-title-small w-full text-center">
+          {data.title}
         </div>
-        <div className="p-dashboard-spacing-element-medium rounded-dashboard-button-square-radius flex justify-center items-center border">
-          <Image
-            src="/img/home/partners/FTRSM.svg"
-            alt="FTRSM"
-            width={104}
-            height={25}
-            className="min-w-[150px]"
-          />
-        </div>
+      )}
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:flex px-dashboard-spacing-element-medium lg:px-0 justify-center gap-[16px]">
+        {data.partner.map((partner: any, i: number) => {
+          return (
+            <PartnerCard key={i} logo={partner.logo.data.attributes.url} />
+          );
+        })}
       </div>
     </div>
+  );
+};
 
+const PartnerCard = ({ logo }: { logo?: any }) => {
+  return (
+    <div className="p-dashboard-spacing-element-medium rounded-dashboard-button-square-radius flex justify-center items-center border h-[100px]">
+      <Image
+        src={logo}
+        alt="FTRSM"
+        width={104}
+        height={25}
+        className="h-full w-auto"
+      />
+    </div>
   );
 };
