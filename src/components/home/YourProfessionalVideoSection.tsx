@@ -11,8 +11,6 @@ import { appearBottom } from "@/animations/appearBottom";
 gsap.registerPlugin(ScrollTrigger);
 
 export const YourProfessionalVideoSection = ({ data }: any) => {
-  console.log(data);
-
   const isMobile = useMediaQuery("(max-width: 768px)");
   const { ref, inView } = useInView({
     triggerOnce: true,
