@@ -138,7 +138,7 @@ const Header = ({ activeNavItem = "" }: HeaderProps) => {
               </Link>
             </nav>
             <div className="hidden md:flex gap-4">
-              <ConnectionOptions
+              {/* <ConnectionOptions
                 onClientClick={() => {
                   setWaitingListType("client");
                   setIsModalDisplayed(true);
@@ -148,6 +148,14 @@ const Header = ({ activeNavItem = "" }: HeaderProps) => {
                   setWaitingListType("monteur");
                   setIsModalDisplayed(true);
                   router.push(routes.SIGNIN);
+                }}
+              /> */}
+              <IslandButton
+                type="tertiary"
+                label="Monteur.se"
+                className="max-w-[100%] sm:max-w-[280px] py-[5px] text-small"
+                onClick={() => {
+                  dispatch(setJoinBetaVisible());
                 }}
               />
               <IslandButton
