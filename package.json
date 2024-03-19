@@ -21,6 +21,7 @@
     "@stripe/react-stripe-js": "^2.4.0",
     "@stripe/stripe-js": "^2.4.0",
     "@studio-freight/react-lenis": "^0.0.21",
+    "@typeform/embed-react": "^3.16.0",
     "@types/js-cookie": "^3.0.3",
     "@types/node": "18.15.3",
     "@types/qs": "^6.9.12",
