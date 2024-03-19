@@ -1,19 +1,18 @@
 import Image from "next/image";
 import { useInView } from "react-intersection-observer";
-import { useEffect, useRef } from "react";
+import { forwardRef, useEffect, useRef } from "react";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import { CardsContainer } from "../_shared/UI/CardsContainer";
 import { SimpleCard } from "../_shared/UI/CardSimple";
-import { IslandButton } from "../_shared/buttons/IslandButton";
-import routes from "@/routes";
-import { Video } from "../_shared/video/Video";
 import { appearBottom } from "@/animations/appearBottom";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export const YourProfessionalVideoSection = ({ data }: any) => {
+  console.log(data);
+
   const isMobile = useMediaQuery("(max-width: 768px)");
   const { ref, inView } = useInView({
     triggerOnce: true,
@@ -25,6 +24,7 @@ export const YourProfessionalVideoSection = ({ data }: any) => {
   const card1 = useRef<HTMLDivElement>(null);
   const card2 = useRef<HTMLDivElement>(null);
   const card3 = useRef<HTMLDivElement>(null);
+  const card4 = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (isMobile) return;
@@ -46,7 +46,7 @@ export const YourProfessionalVideoSection = ({ data }: any) => {
         );
         tlCards.add(
           appearBottom({
-            elmts: [card2.current, card3.current],
+            elmts: [card2.current, card3.current, card4.current],
             liteY: true,
             rotateX: true,
           })
@@ -92,21 +92,18 @@ export const YourProfessionalVideoSection = ({ data }: any) => {
           <SimpleCard ref={card1} className="pb-0 md:px-[80px] overflow-hidden">
             <div className="flex flex-col items-center gap-dashboard-spacing-element-medium">
               <div className="flex flex-col items-center gap-dashboard-specific-radius text-center max-w-[520px]">
-                <div className="text-dashboard-text-description-base text-title-medium">
-                  Chaque jours, des nouveaux modèles de montage disponibles
-                </div>
-                <div className="text-dashboard-text-description-base-low text-base">
-                  Quand vos idées rencontrent nos talents. Choisissez le modèle
-                  de montage qui correspond le mieux à votre projet et composez
-                  vous-même le devis de votre vidéo.
-                </div>
+                {data.title && (
+                  <div className="text-linear-sunset text-title-medium">
+                    {data.title}
+                  </div>
+                )}
+
+                {data.text && (
+                  <div className="text-dashboard-text-description-base-low text-base">
+                    {data.text}
+                  </div>
+                )}
               </div>
-              <IslandButton
-                type="primary"
-                label={"Ouvrir le catalogue"}
-                href={routes.CATALOGUE}
-                enableTwist
-              />
             </div>
             {data.image.data && (
               <div className="w-full flex justify-center md:px- mt-dashboard-spacing-element-medium">
@@ -122,101 +119,71 @@ export const YourProfessionalVideoSection = ({ data }: any) => {
           </SimpleCard>
         }
       >
-        <SimpleCard
-          ref={card2}
-          className="relative overflow-hidden flex flex-col justify-between gap-[56px] pb-0"
-        >
-          <div className="lg:w-2/3">
-            <div className="text-dashboard-text-description-base-low text-title-small">
-              Plus Rapide
-            </div>
-            <div className="text-dashboard-text-description-base text-medium">
-              Commandez aujourd’hui, votre montage démarre demain
-            </div>
-          </div>
+        {data.cards[0] && (
+          <Card
+            ref={card2}
+            title={data.cards[0].title}
+            text={data.cards[0].content}
+            img={data.cards[0].img.data[0].attributes.formats.medium.url}
+          />
+        )}
 
-          {data.card1_img && data.card1_img.data && (
-            <div className="relative w-full">
-              <Image
-                src={data.card1_img.data.attributes.url}
-                alt=""
-                width={data.card1_img.data.attributes.width}
-                height={data.card1_img.data.attributes.height}
-                className="relative z-20 object-cover"
-              />
-            </div>
-          )}
-        </SimpleCard>
+        {data.cards[1] && (
+          <Card
+            ref={card3}
+            title={data.cards[1].title}
+            text={data.cards[1].content}
+            img={data.cards[1].img.data[0].attributes.formats.medium.url}
+          />
+        )}
 
-        <SimpleCard
-          ref={card3}
-          paddingMobileSmall
-          className="relative overflow-hidden flex flex-col justify-between gap-[56px] pb-0"
-        >
-          <div className="lg:w-2/3">
-            <div className="text-dashboard-text-description-base-low text-title-small">
-              Plus Simple
-            </div>
-            <div className="text-dashboard-text-description-base text-medium">
-              Ajustez le devis de votre vidéo selon votre budget et vos besoins
-            </div>
-          </div>
-
-          <div>
-            <div className="relative flex flex-row justify-between w-full z-20">
-              <div className="flex flex-row justify-between items-center border rounded-full z-10 bg-blackBerry">
-                <div className="flex justify-center items-center rounded-full bg-soyMilk text-black w-[24px] h-[24px] n27 font-bold">
-                  1
-                </div>
-                <div className="text-soyMilk px-1 md:px-3 text-[11px] md:text-sm">
-                  Modèle
-                </div>
-              </div>
-              <div className="flex flex-row justify-between items-center border rounded-full z-10 bg-blackBerry">
-                <div className="flex justify-center items-center rounded-full bg-soyMilk text-black w-[24px] h-[24px] n27 font-bold">
-                  2
-                </div>
-                <div className="text-soyMilk px-1 md:px-3 text-[11px] md:text-sm">
-                  Durée du film
-                </div>
-              </div>
-              <div className="flex flex-row justify-between items-center border rounded-full z-10 bg-blackBerry">
-                <div className="flex justify-center items-center rounded-full bg-blueBerry text-soyMilk w-[24px] h-[24px] n27 font-bold">
-                  3
-                </div>
-                <div className="text-soyMilk px-1 md:px-3 text-[11px] md:text-sm">
-                  {" "}
-                  12 Fichiers
-                </div>
-              </div>
-              <div className="absolute w-full h-[1px] bg-soyMilk opacity-30 z-0 top-1/2 -translate-y-1/2"></div>
-            </div>
-
-            {data.card2_img && data.card2_img.data && (
-              <div className="mt-8 sm:mt-8 w-full overflow-hidden rounded-t-[20px]">
-                {data.card2_img.data.attributes.mime.split("/")[0] ===
-                "video" ? (
-                  <Video
-                    video={data.card2_img.data.attributes}
-                    autoPlay
-                    loop
-                    muted
-                    noPlayer
-                  />
-                ) : (
-                  <Image
-                    src={data.card2_img.data.attributes.url}
-                    alt=""
-                    width={data.card1_img.data.attributes.width}
-                    height={data.card1_img.data.attributes.height}
-                    className="relative z-20 w-full h-auto object-cover"
-                  />
-                )}
-              </div>
-            )}
-          </div>
-        </SimpleCard>
+        {data.cards[2] && (
+          <Card
+            ref={card4}
+            title={data.cards[2].title}
+            text={data.cards[2].content}
+            img={data.cards[2].img.data[0].attributes.formats.medium.url}
+          />
+        )}
       </CardsContainer>
     </div>
   );
 };
+
+type CardProps = {
+  title: string;
+  text: string;
+  img?: string;
+};
+const Card = forwardRef<HTMLDivElement, CardProps>(
+  ({ title, text, img }, ref) => {
+    return (
+      <SimpleCard
+        ref={ref}
+        paddingMobileSmall
+        className="relative overflow-hidden flex flex-col justify-between gap-[24px] pb-0"
+      >
+        <div>
+          <div className="text-dashboard-text-description-base-low text-title-small">
+            {title}
+          </div>
+          <div className="text-dashboard-text-description-base text-medium">
+            {text}
+          </div>
+        </div>
+
+        {img && (
+          <div className="relative w-full h-0 pb-[110%] rounded-t-[8px] overflow-hidden">
+            <Image
+              src={img}
+              alt={text}
+              aria-hidden
+              fill
+              className="relative z-20 object-cover"
+            />
+          </div>
+        )}
+      </SimpleCard>
+    );
+  }
+);
