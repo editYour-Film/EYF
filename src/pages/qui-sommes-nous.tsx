@@ -11,13 +11,13 @@ import { useContext, useEffect, useRef } from "react";
 import { TitleReveal } from "@/components/whoweare/TitleReveal";
 import { setRouteName } from "@/store/slices/routesSlice";
 import { useDispatch } from "react-redux";
-import { GradientCard } from "@/components/dashboard/shared/GradientCard";
 import { GlobalContext } from "@/components/_context/GlobalContext";
 import GradientPlanet from "@/img/whoweare/gradient-planet.svg";
 import { Team } from "@/components/whoweare/team/Team";
 import { ImgContent } from "@/components/whoweare/ImgContent";
 import { useGetSeoData } from "@/hooks/useGetSeoData";
 import { Seo } from "@/components/_shared/Seo";
+import { NewsletterSection } from "@/components/home/NewsletterSection";
 
 export async function getServerSideProps() {
   const data: any = await useGetSeoData("about-me");
@@ -92,17 +92,7 @@ export default function WhoWeAre(props: any) {
             <ContainerFullWidth>
               {dataFaqs && <FaqSection data={dataFaqs} filter="about-us" />}
               <div className="max-w-[1400px] lg:mx-[100px] xl:mx-[167px] 2xl:mx-auto md:pt-[90px] flex flex-col gap-dashboard-spacing-element-medium">
-                <GradientCard
-                  title="PARRAINER UN AMI"
-                  content="Bénéficiez d’avantages exclusifs en rejoignant la communauté des parrains editYour.Film dès aujourd’hui."
-                  hasCta
-                  type="email"
-                  placeholder="Email"
-                  ctaLabel="Envoyer le lien de parrainage"
-                  onClick={(email: string) => {
-                    globalContext.sendSponsorLink(email);
-                  }}
-                />
+                <NewsletterSection />
               </div>
             </ContainerFullWidth>
           </div>

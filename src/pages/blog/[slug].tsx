@@ -1,14 +1,16 @@
 import { GlobalContext } from "@/components/_context/GlobalContext";
 import { Seo } from "@/components/_shared/Seo";
-import { ContainerFullWidth } from "@/components/_shared/UI/Container";
+import Container, {
+  ContainerFullWidth,
+} from "@/components/_shared/UI/Container";
 import { Article } from "@/components/blog/Article";
 import { MoreArticles } from "@/components/blog/MoreArticles";
-import { GradientCard } from "@/components/dashboard/shared/GradientCard";
+import { NewsletterSection } from "@/components/home/NewsletterSection";
 import LayoutMain from "@/components/layouts/LayoutMain";
-import { useGetSeoData, useGetSeoDataFiltered } from "@/hooks/useGetSeoData";
+import { useGetSeoDataFiltered } from "@/hooks/useGetSeoData";
 import useStrapi from "@/hooks/useStrapi";
 import { setRouteName } from "@/store/slices/routesSlice";
-import { GetServerSideProps, NextPageContext } from "next";
+import { GetServerSideProps } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
@@ -80,19 +82,9 @@ export default function BlogDetails(props: any) {
           {article && <MoreArticles articles={data} current={article} />}
         </ContainerFullWidth>
 
-        <div className="max-w-[1400px] lg:mx-[100px] xl:mx-[167px] 2xl:mx-auto md:pt-[90px] flex flex-col gap-dashboard-spacing-element-medium">
-          <GradientCard
-            title="PARRAINER UN AMI"
-            content="Bénéficiez d’avantages exclusifs en rejoignant la communauté des parrains editYour.Film dès aujourd’hui."
-            hasCta
-            type="email"
-            placeholder="Email"
-            ctaLabel="Envoyer le lien de parrainage"
-            onClick={(email: string) => {
-              globalContext.sendSponsorLink(email);
-            }}
-          />
-        </div>
+        <Container>
+          <NewsletterSection />
+        </Container>
       </LayoutMain>
     </>
   );
