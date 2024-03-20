@@ -1,5 +1,3 @@
-import routes from "@/routes";
-import Link from "next/link";
 import Button from "../_shared/form/Button";
 import { H1 } from "../_shared/typography/H1";
 import Image from "next/image";
@@ -14,6 +12,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { ClassicContent } from "../_shared/UI/ClassicContent";
+import { setJoinBetaVisible } from "@/store/slices/joinBetaSlice";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -22,7 +21,7 @@ type EditorSectionProps = {
 };
 export const EditorSection = ({ data }: EditorSectionProps) => {
   const isMobile = useMediaQuery("(max-width: 768px)");
-
+  const dispatch = useDispatch();
   const {
     ref: main,
     inView: inviewMain,
@@ -42,7 +41,7 @@ export const EditorSection = ({ data }: EditorSectionProps) => {
 
   useEffect(() => {
     if (isMobile) return;
-    let trigger1:globalThis.ScrollTrigger
+    let trigger1: globalThis.ScrollTrigger;
 
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
@@ -52,7 +51,7 @@ export const EditorSection = ({ data }: EditorSectionProps) => {
         },
       });
 
-      if(!isMobile) {
+      if (!isMobile) {
         tl.fromTo(
           largeCard.current!,
           {
@@ -65,7 +64,7 @@ export const EditorSection = ({ data }: EditorSectionProps) => {
           },
           0
         );
-  
+
         tl.fromTo(
           largeCardInner.current!,
           {
@@ -92,7 +91,7 @@ export const EditorSection = ({ data }: EditorSectionProps) => {
 
     return () => {
       ctx.revert();
-      trigger1 && trigger1.kill()
+      trigger1 && trigger1.kill();
     };
   }, [inviewMain, isMobile]);
 
@@ -116,7 +115,7 @@ export const EditorSection = ({ data }: EditorSectionProps) => {
       <div className="relative mx-auto z-20">
         <div className="flex flex-col max-w-[660px] pl-[20px]">
           <ClassicContent
-            suptitle={data.section_title ?? 'MONTEUR.SE.S'}
+            suptitle={data.section_title ?? "MONTEUR.SE.S"}
             title={data.title}
             titleType="h2"
             titleClassName="text-title-large font-medium text-dashboard-text-title-white-high mt-6 "
@@ -158,7 +157,7 @@ export const EditorSection = ({ data }: EditorSectionProps) => {
           <div
             ref={largeCard}
             className={`relative group md:border rounded-dashboard-button-square-radius mt-dashboard-spacing-element-medium md:mt-4 bg-dashboard-background-content-area md:bg-transparent border pt-dashboard-spacing-element-medium z-10 overflow-hidden perspective origin-center`}
-            style={{"--item-delay": 40 / 100} as React.CSSProperties}
+            style={{ "--item-delay": 40 / 100 } as React.CSSProperties}
           >
             <div
               ref={largeCardInner}
@@ -185,19 +184,25 @@ export const EditorSection = ({ data }: EditorSectionProps) => {
 
               <div className="relative flex flex-col md:flex-row-reverse justify-between gap-dashboard-spacing-element-medium z-20">
                 <div className="md:basis-[55%] px-4 flex flex-col justify-center items-center md:items-start text-center md:text-left">
-                  <H1 className="text-title-medium text-dashboard-text-title-white-high font-medium" fake>
+                  <H1
+                    className="text-title-medium text-dashboard-text-title-white-high font-medium"
+                    fake
+                  >
                     {data.large_card_title}
                   </H1>
                   <p className="text-base text-dashboard-text-description-base my-5 max-w-xs">
                     {data.large_card_content}
                   </p>
                   <div className="flex flex-wrap gap-2.5">
-                    <Link href={routes.SIGNIN}>
-                      <Button
-                        variant="primary"
-                        text="Crée ton profil monteur"
-                      />
-                    </Link>
+                    {/* <Link href={routes.SIGNIN}> */}
+                    <Button
+                      variant="primary"
+                      text="Crée ton profil monteur"
+                      onClick={() => {
+                        dispatch(setJoinBetaVisible());
+                      }}
+                    />
+                    {/* </Link> */}
                   </div>
                 </div>
                 <div
@@ -245,9 +250,9 @@ const Item = ({ title, text, img, i, delay, inView }: ItemProps) => {
   const isMobile = useMediaQuery("(max-width: 768px)");
 
   useEffect(() => {
-    if(isMobile) setIsDisplayed(true)
-    else setIsDisplayed(false)
-  }, [isMobile])
+    if (isMobile) setIsDisplayed(true);
+    else setIsDisplayed(false);
+  }, [isMobile]);
 
   useEffect(() => {
     if (isMobile) return;
@@ -317,12 +322,15 @@ const Item = ({ title, text, img, i, delay, inView }: ItemProps) => {
     >
       <div ref={cardInner} className="absolute w-full h-full top-0 left-0">
         <div
-          className={" hidden md:block absolute w-[130%] h-[130%] left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] z-20 bg-radial-filter opacity-0  group-hover:opacity-50 duration-300"}
+          className={
+            " hidden md:block absolute w-[130%] h-[130%] left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] z-20 bg-radial-filter opacity-0  group-hover:opacity-50 duration-300"
+          }
         ></div>
         <div
-          className={`w-[130%] h-[130%] left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] rounded-3xl ease-in duration-200 absolute z-10 bg-brightness-dark origin-center group-hover:scale-[1.02] group-hover:-translate-x-1/2 group-hover:-translate-y-1/2 group-hover:blur-[7px] ${isDisplayed ? 'opacity-50' : ''}`}
+          className={`w-[130%] h-[130%] left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] rounded-3xl ease-in duration-200 absolute z-10 bg-brightness-dark origin-center group-hover:scale-[1.02] group-hover:-translate-x-1/2 group-hover:-translate-y-1/2 group-hover:blur-[7px] ${
+            isDisplayed ? "opacity-50" : ""
+          }`}
         >
-
           {img.data && (
             <Image
               src={img.data.attributes.url}
@@ -334,9 +342,13 @@ const Item = ({ title, text, img, i, delay, inView }: ItemProps) => {
         </div>
         <div className="absolute mb-5 w-full px-[20px] py-[20px] md:px-6 z-30 bottom-0">
           <div className={"flex gap-4 justify-between items-start"}>
-            <p className="font-title text-[18px] text-dashboard-text-title-white-high uppercase">{title}</p>
+            <p className="font-title text-[18px] text-dashboard-text-title-white-high uppercase">
+              {title}
+            </p>
             <div
-              className={`hidden md:block rounded-full p-2 cursor-pointer bg-soyMilk group-hover:bg-blueBerry svg-color-black group-hover:svg-color-soyMilk transition-transform ${isDisplayed ? 'rotate-0' : 'rotate-45'}`}
+              className={`hidden md:block rounded-full p-2 cursor-pointer bg-soyMilk group-hover:bg-blueBerry svg-color-black group-hover:svg-color-soyMilk transition-transform ${
+                isDisplayed ? "rotate-0" : "rotate-45"
+              }`}
             >
               <div className="w-2">
                 <Cross className="w-full h-full" />
