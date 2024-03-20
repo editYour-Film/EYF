@@ -5,6 +5,7 @@ import validator from "validator";
 import { inputErrors } from "@/const";
 import { useStrapi, useStrapiPost } from "@/hooks/useStrapi";
 import { addEmailToNewsletter } from "@/lib/addEmailToNewsletter";
+import FooterCircle from "@/img/footerImg.svg";
 
 export const NewsletterSection = () => {
   const { data: newsletterData, mutate: getNewsLetterData } = useStrapi(
@@ -14,6 +15,7 @@ export const NewsletterSection = () => {
 
   const [email, setEmail] = useState("");
   const [emailResponse, setEmailResponse] = useState("");
+  const [status, setStatus] = useState("");
 
   /*const handleResponse = (status: any, msg: string) => {
     if (status === 200)
@@ -73,6 +75,7 @@ export const NewsletterSection = () => {
     );
     if (sendRes.status === 200)
       await addEmailToNewsletter(email).then(() => {
+        setStatus("ok");
         setEmailResponse("L'email a bien été ajouté à la newsletter.");
       });
   };
@@ -83,17 +86,19 @@ export const NewsletterSection = () => {
 
   return (
     <>
-      <div className="relative p-8 md:p-14 my-10 md:my-24 rounded-4xl max-w-5xl mx-auto bg-rose-sunset linear-orientation-270 overflow-hidden">
-        <div className="absolute left-0 top-0 w-full h-full bg-pattern z-30 opacity-20 pointer-events-none mix-blend-hard-light"></div>
+      <div
+        className={`gradient-card relative mb-dashboard-spacing-element-medium md:mb-[70px] px-dashboard-mention-padding-right-left py-[53px] lg:pt-[101px] lg:pb-[61px] lg:px-[53px] rounded-dashboard-button-square-radius overflow-hidden border border-dashboard-button-stroke-hover`}
+      >
+        {/* <div className="absolute left-0 top-0 w-full h-full bg-pattern z-30 opacity-20 pointer-events-none mix-blend-hard-light"></div> */}
 
-        <div className="absolute hidden md:flex justify-center items-center top-0 right-0 translate-x-[80%] -translate-y-[10%] md:translate-x-[40%] md:-translate-y-[40%] lg:translate-x-[20%] lg:-translate-y-[30%] w-[350px] h-[350px] z-10 pointer-events-none">
+        {/* <div className="absolute hidden md:flex justify-center items-center top-0 right-0 translate-x-[80%] -translate-y-[10%] md:translate-x-[40%] md:-translate-y-[40%] lg:translate-x-[20%] lg:-translate-y-[30%] w-[350px] h-[350px] z-10 pointer-events-none">
           <div className="absolute flex-shrink-0 w-[350px] h-[350px] rounded-full bg-darkpurple z-20 pointer-events-none"></div>
           <div className="flex-shrink-0 w-[500px] h-[500px] rounded-full bg-lightpurple z-10 pointer-events-none"></div>
-        </div>
+        </div> */}
 
         <div className="relative z-50">
           <H1
-            className="text-black max-w-sm font-bold text-[45px] leading-[110%]"
+            className="text-black xl:max-w-[800px] font-medium text-[45px] sm:text-[55px]"
             fake
           >
             {newsletterData?.title}
@@ -135,7 +140,9 @@ export const NewsletterSection = () => {
               </div>
             </div>
             {emailResponse && (
-              <p className="text-red-500 mt-1.5 ">{emailResponse}</p>
+              <p className={`${status !== "ok" ? "text-red-500" : ""} mt-1.5 `}>
+                {emailResponse}
+              </p>
             )}
 
             <div id="div-submitInput">
@@ -158,6 +165,12 @@ export const NewsletterSection = () => {
 
             <div className="loader"></div>
           </form>
+        </div>
+
+        <div className="gradient-card__deco absolute w-full h-full top-0 left-0 z-0">
+          <div className="absolute w-full h-full top-0 left-0 bg-pattern opacity-30 z-10"></div>
+          <div className="absolute w-full h-full top-0 left-0 bg-rose-sunset linear-orientation-270 z-0"></div>
+          <FooterCircle className="absolute hidden lg:block top-0 right-0 z-20" />
         </div>
       </div>
     </>

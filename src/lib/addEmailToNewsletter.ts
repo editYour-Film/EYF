@@ -20,5 +20,5 @@ export const addEmailToNewsletter = async (emailAdress: string) => {
     body: data,
   };
 
-  client.request(request);
+  await client.request(request)
 };

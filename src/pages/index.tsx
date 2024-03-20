@@ -17,10 +17,10 @@ import useStrapi from "@/hooks/useStrapi";
 import { useContext, useEffect } from "react";
 import { setRouteName } from "@/store/slices/routesSlice";
 import { useDispatch } from "react-redux";
-import { GradientCard } from "@/components/dashboard/shared/GradientCard";
 import { GlobalContext } from "@/components/_context/GlobalContext";
 
 import { useGetSeoData } from "@/hooks/useGetSeoData";
+import { NewsletterSection } from "@/components/home/NewsletterSection";
 
 export async function getServerSideProps() {
   const data: any = await useGetSeoData("page-home");
@@ -133,17 +133,7 @@ export default function Home(props: any) {
             {dataFaqs && <FaqSection data={dataFaqs} />}
 
             <Container>
-              <GradientCard
-                title="PARRAINER UN AMI"
-                content="Bénéficiez d’avantages exclusifs en rejoignant la communauté des parrains editYour.Film dès aujourd’hui."
-                hasCta
-                type="email"
-                placeholder="Email"
-                ctaLabel="Envoyer le lien de parrainage"
-                onClick={(email: string) => {
-                  globalContext.sendSponsorLink(email);
-                }}
-              />
+              <NewsletterSection />
             </Container>
           </div>
         )}

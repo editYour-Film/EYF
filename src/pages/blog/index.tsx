@@ -72,16 +72,7 @@ export default function Blog(props: any) {
               <ArticleTrends articles={data} showPoster />
               <ArticleRecent articles={data} />
 
-              <GradientCard
-                title="PARRAINER UN AMI"
-                content="Bénéficiez d’avantages exclusifs en rejoignant la communauté des parrains editYour.Film dès aujourd’hui."
-                hasCta
-                type="email"
-                placeholder="Email"
-                ctaLabel="Envoyer le lien de parrainage"
-                onClick={(email: string) => {}}
-                className="my-[70px]"
-              />
+              <NewsletterSection />
             </div>
           )}
         </div>

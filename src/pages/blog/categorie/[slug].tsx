@@ -16,6 +16,7 @@ import { ArticleTrends } from "@/components/blog/ArticleTrends";
 import { GetServerSideProps } from "next";
 import { useGetSeoDataFiltered } from "@/hooks/useGetSeoData";
 import { Seo } from "@/components/_shared/Seo";
+import { NewsletterSection } from "@/components/home/NewsletterSection";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const query = context.query;
@@ -149,17 +150,7 @@ const BlogCategory = (props: any) => {
             )}
           </div>
 
-          <GradientCard
-            title="PARRAINER UN AMI"
-            content="Bénéficiez d’avantages exclusifs en rejoignant la communauté des parrains editYour.Film dès aujourd’hui."
-            hasCta
-            type="email"
-            placeholder="Email"
-            ctaLabel="Envoyer le lien de parrainage"
-            onClick={(email: string) => {
-              globalContext.sendSponsorLink(email);
-            }}
-          />
+          <NewsletterSection />
         </div>
       </LayoutMain>
     </>
