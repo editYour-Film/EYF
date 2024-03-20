@@ -13,13 +13,18 @@ export const HistorySection = ({ data }: any) => {
   const p1 = useRef<HTMLDivElement>(null);
   const p2 = useRef<HTMLDivElement>(null);
   const p3 = useRef<HTMLDivElement>(null);
+  const p4 = useRef<HTMLDivElement>(null);
+
   const scrollParent = useRef(null);
   const scrollContent = useRef(null);
+
   const line1 = useRef<HTMLDivElement>(null);
   const line2 = useRef<HTMLDivElement>(null);
+  const line3 = useRef<HTMLDivElement>(null);
 
   const [p2Readed, setP2Readed] = useState(false);
   const [p3Readed, setP3Readed] = useState(false);
+  const [p4Readed, setP4Readed] = useState(false);
 
   const ctx = useRef<gsap.Context>();
   const isTweening = useRef(false);
@@ -27,6 +32,7 @@ export const HistorySection = ({ data }: any) => {
   const step1 = useRef(0);
   const step2 = useRef(0);
   const step3 = useRef(0);
+  const step4 = useRef(0);
 
   const lenis = useLenis();
 
@@ -57,7 +63,7 @@ export const HistorySection = ({ data }: any) => {
         });
 
         tl.to(
-          [p2.current, p3.current],
+          [p2.current, p3.current, p4.current],
           {
             opacity: 0.5,
             y: 300,
@@ -67,19 +73,20 @@ export const HistorySection = ({ data }: any) => {
 
         setP2Readed(false);
         setP3Readed(false);
+        setP4Readed(false);
 
         tl.to(
           line1.current,
           {
-            height: 100,
+            height: 80,
           },
           0
         );
 
         tl.to(
-          line2.current,
+          [line2.current, line3.current],
           {
-            height: 30,
+            height: 0,
           },
           0
         );
@@ -116,11 +123,20 @@ export const HistorySection = ({ data }: any) => {
 
         setP2Readed(true);
         setP3Readed(false);
+        setP4Readed(false);
 
         tl.to(
           line1.current,
           {
-            height: 30,
+            height: 20,
+          },
+          0
+        );
+
+        tl.to(
+          line3.current,
+          {
+            height: 0,
           },
           0
         );
@@ -128,7 +144,7 @@ export const HistorySection = ({ data }: any) => {
         tl.to(
           line2.current,
           {
-            height: 100,
+            height: 80,
           },
           0
         );
@@ -154,20 +170,61 @@ export const HistorySection = ({ data }: any) => {
           0
         );
 
+        tl.to(
+          [p4.current],
+          {
+            opacity: 0.5,
+            y: 300,
+          },
+          0
+        );
+
         setP3Readed(true);
+        setP4Readed(false);
 
         tl.to(
-          line1.current,
+          line2.current,
           {
-            height: 30,
+            height: 20,
           },
           0
         );
 
         tl.to(
-          line2.current,
+          line3.current,
           {
-            height: 30,
+            height: 80,
+          },
+          0
+        );
+      });
+
+      self.add("fourthDate", () => {
+        const tl = gsap.timeline({
+          defaults,
+          onStart: () => {
+            isTweening.current = true;
+          },
+          onComplete: () => {
+            isTweening.current = false;
+          },
+        });
+
+        tl.to(
+          [p4.current],
+          {
+            opacity: 1,
+            y: 0,
+          },
+          0
+        );
+
+        setP4Readed(true);
+
+        tl.to(
+          line3.current,
+          {
+            height: 20,
           },
           0
         );
@@ -175,9 +232,12 @@ export const HistorySection = ({ data }: any) => {
 
       const offset1 = window.innerHeight * 0.15;
       const offset2 = window.innerHeight * 0.15;
+      const offset3 = window.innerHeight * 0.15;
 
       let trigger1: ScrollTrigger;
       let trigger2: ScrollTrigger;
+      let trigger3: ScrollTrigger;
+
       if (p1.current) {
         trigger1 = ScrollTrigger.create({
           trigger: scrollParent.current,
@@ -198,7 +258,9 @@ export const HistorySection = ({ data }: any) => {
         trigger2 = ScrollTrigger.create({
           trigger: scrollParent.current,
           start: `top+=${p1.current?.offsetTop + offset1 + offset2} center`,
-          end: `bottom-=${window.innerHeight / 2 + offset2} center`,
+          end: `top+=${
+            p1.current?.offsetTop + offset1 + offset2 + offset3
+          } center`,
           id: "step2",
           onEnterBack: () => {
             ctx.current?.secondDate();
@@ -207,11 +269,27 @@ export const HistorySection = ({ data }: any) => {
             ctx.current?.thirdDate();
           },
         });
+
+        trigger3 = ScrollTrigger.create({
+          trigger: scrollParent.current,
+          start: `top+=${
+            p1.current?.offsetTop + offset1 + offset2 + offset3
+          } center`,
+          end: `bottom-=${window.innerHeight / 2 + offset2 + offset3} center`,
+          id: "step3",
+          onEnterBack: () => {
+            ctx.current?.thirdDate();
+          },
+          onLeave: () => {
+            ctx.current?.fourthDate();
+          },
+        });
       }
 
       step1.current = trigger1!.start + 20;
       step2.current = trigger2!.start + 20;
-      step3.current = trigger2!.end + 20;
+      step3.current = trigger3!.start + 20;
+      step4.current = trigger3!.end + 20;
 
       const BubbleTl = gsap.timeline({
         paused: true,
@@ -298,7 +376,7 @@ export const HistorySection = ({ data }: any) => {
       </div>
 
       <div ref={scrollParent} className="md:h-[170vh]">
-        <div className="flex justify-between items-start gap-8 md:h-[80vh] lg:h-[80vh] md:sticky md:top-[15vh] lg:top-[15vh]">
+        <div className="flex justify-between items-start gap-8 md:h-[90vh] lg:h-[85vh] md:sticky md:top-[5vh] lg:top-[7.5vh]">
           <div className="relative shrink-0 border md:border-l-0 rounded-r-3xl bg-blackBerry hidden md:flex justify-end items-center md:w-4/12 lg:w-2/5 self-stretch z-10">
             <div className="md:flex flex-col md:justify-center md:items-center lg:justify-start h-max items-center lg:p-16 lg:pr-28 relative overflow-hidden w-full">
               <Tag
@@ -314,7 +392,7 @@ export const HistorySection = ({ data }: any) => {
                 className="w-[1px] h-[100px] gradient-white-transparent"
               ></div>
               <Tag
-                date="2019"
+                date="2020"
                 text="Le bon moment"
                 readed={p2Readed}
                 offset={50}
@@ -327,11 +405,23 @@ export const HistorySection = ({ data }: any) => {
                 className="w-[1px] h-[30px] gradient-white-transparent"
               ></div>
               <Tag
-                date="2023"
-                text="Le lancement"
+                date="2021"
+                text="L'équipe"
                 readed={p3Readed}
                 onClick={() => {
                   lenis.scrollTo(step3.current, { duration: 0.3 });
+                }}
+              />
+              <div
+                ref={line3}
+                className="w-[1px] h-[100px] gradient-white-transparent"
+              ></div>
+              <Tag
+                date="2024"
+                text="Le lancement"
+                readed={p4Readed}
+                onClick={() => {
+                  lenis.scrollTo(step4.current, { duration: 0.3 });
                 }}
               />
             </div>
@@ -342,46 +432,40 @@ export const HistorySection = ({ data }: any) => {
             <div ref={scrollContent} className="max-w-3xl text-base-text">
               <div ref={p1}>
                 <span className="font-medium">
-                  Notre histoire commence quand{" "}
-                  <span className="items-baseline w-max">
-                    <Image
-                      className="relative inline align-baseline mx-4 top-2"
-                      src={"/img/whoweare/francois.png"}
-                      width={42}
-                      height={42}
-                      alt="Photo de François Herard"
-                    />
-                    <span className="underline capitalize">
-                      françois Herard
-                    </span>
-                  </span>
+                  Les bons monteurs ne sont pas réservés qu’aux documentaires
+                  d’ARTE, aux magazines de France Télévisions ou aux grands
+                  youtubers !
                 </span>
                 <p className="mt-3">
-                  après avoir travaillé 25 ans chez France Télévisions a une
-                  idée qui a changé la donne...{" "}
-                </p>
-                <p className="mt-3">
-                  En 2012, il a tenté pour la première fois de créer un service
-                  de montage vidéo à distance, mais l&rsquo;époque était trop
-                  prématurée pour cette idée.
+                  En 2012, François Hérard, alors administrateur de production à
+                  France 3 a pour idée de créer un service de montage vidéo à
+                  distance avec pour objectif de développer une expérience
+                  fluide où créateur.ice.s et monteur.se.s collaboreraient en
+                  distanciel.
                 </p>
               </div>
 
               <div ref={p2} className="mt-12 md:mt-8 md:opacity-90">
-                Puis, en 2019, le COVID-19 a forcé le monde à s&rsquo;adapter
-                rapidement au télétravail. À France Télévisions, les rédactions
-                ont mis en place un dispositif pour permettre aux monteur.se.s
-                de monter les sujets JT depuis leur domicile. Les conditions
-                idéales étaient enfin réunies pour EDY !
+                En 2020, le COVID19 oblige la production audiovisuelle à
+                s’adapter au télétravail. A la Fabrique et dans les rédactions
+                de France Télévisions, les réalisateurs, les journalistes
+                échangent avec les monteurs depuis leur domicile, …et ça marche
+                ! Le montage à distance est désormais dans les usages.
               </div>
 
               <div ref={p3} className="mt-12 md:mt-8 md:opacity-90">
-                Après deux versions de test, nous sommes enfin prêts à vous
-                aider à{" "}
-                <span className="text-linear-sunset font-medium">
-                  transformer vos vidéos en véritables œuvres d&rsquo;art
-                </span>{" "}
-                grâce à toutes les fonctionnalités que nous avons développées.
+                2021, Sébastien Soriano, consultant en Product Design, joue un
+                rôle crucial dans la conception et la création de l’interface
+                utilisateur d’editYour.Film. Sa contribution significative et sa
+                confiance dans le projet l’ont également amené à devenir associé
+                au projet.
+              </div>
+
+              <div ref={p4} className="mt-12 md:mt-8 md:opacity-90">
+                2024, après plusieurs phases de tests, editYour.film permet aux
+                créateurs de confier leur montage vidéo à un professionnel
+                expérimenté en quelques clics, peu importe leur localisation.
+                Vous pouvez dès maintenant profitez de nos services.
               </div>
             </div>
           </div>
