@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from "react";
-import { lerp} from "@/utils/Math";
+import { lerp } from "@/utils/Math";
 import { useSelector, useDispatch } from "react-redux";
 
 import { gsap } from "gsap";
@@ -13,7 +13,9 @@ import ArrowLeft from "@/icons/arrow-left.svg";
 import ArrowRight from "@/icons/arrow-right.svg";
 
 export const Cursor = () => {
-  const isCursorEnabled = useSelector((store: RootState) => store.cursor.enabled)
+  const isCursorEnabled = useSelector(
+    (store: RootState) => store.cursor.enabled
+  );
   const state = useSelector((state: RootState) => state.cursor.value);
   const enabled = useSelector((state: RootState) => state.cursor.enabled);
   const locked = useSelector((state: RootState) => state.cursor.locked);
@@ -46,7 +48,7 @@ export const Cursor = () => {
   const arrowLeft = useRef<HTMLDivElement>(null);
   const arrowRight = useRef<HTMLDivElement>(null);
 
-  const tl = useRef<GSAPTimeline>()
+  const tl = useRef<GSAPTimeline>();
 
   const switchFn = (state: string, isLocked: boolean) => {
     if (!isLocked) {
@@ -93,7 +95,7 @@ export const Cursor = () => {
   }, [state, enabled]);
 
   const textAnim = (text: string) => {
-    const childTl = gsap.timeline()
+    const childTl = gsap.timeline();
 
     childTl.call(
       () => {
@@ -128,18 +130,18 @@ export const Cursor = () => {
       0.3
     );
 
-    iconAnim("none", "out")
-    
-    tl.current!.pause()
-    tl.current!.clear()
-    tl.current!.add(childTl)
-    tl.current!.play()
+    iconAnim("none", "out");
+
+    tl.current!.pause();
+    tl.current!.clear();
+    tl.current!.add(childTl);
+    tl.current!.play();
   };
 
   const iconAnim = (icon: string, inOut = "in") => {
     let iconEl = null;
 
-    const childTl = gsap.timeline()
+    const childTl = gsap.timeline();
 
     switch (icon) {
       case "mute":
@@ -183,7 +185,7 @@ export const Cursor = () => {
         0
       );
     } else {
-      const hideTl = gsap.timeline()
+      const hideTl = gsap.timeline();
       hideTl.to(
         icons.current!.children,
         {
@@ -193,20 +195,20 @@ export const Cursor = () => {
       );
     }
 
-    tl.current!.pause()
-    tl.current!.clear()
-    tl.current!.add(childTl)
-    tl.current!.play()
+    tl.current!.pause();
+    tl.current!.clear();
+    tl.current!.add(childTl);
+    tl.current!.play();
 
-    return tl.current
+    return tl.current;
   };
 
   const handleText = (text: string) => {
     textAnim(text);
-  }
+  };
 
   const handleClick = () => {
-    const childTl = gsap.timeline()
+    const childTl = gsap.timeline();
 
     childTl.to(cursor.current, {
       scale: 0.4,
@@ -216,10 +218,10 @@ export const Cursor = () => {
       ease: "back.inOut",
     });
 
-    tl.current!.pause()
-    tl.current!.clear()
-    tl.current!.add(childTl)
-    tl.current!.play()
+    tl.current!.pause();
+    tl.current!.clear();
+    tl.current!.add(childTl);
+    tl.current!.play();
   };
 
   const handleWatch = () => {
@@ -231,7 +233,7 @@ export const Cursor = () => {
   };
 
   const handleSwipe = () => {
-    const childTl = gsap.timeline()
+    const childTl = gsap.timeline();
 
     childTl.to(
       shape.current,
@@ -265,16 +267,16 @@ export const Cursor = () => {
       dispatch(toRegular());
     });
 
-    tl.current!.pause()
-    tl.current!.clear()
-    tl.current!.add(childTl)
-    tl.current!.play()
+    tl.current!.pause();
+    tl.current!.clear();
+    tl.current!.add(childTl);
+    tl.current!.play();
   };
 
   const handleRegular = () => {
     const childTl = gsap.timeline({
-      paused: true
-    })
+      paused: true,
+    });
 
     setShowText(false);
 
@@ -289,8 +291,8 @@ export const Cursor = () => {
       },
     });
 
-    iconAnim("none", "out")
-    tl.current!.add(childTl.play(), 0)
+    iconAnim("none", "out");
+    tl.current!.add(childTl.play(), 0);
   };
 
   const handleMute = () => {
@@ -318,8 +320,8 @@ export const Cursor = () => {
     y: 0,
   });
 
-  const handleMouseMove = (event: MouseEvent) => {    
-    if (!isCursorEnabled) return
+  const handleMouseMove = (event: MouseEvent) => {
+    if (!isCursorEnabled) return;
 
     posX.current = event.clientX;
     posY.current = event.clientY;
@@ -367,10 +369,10 @@ export const Cursor = () => {
   }, [isCursorEnabled]);
 
   useEffect(() => {
-    tl.current = gsap.timeline()
+    tl.current = gsap.timeline();
 
-    enabled && handleRegular()
-  }, [])
+    enabled && handleRegular();
+  }, []);
 
   if (enabled) {
     return (
@@ -403,13 +405,13 @@ export const Cursor = () => {
                 ref={muteIcon}
                 className="absolute top-0 left-0 w-full h-full"
               >
-                <Mute className="absolute top-0 left-0 w-full h-full svg-color-blueBerry" />
+                <Mute className="absolute top-0 left-0 w-full h-full svg-color-soyMilk" />
               </div>
               <div
                 ref={unmuteIcon}
                 className="absolute top-0 left-0 w-full h-full"
               >
-                <Unmute className="absolute top-0 left-0 w-full h-full svg-color-blueBerry" />
+                <Unmute className="absolute top-0 left-0 w-full h-full svg-color-soyMilk" />
               </div>
               <div
                 ref={arrowLeft}
@@ -449,10 +451,7 @@ const CursorText = ({ text, active }: CursorTextProps) => {
         active ? "active" : ""
       } text-small anim-cursor relative z-10 flex w-full justify-center items-center h-max translate-y-[10%]`}
     >
-      <TextSplit
-        input={text} 
-        type="word" 
-      />
+      <TextSplit input={text} type="word" />
     </div>
   );
 };

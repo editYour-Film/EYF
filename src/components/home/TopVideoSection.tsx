@@ -10,6 +10,7 @@ import { toMute, toRegular, toUnmute } from "@/store/slices/cursorSlice";
 
 import { IslandButton } from "../_shared/buttons/IslandButton";
 import { secureUrl } from "@/utils/utils";
+import routes from "@/routes";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -193,10 +194,8 @@ export const TopVideoSection = ({ data }: any) => {
             type="main"
             label="Obtenir mon devis"
             enableTwist
-            className="mt-12 w-max py-6 sm:mx-auto text-lg"
-            onClick={() => {
-              dispatch(setJoinBetaVisible());
-            }}
+            className="block mt-12 w-max py-6 sm:mx-auto text-lg"
+            href={routes.QUOTE}
           />
 
           <div className="absolute hidden md:block top-[60%] left-[50%] -translate-x-1/2 -translate-y-1/2 bg-radial-gradient-blueLight rounded-full w-full lg:w-[400px] h-[400px]"></div>
