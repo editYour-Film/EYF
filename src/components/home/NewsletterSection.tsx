@@ -89,13 +89,6 @@ export const NewsletterSection = () => {
       <div
         className={`gradient-card relative mb-dashboard-spacing-element-medium md:mb-[70px] px-dashboard-mention-padding-right-left py-[53px] lg:pt-[101px] lg:pb-[61px] lg:px-[53px] rounded-dashboard-button-square-radius overflow-hidden border border-dashboard-button-stroke-hover`}
       >
-        {/* <div className="absolute left-0 top-0 w-full h-full bg-pattern z-30 opacity-20 pointer-events-none mix-blend-hard-light"></div> */}
-
-        {/* <div className="absolute hidden md:flex justify-center items-center top-0 right-0 translate-x-[80%] -translate-y-[10%] md:translate-x-[40%] md:-translate-y-[40%] lg:translate-x-[20%] lg:-translate-y-[30%] w-[350px] h-[350px] z-10 pointer-events-none">
-          <div className="absolute flex-shrink-0 w-[350px] h-[350px] rounded-full bg-darkpurple z-20 pointer-events-none"></div>
-          <div className="flex-shrink-0 w-[500px] h-[500px] rounded-full bg-lightpurple z-10 pointer-events-none"></div>
-        </div> */}
-
         <div className="relative z-50">
           <H1
             className="text-black xl:max-w-[800px] font-medium text-[45px] sm:text-[55px]"
@@ -103,7 +96,7 @@ export const NewsletterSection = () => {
           >
             {newsletterData?.title}
           </H1>
-          <p className="text-xl  text-black md:max-w-md mt-2">
+          <p className="text-xl  text-black md:max-w-xl mt-2">
             {newsletterData?.content}
           </p>
           <form id="sb_form" className="relative max-w-3xl mt-4 md:mt-8">
