@@ -165,9 +165,11 @@ const Footer = () => {
           <Link href={routes.ML} className={linksClass}>
             Mentions légales
           </Link>
+          {/* Hubspot show banner button */}
           <button
             className={linksClass}
             onClick={() => {
+              //@ts-ignore
               var _hsp = (window._hsp = window._hsp || []);
               _hsp.push(["showBanner"]);
             }}
