@@ -12,27 +12,32 @@ export default function Document() {
         <link href="https://fonts.cdnfonts.com/css/n27" rel="stylesheet" />
 
         {/* AXEPTIO */}
-        <script
-          async
-          dangerouslySetInnerHTML={{
-            __html: `window.axeptioSettings = {
-  clientId: "6505804bf909f43e3daacdfb",
-};
- 
-(function(d, s) {
-  var t = d.getElementsByTagName(s)[0], e = d.createElement(s);
-  e.async = true; e.src = "https://static.axept.io/sdk-slim.js";
-  t.parentNode.insertBefore(e, t);
-})(document, "script");`,
-          }}
-        />
-
+        {/* <script
+                      async
+                      dangerouslySetInnerHTML={{
+                        __html: `window.axeptioSettings = {
+              clientId: "6505804bf909f43e3daacdfb",
+            };
+            
+            (function(d, s) {
+              var t = d.getElementsByTagName(s)[0], e = d.createElement(s);
+              e.async = true; e.src = "https://static.axept.io/sdk-slim.js";
+              t.parentNode.insertBefore(e, t);
+            })(document, "script");`,
+                      }}
+                    /> */}
       </Head>
       <body>
         <Main />
         <NextScript />
         {/* Tracking Hubspot */}
-        <script type="text/javascript" id="hs-script-loader" async defer src="//js-eu1.hs-scripts.com/139855704.js"></script>
+        <script
+          type="text/javascript"
+          id="hs-script-loader"
+          async
+          defer
+          src="//js-eu1.hs-scripts.com/139855704.js"
+        ></script>
       </body>
     </Html>
   );
