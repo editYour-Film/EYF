@@ -165,6 +165,15 @@ const Footer = () => {
           <Link href={routes.ML} className={linksClass}>
             Mentions légales
           </Link>
+          <button
+            className={linksClass}
+            onClick={() => {
+              var _hsp = (window._hsp = window._hsp || []);
+              _hsp.push(["showBanner"]);
+            }}
+          >
+            Paramètres des cookies
+          </button>
         </div>
       </div>
 
