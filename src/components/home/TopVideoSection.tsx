@@ -6,11 +6,19 @@ import useMediaQuery from "@/hooks/useMediaQuery";
 import { lerp, map, clamp } from "@/utils/Math";
 import { useDispatch } from "react-redux";
 import { setJoinBetaVisible } from "../../store/slices/joinBetaSlice";
-import { toMute, toRegular, toUnmute } from "@/store/slices/cursorSlice";
+import {
+  enableCustomCursor,
+  toMute,
+  toRegular,
+  toUnmute,
+} from "@/store/slices/cursorSlice";
 
 import { IslandButton } from "../_shared/buttons/IslandButton";
 import { secureUrl } from "@/utils/utils";
 import routes from "@/routes";
+
+import Mute from "@/icons/mute.svg";
+import UnMute from "@/icons/unmute.svg";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -233,7 +241,8 @@ export const TopVideoSection = ({ data }: any) => {
                   )}
                   {media && media.current && (
                     <video
-                      className="relative w-full h-full sm:h-auto object-cover pointer-events-none md:pointer-events-auto"
+                      className="relative w-full h-full sm:h-auto object-cover"
+                      controls={false}
                       autoPlay={true}
                       loop
                       muted={isVideoMute}
@@ -245,6 +254,8 @@ export const TopVideoSection = ({ data }: any) => {
                         dispatch(toRegular());
                       }}
                       onClick={() => {
+                        console.log("click");
+
                         handleClick();
                       }}
                     >
@@ -252,6 +263,12 @@ export const TopVideoSection = ({ data }: any) => {
                         src={secureUrl(media.current.attributes?.url ?? "")}
                       />
                     </video>
+                  )}
+
+                  {isMobileScreen && (
+                    <div className="w-[25px] h-[25px] absolute top-2 right-2 z-20">
+                      {isVideoMute ? <Mute /> : <UnMute />}
+                    </div>
                   )}
                 </div>
               </div>

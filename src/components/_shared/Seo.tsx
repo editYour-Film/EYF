@@ -1,3 +1,5 @@
+import { Fragment } from "react";
+
 type SeoProps = {
   data: any;
 };
@@ -15,10 +17,10 @@ export const Seo = ({ data }: SeoProps) => {
       {data.keywords && <meta name="keywords" content={data.keywords} />}
 
       {data.metaSocial &&
-        data.metaSocial.map((el: any) => {
+        data.metaSocial.map((el: any, i: number) => {
           if (el.socialNetwork === "Facebook") {
             return (
-              <>
+              <Fragment key={i}>
                 {data.canonicalURL && (
                   <meta
                     property="og:url"
@@ -46,11 +48,11 @@ export const Seo = ({ data }: SeoProps) => {
                     key="og:image"
                   />
                 )}
-              </>
+              </Fragment>
             );
           } else if (el.socialNetwork === "Twitter") {
             return (
-              <>
+              <Fragment key={i}>
                 <meta
                   name="twitter:card"
                   content="summary_large_image"
@@ -71,7 +73,7 @@ export const Seo = ({ data }: SeoProps) => {
                     content={el.image.data.attributes.formats.medium.url}
                   />
                 )}
-              </>
+              </Fragment>
             );
           }
         })}
