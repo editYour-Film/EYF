@@ -19,6 +19,10 @@ const nextConfig = {
       issuer: /\.[jt]sx?$/,
       use: ["@svgr/webpack"],
     });
+    config.watchOptions = {
+      poll: 1000,
+      aggregateTimeout: 300
+    }
 
     config.resolve.fallback = { fs: false };
 
